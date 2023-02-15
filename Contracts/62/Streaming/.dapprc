@@ -1,0 +1,23 @@
+# Make dependencies available
+export DAPP_REMAPPINGS=$(cat remappings.txt)
+
+export DAPP_SOLC_VERSION=0.8.10
+# If you're getting an "invalid character at offset" error, comment this out.
+export DAPP_LINK_TEST_LIBRARIES=0
+export DAPP_TEST_VERBOSITY=1
+export DAPP_TEST_SMTTIMEOUT=500000
+
+# Optimize your contracts before deploying to reduce runtime execution costs.
+# Check out the docs to learn more: https://docs.soliditylang.org/en/v0.8.9/using-the-compiler.html#optimizer-options
+export DAPP_BUILD_OPTIMIZE=1
+export DAPP_BUILD_OPTIMIZE_RUNS=200
+
+# set so that we can deploy to local node w/o hosted private keys
+export ETH_RPC_ACCOUNTS=true
+
+if [ "$DEEP_FUZZ" == "true" ]
+then 
+  export DAPP_TEST_FUZZ_RUNS=50000 # Fuzz for a long time if DEEP_FUZZ is set to true.
+else
+  export DAPP_TEST_FUZZ_RUNS=100 # Only fuzz briefly if DEEP_FUZZ is not set to true.
+fi

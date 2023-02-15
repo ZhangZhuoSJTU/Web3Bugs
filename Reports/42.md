@@ -1,0 +1,974 @@
+---
+sponsor: "Mochi"
+slug: "2021-10-mochi"
+date: "2021-11-23"
+title: "Mochi contest"
+findings: "https://github.com/code-423n4/2021-10-mochi-findings/issues"
+contest: 42
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the code contest outlined in this document, C4 conducted an analysis of the Mochi smart contract system written in Solidity. The code contest took place between October 21—October 27 2021.
+
+## Wardens
+
+16 Wardens contributed reports to the Mochi code contest:
+
+1. [jonah1005](https://twitter.com/jonah1005w)
+2. [leastwood](https://twitter.com/liam_eastwood13)
+3. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+4. [cmichel](https://twitter.com/cmichelio)
+5. [gpersoon](https://twitter.com/gpersoon)
+6. harleythedog
+7. [gzeon](https://twitter.com/gzeon)
+8. [pauliax](https://twitter.com/SolidityDev)
+9. [defsec](https://twitter.com/defsec_)
+10. [ye0lde](https://twitter.com/_ye0lde)
+11. [nikitastupin](http://twitter.com/_nikitastupin)
+12. [loop](https://twitter.com/loop_225)
+13. pants
+14. 0x0x0x
+15. hyh
+
+This contest was judged by [Ghoul.sol](https://twitter.com/Ghoulsol).
+
+Final report assembled by [CloudEllie](https://twitter.com/CloudEllie1) and [moneylegobatman](https://twitter.com/money_lego).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 38 unique vulnerabilities and 89 total findings. All of the issues presented here are linked back to their original finding.
+
+Of these vulnerabilities, 13 received a risk rating in the category of HIGH severity, 15 received a risk rating in the category of MEDIUM severity, and 10 received a risk rating in the category of LOW severity.
+
+C4 analysis also identified 18 non-critical recommendations and 33 gas optimizations.
+
+# Scope
+
+The code under review can be found within the [C4 Mochi contest repository](https://github.com/code-423n4/2021-10-mochi), and is composed of 70 smart contracts written in the Solidity programming language and includes 3,828 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (13)
+
+## [[H-01] Vault fails to track debt correctly that leads to bad debt](https://github.com/code-423n4/2021-10-mochi-findings/issues/72)
+_Submitted by jonah1005, also found by WatchPug_
+
+#### Impact
+It's similar to the issue "misuse amount as increasing debt in the vault contract".
+Similar issue in a different place that leads to different exploit patterns and severity.
+
+When users borrow usdm from a vault, the debt increases by the amount \* 1.005.
+
+```solidity
+    uint256 increasingDebt = (_amount * 1005) / 1000;
+```
+
+However, when the contract records the total debt it uses `_amount` instead of `increasingDebt`.
+
+```solidity
+details[_id].debtIndex =
+    (details[_id].debtIndex * (totalDebt)) /
+    (details[_id].debt + _amount);
+details[_id].debt = totalDebt;
+details[_id].status = Status.Active;
+debts += _amount;
+```
+
+[MochiVault.sol L242-L249](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L242-L249)
+
+The contract's debt is inconsistent with the total sum of all users' debt. The bias increases overtime and would break the vault at the end.
+
+For simplicity, we assume there's only one user in the vault.
+Example:
+
+1.  User deposits 1.2 M worth of BTC and borrows 1M USDM.
+2.  The user's debt (`details[_id].debt`) would be 1.005 M as there's a .5 percent fee.
+3.  The contract's debt is 1M.
+4.  BTC price decrease by 20 percent
+5.  The liquidator tries to liquidate the position.
+6.  The liquidator repays 1.005 M and the contract tries to sub the debt by 1.005 M
+7.  The transaction is reverted as `details[_id].debt -= _usdm;` would raise exception.
+
+inaccurate accounting would lead to serious issues. I consider this a high-risk issue.
+
+#### Proof of Concept
+This is a web3.py script that a liquidation may fail.
+
+```python
+deposit_amount = 10**18
+big_deposit = deposit_amount * 100000
+minter.functions.mint(user, big_deposit).transact()
+
+dai.functions.approve(vault.address, big_deposit + deposit_amount).transact()
+
+# create two positions
+vault.functions.mint(user, zero_address).transact()
+vault.functions.mint(user, zero_address).transact()
+
+# # borrow max amount
+vault.functions.increase(0, big_deposit, big_deposit, zero_address, '').transact()
+vault.functions.increase(1, deposit_amount, deposit_amount, zero_address, '').transact()
+
+vault_debt = vault.functions.debts().call()
+
+# ## This would clear out all debt in vault.
+repay_amount = vault_debt + 10**18
+usdm.functions.approve(vault.address, repay_amount).transact()
+
+vault.functions.repay(0, repay_amount).transact()
+
+print('debt left:', vault.functions.debts().call())
+# ## All the positions would not be liquidated from now on
+
+dai_price = cssr_factory.functions.getPrice(dai.address).call()
+cssr_factory.functions.setPrice(dai.address, dai_price[0] // 10).transact()
+
+## this would revert
+liquidator.functions.triggerLiquidation(dai.address, 1).transact()
+```
+
+#### Recommended Mitigation Steps
+I believe this is a mistake. Recommend to check the contract to make sure `increasingDebt` is used consistently.
+
+## [[H-02] `FeePoolV0.sol#distributeMochi()` will unexpectedly flush `treasuryShare`, causing the protocol fee cannot be properly accounted for and collected](https://github.com/code-423n4/2021-10-mochi-findings/issues/114)
+_Submitted by WatchPug_
+
+`distributeMochi()` will call `_buyMochi()` to convert `mochiShare` to Mochi token and call `_shareMochi()` to send Mochi to vMochi Vault and veCRV Holders. It wont touch the `treasuryShare`.
+
+However, in the current implementation, `treasuryShare` will be reset to `0`. This is unexpected and will cause the protocol fee can not be properly accounted for and collected.
+
+[`FeePoolV0.sol#L79` L95](https://github.com/code-423n4/2021-10-mochi/blob/8458209a52565875d8b2cefcb611c477cefb9253/projects/mochi-core/contracts/feePool/FeePoolV0.sol#L79-L95)
+
+```solidity
+function _shareMochi() internal {
+    IMochi mochi = engine.mochi();
+    uint256 mochiBalance = mochi.balanceOf(address(this));
+    // send Mochi to vMochi Vault
+    mochi.transfer(
+        address(engine.vMochi()),
+        (mochiBalance * vMochiRatio) / 1e18
+    );
+    // send Mochi to veCRV Holders
+    mochi.transfer(
+        crvVoterRewardPool,
+        (mochiBalance * (1e18 - vMochiRatio)) / 1e18
+    );
+    // flush mochiShare
+    mochiShare = 0;
+    treasuryShare = 0;
+}
+```
+
+##### Impact
+Anyone can call `distributeMochi()` and reset `treasuryShare` to `0`, and then call `updateReserve()` to allocate part of the wrongfuly resetted `treasuryShare` to `mochiShare` and call `distributeMochi()`.
+
+Repeat the steps above and the `treasuryShare` will be consumed to near zero, profits the vMochi Vault holders and veCRV Holders. The protocol suffers the loss of funds.
+
+##### Recommendation
+Change to:
+
+```solidity
+function _buyMochi() internal {
+    IUSDM usdm = engine.usdm();
+    address[] memory path = new address[](2);
+    path[0] = address(usdm);
+    path[1] = address(engine.mochi());
+    usdm.approve(address(uniswapRouter), mochiShare);
+    uniswapRouter.swapExactTokensForTokens(
+        mochiShare,
+        1,
+        path,
+        address(this),
+        type(uint256).max
+    );
+    // flush mochiShare
+    mochiShare = 0;
+}
+
+function _shareMochi() internal {
+    IMochi mochi = engine.mochi();
+    uint256 mochiBalance = mochi.balanceOf(address(this));
+    // send Mochi to vMochi Vault
+    mochi.transfer(
+        address(engine.vMochi()),
+        (mochiBalance * vMochiRatio) / 1e18
+    );
+    // send Mochi to veCRV Holders
+    mochi.transfer(
+        crvVoterRewardPool,
+        (mochiBalance * (1e18 - vMochiRatio)) / 1e18
+    );
+}
+```
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/114)**
+
+## [[H-03] `ReferralFeePoolV0.sol#claimRewardAsMochi()` Array out of bound exception](https://github.com/code-423n4/2021-10-mochi-findings/issues/97)
+_Submitted by WatchPug, also found by pauliax_
+
+[`ReferralFeePoolV0.sol#L28` L42](https://github.com/code-423n4/2021-10-mochi/blob/8458209a52565875d8b2cefcb611c477cefb9253/projects/mochi-core/contracts/feePool/ReferralFeePoolV0.sol#L28-L42)
+
+```solidity
+function claimRewardAsMochi() external {
+    IUSDM usdm = engine.usdm();
+    address[] memory path = new address[](2);
+    path[0] = address(usdm);
+    path[1] = uniswapRouter.WETH();
+    path[2] = address(engine.mochi());
+    usdm.approve(address(uniswapRouter), reward[msg.sender]);
+    // we are going to ingore the slippages here
+    uniswapRouter.swapExactTokensForTokens(
+        reward[msg.sender],
+        1,
+        path,
+        address(this),
+        type(uint256).max
+    );
+```
+
+In `ReferralFeePoolV0.sol#claimRewardAsMochi()`, `path` is defined as an array of length 2 while it should be length 3.
+
+As a result, at L33, an out-of-bound exception will be thrown and revert the transaction.
+
+##### Impact
+`claimRewardAsMochi()` will not work as expected so that all the referral fees cannot be claimed but stuck in the contract.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/97)**
+
+## [[H-04] `registerAsset()` can `overwrite _assetClass` value](https://github.com/code-423n4/2021-10-mochi-findings/issues/20)
+_Submitted by gpersoon, also found by jonah1005 and leastwood_
+
+#### Impact
+Everyone can call the function `registerAsset()` of MochiProfileV0.sol
+Assuming the liquidity for the asset is sufficient, `registerAsset()` will reset the \_assetClass of an already registered asset to `AssetClass.Sigma`.
+
+When the \_assetClass is changed to `AssetClass.Sigma` then `liquidationFactor()`, `riskFactor()`, `maxCollateralFactor()`, `liquidationFee()` `keeperFee()` `maxFee()` will also return a different value.
+Then the entire vault will behave differently.
+The threshold for liquidation will also be different, possibly leading to a liquidation that isn't supposed to happen.
+
+#### Recommended Mitigation Steps
+Add the following in function `registerAsset()`:
+```solidity
+require(\_assetClass\[\_asset] ==0,"Already exists");
+```
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/20)**
+
+## [[H-05] `debts` calculation is not accurate](https://github.com/code-423n4/2021-10-mochi-findings/issues/25)
+_Submitted by gpersoon_
+
+#### Impact
+The value of the global variable `debts` in the contract `MochiVault.sol` is calculated in an inconsistent way.
+
+In the function `borrow()` the variable `debts` is increased with a value excluding the fee.
+However in `repay()` and `liquidate()` it is decreased with the same value as `details\[\_id].debt` is decreased, which is including the fee.
+
+This would mean that `debts` will end up in a negative value when all debts are repay-ed. Luckily the function `repay()` prevents this from happening.
+
+In the meantime the value of `debts` isn't accurate.
+This value is used directly or indirectly in:
+- `utilizationRatio()`,` stabilityFee()` `calculateFeeIndex()` of `MochiProfileV0.sol`
+- `liveDebtIndex()`, `accrueDebt()`, `currentDebt()` of `MochiVault.sol`
+
+This means the entire debt and claimable calculations are slightly off.
+
+#### Proof of Concept
+[`vault/MochiVault` sol](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol)
+
+```solidity
+function borrow(..)
+details\[\_id].debt = totalDebt; // includes the fee
+debts += \_amount;     // excludes the fee
+
+function repay(..)
+debts -= \_amount;\
+details\[\_id].debt -= \_amount;
+
+function liquidate(..)
+debts -= \_usdm;
+details\[\_id].debt -= \_usdm;
+```
+
+see [issue page](https://github.com/code-423n4/2021-10-mochi-findings/issues/25) for referenced code.
+
+#### Recommended Mitigation Steps
+In function `borrow()`:
+replace
+`debts += \_amount;`
+with
+`debts += totalDebt`
+
+[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/25)
+
+## [[H-06] Referrer can drain `ReferralFeePoolV0`](https://github.com/code-423n4/2021-10-mochi-findings/issues/55)
+_Submitted by gzeon_
+
+#### Impact
+function `claimRewardAsMochi` in `ReferralFeePoolV0.sol` did not reduce user reward balance, allowing referrer to claim the same reward repeatedly and thus draining the fee pool.
+
+#### Proof of Concept
+Did not reduce user reward balance at L28-47 in [ReferralFeePoolV0.sol](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/feePool/ReferralFeePoolV0.sol)
+
+#### Recommended Mitigation Steps
+Add the following lines
+
+> rewards -= reward\[msg.sender];
+> reward\[msg.sender] = 0;
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/55)**
+
+## [[H-07] Liquidation will never work with non-zero discounts](https://github.com/code-423n4/2021-10-mochi-findings/issues/66)
+_Submitted by harleythedog_
+
+#### Impact
+Right now, there is only one discount profile in the github repo: the "`NoDiscountProfile`" which does not discount the debt at all. This specific discount profile works correctly, but I claim that any other discount profile will result in liquidation never working.
+
+Suppose that we instead have a discount profile where `discount()` returns any value strictly larger than 0. Now, suppose someone wants to trigger a liquidation on a position. First, `triggerLiquidation` will be called (within `DutchAuctionLiquidator.sol`). The variable "debt" is initialized as equal to `vault.currentDebt(\_nftId)`. Notice that `currentDebt(\_ndfId)` (within `MochiVault.sol`) simply scales the current debt of the position using the `liveDebtIndex()` function, but there is no discounting being done within the function - this will be important.
+
+Back within the `triggerLiquidation` function, the variable "collateral" is  simply calculated as the total collateral of the position. Then, the function calls `vault.liquidate(\_nftId, collateral, debt)`, and I claim that this will never work due to underflow.  Indeed, the liquidate function will first update the debt of the position (due to the `updateDebt(\_id)` modifier). The debt of the position is thus updated using lines 99-107 in `MochiVault.sol`. We can see that the `details\[\_id].debt` is updated in the exact same way as the calculations for `currentDebt(\_nftId)`, however, there is the extra subtraction of the `discountedDebt` on line 107.
+
+Eventually we will reach line 293 in `MochiVault.sol`. However, since we discounted the debt in the calculation of `details\[\_id].debt`, but we did not discount the debt for the passed in parameter \_usdm (and thus is strictly larger in value), line 293 will always error due to an underflow. In summary, any discount profile that actually discounts the debt of the position will result in all liquidations erroring out due to this underflow. Since no positions will be liquidatable, this represents a major flaw in the contract as then no collateral can be liquidated so the entire functionality of the contract is compromised.
+
+#### Proof of Concept
+- [Liquidate function in `MochiVault.sol`](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#:~:text=function-,liquidate,-)
+- [`triggerLiquidation` function in `DutchAuctionLiquidator.sol`](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/liquidator/DutchAuctionLiquidator.sol#:~:text=function-,triggerLiquidation,-address%20_asset%2C%20uint256)
+
+Retracing the steps as I have described above, we can see that any call to `triggerLiquidation` will result in:
+
+```solidity
+details\[\_id].debt -= \_usdm;
+```
+
+throwing an error since \_usdm will be larger than `details\[\_id].debt`.
+
+#### Recommended Mitigation Steps
+An easy fix is to simply change:
+
+`details\[\_id].debt -= \_usdm;`
+
+to be:
+
+`details\[\_id].debt = 0;`
+
+as liquidating a position should probably just be equivalent to repaying all of the debt in the position.
+
+Side Note: If there are no other discount profiles planned to be added other than "`NoDiscountProfile`", then I would recommend deleting all of the discount logic entirely, since `NoDiscountProfile` doesn't actually do anything.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/66)**
+
+## [[H-08] Anyone can extend withdraw wait period by depositing zero collateral](https://github.com/code-423n4/2021-10-mochi-findings/issues/69)
+_Submitted by harleythedog, also found by WatchPug_
+
+#### Impact
+In `MochiVault.sol`, the deposit function allows anyone to deposit collateral into any position. A malicious user can call this function with amount = 0, which would reset the amount of time the owner has to wait before they can withdraw their collateral from their position. This is especially troublesome with longer delays, as a malicious user would only have to spend a little gas to lock out all other users from being able to withdraw from their positions, compromising the functionality of the contract altogether.
+
+#### Proof of Concept
+
+the `deposit` function [here](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#:~:text=function-,deposit,-uint256%20_id%2C%20uint256)
+
+Notice that calling this function with amount = 0 is not disallowed. This overwrites `lastDeposit\[\_id]`, extending the wait period before a withdraw is allowed.
+
+#### Recommended Mitigation Steps
+I would recommend adding:
+
+`require(amount > 0, "zero")`
+
+at the start of the function, as depositing zero collateral does not seem to be a necessary use case to support.
+
+It may also be worthwhile to consider only allowing the owner of a position to deposit collateral.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/69)**
+
+## [[H-09] treasury is vulnerable to sandwich attack](https://github.com/code-423n4/2021-10-mochi-findings/issues/60)
+_Submitted by jonah1005_
+
+#### Impact
+There's a permissionless function `veCRVlock` in `MochiTreasury`. Since everyone can trigger this function, the attacker can launch a sandwich attack with flashloan to steal the funds.
+[MochiTreasuryV0.sol#L73-L94](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/treasury/MochiTreasuryV0.sol#L73-L94)
+
+Attackers can possibly steal all the funds in the treasury. I consider this is a high-risk issue.
+
+#### Proof of Concept
+[MochiTreasuryV0.sol#L73-L94](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/treasury/MochiTreasuryV0.sol#L73-L94)
+
+Here's an exploit pattern
+
+1.  Flashloan and buy CRV the uniswap pool
+2.  Trigger `veCRVlock()`
+3.  The treasury buys CRV at a very high price.
+4.  Sell CRV and pay back the loan.
+
+#### Recommended Mitigation Steps
+Recommend to add `onlyOwner` modifier.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/60)**
+
+## [[H-10] Changing NFT contract in the `MochiEngine` would break the protocol](https://github.com/code-423n4/2021-10-mochi-findings/issues/63)
+_Submitted by jonah1005_
+
+#### Impact
+`MochiEngine` allows the operator to change the NFT contract in [MochiEngine.sol#L91-L93](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/MochiEngine.sol#L91-L93)
+
+All the vaults would point to a different NFT address. As a result, users would not be access their positions. The entire protocol would be broken.
+
+IMHO, A function that would break the entire protocol shouldn't exist.
+
+I consider this is a high-risk issue.
+
+#### Proof of Concept
+[MochiEngine.sol#L91-L93](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/MochiEngine.sol#L91-L93)
+
+#### Recommended Mitigation Steps
+Remove the function.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/63)**
+
+## [[H-11] `treasuryShare` is Overwritten in `FeePoolV0._shareMochi()`](https://github.com/code-423n4/2021-10-mochi-findings/issues/89)
+_Submitted by leastwood_
+
+#### Impact
+The `FeePoolV0.sol` contract accrues fees upon the liquidation of undercollaterised positions. These fees are split between treasury and `vMochi` contracts. However, when `distributeMochi()` is called to distribute `mochi` tokens to `veCRV` holders, both `mochiShare` and `treasuryShare` is flushed from the contract when there are still `usdm` tokens in the contract.
+
+#### Proof of Concept
+Consider the following scenario:
+
+*   The `FeePoolV0.sol` contract contains 100 `usdm` tokens at an exchange rate of 1:1 with `mochi` tokens.
+*   `updateReserve()` is called to set the split of `usdm` tokens such that `treasuryShare` has claim on 20 `usdm` tokens and `mochiShare` has claim on the other 80 tokens.
+*   A `veCRV` holder seeks to increase their earnings by calling `distributeMochi()` before `sendToTreasury()` has been called.
+*   As a result, 80 `usdm` tokens are converted to `mochi` tokens and  locked in a curve rewards pool.
+*   Consequently, `mochiShare` and `treasuryShare` is set to `0` (aka flushed).
+*   The same user calls `updateReserve()` to split the leftover 20 `usdm` tokens between `treasuryShare` and `mochiShare`.
+*   `mochiShare` is now set to 16 `usdm` tokens.
+*   The above process is repeated to distribute `mochi` tokens to `veCRV` holders again and again.
+*   The end result is that `veCRV` holders have been able to receive all tokens that were intended to be distributed to the treasury.
+
+
+[`FeePoolV0.sol` L94](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/feePool/FeePoolV0.sol#L94)
+
+#### Tools Used
+- Manual code review
+- Discussions with the Mochi team.
+
+#### Recommended Mitigation Steps
+Consider removing the line in `FeePoolV0.sol` (mentioned above), where `treasuryShare` is flushed.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/89)**
+
+## [[H-12] feePool is vulnerable to sandwich attack.](https://github.com/code-423n4/2021-10-mochi-findings/issues/65)
+_Submitted by jonah1005_
+
+#### Impact
+There's a permissionless function `distributeMochi` in [FeePoolV0.sol L55-L62](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/feePool/FeePoolV0.sol#L55-L62). Since everyone can trigger this function, an attacker can launch a sandwich attack with flashloan to steal the funds.
+
+The devs have mentioned this concern in the comment. An attacker can steal the funds with a flash loan attack.
+
+Attackers can steal all the funds in the pool. I consider this is a high-risk issue.
+
+#### Proof of Concept
+[FeePoolV0.sol#L55-L62](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/feePool/FeePoolV0.sol#L55-L62)
+
+Please refer to [yDai Incident](https://peckshield.medium.com/the-ydai-incident-analysis-forced-investment-2b8ac6058eb5) to check the severity of a `harvest` function without slippage control.
+
+Please refer to [Mushrooms-finance-theft](https://medium.com/immunefi/mushrooms-finance-theft-of-yield-bug-fix-postmortem-16bd6961388f) to check how likely this kind of attack might happen.
+
+#### Recommended Mitigation Steps
+If the dev wants to make this a permissionless control, the contract should calculate a min return based on TWAP and check the slippage.
+
+
+### Comments:
+**[ryuheimat (Mochi) disputed](https://github.com/code-423n4/2021-10-mochi-findings/issues/65#issuecomment-953031170):**
+ > I think this is same case as https://github.com/code-423n4/2021-10-mochi-findings/issues/60
+
+**[ghoul-sol (judge) commented](https://github.com/code-423n4/2021-10-mochi-findings/issues/65#issuecomment-957027904):**
+ > The same attack, different part of the code. I'll keep them both.
+
+## [[H-13] Tokens Can Be Stolen By Frontrunning `VestedRewardPool.vest()` and `VestedRewardPool.lock()`](https://github.com/code-423n4/2021-10-mochi-findings/issues/92)
+_Submitted by leastwood_
+
+#### Impact
+The `VestedRewardPool.sol` contract is a public facing contract aimed at vesting tokens for a minimum of 90 days before allowing the recipient to withdraw their `mochi`. The `vest()` function does not utilise `safeTransferFrom()` to ensure that vested tokens are correctly allocated to the recipient. As a result, it is possible to frontrun a call to `vest()` and effectively steal a recipient's vested tokens. The same issue applies to the `lock()` function.
+
+#### Proof of Concept
+- [`VestedRewardPool.sol#L36` L46](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/emission/VestedRewardPool.sol#L36-L46)
+- [`VestedRewardPool.sol#L54` L64](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/emission/VestedRewardPool.sol#L54-L64)
+
+#### Tools Used
+Manual code review
+Discussions with the Mochi team
+
+#### Recommended Mitigation Steps
+Ensure that users understand that this function should not be interacted directly as this could result in lost `mochi` tokens. Additionally, it might be worthwhile creating a single externally facing function which calls `safeTransferFrom()`, `vest()` and `lock()` in a single transaction.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/92)**
+
+# Medium Risk Findings (15)
+
+## [[M-01] liquidation factor < collateral factor for Sigma type](https://github.com/code-423n4/2021-10-mochi-findings/issues/126)
+_Submitted by cmichel, also found by gzeon_
+
+The `MochiProfileV0` defines liquidation and collateral factors for different asset types.
+For the `AssetClass.Sigma` type, the liquidation factor is *less* than the collateral factor:
+
+```solidity
+function liquidationFactor(address _asset)
+    public
+    view
+    override
+    returns (float memory)
+{
+    AssetClass class = assetClass(_asset);
+    if (class == AssetClass.Sigma) { // } else if (class == AssetClass.Sigma) {
+        return float({numerator: 40, denominator: 100});
+    }
+}
+
+function maxCollateralFactor(address _asset)
+    public
+    view
+    override
+    returns (float memory)
+{
+    AssetClass class = assetClass(_asset);
+    if (class == AssetClass.Sigma) {
+        return float({numerator: 45, denominator: 100});
+    }
+}
+```
+
+This means that one can take a loan of up to 45% of their collateral but then immediately gets liquidated as the liquidation factor is only 40%.
+There should always be a buffer between these such that taking the max loan does not immediately lead to liquidations:
+
+> A safety buffer is maintained between max CF and LF to protect users against liquidations due to normal volatility. [Docs](https://hackmd.io/@az-/mochi-whitepaper#Collateral-Factor-CF)
+
+#### Recommended Mitigation Steps
+The max collateral factor for the Sigma type should be higher than its liquidation factor.
+
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/126)**
+
+## [[M-02] `regerralFeePool` is vulnerable to MEV searcher](https://github.com/code-423n4/2021-10-mochi-findings/issues/62)
+_Submitted by jonah1005, also found by cmichel_
+
+#### Impact
+`claimRewardAsMochi` in the `ReferralFeePoolV0` ignores slippage. This is not a desirable design. There are a lot of MEV searchers in the current network. Swapping assets with no slippage control would get rekted. Please refer to <https://github.com/flashbots/pm>.
+
+Given the current state of the Ethereum network, users would likely be sandwiched. I consider this is a high-risk issue.
+
+#### Proof of Concept
+[ReferralFeePoolV0.sol#L28-L48](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/feePool/ReferralFeePoolV0.sol#L28-L48)
+Please refer to  [Mushrooms Finance Theft of Yield Bug Fix Postmortem | by Immunefi | Immunefi | Medium](https://medium.com/immunefi/mushrooms-finance-theft-of-yield-bug-fix-postmortem-16bd6961388f) to see a possible attack pattern.
+
+#### Recommended Mitigation Steps
+I recommend adding `minReceivedAmount` as a parameter.
+
+```solidity
+function claimRewardAsMochi(uint256 _minReceivedAmount) external {
+    // original logic here
+    require(engine.mochi().balanceOf(address(this)) > _minReceivedAmount, "!min");
+    engine.mochi().transfer(
+        msg.sender,
+        engine.mochi().balanceOf(address(this))
+    );
+}
+```
+
+Also, the front-end should calculate the min amount with the current price.
+
+[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/62)
+
+## [[M-03] A malicious user can potentially escape liquidation by creating a dust amount position and trigger the liquidation by themself](https://github.com/code-423n4/2021-10-mochi-findings/issues/127)
+_Submitted by WatchPug, also found by jonah1005_
+
+In the current implementation, a liquidated position can be used for depositing and borrowing again.
+
+However, if there is a liquidation auction ongoing, even if the position is now `liquidatable`, the call of `triggerLiquidation()` will still fail.
+
+The liquidator must `settleLiquidation` first.
+
+If the current auction is not profitable for the liquidator, say the value of the collateral can not even cover the gas cost, the liquidator may be tricked and not liquidate the new loan at all.
+
+Considering if the liquidator bot is not as small to handle this situation (take the profit of the new liquidation and the gas cost loss of the current auction into consideration), a malicious user can create a dust amount position trigger the liquidation by themself.
+
+Since the collateral of this position is so small that it can not even cover the gas cost, liquidators will most certainly ignore this auction.
+
+The malicious user will then deposit borrow the actual loan.
+
+When this loan becomes `liquidatable`, liquidators may:
+
+1.  confuse the current dust auction with the `liquidatable` position;
+2.  unable to proceed with such a complex liquidation.
+
+As a result, the malicious user can potentially escape liquidation.
+
+##### Recommendation
+Consider making liquidated positions unable to be used (for depositing and borrowing) again.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/127)**
+
+## [[M-04] Unchecked ERC20 transfer calls](https://github.com/code-423n4/2021-10-mochi-findings/issues/75)
+_Submitted by loop, also found by cmichel, defsec, gzeon, leastwood, nikitastupin, pants, and WatchPug_
+
+ERC20 `transfer` and `transferFrom` calls normally return `true` on a succesful transfer. In DutchAuctionLiquidator the call `asset.transfer(msg.sender, _collateral);` is made. `asset` refers to whichever ERC20 asset is used for the vault of that auction. If `asset` is an ERC20 token which does not comply with the EIP-20 standard it might return `false` on a failed transaction rather than revert. In this case it would count as a valid transaction even though it is not. If a vault would be making use of USDT the transfer call would always revert as USDT returns `void` on transfers.
+
+There are a few more transfer(From) calls which are unchecked, these are however all on a predetermined asset (mochi, usdM and crv) and unlikely to cause problems.
+
+#### Proof of Concept
+See [issue page](https://github.com/code-423n4/reports/blob/mochi/mochi/2021-10-mochi-findings-DRAFT.md) for referenced code.
+
+
+#### Tools Used
+Slither
+
+#### Recommended Mitigation Steps
+In other contracts the functions `cheapTransfer` and `cheapTransferFrom` are used which are part of the mochifi cheapERC20 library. These functions do check for a return value and could be used rather than `transfer` and `transferFrom`.
+
+### Comments:
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/75#issuecomment-952083361):**
+ > `transferFrom` and `transfer` functions are used for mochi and usdm tokens which are standard EIP-20 tokens.
+>
+
+## [[M-05] Chainlink's `latestRoundData` might return stale or incorrect results](https://github.com/code-423n4/2021-10-mochi-findings/issues/87)
+_Submitted by nikitastupin, also found by cmichel, defsec, leastwood, and WatchPug_
+
+#### Proof of Concept
+[`ChainlinkAdapter.sol` L49](https://github.com/code-423n4/2021-10-mochi/blob/8458209a52565875d8b2cefcb611c477cefb9253/projects/mochi-cssr/contracts/adapter/ChainlinkAdapter.sol#L49)
+
+The `ChainlinkAdapter` calls out to a Chainlink oracle receiving the `latestRoundData()`. If there is a problem with Chainlink starting a new round and finding consensus on the new value for the oracle (e.g. Chainlink nodes abandon the oracle, chain congestion, vulnerability/attacks on the chainlink system) consumers of this contract may continue using outdated stale or incorrect data (if oracles are unable to submit no new round is started).
+
+#### Recommended Mitigation Steps
+Recommend adding the following checks:
+```solidity
+    ( roundId, rawPrice, , updateTime, answeredInRound ) = AggregatorV3Interface(XXXXX).latestRoundData();
+    require(rawPrice > 0, "Chainlink price <= 0");
+    require(updateTime != 0, "Incomplete round");
+    require(answeredInRound >= roundId, "Stale price");
+```
+#### References
+*   <https://consensys.net/diligence/audits/2021/09/fei-protocol-v2-phase-1/#chainlinkoraclewrapper-latestrounddata-might-return-stale-results>
+*   <https://github.com/code-423n4/2021-05-fairside-findings/issues/70>
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/87)**
+
+## [[M-06] Debt accrual is path-dependant and inaccurate](https://github.com/code-423n4/2021-10-mochi-findings/issues/129)
+_Submitted by cmichel_
+
+The total `debt` in `MochiVault.accrueDebt` increases by the current `debt` times the debt index growth.
+This is correct but the total `debt` is then *reduced* again by the calling *user's* discounted debt, meaning, the total debt depends on which specific user performs the debt accrual.
+
+This should not be the case.
+
+#### POC
+Assume we have a total debt of `2000`, two users A and B, where A has a debt of 1000, and B has a debt of 100.
+The (previous) `debtIndex = 1.0` and accruing it now would increase it to `1.1`.
+
+There's a difference if user A or B first does the accrual.
+
+###### User A accrues first
+User A calls `accrueDebt`: `increased = 2000 * 1.1/1.0 - 2000 = 200`. Thus `debts` is first set to `2200`. The user's `increasedDebt = 1000 * 1.1 / 1.0 - 1000 = 100` and assume a discount of `10%`, thus `discountedDebt = 100 * 10% = 10`.
+Then `debts = 2200 - 10 = 2190`.
+
+The next accrual will work with a total debt of `2190`.
+
+###### User B accruess first
+User B calls `accrueDebt`: `increased = 2000 * 1.1/1.0 - 2000 = 200`. Thus `debts` is first set to `2200`. The user's `increasedDebt = 100 * 1.1 / 1.0 - 100 = 10` and assume a discount of `10%`, thus `discountedDebt = 10 * 10% = 1`.
+Then `debts = 2200 - 1 = 2199`.
+
+The next accrual will work with a total debt of `2199`, leading to more debt overall.
+
+#### Impact
+The total debt of a system depends on who performs the accruals which should ideally not be the case.
+The discrepancy compounds and can grow quite large if a whale always does the accrual compared to someone with almost no debt or no discount.
+
+#### Recommended Mitigation Steps
+Don't use the discounts or track the weighted average discount across all users that is subtracted from the increased total debt each time, i.e., reduce it by the discount of **all users** (instead of current caller only) when accruing to correctly track the debt.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/129)**
+
+## [[M-07] Changing engine.nft contract breaks vaults](https://github.com/code-423n4/2021-10-mochi-findings/issues/130)
+_Submitted by cmichel_
+
+Governance can change the `engine.nft` address which is used by vaults to represent collateralized debt positions (CDP).
+When minting a vault using `MochiVault.mint` the address returned ID will be used and overwrite the state of an existing debt position and set its status to `Idle`.
+
+#### Impact
+Changing the NFT address will allow overwriting existing CDPs.
+
+#### Recommended Mitigation Steps
+Disallow setting a new NFT address. or ensure that the new NFT's IDs start at the old NFT's IDs.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/130)**
+
+## [[M-08] `UniswapV2/SushiwapLPAdapter` update the wrong token](https://github.com/code-423n4/2021-10-mochi-findings/issues/134)
+_Submitted by cmichel_
+
+The `UniswapV2LPAdapter/SushiswapV2LPAdapter.update` function retrieves the `underlying` from the LP token pair (`_asset`) but then calls `router.update(_asset, _proof)` which is the LP token itself again.
+This will end up with the router calling this function again recursively.
+
+#### Impact
+This function fails as there's an infinite recursion and eventually runs out of gas.
+
+#### Recommendation
+The idea was most likely to update the `underlying` price which is used in `_getPrice` as `uint256 eAvg = cssr.getExchangeRatio(_underlying, weth);`.
+
+Call `router.update(underlying, _proof)` instead. Note that the `_proof` does not necessarily update the `underlying <> WETH` pair, it could be any `underlying <> keyAsset` pair.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/134)**
+
+## [[M-09] `UniswapV2TokenAdapter` does not support Sushiswap-only assets](https://github.com/code-423n4/2021-10-mochi-findings/issues/135)
+_Submitted by cmichel_
+
+The `UniswapV2TokenAdapter.supports` function calls its `aboveLiquidity` function which returns the UniswapV2 liquidity if the pair exists.
+If this is below `minimumLiquidity`, the `supports` function will return `false`.
+
+However, it could be that the `Sushiswap` pair has lots of liquidity and could be used.
+
+```solidity
+try uniswapCSSR.getLiquidity(_asset, _pairedWith) returns (
+            uint256 liq
+        ) {
+    float memory price = cssrRouter.getPrice(_pairedWith);
+    // @audit this returns early. if it's false it should check sushiswap first
+    return convertToValue(liq, price) >= minimumLiquidity;
+} catch {
+    try sushiCSSR.getLiquidity(_asset, _pairedWith) returns (
+        uint256 liq
+    ) {
+        float memory price = cssrRouter.getPrice(_pairedWith);
+        return convertToValue(liq, price) >= minimumLiquidity;
+    } catch {
+        return false;
+    }
+}
+```
+
+#### Impact
+Suppose the `UniswapV2TokenAdapter` wants to be used as an adapter for a Sushiswap pool.
+An attacker creates a UniswapV2 pool for the same pair and does not provide liquidity.
+The `Router.setPriceSource` calls `UniswapV2TokenAdapter.supports` and returns false as the Uniswap liquidity is too low, without checking the Sushiswap liquidity.
+
+#### Recommendation
+In `aboveLiquidity`, if the UniswapV2 liquidity is *less* than the minimum liquidity, instead of returning, compare the Sushiswap liquidity against this threshold.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/135)**
+
+## [[M-10] griefing attack to block withdraws](https://github.com/code-423n4/2021-10-mochi-findings/issues/21)
+_Submitted by gpersoon_
+
+#### Impact
+Every time you deposit some assets in the vault (via `deposit()` of `MochiVault.sol`) then "lastDeposit\[\_id]" is set to `block.timestamp`.
+The modifier `wait()` checks this value and makes sure you cannot withdraw for "`delay()`" blocks.
+The default value for `delay()` is 3 minutes.
+
+Knowing this delay you can do a griefing attack:
+On chains with low gas fees: every 3 minutes deposit a tiny amount for a specific NFT-id (which has a large amount of assets).
+On chains with high gas fees: monitor the mempool for a `withdraw()` transaction and frontrun it with a `deposit()`
+
+This way the owner of the NFT-id can never withdraw the funds.
+
+#### Proof of Concept
+- [`MochiVault.sol#L47` L54](https://github.com/code-423n4/2021-10-mochi/blob/806ebf2a364c01ff54d546b07d1bdb0e928f42c6/projects/mochi-core/contracts/vault/MochiVault.sol#L47-L54)
+- [`vault/MochiVault.sol` L171](https://github.com/code-423n4/2021-10-mochi/blob/806ebf2a364c01ff54d546b07d1bdb0e928f42c6/projects/mochi-core/contracts/vault/MochiVault.sol#L171)
+- [`profile/MochiProfileV0.sol` L33](https://github.com/code-423n4/2021-10-mochi/blob/806ebf2a364c01ff54d546b07d1bdb0e928f42c6/projects/mochi-core/contracts/profile/MochiProfileV0.sol#L33)
+
+#### Recommended Mitigation Steps
+Create a mechanism where you only block the withdraw of recently deposited funds
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/21#issuecomment-952886314):**
+ > Will update deposit function to allow only NFT owner to deposit
+
+## [[M-11] borrow function will borrow max cf when trying to borrow > cf](https://github.com/code-423n4/2021-10-mochi-findings/issues/45)
+_Submitted by gzeon_
+
+#### Impact
+Borrow function in `MochiVault` will borrow to max cf when trying to borrow > cf instead of revert with ">cf" as specified in the supplied test. The difference in behavior may cause user to borrow at dangerous collateral level, and receive less than the amount requested.
+
+#### Proof of Concept
+* [`MochiVault` sol](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol)
+
+#### Recommended Mitigation Steps
+Revert if `details\[\_id].debt` + `\_amount` > `maxMinted` with ">cf"
+
+
+**[ryuheimat (Mochi) conirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/45)**
+
+## [[M-12] anyone can create a vault by directly calling the factory](https://github.com/code-423n4/2021-10-mochi-findings/issues/80)
+_Submitted by jonah1005_
+
+#### Impact
+In [MochiVaultFactory.sol#L26-L37](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVaultFactory.sol#L26-L37), there's no permission control in the `vaultFactory`. Anyone can create a vault. The transaction would be reverted when the government tries to deploy such an asset.
+
+As the protocol checks whether the vault is a valid vault by comparing the contract's address with the computed address, the protocol would recognize the random vault as a valid one.
+
+I consider this is a medium-risk issue.
+
+#### Proof of Concept
+Here's a web3.py script to trigger the bug.
+
+```py
+vault_factory.functions.deployVault(usdt.address).transact()
+## this tx would be reverted
+profile.functions.registerAssetByGov([usdt.address], [3]).transact()
+```
+
+#### Recommended Mitigation Steps
+Recommend to add a check.
+
+```solidity
+require(msg.sender == engine, "!engine");
+```
+
+[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/80)
+
+## [[M-13] Improper Validation Of `create2` Return Value](https://github.com/code-423n4/2021-10-mochi-findings/issues/155)
+_Submitted by leastwood_
+
+#### Impact
+The `BeaconProxyDeployer.deploy()` function is used to deploy lightweight proxy contracts that act as each asset's vault. The function does not revert properly if there is a failed contract deployment or revert from the `create2` opcode as it does not properly check the returned address for bytecode. The `create2` opcode returns the expected address which will never be the zero address (as is what is currently checked).
+
+#### Proof of Concept
+- [`BeaconProxyDeployer.sol` L31](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-library/contracts/BeaconProxyDeployer.sol#L31)
+
+#### Tools Used
+- Manual code review
+- Discussions with the Mochi team
+- Discussions with library dev
+
+#### Recommended Mitigation Steps
+The recommended mitigation was to update `iszero(result)` to `iszero(extcodesize(result))` in the line mentioned above. This change has already been made in the corresponding library which can be found [here](https://github.com/Nipol/bean-contracts/pull/13), however, this needs to also be reflected in Mochi's contracts.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/155)**
+
+## [[M-14] `MochiTreasuryV0.withdrawLock()` Is Callable When Locking Has Been Toggled](https://github.com/code-423n4/2021-10-mochi-findings/issues/161)
+_Submitted by leastwood_
+
+#### Impact
+`withdrawLock()` does not prevent users from calling this function when locking has been toggled. As a result, withdraws may be made unexpectedly.
+
+#### Proof of Concept
+- [`MochiTreasuryV0.sol#L40` L42](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/treasury/MochiTreasuryV0.sol#L40-L42)
+
+#### Tools Used
+Manual code review
+
+#### Recommended Mitigation Steps
+Consider adding `require(lockCrv, "!lock");` to `withdrawLock()` to ensure this function is not called unexpectedly. Alternatively if this is intended behaviour, it should be rather checked that the lock has not been toggled, otherwise users could maliciously relock tokens.
+
+[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/161)
+
+## [[M-15] `MochiTreasuryV0.sol` Is Unusable In Its Current State](https://github.com/code-423n4/2021-10-mochi-findings/issues/168)
+_Submitted by leastwood_
+
+#### Impact
+`MochiTreasuryV0.sol` interacts with Curve's voting escrow contract to lock tokens for 90 days, where it can be later withdrawn by the governance role. However, `VotingEscrow.vy` does not allow contracts to call the following functions; `create_lock()`, `increase_amount()` and `increase_unlock_time()`. For these functions, `msg.sender` must be an EOA account or an approved smart wallet. As a result, any attempt to lock tokens will fail in `MochiTreasuryV0.sol`.
+
+#### Proof of Concept
+- [`VotingEscrow.vy` L418](https://github.com/curvefi/curve-dao-contracts/blob/master/contracts/VotingEscrow.vy#L418)
+- [`VotingEscrow.vy` L438](https://github.com/curvefi/curve-dao-contracts/blob/master/contracts/VotingEscrow.vy#L438)
+- [`VotingEscrow.vy` L455](https://github.com/curvefi/curve-dao-contracts/blob/master/contracts/VotingEscrow.vy#L455)
+
+
+#### Tools Used
+- Manual code review
+- Discussions with the Mochi team
+
+#### Recommended Mitigation Steps
+Consider updating this contract to potentially use another escrow service that enables `msg.sender` to be a contract. Alternatively, this escrow functionality can be replaced with an internal contract which holds `usdm` tokens instead, removing the need to convert half of the tokens to Curve tokens. Holding Curve tokens for a minimum of 90 days may overly expose the Mochi treasury to Curve token price fluctuations.
+
+**[ryuheimat (Mochi) confirmed](https://github.com/code-423n4/2021-10-mochi-findings/issues/168)**
+
+# Low Risk Findings (10)
+
+- [[L-01] `MochiVault.flashFee()` May Truncate Result](https://github.com/code-423n4/2021-10-mochi-findings/issues/171) _Submitted by leastwood_
+- [[L-02] `FeePoolV0.sol` Lack of input validation](https://github.com/code-423n4/2021-10-mochi-findings/issues/106) _Submitted by WatchPug, also found by cmichel and pauliax_
+- [[L-03] Minor precision loss](https://github.com/code-423n4/2021-10-mochi-findings/issues/105) _Submitted by WatchPug_
+- [[L-04] Key currencies can be double counted](https://github.com/code-423n4/2021-10-mochi-findings/issues/122) _Submitted by cmichel_
+- [[L-05] Mochi fees can be accidentally burned](https://github.com/code-423n4/2021-10-mochi-findings/issues/123) _Submitted by cmichel_
+- [[L-06] Flashloan fee griefing attack for existing approvals](https://github.com/code-423n4/2021-10-mochi-findings/issues/124) _Submitted by cmichel_
+- [[L-07] Unsafe `int256` casts in `accrueDebt`](https://github.com/code-423n4/2021-10-mochi-findings/issues/128) _Submitted by cmichel_
+- [[L-08] Unchecked low level call](https://github.com/code-423n4/2021-10-mochi-findings/issues/76) _Submitted by loop, also found by cmichel_
+- [[L-09] `UniswapV2CSSR` assumes data was observed when block state was inserted](https://github.com/code-423n4/2021-10-mochi-findings/issues/136) _Submitted by cmichel_
+- [[L-10] FRONT-RUNNABLE INITIALIZERS](https://github.com/code-423n4/2021-10-mochi-findings/issues/37) _Submitted by defsec, also found by pants_
+
+# Non-Critical Findings (18)
+
+- [[N-01] Missing events for governor only functions that change critical parameters](https://github.com/code-423n4/2021-10-mochi-findings/issues/32) _Submitted by defsec, also found by hyh, leastwood, nikitastupin, pants, and WatchPug_
+- [[N-02] borrow function will underflow when total debt > creditCap](https://github.com/code-423n4/2021-10-mochi-findings/issues/56) _Submitted by gzeon_
+- [[N-03] Vault status is not set to Liquidated after liquidation](https://github.com/code-423n4/2021-10-mochi-findings/issues/51) _Submitted by gzeon, also found by cmichel, gpersoon, harleythedog, and WatchPug_
+- [[N-04] `MochiTreasuryV0.sol` Implements `receive()` Function With No Withdraw Mechanism](https://github.com/code-423n4/2021-10-mochi-findings/issues/162) _Submitted by leastwood_
+- [[N-05] `MochiTreasuryV0.claimOperationCost()` Writes State Variable After An External Call Is Made](https://github.com/code-423n4/2021-10-mochi-findings/issues/163) _Submitted by leastwood_
+- [[N-06] Mochi Protocol Is Lacking Extensive Test Coverage](https://github.com/code-423n4/2021-10-mochi-findings/issues/167) _Submitted by leastwood_
+- [[N-07] `flashLoan()` is Lacking Protections Against Reentrancy](https://github.com/code-423n4/2021-10-mochi-findings/issues/170) _Submitted by leastwood_
+- [[N-08] Lack of input validation of arrays](https://github.com/code-423n4/2021-10-mochi-findings/issues/31) _Submitted by gzeon, also found by WatchPug_
+- [[N-09] Typos](https://github.com/code-423n4/2021-10-mochi-findings/issues/113) _Submitted by WatchPug_
+- [[N-10] ERC20 approve method missing return value check](https://github.com/code-423n4/2021-10-mochi-findings/issues/36) _Submitted by defsec_
+- [[N-11] Not all functions of `DutchAuctionLiquidator.sol` check the auction state](https://github.com/code-423n4/2021-10-mochi-findings/issues/26) _Submitted by gpersoon_
+- [[N-12] Missing zero-address checks](https://github.com/code-423n4/2021-10-mochi-findings/issues/86) _Submitted by loop, also found by pants_
+- [[N-13] flashFee lack of precision](https://github.com/code-423n4/2021-10-mochi-findings/issues/2) _Submitted by pants_
+- [[N-14] Unable to deposit to liquidated vault as specified](https://github.com/code-423n4/2021-10-mochi-findings/issues/50) _Submitted by gzeon_
+- [[N-15] Misspelling: Collaterized should be Collateralized](https://github.com/code-423n4/2021-10-mochi-findings/issues/70) _Submitted by harleythedog_
+- [[N-16] Unlocked pragma version](https://github.com/code-423n4/2021-10-mochi-findings/issues/74) _Submitted by loop_
+- [[N-17] Comment typos](https://github.com/code-423n4/2021-10-mochi-findings/issues/138) _Submitted by ye0lde_
+- [[N-18] Open TODOs/questions](https://github.com/code-423n4/2021-10-mochi-findings/issues/139) _Submitted by ye0lde_
+
+# Gas Optimizations (33)
+- [[G-01] debts <= _amount](https://github.com/code-423n4/2021-10-mochi-findings/issues/159) _Submitted by pauliax_
+- [[G-02] Unchecked math](https://github.com/code-423n4/2021-10-mochi-findings/issues/156) _Submitted by pauliax_
+- [[G-03] Gas optimizations (code simplification, memory variables addition or removal)](https://github.com/code-423n4/2021-10-mochi-findings/issues/164) _Submitted by hyh, also found by 0x0x0x_
+- [[G-04] Cached length of arrays to avoid loading them repeadetly](https://github.com/code-423n4/2021-10-mochi-findings/issues/64) _Submitted by 0x0x0x, also found by WatchPug_
+- [[G-05] Initialization of `pair` can be done later to save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/100) _Submitted by WatchPug_
+- [[G-06] `VestedRewardPool.sol#checkClaimable()` Add `vesting[recipient].ends > 0` to the condition can save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/102) _Submitted by WatchPug_
+- [[G-07] `DutchAuctionLiquidator.sol#triggerLiquidation()` Adding precondition check can save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/104) _Submitted by WatchPug_
+- [[G-08] Variable `liquidated` in MochiVault is never used](https://github.com/code-423n4/2021-10-mochi-findings/issues/88) _Submitted by loop, also found by defsec, gzeon, harleythedog, and WatchPug_
+- [[G-09] Avoid unnecessary storage read can save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/112) _Submitted by WatchPug_
+- [[G-10] Simplify `sqrt()` can save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/115) _Submitted by WatchPug_
+- [[G-11] Declaring unnecessary immutable variables as constant can save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/117) _Submitted by WatchPug_
+- [[G-12] `MochiVault.sol` Remove redundant check can save gas](https://github.com/code-423n4/2021-10-mochi-findings/issues/119) _Submitted by WatchPug_
+- [[G-13] Save Gas With The Unchecked Keyword (MochiVault.sol)](https://github.com/code-423n4/2021-10-mochi-findings/issues/82) _Submitted by ye0lde, also found by WatchPug_
+- [[G-14] multiple inter-contract references in the same function](https://github.com/code-423n4/2021-10-mochi-findings/issues/67) _Submitted by jonah1005, also found by WatchPug_
+- [[G-15] Replace engine.nft().ownerOf(_id) with msg.sender in withdraw function](https://github.com/code-423n4/2021-10-mochi-findings/issues/47) _Submitted by harleythedog, also found by WatchPug_
+- [[G-16] Upgrade pragma to at least 0.8.4](https://github.com/code-423n4/2021-10-mochi-findings/issues/34) _Submitted by defsec_
+- [[G-17] Gas Optimization on the Public Function](https://github.com/code-423n4/2021-10-mochi-findings/issues/38) _Submitted by defsec_
+- [[G-18] Gas optimization: Placement of require statements in MochiVault.sol](https://github.com/code-423n4/2021-10-mochi-findings/issues/27) _Submitted by gzeon, also found by harleythedog_
+- [[G-19] Gas optimization: Caching variables](https://github.com/code-423n4/2021-10-mochi-findings/issues/28) _Submitted by gzeon, also found by pauliax and ye0lde_
+- [[G-20] Gas optimization: Struct layout](https://github.com/code-423n4/2021-10-mochi-findings/issues/30) _Submitted by gzeon_
+- [[G-21] Gas optimization: Struct layout in `DutchAuctionLiquidator.sol`](https://github.com/code-423n4/2021-10-mochi-findings/issues/54) _Submitted by gzeon_
+- [[G-22] Unused storage variable in UsdmMinter.sol](https://github.com/code-423n4/2021-10-mochi-findings/issues/42) _Submitted by harleythedog_
+- [[G-23] Unnecessary require in settleLiquidation ](https://github.com/code-423n4/2021-10-mochi-findings/issues/71) _Submitted by harleythedog_
+- [[G-24] Calling `sushiCSSR.getLiquidity` two times leads to increased gas cost without benefits](https://github.com/code-423n4/2021-10-mochi-findings/issues/83) _Submitted by nikitastupin_
+- [[G-25] Improve precision and gas costs in_shareMochi](https://github.com/code-423n4/2021-10-mochi-findings/issues/150) _Submitted by pauliax_
+- [[G-26] Cache the results of duplicate external calls](https://github.com/code-423n4/2021-10-mochi-findings/issues/152) _Submitted by pauliax_
+- [[G-27] Pack structs tightly](https://github.com/code-423n4/2021-10-mochi-findings/issues/153) _Submitted by pauliax_
+- [[G-28] Useless imports](https://github.com/code-423n4/2021-10-mochi-findings/issues/154) _Submitted by pauliax_
+- [[G-29] Duplicate math operations](https://github.com/code-423n4/2021-10-mochi-findings/issues/158) _Submitted by pauliax_
+- [[G-30] Duplicate check of supported token on flash loan](https://github.com/code-423n4/2021-10-mochi-findings/issues/160) _Submitted by pauliax_
+- [[G-31] Long Revert Strings](https://github.com/code-423n4/2021-10-mochi-findings/issues/41) _Submitted by ye0lde_
+- [[G-32] Reduce State Variable Use in VestedRewardPool.sol](https://github.com/code-423n4/2021-10-mochi-findings/issues/43) _Submitted by ye0lde_
+- [[G-33] Remove extra calls in updateReserve (FeePoolV0.sol)](https://github.com/code-423n4/2021-10-mochi-findings/issues/79) _Submitted by ye0lde_
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

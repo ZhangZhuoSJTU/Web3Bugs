@@ -1,0 +1,25 @@
+{
+  "name": "cally",
+  "author": "outdoteth",
+  "version": "1.0.0",
+  "description": "Exotic NFT and ERC20 covered call vaults",
+  "homepage": "https://github.com/outdoteth/cally",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/outdoteth/cally.git"
+  },
+  "scripts": {
+    "prettier": "prettier --write 'src/**/*.sol'",
+    "prettier:list": "prettier --list-different 'src/**/*.sol'",
+    "prettier:check": "prettier --check 'src/**/*.sol'",
+    "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
+    "solhint:check": "solhint --config ./.solhint.json 'src/**/*.sol'",
+    "lint": "npm run prettier && npm run solhint",
+    "lint:check": "npm run prettier:check && npm run solhint:check"
+  },
+  "dependencies": {
+    "prettier": "^2.6.2",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "solhint": "^3.3.7"
+  }
+}

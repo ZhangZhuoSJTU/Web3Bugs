@@ -1,0 +1,1064 @@
+---
+sponsor: "Mimo DeFi"
+slug: "2022-04-mimo"
+date: "2022-07-18"
+title: "Mimo DeFi contest"
+findings: "https://github.com/code-423n4/2022-04-mimo-findings/issues"
+contest: 115
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 audit contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the audit contest outlined in this document, C4 conducted an analysis of the Mimo DeFi smart contract system written in Solidity. The audit contest took place between April 28 - 
+May 2 2022.
+
+## Wardens
+
+46 Wardens contributed reports to the Mimo DeFi contest:
+
+  1. 0xDjango
+  1. unforgiven
+  1. [Picodes](https://twitter.com/thePicodes)
+  1. AlleyCat
+  1. [smiling_heretic](https://github.com/SmilingHeretic)
+  1. robee
+  1. [defsec](https://twitter.com/defsec_)
+  1. [pauliax](https://twitter.com/SolidityDev)
+  1. [Dravee](https://twitter.com/JustDravee)
+  1. 0x1f8b
+  1. [broccolirob](https://twitter.com/0xbroccolirob)
+  1. [MaratCerby](https://twitter.com/MaratCerby)
+  1. [ych18](https://www.linkedin.com/in/yahia-chaabane/)
+  1. [joestakey](https://twitter.com/JoeStakey)
+  1. [berndartmueller](https://twitter.com/berndartmueller)
+  1. hyh
+  1. delfin454000
+  1. cccz
+  1. sorrynotsorry
+  1. kebabsec (okkothejawa and [FlameHorizon](https://twitter.com/FlameHorizon1))
+  1. [z3s](https://github.com/z3s/)
+  1. [0xNazgul](https://twitter.com/0xNazgul)
+  1. 0x4non
+  1. rotcivegaf
+  1. [Funen](https://instagram.com/vanensurya)
+  1. GimelSec ([rayn](https://twitter.com/rayn731) and sces60107)
+  1. samruna
+  1. 0x52
+  1. dipp
+  1. peritoflores
+  1. sikorico
+  1. [GalloDaSballo](https://twitter.com/gallodasballo)
+  1. Hawkeye (0xwags and 0xmint)
+  1. ilan
+  1. [luduvigo](https://twitter.com/luduvigo)
+  1. [shenwilly](https://twitter.com/shenwilly_)
+  1. simon135
+  1. 0xkatana
+  1. slywaters
+  1. [Tomio](https://twitter.com/meidhiwirara)
+  1. [0v3rf10w](https://twitter.com/_0v3rf10w)
+  1. oyc_109
+  1. [Tadashi](https://github.com/htadashi)
+
+This contest was judged by [gzeon](https://twitter.com/gzeon).
+
+Final report assembled by [liveactionllama](https://twitter.com/liveactionllama).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 7 unique vulnerabilities. Of these vulnerabilities, 2 received a risk rating in the category of HIGH severity and 5 received a risk rating in the category of MEDIUM severity.
+
+Additionally, C4 analysis included 33 reports detailing issues with a risk rating of LOW severity or non-critical. There were also 26 reports recommending gas optimizations.
+
+All of the issues presented here are linked back to their original finding.
+
+# Scope
+
+The code under review can be found within the [C4 Mimo DeFi contest repository](https://github.com/code-423n4/2022-04-mimo), and is composed of 26 smart contracts written in the Solidity programming language and includes 2,432 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low/non-critical.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code4rena.com).
+
+# High Risk Findings (2)
+## [[H-01] User can call liquidate() and steal all collateral due to arbitrary router call](https://github.com/code-423n4/2022-04-mimo-findings/issues/83)
+_Submitted by 0xDjango_
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/core/contracts/liquidityMining/v2/PARMinerV2.sol#L126>
+
+<https://github.com/Uniswap/v2-periphery/blob/2efa12e0f2d808d9b49737927f0e416fafa5af68/contracts/UniswapV2Router02.sol#L299>
+
+<https://github.com/Uniswap/solidity-lib/blob/c01640b0f0f1d8a85cba8de378cc48469fcfd9a6/contracts/libraries/TransferHelper.sol#L47-L50>
+
+A malicious user is able to steal all collateral of an unhealthy position in `PARMinerV2.sol`. The code for the `liquidate()` function is written so that the following steps are followed:
+
+*   User calls `PARMinerV2.liquidate()`
+*   PARMinerV2 performs the liquidation with `_a.parallel().core().liquidatePartial()`
+*   PARMinerV2 receives the liquidated collateral
+*   An arbitrary router function is called to swap the collateral to PAR
+*   Finally, `PARMinerV2.liquidate()` checks that PARMinerV2's PAR balance is higher than the balance at the beginning of the function call.
+
+The exploit occurs with the arbitrary router call. The malicious user is able to supply the `dexTxnData` parameter which dictates the function call to the router. If the user supplied a function such as UniswapV2Router's `swapExactTokenForETH()`, then control flow will be given to the user, allowing them to perform the exploit.
+
+Note: The Mimo developers have stated that the routers used by the protocol will be DEX Aggregators such as 1inch and Paraswap, but this submission will be referring to UniswapV2Router for simplicity. It can be assumed that the dex aggregators currently allow swapping tokens for ETH.
+
+Continuing the exploit, once the attacker has gained control due to the ETH transfer, they are able to swap the ETH for PAR. Finally, they deposit the PAR with `PARMinerV2.deposit()`. This will cause the final check of `liquidate()` to pass because PARMinerV2's PAR balance will be larger than the start of the liquidation call.
+
+The attacker is able to steal all collateral from every unhealthy position that they liquidate. In the most extreme case, the attacker is able to open their own risky positions with the hope that the position becomes unhealthy. They will borrow the PAR and then liquidate themselves to take back the collateral. Thus effectively stealing PAR.
+
+### Proof of Concept
+
+Steps for exploit:
+
+*   Attacker monitors unhealthy positions. Finds a position to liquidate.
+*   Attacker calls `PARMinerV2.liquidate()`
+*   Position liquidated. Collateral transferred back to `PARMinerV2`
+*   In the `liquidate()` function, attacker supplies bytes for `UniswapV2Router.swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)`. For `to`, they supply the attacker contract.
+*   `swapExactTokensForETH()` firstly swaps the collateral for ETH and then transfers the ETH to the user with `TransferHelper.safeTransferETH(to, amounts[amounts.length - 1]);`
+*   `TransferHelper.safeTransferETH()` contains a call to the receiver via `(bool success, ) = to.call{value: value}(new bytes(0));`
+*   Therefore, the attacker contract will indeed gain control of execution.
+
+The attacker contract will then perform the following steps:
+
+*   Swap the received ETH to PAR.
+*   Deposit the PAR in `PARMinerV2`
+*   Withdraw the deposited PAR.
+
+### Recommended Mitigation Steps
+
+The arbitrary call to the router contracts is risky because of the various functions that they can contain. Perhaps a solution is to only allow certain calls such as swapping tokens to tokens, not ETH. This would require frequently updated knowledge of the router's functions, though would be beneficial for security.
+
+Also, adding a check that the `_totalStake` variable has not increased during the liquidation call will mitigate the risk of the attacker depositing the PAR to increase the contract's balance. The attacker would have no option but to transfer the PAR to PARMinerV2 as is intended.
+
+**[m19 (Mimo Defi) disagreed with severity and commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/83#issuecomment-1118331621):**
+ > We believe in theory this attack is actually possible, but highly unlikely to happen. It also begs the question of whether it's really worth it for an attacker to do this because they could just call VaultsCore.liquidate() themselves (for example with a flashloan) and stake all the PAR they profit that way directly.
+
+**[m19 (Mimo DeFi) confirmed and commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/83#issuecomment-1120159996):**
+ > We misunderstood this exploit wrong and we confirm it. Basically, if the attacker was liquidating a 10,000 PAR position, he could potentially end up with a 10,000 PAR stake + liquidation profits. Our previous understanding was that he could only end up with the profits.
+> 
+> At the very least we'll implement a check that `totalStake` hasn't changed, we will carefully consider if more changes are needed.
+
+
+
+***
+
+## [[H-02] Fund loss or theft by attacker with creating a flash loan and setting SuperVault as receiver so executeOperation() will be get called by lendingPool but with attackers specified params](https://github.com/code-423n4/2022-04-mimo-findings/issues/123)
+_Submitted by unforgiven, also found by Picodes_
+
+According to Aave documentation, when requesting flash-loan, it's possible to specify a `receiver`, so function `executeOperation()` of that `receiver` will be called by `lendingPool`.
+<https://docs.aave.com/developers/v/2.0/guides/flash-loans>
+In the `SuperVault` there is no check to prevent this attack so attacker can use this and perform  `griefing attack` and make miner contract lose all its funds. or he can create specifically crafted `params` so when `executeOperation()` is called by `lendingPool`, attacker could steal vault's user funds.
+
+### Proof of Concept
+
+To exploit this attacker will do this steps:
+
+1.  will call `Aave lendingPool` to get a flash-loan and specify `SuperVault` as `receiver` of flash-loan. and also create a specific `params` that invoke `Operation.REBALANCE` action to change user vault's collateral.
+2.  `lendingPool` will call `executeOperation()` of `SuperVault` with attacker specified data.
+3.  `executeOperation()` will check `msg.sender` and will process the function call which will cause some dummy exchanges that will cost user exchange fee and flash-loan fee.
+4.  attacker will repeat this attack until user losses all his funds.
+
+<!---->
+
+      function executeOperation(
+        address[] calldata assets,
+        uint256[] calldata amounts,
+        uint256[] calldata premiums,
+        address,
+        bytes calldata params
+      ) external returns (bool) {
+        require(msg.sender == address(lendingPool), "SV002");
+        (Operation operation, bytes memory operationParams) = abi.decode(params, (Operation, bytes));
+        IERC20 asset = IERC20(assets[0]);
+        uint256 flashloanRepayAmount = amounts[0] + premiums[0];
+        if (operation == Operation.LEVERAGE) {
+          leverageOperation(asset, flashloanRepayAmount, operationParams);
+        }
+        if (operation == Operation.REBALANCE) {
+          rebalanceOperation(asset, amounts[0], flashloanRepayAmount, operationParams);
+        }
+        if (operation == Operation.EMPTY) {
+          emptyVaultOperation(asset, amounts[0], flashloanRepayAmount, operationParams);
+        }
+
+        asset.approve(address(lendingPool), flashloanRepayAmount);
+        return true;
+      }
+
+To steal user fund in `SupperVault` attacker needs more steps. in all these actions (`Operation.REBALANCE`, `Operation.LEVERAGE`, `Operation.EMPTY`) contract will call `aggregatorSwap()` with data that are controlled by attacker.
+
+      function aggregatorSwap(
+        uint256 dexIndex,
+        IERC20 token,
+        uint256 amount,
+        bytes memory dexTxData
+      ) internal {
+        (address proxy, address router) = _dexAP.dexMapping(dexIndex);
+        require(proxy != address(0) && router != address(0), "SV201"); 
+        token.approve(proxy, amount);
+        router.call(dexTxData);
+      }
+
+Attacker can put special data in `dexTxData` that make contract to do an exchange with bad price. To do this, attacker will create a smart contract that will do this steps:
+
+1.  manipulate price in exchange with flash loan.
+2.  make a call to `executeOperation()` by `Aave flash-loan` with `receiver` and specific `params` so that `SuperVault` will make calls to manipulated exchange for exchanging.
+3.  do the reverse of #1 and pay the flash-loan and steal the user fund.
+
+The details are:
+Attacker can manipulate swapping pool price with flash-loan, then Attacker will create specific `params` and perform steps 1 to 4. so contract will try to exchange tokens and because of attacker price manipulation and specific `dexTxData`, contract will have bad deals.
+After that, attacker can reverse the process of swap manipulation and get his  flash-loan tokens and some of `SuperVault` funds and. then pay the flash-loan.
+
+### Tools Used
+
+VIM
+
+### Recommended Mitigation Steps
+
+There should be some state variable which stores the fact that `SuperVault` imitated flash-loan.
+When contract tries to start flash-loan, it sets the `isFlash` to `True` and `executeOperation()` only accepts calls if `isFlash` is `True`. and after the flash loan code will set `isFlash` to `False.`
+
+**[m19 (Mimo DeFi) confirmed and commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/123#issuecomment-1117124780):**
+ > We definitely confirm this issue and intend to fix it.
+
+
+
+***
+
+ 
+# Medium Risk Findings (5)
+## [[M-01] Decimal token underflow could produce loss of funds](https://github.com/code-423n4/2022-04-mimo-findings/issues/55)
+_Submitted by 0x1f8b, also found by broccolirob and pauliax_
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/core/contracts/oracles/GUniLPOracle.sol#L47>
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/core/contracts/oracles/GUniLPOracle.sol#L51>
+
+It is possible to produce underflows with specific tokens which can cause errors when calculating prices.
+
+### Proof of Concept
+
+The pragma is `pragma solidity 0.6.12;` therefore, integer overflows must be protected with safe math. But in the case of [GUniLPOracle](https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/core/contracts/oracles/GUniLPOracle.sol#L51), there is a decimal subtraction that could underflow if any token in the pool has more than 18 decimals. This could cause an error when calculating price values.
+
+### Recommended Mitigation Steps
+
+Ensure that tokens have less than 18 decimals.
+
+**[m19 (Mimo DeFi) confirmed and commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/55#issuecomment-1118295987):**
+ > We confirm this issue.
+
+
+
+***
+
+## [[M-02] Users can use updateBoost function to claim unfairly large rewards from liquidity mining contracts for themselves at cost of other users.](https://github.com/code-423n4/2022-04-mimo-findings/issues/136)
+_Submitted by smiling_heretic, also found by unforgiven_
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/core/contracts/liquidityMining/v2/PARMinerV2.sol#L159-L165>
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/core/contracts/liquidityMining/v2/GenericMinerV2.sol#L88-L94>
+
+Users aware of this vulnerability could effectively steal a portion of liquidity mining rewards from honest users.
+
+Affected contracts are: `SupplyMinerV2`, `  DemandMinerV2 `, `  PARMinerV2 `
+
+`VotingMinerV2` is less affected because locking veMIMO in `votingEscrow`  triggers a call to `releaseMIMO` of this miner contract (which in turn updates user's boost multiplier).
+
+### Proof of Concept
+
+Let's focus here on `SupplyMinerV2`. The exploits for other liquidity mining contracts are analogous.
+
+#### Scenario 1:
+
+Both Alice and Bob deposit 1 WETH to `coreVaults`  and borrow 100 PAR from `coreVaults`. They both have no locked veMIMO.
+
+Now they wait for a month without interacting with the protocol. In the meantime, `SupplyMinerV2` accumulated 100 MIMO for rewards.
+
+Alice locks huge amount of veMIMO in `votingEscrow`, so now her `boostMultiplier`  is 4.
+
+Let's assume that Alice and Bob are the only users of the protocol. Because they borrowed the same amounts of PAR, they should have the same stakes for past month, so a fair reward for each of them (for this past month) should be 50 MIMO. If they simply repay their debts now, 50 MIMO is indeed what they get.
+
+However if Alice calls `supplyMiner.updateBoost(alice)` before repaying her debt, she can claim 80 MIMO and leave only 20 MIMO for Bob. She can basically apply the multiplier 4 to her past stake.
+
+#### Scenario 2:
+
+Both Alice and Bob deposit 1 WETH to `coreVaults`  and borrow 100 PAR from `coreVaults`. Bob locks huge amount of veMIMO in `votingEscrow` for 4 years, so now his `boostMultiplier` is 4.
+
+Alice and Bob wait for 4 years without interacting with the protocol.
+
+`SupplyMinerV2` accumulated 1000 MIMO rewards.
+
+Because of his locked veMIMO, Bob should be able to claim larger reward than Alice. Maybe not 4 times larger but definitely larger.
+
+However, if Alice includes  a transaction with call `supplyMiner.updateBoost(bob)` before Bob's `vaultsCore.repay()` , then she can claim 500 MIMO. She can effectively set Bob's `boostMultiplier` for past 4 years to 1.
+
+### Tools Used
+
+Tested in Foundry
+
+### Recommended Mitigation Steps
+
+I have 2 ideas:
+
+1.  Remove `updateBoost` function. There shouldn't be a way to update boost multiplier without claiming rewards and updating `_userInfo.accAmountPerShare` .  So `releaseRewards`  should be sufficient.
+2.  A better, but also much more difficult solution, would be to redesign boost updates in such a way that distribution of rewards no longer depends on when and how often boost multiplier is updated. If the formula for boost multiplier stays the same, this approach might require calculating integrals of the multiplier as a function of time.
+
+**[m19 (Mimo DeFi) confirmed and commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/136#issuecomment-1117148014):**
+ > We agree this is an issue and intend to fix it.
+
+
+
+***
+
+## [[M-03] SuperVault's leverageSwap and emptyVaultOperation can become stuck](https://github.com/code-423n4/2022-04-mimo-findings/issues/145)
+_Submitted by hyh, also found by cccz, berndartmueller, delfin454000, joestakey, robee, defsec, and 0xDjango_
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/supervaults/contracts/SuperVault.sol#L320-L326>
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/supervaults/contracts/SuperVault.sol#L198-L199>
+
+leverageSwap and emptyVaultOperation can be run repeatedly for the same tokens. If these tokens happen to be an ERC20 that do not allow for approval of positive amount when allowance already positive, both functions can become stuck.
+
+<https://github.com/d-xo/weird-erc20#approval-race-protections>
+
+In both cases, logic doesn't seem to guarantee full usage of the allowance given. If it's not used fully, the token will revert each next approve attempt, which will render the functions unavailable for the token.
+
+While emptyVaultOperation can be cured by emptying the balance and rerun, in the leverageSwap case there is no such fix possible.
+
+Setting severity to medium as this clearly impacts leverageSwap and emptyVaultOperation availability to the users.
+
+### Proof of Concept
+
+leverageSwap calls target token for maximum approval of core each time:
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/supervaults/contracts/SuperVault.sol#L320-L326>
+
+```solidity
+  ///@param token The leveraged asset to swap PAR for
+  function leverageSwap(bytes memory params, IERC20 token) internal {
+    (uint256 parToSell, bytes memory dexTxData, uint dexIndex) = abi.decode(
+      params,
+      (uint256, bytes, uint )
+    );
+    token.approve(address(a.core()), 2**256 - 1);
+```
+
+Some tokens do not have maximum amount as an exception, simply reverting any attempt to approve positive from positive, for example current USDT contract, L205:
+
+<https://etherscan.io/address/0xdac17f958d2ee523a2206206994597c13d831ec7#code>
+
+I.e. if leverageSwap be run again with USDT it will revert all the times after the first.
+
+emptyVaultOperation approves core for the whole balance of stablex:
+
+<https://github.com/code-423n4/2022-04-mimo/blob/b18670f44d595483df2c0f76d1c57a7bfbfbc083/supervaults/contracts/SuperVault.sol#L198-L199>
+
+```solidity
+    IERC20 par = IERC20(a.stablex());
+    par.approve(address(a.core()), par.balanceOf(address(this)));
+```
+
+### Recommended Mitigation Steps
+
+Consider adding zero amount approval before actual amount approval, i.e. force zero allowance before current approval.
+
+**[m19 (Mimo DeFi) acknowledged](https://github.com/code-423n4/2022-04-mimo-findings/issues/145)**
+
+**[gzeoneth (judge) commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/145#issuecomment-1146831466):**
+ > Having `approve(0)` first will still revert with USDT because the interface expect it to return a bool but USDT return void. Fund also won't be stuck because it will revert. Judging as Med Risk as function availability could be impacted. Unlike the core protocol, `SuperVault` can take any token as input and USDT is listed on various lending protocol like AAVE.
+
+
+
+***
+
+## [[M-04] Non-standard ERC20 Tokens are Not Supported](https://github.com/code-423n4/2022-04-mimo-findings/issues/127)
+_Submitted by ych18, also found by MaratCerby, robee, and defsec_
+
+When trying to call `SuperVault.executeOperation`  the transaction reverts. This is because the call to `asset.approve()` in line{97} doesn't match the expected function signature of `approve()` on the target contract like in the case of USDT.
+
+This issue exists in any call to approve function when the asset could be any ERC20.
+
+Recommendation : consider using safeApprove of OZ
+
+**[m19 (Mimo DeFi) acknowledged](https://github.com/code-423n4/2022-04-mimo-findings/issues/127)**
+
+**[gzeoneth (judge) decreased severity to Medium and commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/127#issuecomment-1146832811):**
+ > Judging as Med Risk as function availability could be impacted. Unlike the core protocol, `SuperVault` can take any token as input and USDT is listed on various lending protocol like AAVE.
+
+
+
+***
+
+## [[M-05] ABDKMath64 performs multiplication on results of division](https://github.com/code-423n4/2022-04-mimo-findings/issues/151)
+_Submitted by AlleyCat_
+
+<https://github.com/code-423n4/2022-04-mimo/blob/main/core/contracts/libraries/ABDKMath64x64.sol#L626>
+
+<https://github.com/code-423n4/2022-04-mimo/blob/main/core/contracts/libraries/ABDKMath64x64.sol#L629>
+
+<https://github.com/code-423n4/2022-04-mimo/blob/main/core/contracts/libraries/ABDKMath64x64.sol#L630>
+
+Solidity could truncate the results, performing multiplication before division will prevent rounding/truncation in solidity math.
+
+### Recommended Mitigation Steps
+
+Consider ordering multiplication first.
+
+**[m19 (Mimo DeFi) acknowledged](https://github.com/code-423n4/2022-04-mimo-findings/issues/151)**
+
+
+
+***
+
+# Low Risk and Non-Critical Issues
+
+For this contest, 33 reports were submitted by wardens detailing low risk and non-critical issues. The [report highlighted below](https://github.com/code-423n4/2022-04-mimo-findings/issues/153) by **Dravee** received the top score from the judge.
+
+*The following wardens also submitted reports: [robee](https://github.com/code-423n4/2022-04-mimo-findings/issues/104), [defsec](https://github.com/code-423n4/2022-04-mimo-findings/issues/124), [pauliax](https://github.com/code-423n4/2022-04-mimo-findings/issues/137), [0xDjango](https://github.com/code-423n4/2022-04-mimo-findings/issues/87), [berndartmueller](https://github.com/code-423n4/2022-04-mimo-findings/issues/117), [hyh](https://github.com/code-423n4/2022-04-mimo-findings/issues/165), [joestakey](https://github.com/code-423n4/2022-04-mimo-findings/issues/114), [0x52](https://github.com/code-423n4/2022-04-mimo-findings/issues/66), [dipp](https://github.com/code-423n4/2022-04-mimo-findings/issues/113), [kebabsec](https://github.com/code-423n4/2022-04-mimo-findings/issues/74), [peritoflores](https://github.com/code-423n4/2022-04-mimo-findings/issues/149), [Picodes](https://github.com/code-423n4/2022-04-mimo-findings/issues/109), [sikorico](https://github.com/code-423n4/2022-04-mimo-findings/issues/106), [sorrynotsorry](https://github.com/code-423n4/2022-04-mimo-findings/issues/102), [z3s](https://github.com/code-423n4/2022-04-mimo-findings/issues/96), [0x1f8b](https://github.com/code-423n4/2022-04-mimo-findings/issues/58), [0x4non](https://github.com/code-423n4/2022-04-mimo-findings/issues/3), [AlleyCat](https://github.com/code-423n4/2022-04-mimo-findings/issues/154), [cccz](https://github.com/code-423n4/2022-04-mimo-findings/issues/61), [delfin454000](https://github.com/code-423n4/2022-04-mimo-findings/issues/141), [Funen](https://github.com/code-423n4/2022-04-mimo-findings/issues/152), [GalloDaSballo](https://github.com/code-423n4/2022-04-mimo-findings/issues/12), [GimelSec](https://github.com/code-423n4/2022-04-mimo-findings/issues/92), [Hawkeye](https://github.com/code-423n4/2022-04-mimo-findings/issues/162), [ilan](https://github.com/code-423n4/2022-04-mimo-findings/issues/110), [luduvigo](https://github.com/code-423n4/2022-04-mimo-findings/issues/10), [MaratCerby](https://github.com/code-423n4/2022-04-mimo-findings/issues/51), [rotcivegaf](https://github.com/code-423n4/2022-04-mimo-findings/issues/23), [samruna](https://github.com/code-423n4/2022-04-mimo-findings/issues/13), [shenwilly](https://github.com/code-423n4/2022-04-mimo-findings/issues/79), [simon135](https://github.com/code-423n4/2022-04-mimo-findings/issues/72), and [unforgiven](https://github.com/code-423n4/2022-04-mimo-findings/issues/98).*
+
+## Table of Contents
+
+See [original submission](https://github.com/code-423n4/2022-04-mimo-findings/issues/153) for details.
+
+## [L-01] `approve` should be replaced with `safeApprove` or `safeIncreaseAllowance() / safeDecreaseAllowance()`
+
+`approve` is subject to a known front-running attack. Consider using `safeApprove` instead:
+
+```solidity
+core/contracts/liquidityMining/v2/PARMinerV2.sol:
+   58:     _par.approve(address(_a.parallel().core()), uint256(-1));
+  125:     collateralToken.approve(proxy, collateralToken.balanceOf(address(this)));
+
+core/echidna/TInceptionVaultHealthy.sol:
+  33:     _weth.approve(address(a), _adminDepositAmount);
+  39:     _link.approve(address(v), _userDepositAmount);
+  47:     _par.approve(address(_inceptionVaultsCore), _MAX_INT);
+
+core/echidna/TInceptionVaultUnhealthy.sol:
+  37:     _weth.approve(address(a), _adminDepositAmount);
+  43:     _link.approve(address(v), _userDepositAmount);
+  52:     _par.approve(address(_inceptionVaultsCore), _MAX_INT);
+
+core/echidna/TInceptionVaultUnhealthyAssertion.sol:
+  36:     _weth.approve(address(a), _adminDepositAmount);
+  42:     _link.approve(address(v), _userDepositAmount);
+  51:     _par.approve(address(_inceptionVaultsCore), _MAX_INT);
+
+core/echidna/TInceptionVaultUnhealthyProperty.sol:
+  35:     _weth.approve(address(a), _adminDepositAmount);
+  41:     _link.approve(address(v), _userDepositAmount);
+  50:     _par.approve(address(_inceptionVaultsCore), _MAX_INT);
+
+supervaults/contracts/SuperVault.sol:
+   97:     asset.approve(address(lendingPool), flashloanRepayAmount);
+  149:     IERC20(toCollateral).approve(address(a.core()), depositAmount);
+  199:     par.approve(address(a.core()), par.balanceOf(address(this)));
+  273:     token.approve(address(a.core()), amount);
+  289:     token.approve(address(a.core()), depositAmount);
+  326:     token.approve(address(a.core()), 2**256 - 1);
+  345:     token.approve(proxy, amount);
+```
+
+Keep in mind though that it would be actually better to replace safeApprove() with safeIncreaseAllowance() or safeDecreaseAllowance().
+
+See this discussion: [SafeERC20.safeApprove() Has unnecessary and unsecure added behavior](https://github.com/OpenZeppelin/openzeppelin-contracts/issues/2219)
+
+## [L-02] Add constructor initializers
+
+As per [OpenZeppelinâ€™s (OZ) recommendation](https://forum.openzeppelin.com/t/uupsupgradeable-vulnerability-post-mortem/15680/6), â€œThe guidelines are now to make it impossible for *anyone* to run `initialize` on an implementation contract, by adding an empty constructor with the `initializer` modifier. So the implementation contract gets initialized automatically upon deployment.â€
+
+Note that this behaviour is also incorporated the [OZ Wizard](https://wizard.openzeppelin.com/) since the UUPS vulnerability discovery: â€œAdditionally, we modified the code generated by the [Wizard 19](https://wizard.openzeppelin.com/) to include a constructor that automatically initializes the implementation when deployed.â€
+
+Furthermore, this thwarts any attempts to frontrun the initialization tx of these contracts:
+
+```solidity
+core/contracts/inception/AdminInceptionVault.sol:
+  35:   function initialize(
+
+core/contracts/inception/InceptionVaultsCore.sol:
+  40:   function initialize(
+
+core/contracts/inception/InceptionVaultsDataProvider.sol:
+  30:   function initialize(IInceptionVaultsCore inceptionVaultsCore, IAddressProvider addressProvider)
+
+core/contracts/inception/priceFeed/ChainlinkInceptionPriceFeed.sol:
+  29:   function initialize(
+
+supervaults/contracts/SuperVault.sol:
+  49:   function initialize(
+```
+
+## [L-03] Missing address(0) checks
+
+According to Slither:
+
+```solidity
+AdminInceptionVault.initialize(address,IAddressProvider,IDebtNotifier,IWETH,IERC20,IInceptionVaultsCore)._owner (contracts/inception/AdminInceptionVault.sol#36) lacks a zero-check on :
+  - owner = _owner (contracts/inception/AdminInceptionVault.sol#48)
+InceptionVaultsCore.initialize(address,IInceptionVaultsCore.VaultConfig,IERC20,IAddressProvider,IAdminInceptionVault,IInceptionVaultsDataProvider,IInceptionVaultPriceFeed)._owner (contracts/inception/InceptionVaultsCore.sol#41) lacks a zero-check on :
+  - owner = _owner (contracts/inception/InceptionVaultsCore.sol#56)
+DemandMinerV2.setFeeCollector(address).feeCollector (contracts/liquidityMining/v2/DemandMinerV2.sol#46) lacks a zero-check on :
+  - _feeCollector = feeCollector (contracts/liquidityMining/v2/DemandMinerV2.sol#47)
+PARMinerV2.liquidate(uint256,uint256,uint256,bytes).router (contracts/liquidityMining/v2/PARMinerV2.sol#124) lacks a zero-check on :
+  - router.call(dexTxData) (contracts/liquidityMining/v2/PARMinerV2.sol#126)
+```
+
+## [L-04] Add a timelock to critical functions
+
+It is a good practice to give time for users to react and adjust to critical changes. A timelock provides more guarantees and reduces the level of trust required, thus decreasing risk for users. It also indicates that the project is legitimate (less risk of a malicious Manager making a frontrunning/sandwich attack on the fees).
+
+Consider adding a timelock to:
+
+```solidity
+File: DemandMinerV2.sol
+56:   function setFeeConfig(FeeConfig memory newFeeConfig) external override onlyManager {
+57:     _feeConfig = newFeeConfig;
+58:     emit FeeConfigSet(newFeeConfig);
+59:   }
+```
+
+## [L-05] Fee in `DemandMinerV2.setFeeConfig()` should be upper-bounded
+
+```solidity
+File: DemandMinerV2.sol
+56:   function setFeeConfig(FeeConfig memory newFeeConfig) external override onlyManager {
+57:     _feeConfig = newFeeConfig;
+58:     emit FeeConfigSet(newFeeConfig);
+59:   }
+```
+
+## [N-01] Unused named returns
+
+Using both named returns and a return statement isn't necessary. Removing one of those can improve code clarity:
+
+```solidity
+core/contracts/inception/priceFeed/ChainlinkInceptionPriceFeed.sol:
+  73:   function getAssetPrice() public view override returns (uint256 price) {
+```
+
+## [N-02] Useless import: SafeMath
+
+```solidity
+File: SuperVault.sol
+6: import "@openzeppelin/contracts/utils/math/SafeMath.sol"; //@audit NC: useless import
+```
+
+## [N-03] The visibility for constructor is ignored
+
+```solidity
+File: SuperVaultFactory.sol
+17:   constructor(address _base) public {
+```
+
+**[m19 (Mimo DeFi) commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/153#issuecomment-1120354471):**
+ > Very clear and well structured QA report
+
+**[gzeoneth (judge) commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/153#issuecomment-1146848674):**
+ > For L-01 I don't think there are front-running risk but the suggestion to use `safeIncreaseAllowance` is fine
+> Otherwise looks good and I think the severity of each issue is well labeled.
+
+
+
+***
+
+# Gas Optimizations
+
+For this contest, 26 reports were submitted by wardens detailing gas optimizations. The [report highlighted below](https://github.com/code-423n4/2022-04-mimo-findings/issues/139) by **Dravee** received the top score from the judge.
+
+*The following wardens also submitted reports: [joestakey](https://github.com/code-423n4/2022-04-mimo-findings/issues/111), [robee](https://github.com/code-423n4/2022-04-mimo-findings/issues/105), [0xNazgul](https://github.com/code-423n4/2022-04-mimo-findings/issues/82), [defsec](https://github.com/code-423n4/2022-04-mimo-findings/issues/129), [0xkatana](https://github.com/code-423n4/2022-04-mimo-findings/issues/71), [slywaters](https://github.com/code-423n4/2022-04-mimo-findings/issues/68), [Tomio](https://github.com/code-423n4/2022-04-mimo-findings/issues/97), [0v3rf10w](https://github.com/code-423n4/2022-04-mimo-findings/issues/78), [0x4non](https://github.com/code-423n4/2022-04-mimo-findings/issues/2), [0xDjango](https://github.com/code-423n4/2022-04-mimo-findings/issues/88), [delfin454000](https://github.com/code-423n4/2022-04-mimo-findings/issues/140), [MaratCerby](https://github.com/code-423n4/2022-04-mimo-findings/issues/60), [oyc_109](https://github.com/code-423n4/2022-04-mimo-findings/issues/20), [pauliax](https://github.com/code-423n4/2022-04-mimo-findings/issues/138), [rotcivegaf](https://github.com/code-423n4/2022-04-mimo-findings/issues/14), [sorrynotsorry](https://github.com/code-423n4/2022-04-mimo-findings/issues/101), [0x1f8b](https://github.com/code-423n4/2022-04-mimo-findings/issues/59), [Funen](https://github.com/code-423n4/2022-04-mimo-findings/issues/150), [GimelSec](https://github.com/code-423n4/2022-04-mimo-findings/issues/89), [kebabsec](https://github.com/code-423n4/2022-04-mimo-findings/issues/75), [Picodes](https://github.com/code-423n4/2022-04-mimo-findings/issues/108), [samruna](https://github.com/code-423n4/2022-04-mimo-findings/issues/11), [Tadashi](https://github.com/code-423n4/2022-04-mimo-findings/issues/157), [ych18](https://github.com/code-423n4/2022-04-mimo-findings/issues/128), and [z3s](https://github.com/code-423n4/2022-04-mimo-findings/issues/95).*
+
+## Table of Contents
+
+See [original submission](https://github.com/code-423n4/2022-04-mimo-findings/issues/139).
+
+## [G-01] Help the optimizer by saving a storage variable's reference instead of repeatedly fetching it
+
+To help the optimizer, declare a `storage` type variable and use it instead of repeatedly fetching the reference in a map or an array.
+
+The effect can be quite significant.
+
+As an example, instead of repeatedly calling `someMap[someIndex]`, save its reference like this: `SomeStruct storage someStruct = someMap[someIndex]` and use it.
+
+Instances include (check the `@audit` tags):
+
+```solidity
+core/contracts/dex/DexAddressProvider.sol:
+  53:     return (_dexMapping[index].proxy, _dexMapping[index].router);  //@audit gas: should declare a storage variable "Dex storage _dex = _dexMapping[index]"
+```
+
+## [G-02] Caching external values in memory
+
+See the `@audit` tags for further details:
+
+```solidity
+core/contracts/dex/DexAddressProvider.sol:
+  22:     require(_a.controller().hasRole(_a.controller().MANAGER_ROLE(), msg.sender), "LM010"); //@audit gas: should cache _a.controller()
+
+supervaults/contracts/SuperVault.sol:
+  369:     if (ga.mimo().balanceOf(address(this)) > 0) {  //@audit gas: should cache ga.mimo()
+```
+
+## [G-03] Using an existing memory variable instead of reading storage
+
+See the `@audit` tags for further details:
+
+```solidity
+core/contracts/oracles/BalancerV2LPOracle.sol:
+  41:     (address _pool, IBalancerVault.PoolSpecialization tokensNum) = vault.getPool(poolId); //@audit gas: should use memory variable _poolId: "vault.getPool(_poolId)"
+```
+
+## [G-04] `BalancerV2LPOracle.sol`: Tighly pack storage variables
+
+I suggest going from (see `@audit` tags):
+
+```solidity
+File: BalancerV2LPOracle.sol
+14: contract BalancerV2LPOracle is AggregatorV3Interface, BNum {
+15:   using SafeMath for uint256;
+16: 
+17:   string public override description; //@audit gas: 32 bytes
+18:   uint256 public override version = 3; //@audit gas: 32 bytes
+19:   uint8 public override decimals; //@audit gas: 1 byte, can be tightly packed by being moved further down or by moving an address closer
+20: 
+21:   bytes32 public poolId; //@audit gas: 32 bytes
+22:   IBalancerVault public vault; //@audit gas: 20 bytes
+23:   IBalancerPool public pool; //@audit gas: 20 bytes
+24:   AggregatorV3Interface public oracleA; //@audit gas: 20 bytes
+25:   AggregatorV3Interface public oracleB; //@audit gas: 20 bytes
+```
+
+to
+
+```solidity
+contract BalancerV2LPOracle is AggregatorV3Interface, BNum {
+  using SafeMath for uint256;
+
+  string public override description; //@audit gas: 32 bytes (slot 1)
+  uint256 public override version = 3; //@audit gas: 32 bytes (slot 2)
+  uint8 public override decimals; //@audit gas: 1 byte (slot 3)
+
+  IBalancerVault public vault; //@audit gas: 20 bytes (slot 3)
+  IBalancerPool public pool; //@audit gas: 20 bytes  (slot 4)
+  bytes32 public poolId; //@audit gas: 32 bytes <= this is the one we moved
+  AggregatorV3Interface public oracleA; //@audit gas: 20 bytes
+  AggregatorV3Interface public oracleB; //@audit gas: 20 bytes
+```
+
+Which would save 1 storage slot.
+
+## [G-05] Variables that should be constant
+
+According to slither:
+
+```jsx
+BalancerV2LPOracle.version (contracts/oracles/BalancerV2LPOracle.sol#18) should be constant
+GUniLPOracle.version (contracts/oracles/GUniLPOracle.sol#16) should be constant
+```
+
+## [G-06] `> 0` is less efficient than `!= 0` for unsigned integers (with proof)
+
+`!= 0` costs less gas compared to `> 0` for unsigned integers in `require` statements with the optimizer enabled (6 gas)
+
+Proof: While it may seem that `> 0` is cheaper than `!=`, this is only true without the optimizer enabled and outside a require statement. If you enable the optimizer at 10k AND you're in a `require` statement, this will save gas. You can see this tweet for more proofs: <https://twitter.com/gzeon/status/1485428085885640706>
+
+I suggest changing `> 0` with `!= 0` here:
+
+```solidity
+core/contracts/inception/InceptionVaultsCore.sol:122:    require(_amount > 0, "IV100");
+core/contracts/liquidityMining/v2/GenericMinerV2.sol:58:    require(boostConfig.a >= 1 && boostConfig.d > 0 && boostConfig.maxBoost >= 1, "LM004");
+core/contracts/liquidityMining/v2/GenericMinerV2.sol:70:    require(newBoostConfig.a >= 1 && newBoostConfig.d > 0 && newBoostConfig.maxBoost >= 1, "LM004");
+core/contracts/liquidityMining/v2/GenericMinerV2.sol:175:    require(value > 0, "LM101");
+core/contracts/liquidityMining/v2/GenericMinerV2.sol:195:    require(value > 0, "LM101");
+core/contracts/liquidityMining/v2/PARMinerV2.sol:52:    require(boostConfig.a >= 1 && boostConfig.d > 0 && boostConfig.maxBoost >= 1, "LM004");
+core/contracts/liquidityMining/v2/PARMinerV2.sol:71:    require(newBoostConfig.a >= 1 && newBoostConfig.d > 0 && newBoostConfig.maxBoost >= 1, "LM004");
+core/contracts/liquidityMining/v2/PARMinerV2.sol:254:    require(_value > 0, "LM101");
+core/contracts/liquidityMining/v2/PARMinerV2.sol:284:    require(_value > 0, "LM101");
+core/contracts/oracles/GUniLPOracle.sol:112:    require(rA > 0 || rB > 0, "C100");
+```
+
+Also, please enable the Optimizer.
+
+## [G-07] `<=` is cheaper than `<`
+
+Strict inequalities (`<`) are more expensive than non-strict ones (`<=`). This is due to some supplementary checks (ISZERO, 3 gas)
+
+I suggest using  `<=`  instead of `<` here:
+
+```solidity
+core/contracts/libraries/ABDKMath64x64.sol:697:      return uint128(r < r1 ? r : r1);
+```
+
+## [G-08] Splitting `require()` statements that use `&&` saves gas
+
+Instead of using the `&&` operator in a single require statement to check multiple conditions, I suggest using multiple require statements with 1 condition per require statement (saving 3 gas per `&`):
+
+```solidity
+core/contracts/libraries/ABDKMath64x64.sol:
+   35:     require(x >= -0x8000000000000000 && x <= 0x7FFFFFFFFFFFFFFF);
+   83:     require(result >= MIN_64x64 && result <= MAX_64x64);
+  107:     require(result >= MIN_64x64 && result <= MAX_64x64);
+  120:     require(result >= MIN_64x64 && result <= MAX_64x64);
+  133:     require(result >= MIN_64x64 && result <= MAX_64x64);
+  207:     require(result >= MIN_64x64 && result <= MAX_64x64);
+  288:     require(result >= MIN_64x64 && result <= MAX_64x64);
+  413:     require(result >= MIN_64x64 && result <= MAX_64x64);
+
+core/contracts/liquidityMining/v2/GenericMinerV2.sol:
+   58:     require(boostConfig.a >= 1 && boostConfig.d > 0 && boostConfig.maxBoost >= 1, "LM004");
+   70:     require(newBoostConfig.a >= 1 && newBoostConfig.d > 0 && newBoostConfig.maxBoost >= 1, "LM004");
+  331:     require(multiplier >= 1e18 && multiplier <= _boostConfig.maxBoost, "LM103");
+
+core/contracts/liquidityMining/v2/PARMinerV2.sol:
+   52:     require(boostConfig.a >= 1 && boostConfig.d > 0 && boostConfig.maxBoost >= 1, "LM004");
+   71:     require(newBoostConfig.a >= 1 && newBoostConfig.d > 0 && newBoostConfig.maxBoost >= 1, "LM004");
+  426:     require(multiplier >= 1e18 && multiplier <= _boostConfig.maxBoost, "LM103");
+
+supervaults/contracts/SuperVault.sol:
+  344:     require(proxy != address(0) && router != address(0), "SV201"); 
+```
+
+## [G-09] `require()` should be used for checking error conditions on inputs and return values while `assert()` should be used for invariant checking
+
+Properly functioning code should **never** reach a failing assert statement, unless there is a bug in your contract you should fix. Here, I believe the assert should be a require or a revert:
+
+```solidity
+core/contracts/libraries/ABDKMath64x64.sol:641:      assert(xh == hi >> 128);
+```
+
+As the Solidity version is `0.6.12 < 0.8.0`, the remaining gas would not be refunded in case of failure.
+
+## [G-10] Amounts should be checked for 0 before calling a transfer
+
+Checking non-zero transfer values can avoid an expensive external call and save gas.
+
+While this is done at some places, it's not consistently done in the solution.
+
+I suggest adding a non-zero-value check here:
+
+```solidity
+core/contracts/inception/AdminInceptionVault.sol:81:    asset.safeTransferFrom(msg.sender, address(this), _depositAmount);
+core/contracts/inception/AdminInceptionVault.sol:101:    asset.safeTransfer(msg.sender, _amount);
+core/contracts/inception/AdminInceptionVault.sol:124:    stablex.safeTransfer(_to, _amount);
+core/contracts/inception/AdminInceptionVault.sol:131:    _mimo.safeTransfer(_to, _amount);
+core/contracts/inception/AdminInceptionVault.sol:139:    par.safeTransfer(_to, _amount);
+core/contracts/inception/AdminInceptionVault.sol:145:    this function uses `transferFrom()` and requires pre-approval via `approve()` on the ERC20.
+core/contracts/inception/AdminInceptionVault.sol:151:    asset.safeTransferFrom(msg.sender, address(this), _amount);
+core/contracts/inception/InceptionVaultsCore.sol:67:    _inceptionCollateral.safeTransferFrom(msg.sender, address(this), _amount);
+core/contracts/inception/InceptionVaultsCore.sol:93:    _inceptionCollateral.safeTransfer(msg.sender, _amount);
+core/contracts/inception/InceptionVaultsCore.sol:186:    stablex.safeTransferFrom(msg.sender, address(_adminInceptionVault), _amount);
+core/contracts/inception/InceptionVaultsCore.sol:234:    stablex.safeTransferFrom(msg.sender, address(this), _amount);
+core/contracts/inception/InceptionVaultsCore.sol:235:    stablex.safeTransfer(address(_adminInceptionVault), _amount);
+core/contracts/inception/InceptionVaultsCore.sol:239:    _inceptionCollateral.safeTransfer(msg.sender, collateralToReceive);
+core/contracts/liquidityMining/v2/DemandMinerV2.sol:67:    _token.safeTransferFrom(msg.sender, address(this), amount);
+core/contracts/liquidityMining/v2/DemandMinerV2.sol:72:      _token.safeTransfer(_feeCollector, fee);
+core/contracts/liquidityMining/v2/DemandMinerV2.sol:87:      _token.safeTransfer(_feeCollector, fee);
+core/contracts/liquidityMining/v2/DemandMinerV2.sol:90:    _token.safeTransfer(msg.sender, withdrawAmount);
+core/contracts/liquidityMining/v2/PARMinerV2.sol:92:    _par.safeTransferFrom(msg.sender, address(this), amount);
+core/contracts/liquidityMining/v2/PARMinerV2.sol:101:    _par.safeTransfer(msg.sender, amount);
+core/contracts/liquidityMining/v2/PARMinerV2.sol:127:    _par.safeTransfer(msg.sender, _liquidateCallerReward);
+supervaults/contracts/SuperVault.sol:129:    IERC20(asset).transferFrom(msg.sender, address(this), depositAmount);
+supervaults/contracts/SuperVault.sol:247:    require(asset.transfer(msg.sender, amount));
+supervaults/contracts/SuperVault.sol:274:    token.transferFrom(msg.sender, address(this), amount);
+supervaults/contracts/SuperVault.sol:290:    token.transferFrom(msg.sender, address(this), depositAmount);
+```
+
+## [G-11] An array's length should be cached to save gas in for-loops
+
+Reading array length at each iteration of the loop takes 6 gas (3 for mload and 3 to place memory_offset) in the stack.
+
+Caching the array length in the stack saves around 3 gas per iteration.
+
+Here, I suggest storing the array's length in a variable before the for-loop, and use it instead:
+
+```solidity
+core/contracts/dex/DexAddressProvider.sol:16:    for (uint256 i; i < dexes.length; i++) {
+```
+
+## [G-12] `++i` costs less gas compared to `i++` or `i += 1`
+
+`++i` costs less gas compared to `i++` or `i += 1` for unsigned integer, as pre-increment is cheaper (about 5 gas per iteration). This statement is true even with the optimizer enabled.
+
+`i++` increments `i` and returns the initial value of `i`. Which means:
+
+```solidity
+uint i = 1;  
+i++; // == 1 but i == 2  
+```
+
+But `++i` returns the actual incremented value:
+
+```solidity
+uint i = 1;  
+++i; // == 2 and i == 2 too, so no need for a temporary variable  
+```
+
+In the first case, the compiler has to create a temporary variable (when used) for returning `1` instead of `2`
+
+Instances include:
+
+```solidity
+core/contracts/dex/DexAddressProvider.sol:16:    for (uint256 i; i < dexes.length; i++) {
+core/contracts/inception/AdminInceptionVault.sol:108:    for (uint8 i = 1; i < _collateralCount + 1; i++) {
+core/contracts/libraries/ABDKMath64x64.sol:396:            resultShift += 1;
+core/contracts/libraries/ABDKMath64x64.sol:403:          absXShift += 1;
+core/contracts/libraries/ABDKMath64x64.sol:463:    if (xc >= 0x2) msb += 1; // No need to shift xc anymore
+core/contracts/libraries/ABDKMath64x64.sol:624:      if (xc >= 0x2) msb += 1; // No need to shift xc anymore
+```
+
+I suggest using `++i` instead of `i++` to increment the value of an uint variable.
+
+## [G-13] Usage of a non-native 256 bits uint as a counter in for-loops increases gas cost
+
+Due to how the EVM natively works on 256 bit numbers, using a 8 bit number in for-loops introduces additional costs as the EVM has to properly enforce the limits of this smaller type.
+
+See the warning at this link: <https://docs.soliditylang.org/en/v0.8.0/internals/layout_in_storage.html#layout-of-state-variables-in-storage> :
+
+> When using elements that are smaller than 32 bytes, your contractâ€™s gas usage may be higher. This is because the EVM operates on 32 bytes at a time. Therefore, if the element is smaller than that, the EVM must use more operations in order to reduce the size of the element from 32 bytes to the desired size.
+> It is only beneficial to use reduced-size arguments if you are dealing with storage values because the compiler will pack multiple elements into one storage slot, and thus, combine multiple reads or writes into a single operation. When dealing with function arguments or memory values, there is no inherent benefit because the compiler does not pack these values.
+
+Affected code:
+
+```solidity
+core/contracts/inception/AdminInceptionVault.sol:108:    for (uint8 i = 1; i < _collateralCount + 1; i++) {
+```
+
+Consider manually checking for the upper bound before the for-loop and using the `uint256` type as a counter in the mentioned for-loops.
+
+## [G-14] Public functions to external
+
+The following functions could be set external to save gas and improve code quality.
+External call cost is less expensive than of public functions.
+
+```solidity
+clone(bytes) should be declared external:
+ - SuperVaultFactory.clone(bytes) (contracts/SuperVaultFactory.sol#23-28)
+parallel() should be declared external:
+ - DexAddressProvider.parallel() (contracts/dex/DexAddressProvider.sol#43-45)
+dexMapping(uint256) should be declared external:
+ - DexAddressProvider.dexMapping(uint256) (contracts/dex/DexAddressProvider.sol#52-54)
+deposit(address,uint256) should be declared external:
+ - AdminInceptionVault.deposit(address,uint256) (contracts/inception/AdminInceptionVault.sol#149-154)
+borrow(uint256,uint256) should be declared external:
+ - AdminInceptionVault.borrow(uint256,uint256) (contracts/inception/AdminInceptionVault.sol#164-173)
+a() should be declared external:
+ - AdminInceptionVault.a() (contracts/inception/AdminInceptionVault.sol#175-177)
+debtNotifier() should be declared external:
+ - AdminInceptionVault.debtNotifier() (contracts/inception/AdminInceptionVault.sol#179-181)
+weth() should be declared external:
+ - AdminInceptionVault.weth() (contracts/inception/AdminInceptionVault.sol#183-185)
+mimo() should be declared external:
+ - AdminInceptionVault.mimo() (contracts/inception/AdminInceptionVault.sol#187-189)
+inceptionCore() should be declared external:
+ - AdminInceptionVault.inceptionCore() (contracts/inception/AdminInceptionVault.sol#191-193)
+collateralCount() should be declared external:
+ - AdminInceptionVault.collateralCount() (contracts/inception/AdminInceptionVault.sol#195-197)
+collaterals(uint8) should be declared external:
+ - AdminInceptionVault.collaterals(uint8) (contracts/inception/AdminInceptionVault.sol#199-201)
+collateralId(address) should be declared external:
+ - AdminInceptionVault.collateralId(address) (contracts/inception/AdminInceptionVault.sol#203-205)
+a() should be declared external:
+ - InceptionVaultFactory.a() (contracts/inception/InceptionVaultFactory.sol#138-140)
+debtNotifier() should be declared external:
+ - InceptionVaultFactory.debtNotifier() (contracts/inception/InceptionVaultFactory.sol#142-144)
+weth() should be declared external:
+ - InceptionVaultFactory.weth() (contracts/inception/InceptionVaultFactory.sol#146-148)
+mimo() should be declared external:
+ - InceptionVaultFactory.mimo() (contracts/inception/InceptionVaultFactory.sol#150-152)
+adminInceptionVaultBase() should be declared external:
+ - InceptionVaultFactory.adminInceptionVaultBase() (contracts/inception/InceptionVaultFactory.sol#154-156)
+inceptionVaultsCoreBase() should be declared external:
+ - InceptionVaultFactory.inceptionVaultsCoreBase() (contracts/inception/InceptionVaultFactory.sol#158-160)
+inceptionVaultsDataProviderBase() should be declared external:
+ - InceptionVaultFactory.inceptionVaultsDataProviderBase() (contracts/inception/InceptionVaultFactory.sol#162-164)
+inceptionVaultCount() should be declared external:
+ - InceptionVaultFactory.inceptionVaultCount() (contracts/inception/InceptionVaultFactory.sol#166-168)
+priceFeedCount() should be declared external:
+ - InceptionVaultFactory.priceFeedCount() (contracts/inception/InceptionVaultFactory.sol#170-172)
+inceptionVaults(uint256) should be declared external:
+ - InceptionVaultFactory.inceptionVaults(uint256) (contracts/inception/InceptionVaultFactory.sol#174-176)
+priceFeeds(uint8) should be declared external:
+ - InceptionVaultFactory.priceFeeds(uint8) (contracts/inception/InceptionVaultFactory.sol#178-180)
+priceFeedIds(address) should be declared external:
+ - InceptionVaultFactory.priceFeedIds(address) (contracts/inception/InceptionVaultFactory.sol#182-184)
+cumulativeRate() should be declared external:
+ - InceptionVaultsCore.cumulativeRate() (contracts/inception/InceptionVaultsCore.sol#243-245)
+lastRefresh() should be declared external:
+ - InceptionVaultsCore.lastRefresh() (contracts/inception/InceptionVaultsCore.sol#247-249)
+vaultConfig() should be declared external:
+ - InceptionVaultsCore.vaultConfig() (contracts/inception/InceptionVaultsCore.sol#251-253)
+a() should be declared external:
+ - InceptionVaultsCore.a() (contracts/inception/InceptionVaultsCore.sol#255-257)
+inceptionCollateral() should be declared external:
+ - InceptionVaultsCore.inceptionCollateral() (contracts/inception/InceptionVaultsCore.sol#259-261)
+adminInceptionVault() should be declared external:
+ - InceptionVaultsCore.adminInceptionVault() (contracts/inception/InceptionVaultsCore.sol#263-265)
+inceptionVaultsData() should be declared external:
+ - InceptionVaultsCore.inceptionVaultsData() (contracts/inception/InceptionVaultsCore.sol#267-269)
+inceptionPriceFeed() should be declared external:
+ - InceptionVaultsCore.inceptionPriceFeed() (contracts/inception/InceptionVaultsCore.sol#271-273)
+a() should be declared external:
+ - InceptionVaultsDataProvider.a() (contracts/inception/InceptionVaultsDataProvider.sol#161-163)
+inceptionVaultsCore() should be declared external:
+ - InceptionVaultsDataProvider.inceptionVaultsCore() (contracts/inception/InceptionVaultsDataProvider.sol#165-167)
+inceptionVaultCount() should be declared external:
+ - InceptionVaultsDataProvider.inceptionVaultCount() (contracts/inception/InceptionVaultsDataProvider.sol#169-171)
+baseDebt() should be declared external:
+ - InceptionVaultsDataProvider.baseDebt() (contracts/inception/InceptionVaultsDataProvider.sol#173-175)
+a() should be declared external:
+ - ChainlinkInceptionPriceFeed.a() (contracts/inception/priceFeed/ChainlinkInceptionPriceFeed.sol#87-89)
+inceptionCollateral() should be declared external:
+ - ChainlinkInceptionPriceFeed.inceptionCollateral() (contracts/inception/priceFeed/ChainlinkInceptionPriceFeed.sol#91-93)
+assetOracle() should be declared external:
+ - ChainlinkInceptionPriceFeed.assetOracle() (contracts/inception/priceFeed/ChainlinkInceptionPriceFeed.sol#95-97)
+eurOracle() should be declared external:
+ - ChainlinkInceptionPriceFeed.eurOracle() (contracts/inception/priceFeed/ChainlinkInceptionPriceFeed.sol#99-101)
+deposit(uint256) should be declared external:
+ - DemandMinerV2.deposit(uint256) (contracts/liquidityMining/v2/DemandMinerV2.sol#66-76)
+withdraw(uint256) should be declared external:
+ - DemandMinerV2.withdraw(uint256) (contracts/liquidityMining/v2/DemandMinerV2.sol#82-92)
+token() should be declared external:
+ - DemandMinerV2.token() (contracts/liquidityMining/v2/DemandMinerV2.sol#94-96)
+feeCollector() should be declared external:
+ - DemandMinerV2.feeCollector() (contracts/liquidityMining/v2/DemandMinerV2.sol#98-100)
+feeConfig() should be declared external:
+ - DemandMinerV2.feeConfig() (contracts/liquidityMining/v2/DemandMinerV2.sol#102-104)
+releaseRewards(address) should be declared external:
+ - GenericMinerV2.releaseRewards(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#80-86)
+ - PARMinerV2.releaseRewards(address) (contracts/liquidityMining/v2/PARMinerV2.sol#136-142)
+updateBoost(address) should be declared external:
+ - GenericMinerV2.updateBoost(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#91-94)
+stake(address) should be declared external:
+ - GenericMinerV2.stake(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#101-103)
+ - PARMinerV2.stake(address) (contracts/liquidityMining/v2/PARMinerV2.sol#172-174)
+stakeWithBoost(address) should be declared external:
+ - GenericMinerV2.stakeWithBoost(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#110-112)
+ - PARMinerV2.stakeWithBoost(address) (contracts/liquidityMining/v2/PARMinerV2.sol#181-183)
+pendingMIMO(address) should be declared external:
+ - GenericMinerV2.pendingMIMO(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#119-122)
+ - PARMinerV2.pendingMIMO(address) (contracts/liquidityMining/v2/PARMinerV2.sol#190-193)
+pendingPAR(address) should be declared external:
+ - GenericMinerV2.pendingPAR(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#129-132)
+ - PARMinerV2.pendingPAR(address) (contracts/liquidityMining/v2/PARMinerV2.sol#200-207)
+par() should be declared external:
+ - GenericMinerV2.par() (contracts/liquidityMining/v2/GenericMinerV2.sol#134-136)
+ - PARMinerV2.par() (contracts/liquidityMining/v2/PARMinerV2.sol#209-211)
+a() should be declared external:
+ - GenericMinerV2.a() (contracts/liquidityMining/v2/GenericMinerV2.sol#138-140)
+ - PARMinerV2.a() (contracts/liquidityMining/v2/PARMinerV2.sol#213-215)
+boostConfig() should be declared external:
+ - GenericMinerV2.boostConfig() (contracts/liquidityMining/v2/GenericMinerV2.sol#142-144)
+ - PARMinerV2.boostConfig() (contracts/liquidityMining/v2/PARMinerV2.sol#217-219)
+totalStake() should be declared external:
+ - GenericMinerV2.totalStake() (contracts/liquidityMining/v2/GenericMinerV2.sol#146-148)
+ - PARMinerV2.totalStake() (contracts/liquidityMining/v2/PARMinerV2.sol#221-223)
+totalStakeWithBoost() should be declared external:
+ - GenericMinerV2.totalStakeWithBoost() (contracts/liquidityMining/v2/GenericMinerV2.sol#150-152)
+ - PARMinerV2.totalStakeWithBoost() (contracts/liquidityMining/v2/PARMinerV2.sol#225-227)
+userInfo(address) should be declared external:
+ - GenericMinerV2.userInfo(address) (contracts/liquidityMining/v2/GenericMinerV2.sol#164-166)
+ - PARMinerV2.userInfo(address) (contracts/liquidityMining/v2/PARMinerV2.sol#243-245)
+deposit(uint256) should be declared external:
+ - PARMinerV2.deposit(uint256) (contracts/liquidityMining/v2/PARMinerV2.sol#91-94)
+withdraw(uint256) should be declared external:
+ - PARMinerV2.withdraw(uint256) (contracts/liquidityMining/v2/PARMinerV2.sol#100-103)
+liquidate(uint256,uint256,uint256,bytes) should be declared external:
+ - PARMinerV2.liquidate(uint256,uint256,uint256,bytes) (contracts/liquidityMining/v2/PARMinerV2.sol#112-130)
+restakePAR(address) should be declared external:
+ - PARMinerV2.restakePAR(address) (contracts/liquidityMining/v2/PARMinerV2.sol#148-157)
+updateBoost(address) should be declared external:
+ - PARMinerV2.updateBoost(address) (contracts/liquidityMining/v2/PARMinerV2.sol#162-165)
+liquidateCallerReward() should be declared external:
+ - PARMinerV2.liquidateCallerReward() (contracts/liquidityMining/v2/PARMinerV2.sol#229-231)
+baseDebtChanged(address,uint256) should be declared external:
+ - SupplyMinerV2.baseDebtChanged(address,uint256) (contracts/liquidityMining/v2/SupplyMinerV2.sol#45-47)
+collateral() should be declared external:
+ - SupplyMinerV2.collateral() (contracts/liquidityMining/v2/SupplyMinerV2.sol#49-51)
+syncStake(address) should be declared external:
+ - VotingMinerV2.syncStake(address) (contracts/liquidityMining/v2/VotingMinerV2.sol#56-60)
+```
+
+## [G-15] No need to explicitly initialize variables with default values
+
+If a variable is not set/initialized, it is assumed to have the default value (`0` for `uint`, `false` for `bool`, `address(0)` for address...). Explicitly initializing it with its default value is an anti-pattern and wastes gas.
+
+As an example: `for (uint256 i = 0; i < numIterations; ++i) {` should be replaced with `for (uint256 i; i < numIterations; ++i) {`
+
+Instances include:
+
+```solidity
+core/contracts/inception/InceptionVaultsCore.sol:218:    uint256 insuranceAmount = 0;
+core/contracts/libraries/ABDKMath64x64.sol:153:      bool negativeResult = false;
+core/contracts/libraries/ABDKMath64x64.sol:222:    bool negativeResult = false;
+core/contracts/libraries/ABDKMath64x64.sol:387:      uint256 resultShift = 0;
+core/contracts/libraries/ABDKMath64x64.sol:437:    int256 msb = 0;
+```
+
+I suggest removing explicit initializations for default values.
+
+## [G-16] Use Custom Errors instead of Revert Strings to save Gas
+
+Custom errors from Solidity 0.8.4 are cheaper than revert strings (cheaper deployment cost and runtime cost when the revert condition is met)
+
+Source: <https://blog.soliditylang.org/2021/04/21/custom-errors/>:
+
+> Starting from [Solidity v0.8.4](https://github.com/ethereum/solidity/releases/tag/v0.8.4), there is a convenient and gas-efficient way to explain to users why an operation failed through the use of custom errors. Until now, you could already use strings to give more information about failures (e.g., `revert("Insufficient funds.");`), but they are rather expensive, especially when it comes to deploy cost, and it is difficult to use dynamic information in them.
+
+Custom errors are defined using the `error` statement, which can be used inside and outside of contracts (including interfaces and libraries).
+
+Instances include:
+
+```solidity
+supervaults/contracts/SuperVault.sol:39:    require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "SV001");
+supervaults/contracts/SuperVault.sol:56:    require(address(_a) != address(0));
+supervaults/contracts/SuperVault.sol:57:    require(address(_ga) != address(0));
+supervaults/contracts/SuperVault.sol:58:    require(address(_lendingPool) != address(0));
+supervaults/contracts/SuperVault.sol:59:    require(address(dexAP) != address(0));
+supervaults/contracts/SuperVault.sol:83:    require(msg.sender == address(lendingPool), "SV002");
+supervaults/contracts/SuperVault.sol:109:    require(token.balanceOf(address(this)) >= flashloanRepayAmount, "SV101");
+supervaults/contracts/SuperVault.sol:156:    require(fromCollateral.balanceOf(address(this)) >= flashloanRepayAmount, "SV101");
+supervaults/contracts/SuperVault.sol:207:    require(vaultCollateral.balanceOf(address(this)) >= flashloanRepayAmount, "SV101");
+supervaults/contracts/SuperVault.sol:233:    require(IERC20(a.stablex()).transfer(msg.sender, IERC20(a.stablex()).balanceOf(address(this))));
+supervaults/contracts/SuperVault.sol:247:    require(asset.transfer(msg.sender, amount));
+supervaults/contracts/SuperVault.sol:255:    require(IERC20(a.stablex()).transfer(msg.sender, IERC20(a.stablex()).balanceOf(address(this))));
+supervaults/contracts/SuperVault.sol:264:    require(token.transfer(msg.sender, token.balanceOf(address(this))));
+supervaults/contracts/SuperVault.sol:292:    require(IERC20(a.stablex()).transfer(msg.sender, IERC20(a.stablex()).balanceOf(address(this)))); //par
+supervaults/contracts/SuperVault.sol:313:    require(IERC20(a.stablex()).transfer(msg.sender, IERC20(a.stablex()).balanceOf(address(this)))); //par
+supervaults/contracts/SuperVault.sol:344:    require(proxy != address(0) && router != address(0), "SV201"); 
+supervaults/contracts/SuperVault.sol:370:      require(ga.mimo().transfer(msg.sender, ga.mimo().balanceOf(address(this))));
+supervaults/contracts/SuperVaultFactory.sol:18:    require(address(_base) != address(0));
+```
+
+I suggest replacing revert strings with custom errors.
+
+**[m19 (Mimo DeFi) commented](https://github.com/code-423n4/2022-04-mimo-findings/issues/139#issuecomment-1120354400):**
+ > This was a very thorough gas optimization report and is very helpful for us.
+
+
+
+
+***
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

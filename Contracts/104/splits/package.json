@@ -1,0 +1,37 @@
+{
+  "name": "@chestrnft/splits",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ChestrNFT/splits.git",
+  "author": "<hello@chestr.io>",
+  "license": "MIT",
+  "scripts": {
+    "test": "hardhat test",
+    "deploy:default": "hardhat run scripts/deploy.ts",
+    "deploy:rinkeby": "hardhat run --network rinkeby scripts/deploy.ts",
+    "deploy:mainnet": "hardhat run --network mainnet scripts/deploy.ts"
+  },
+  "dependencies": {
+    "@chestrnft/royalty-vault": "git+ssh://git@github.com/ChestrNFT/royalty-vault.git#eng-124-feature-royalty-vault-implementation",
+    "@nomiclabs/hardhat-solhint": "^2.0.0",
+    "@openzeppelin/contracts": "^4.5.0",
+    "@typechain/ethers-v5": "^5.0.0",
+    "@types/mocha": "^8.2.0",
+    "commander": "^7.2.0",
+    "dotenv": "^16.0.0",
+    "hardhat": "^2.9.2",
+    "hardhat-typechain": "^0.3.4",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^9.1.1",
+    "typechain": "^4.0.1",
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "chai": "^4.2.0",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.2"
+  }
+}

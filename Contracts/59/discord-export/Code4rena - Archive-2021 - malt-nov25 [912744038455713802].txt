@@ -1,0 +1,180 @@
+==============================================================
+Guild: Code4rena
+Channel: Archive-2021 / malt-nov25
+==============================================================
+
+[23-Nov-21 08:49 AM] itsmetechjay | C4#5294
+👋 Hello and welcome to the contest channel for the $80K USDC Malt Finance contest!
+
+📆 Contest opens November 25, 2021, at 0:00 UTC and runs through December 1, 2021 at 23:59 UTC (7 days).
+
+Please give a warm welcome to the Malt Finance team - specifically @0xScotch, who will be available during the contest to answer questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, you might want to enable notifications. 🐺 ⏰
+
+{Reactions}
+🥃 (3) Malt MaltM (2) 🎉 (2) 
+
+[23-Nov-21 08:54 AM] 0xScotch#6626
+Thanks everyone 🙂 I'm excited to help you all out as much as I can
+
+{Reactions}
+👋 (14) 
+
+[23-Nov-21 11:42 AM] 0xScotch#6626
+
+{Stickers}
+Code4rena - Archive-2021 - malt-nov25 [912744038455713802].txt_Files/910883606778503208-0D5D2.png
+
+
+[23-Nov-21 11:42 AM] 0xScotch#6626
+In security
+
+
+[24-Nov-21 04:48 PM] HardlyDifficult#1668
+hey, trying to get started by running the tests. `npx hardhat compile` produced most of the type files, but `Oracle` and `LiquidityMine` are missing. This causes `npx hardhat test` to fail -- I'm not seeing those files in the contracts dir. Is there another step to get setup?
+
+
+[24-Nov-21 04:55 PM] itsmetechjay | C4#5294
+Tagging in @0xScotch ^^
+
+
+[24-Nov-21 04:57 PM] 0xScotch#6626
+Those are old contracts, they shouldn't be in the repo. Maybe I erroneously copied them over
+
+
+[24-Nov-21 04:57 PM] 0xScotch#6626
+I'll pull the repo fresh and see if I can reproduce the issue
+
+
+[24-Nov-21 05:00 PM] 0xScotch#6626
+Or are the types being imported in some tests? If thats the case then those lines should just be removed. My mistake if those made it in there
+
+
+[24-Nov-21 05:01 PM] HardlyDifficult#1668
+they are imported in helpers.ts
+
+
+[24-Nov-21 05:01 PM] asdfff#2381
+
+{Attachments}
+Code4rena - Archive-2021 - malt-nov25 [912744038455713802].txt_Files/2021-11-25-020019_967x175_scrot-75642.png
+
+
+[24-Nov-21 05:02 PM] HardlyDifficult#1668
+removing the imports and the functions that breaks then causes Auction.test.ts to error..
+
+
+[24-Nov-21 05:03 PM] HardlyDifficult#1668
+it's a bit of a rabit hole, but yea doesn't look like any of this is required. it would be helpful to all if you could push up changes to remove the old stuff
+
+
+[24-Nov-21 05:04 PM] 0xScotch#6626
+I am more than happy to fix that and push the changes. @itsmetechjay | C4 is that allowed?
+
+
+[24-Nov-21 05:05 PM] itsmetechjay | C4#5294
+Yep!
+
+
+[24-Nov-21 05:06 PM] HardlyDifficult#1668
+just got it running, i could pr it if you want
+
+
+[24-Nov-21 05:10 PM] HardlyDifficult#1668
+Getting a bunch of test failures with no changes other than cleaning up the import problem
+
+
+[24-Nov-21 05:11 PM] asdfff#2381
+>You should already have the UI repo cloned locally in the same directory as this repo (If you do not have access to the UI repo ask for access)
+
+
+[24-Nov-21 05:11 PM] asdfff#2381
+pls ser where is ui repo
+
+
+[24-Nov-21 05:12 PM] asdfff#2381
+or is it out of scope
+
+
+[24-Nov-21 05:19 PM] 0xScotch#6626
+The UI isn't in the scope of the audit but if you feel like it will be helpful for your understanding / workflow then I am more than happy to give you access
+
+
+[24-Nov-21 05:20 PM] 0xScotch#6626
+I'll push the fixes now. Just running the test suite to make sure its working. (all tests should pass except a bunch in `RewardDistributor.test.ts` which broke due to a change made in the `RewardDistributor` contract recently and the tests haven't been updated for the new behaviour
+
+
+[24-Nov-21 05:21 PM] HardlyDifficult#1668
+ah, yea that's most of them that I saw. There was also 2 fails in `AuctionEscapeHatch`
+
+
+[24-Nov-21 05:26 PM] 0xScotch#6626
+https://github.com/code-423n4/2021-11-malt/pull/2
+
+{Embed}
+https://github.com/code-423n4/2021-11-malt/pull/2
+Remove old unused imports and test helpers by 0xScotch · Pull Reque...
+Code4rena - Archive-2021 - malt-nov25 [912744038455713802].txt_Files/2-B4B78
+
+
+[24-Nov-21 05:27 PM] 0xScotch#6626
+All escape hatch tests are passing on the new PR. Should be good to go when it gets merged
+
+{Attachments}
+Code4rena - Archive-2021 - malt-nov25 [912744038455713802].txt_Files/unknown-E45F7.png
+
+
+[24-Nov-21 05:30 PM] 0xScotch#6626
+PR has been merged
+
+
+[24-Nov-21 05:30 PM] HardlyDifficult#1668
+It seems to be a timing issue. Sometimes passes, sometimes fails. But I can work with this -- thanks!
+
+
+[24-Nov-21 05:32 PM] 0xScotch#6626
+Curious. Never run into that. Would be interested in hearing more about it if you find something concrete. Obviously low priority vs rest of the tasks at hand though
+
+
+[28-Nov-21 09:21 AM] Throttle#2085
+@0xScotch Which compiler version was used for compilation?
+
+
+[28-Nov-21 12:12 PM] 0xScotch#6626
+0.6.6
+
+{Reactions}
+🙏 
+
+[01-Dec-21 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **Malt Finance **contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: the Malt Finance team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+
+[01-Dec-21 05:29 PM] 0xScotch#6626
+Thanks to everyone who submitted any findings to the Malt contest. I'm super happy to be able to play a part in this new open security model.
+
+
+[01-Dec-21 05:32 PM] 0xScotch#6626
+Not sure how often project devs say this but it's truly amazing for us (for me at least) to go through this process because we learn so much just seeing what gets found. Both in terms of specific learning for the project being audited but also generally about mistakes we make or things we overlook when we code. Its truly a win win for everyone involved!
+
+{Reactions}
+hi5 (13) cyberheart (2) thankyou (3) 
+
+[02-Dec-21 10:11 AM] ⛅CloudEllie#4509
+Ahhhh man, so appreciate you saying this, @0xScotch -- +100 from me on how much I appreciate this community's contributions to collective knowledge and skill!
+
+{Reactions}
+💯 
+
+[11-Jan-22 03:14 PM] Alex The Entreprenerd#5686
+@0xScotch am judging the contest, will DM for some clarifications
+
+
+==============================================================
+Exported 35 message(s)
+==============================================================

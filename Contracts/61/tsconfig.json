@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "strict": true,
+      "esModuleInterop": true,
+      "strictPropertyInitialization": false,
+      "outDir": "dist",
+      "resolveJsonModule": true,
+      "declaration": true,
+      "declarationDir": "./dist/types",
+      "baseUrl": ".",
+      "moduleResolution": "node",
+      "paths": {
+          "@utils": ["utils"],
+          "@utils/*": ["utils/*"],
+          "@typechain/*": ["typechain/*"]
+      }
+    },
+    "include": ["./test/**/*.ts", "./utils/**/*.ts", "./deploy/**/*.ts", "./typechain/**/*.ts", "test/Pool/Pool.spec.js", "./scripts/*.ts", "scripts/verify/contractsToVerify.ts", "scripts/verify/verify.ts"],
+    "exclude": ["./existingContracts/*"],
+    "files": [
+      "hardhat.config.ts",
+    ]
+  }
+  

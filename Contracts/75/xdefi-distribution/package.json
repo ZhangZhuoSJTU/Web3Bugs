@@ -1,0 +1,32 @@
+{
+  "name": "xdefi-distribution",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
+    "deploy:ropsten": "hardhat run scripts/deploy.js --network ropsten",
+    "deploy:rinkeby": "hardhat run scripts/deploy.js --network rinkeby",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet",
+    "deploy:ganache": "hardhat run scripts/deploy.js --network ganache",
+    "server": "node ./backend/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.2",
+    "hardhat": "^2.7.0",
+    "hardhat-gas-reporter": "^1.0.6",
+    "solidity-coverage": "^0.7.17"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.0"
+  }
+}

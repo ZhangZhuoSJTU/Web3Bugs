@@ -1,0 +1,182 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-Q2-2022 / ☑backed-apr5
+==============================================================
+
+[04-Apr-22 08:52 AM] kartoonjoy | C4 🎇🎇#3870
+👋 Hello and welcome to the contest channel for the **$30K USDC Backed** contest!
+
+📆 Contest opens April 5, 2022 at 0:00 UTC and runs through April 7, 2022 at 23:59 UTC (3 days).
+
+Please give a warm welcome to the Backed team, particularly @wilsoncusack and @gobes, who will be available for questions either here in the channel or via DM.
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+Contest Page: https://code4rena.com/contests/2022-04-backed-protocol-contest
+
+{Embed}
+https://code4rena.com/contests/2022-04-backed-protocol-contest
+Code4rena Backed Protocol contest
+$30,000 USDC
+5 April 2022—7 April 2022
+Code4rena - ARCHIVE-Q2-2022 - ☑backed-apr5 [960556456816553994].txt_Files/C4-banner-7C19B.png
+
+{Reactions}
+👋 (8) 🥳 (7) 
+
+[04-Apr-22 05:01 PM] wilsoncusack#2613
+Hi all! Excited to be here. We've tried to document everything as best we can in the README but please reach out with any questions. Don't hesitate to @ us if you're waiting for a response, though both of us are on the east coast in the US, so be aware any lag might be due to that 😀
+
+{Reactions}
+catup (2) 
+
+[05-Apr-22 03:01 AM] renniepak#1983
+Hey! Just wanted to say you have a nice, well-organised/documented easy to understand project for beginners (like me) to get into. Not sure i'm gonna submit something (I'll leave that to the experts) but enjoying myself so far 🙂
+
+
+[05-Apr-22 04:18 AM] wilsoncusack#2613
+so glad to hear that, thank you!
+
+
+[05-Apr-22 05:39 AM] wilsoncusack#2613
+Hi all! Someone pointed out to me that some of the forge tests were failing with the latest foundry version, I pushed fixes for these tests https://github.com/code-423n4/2022-04-backed/pull/3. Note `.gas-snapshot` also reflects the latest forge accounting
+
+
+[05-Apr-22 05:40 AM] wilsoncusack#2613
+Also, for anyone interested, I am going to do a livestream on Twitch from 5pm - 6pm tonight, going through the code with Transmissions11 and answering any questions in the chat! https://www.twitch.tv/wilsoncusack/schedule?seriesID=9d34b511-f534-4046-9782-81f3de6c73f9
+
+{Embed}
+https://www.twitch.tv/wilsoncusack/schedule?seriesID=9d34b511-f534-4046-9782-81f3de6c73f9
+wilsoncusack Schedule - Twitch
+Check out wilsoncusack stream schedule, and set reminders so you don’t miss out!
+Code4rena - ARCHIVE-Q2-2022 - ☑backed-apr5 [960556456816553994].txt_Files/5f49f6c1-db2a-49c8-b035-af4f15886a4c-profi-AF324.png
+
+
+[05-Apr-22 05:43 AM] renniepak#1983
+I know it's not in scope, but the site also has some issues 🙂
+
+{Attachments}
+Code4rena - ARCHIVE-Q2-2022 - ☑backed-apr5 [960556456816553994].txt_Files/unknown-92476.png
+
+
+[05-Apr-22 05:51 AM] wilsoncusack#2613
+yes sorry a last minute change broke some stuff, will get it fixed 😀
+
+
+[05-Apr-22 05:51 AM] renniepak#1983
+Np 🙂
+
+
+[05-Apr-22 05:53 AM] wilsoncusack#2613
+Hop over to our discord https://discord.gg/GtryCD2H if you want to talk site / get help with anything outside the audit!
+
+
+[05-Apr-22 06:55 AM] VAD#3549
+Hey! What kind of ERC721 one would expect user to collateral on? Is it normal NFT with rare uri?
+Or NFT that hold asset/reward value in other protocol?
+
+Do we even need to consider user might lend token for buggy ERC721 that is impossible to seize?
+
+
+[05-Apr-22 06:57 AM] VAD#3549
+Or the fault just belong to user not checking asset first before lending?
+
+
+[05-Apr-22 07:09 AM] wilsoncusack#2613
+Good questions! I should maybe add a note to the readme about the last one: there are many things that can go wrong if lender doesn’t validate the NFT and so these are really out of scope. Could be a fraud, malicious code, etc.
+
+
+[05-Apr-22 07:09 AM] wilsoncusack#2613
+As for what might be lent to, anything that conforms to the standard! From PUNKs to univ3 positions
+
+
+[05-Apr-22 07:10 AM] wilsoncusack#2613
+Of course again some caveat that funds could be loss if you borrow against an NFT that is being sent royalties or something: will be stuck in facilitator
+
+
+[05-Apr-22 07:26 AM] VAD#3549
+Just check up on Uniswap v3 NFT.
+It is quite interesting on who should get royalties. I will put that on QA since this is out of scope of audits.
+
+
+[05-Apr-22 08:27 AM] wilsoncusack#2613
+yeah I could go on and on about all the things that come up if you try to handle these kinds of cases, quite tricky 🙂
+
+
+[05-Apr-22 08:27 AM] wilsoncusack#2613
+but appreciate it and look forward to reading!
+
+
+[05-Apr-22 09:39 AM] cmichel#0001
+Borrowing NFTs against ERC20 collateral would also be interesting. Then I could borrow a uniswap LP and get fees (like a floating-to-fixed interest rate swap for the lender?) or borrow a BAYC for a day to order merch in their shop
+
+{Reactions}
+💯 (3) 
+
+[05-Apr-22 10:13 AM] Pedroais#1630
+I'm not submitting any issues related to NFT or ERC20 token contract being malicious as it's up to the lender and borrower to know the NFT/token they are transacting with.
+
+
+[05-Apr-22 10:14 AM] Pedroais#1630
+I think that should be marked out of scope
+
+
+[05-Apr-22 10:19 AM] wilsoncusack#2613
+Yeah I think that’s broadly correct. We definitely would want to know if like re-entrancy concerns from unusual contracts, but the space of what a purely malicious contract could do is far too wide to cover
+
+
+[05-Apr-22 10:22 AM] wilsoncusack#2613
+Yeah I think you’d want like a contract to hold it where the “borrower” could make any call from that contract. Contract would just need to assert it still owned the NFT after the call 😁
+
+
+[05-Apr-22 07:04 PM] hickuphh3#4268
+this was great, learnt a couple of tricks from the optimizoooor 😂  😂
+
+{Reactions}
+😀 (2) 
+
+[05-Apr-22 11:36 PM] teryanarmen#2961
+How come the UI on https://rinkeby.withbacked.xyz/ shows 4 decimal points for interest rate? Isnt it supposed to be just 1?
+
+
+[06-Apr-22 02:50 AM] wilsoncusack#2613
+Site is getting updated  😀
+
+{Reactions}
+👍 
+
+[06-Apr-22 10:57 AM] t1nt1n#0483
++1 on the nice documentation 🙂
+
+{Reactions}
+🙏 
+
+[06-Apr-22 12:51 PM] wilsoncusack#2613
+If you're submitting gas findings, please make sure you validate them with `forge snapshot`. Have seen quite a few that do not save gas 😀
+
+
+[07-Apr-22 03:13 AM] sorryNotsorry#1586
+Hey @wilsoncusack Possible to DM?
+
+
+[07-Apr-22 03:22 AM] wilsoncusack#2613
+Yup! Others have been able to lmk if you have issues
+
+
+[07-Apr-22 05:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens  The Backed contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: Backed's team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements  for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping a gardener if you have questions along the way!
+
+
+[07-Apr-22 05:54 PM] wilsoncusack#2613
+thanks all!
+
+{Reactions}
+hi5 (5) 
+
+==============================================================
+Exported 32 message(s)
+==============================================================

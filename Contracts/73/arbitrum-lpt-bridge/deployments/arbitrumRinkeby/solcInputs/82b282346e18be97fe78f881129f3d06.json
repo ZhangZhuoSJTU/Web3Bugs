@@ -1,0 +1,44 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/L2/gateway/L2Migrator.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {L2ArbitrumMessenger} from \"./L2ArbitrumMessenger.sol\";\nimport {IMigrator} from \"../../interfaces/IMigrator.sol\";\n\ncontract L2Migrator is L2ArbitrumMessenger, IMigrator {\n    address public l1Migrator;\n\n    event MigrateDelegatorFinalized(\n        MigrateDelegatorParams params\n    );\n\n    event MigrateUnbondingLocksFinalized(\n        MigrateUnbondingLocksParams params\n    );\n\n    event MigrateSenderFinalized(\n        MigrateSenderParams params\n    );\n\n    constructor(address _l1Migrator) {\n        l1Migrator = _l1Migrator;\n    }\n\n    // TODO: Add auth\n    function setL1Migrator(address _l1Migrator) external {\n        l1Migrator = _l1Migrator;\n    }\n\n    function finalizeMigrateDelegator(MigrateDelegatorParams memory _params)\n        external\n        onlyL1Counterpart(l1Migrator)\n    {\n        // TODO: Fill logic\n        emit MigrateDelegatorFinalized(_params);\n    }\n\n    function finalizeMigrateUnbondingLocks(MigrateUnbondingLocksParams memory _params)\n        external\n        onlyL1Counterpart(l1Migrator)\n    {\n        // TODO: Fill logic\n        emit MigrateUnbondingLocksFinalized(_params);\n    }\n\n    function finalizeMigrateSender(MigrateSenderParams memory _params)\n        external\n        onlyL1Counterpart(l1Migrator)\n    {\n        // TODO: Fill logic\n        emit MigrateSenderFinalized(_params);\n    }\n}"
+    },
+    "contracts/L2/gateway/L2ArbitrumMessenger.sol": {
+      "content": "//SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport {ArbSys} from \"../../arbitrum/ArbSys.sol\";\n\nabstract contract L2ArbitrumMessenger {\n    event TxToL1(\n        address indexed _from,\n        address indexed _to,\n        uint256 indexed _id,\n        bytes _data\n    );\n\n    function sendTxToL1(\n        address user,\n        address to,\n        bytes memory data\n    ) internal returns (uint256) {\n        // note: this method doesn't support sending ether to L1 together with a call\n        uint256 id = ArbSys(address(100)).sendTxToL1(to, data);\n        emit TxToL1(user, to, id, data);\n        return id;\n    }\n\n    modifier onlyL1Counterpart(address l1Counterpart) {\n        require(\n            msg.sender == applyL1ToL2Alias(l1Counterpart),\n            \"ONLY_COUNTERPART_GATEWAY\"\n        );\n        _;\n    }\n\n    uint160 internal constant OFFSET =\n        uint160(0x1111000000000000000000000000000000001111);\n\n    // l1 addresses are transformed durng l1->l2 calls\n    function applyL1ToL2Alias(address l1Address)\n        internal\n        pure\n        returns (address l2Address)\n    {\n        l2Address = address(uint160(l1Address) + OFFSET);\n    }\n}\n"
+    },
+    "contracts/interfaces/IMigrator.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ninterface IMigrator {\n    struct MigrateDelegatorParams {\n        // Address that is migrating from L1\n        address l1Addr;\n        // Address to use on L2\n        // If null, l1Addr is used on L2\n        address l2Addr;\n        // Stake of l1Addr on L1\n        uint256 stake;\n        // Delegated stake of l1Addr on L1\n        uint256 delegatedStake;\n        // Fees of l1Addr on L1\n        uint256 fees;\n        // Delegate of l1Addr on L1\n        address delegate;\n    }\n\n    struct MigrateUnbondingLocksParams {\n        // Address that is migrating from L1\n        address l1Addr;\n        // Address to use on L2\n        // If null, l1Addr is used on L2\n        address l2Addr;\n        // Total tokens in unbonding locks\n        uint256 total;\n        // IDs of unbonding locks being migrated\n        uint256[] unbondingLockIds;\n    }\n\n    struct MigrateSenderParams {\n        // Address that is migrating from L1\n        address l1Addr;\n        // Address to use on L2\n        // If null, l1Addr is used on L2\n        address l2Addr;\n        // Deposit of l1Addr on L1\n        uint256 deposit;\n        // Reserve of l1Addr on L1\n        uint256 reserve;\n    }\n}"
+    },
+    "contracts/arbitrum/ArbSys.sol": {
+      "content": "// SPDX-License-Identifier: Apache-2.0\n\n/*\n * Copyright 2021, Offchain Labs, Inc.\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *    http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n */\n\npragma solidity ^0.8.0;\n\n/**\n * @title Precompiled contract that exists in every Arbitrum chain at address(100), 0x0000000000000000000000000000000000000064. Exposes a variety of system-level functionality.\n */\ninterface ArbSys {\n    /**\n     * @notice Get internal version number identifying an ArbOS build\n     * @return version number as int\n     */\n    function arbOSVersion() external pure returns (uint256);\n\n    function arbChainID() external view returns (uint256);\n\n    /**\n     * @notice Get Arbitrum block number (distinct from L1 block number; Arbitrum genesis block has block number 0)\n     * @return block number as int\n     */\n    function arbBlockNumber() external view returns (uint256);\n\n    /**\n     * @notice Send given amount of Eth to dest from sender.\n     * This is a convenience function, which is equivalent to calling sendTxToL1 with empty calldataForL1.\n     * @param destination recipient address on L1\n     * @return unique identifier for this L2-to-L1 transaction.\n     */\n    function withdrawEth(address destination)\n        external\n        payable\n        returns (uint256);\n\n    /**\n     * @notice Send a transaction to L1\n     * @param destination recipient address on L1\n     * @param calldataForL1 (optional) calldata for L1 contract call\n     * @return a unique identifier for this L2-to-L1 transaction.\n     */\n    function sendTxToL1(address destination, bytes calldata calldataForL1)\n        external\n        payable\n        returns (uint256);\n\n    /**\n     * @notice get the number of transactions issued by the given external account or the account sequence number of the given contract\n     * @param account target account\n     * @return the number of transactions issued by the given external account or the account sequence number of the given contract\n     */\n    function getTransactionCount(address account)\n        external\n        view\n        returns (uint256);\n\n    /**\n     * @notice get the value of target L2 storage slot\n     * This function is only callable from address 0 to prevent contracts from being able to call it\n     * @param account target account\n     * @param index target index of storage slot\n     * @return stotage value for the given account at the given index\n     */\n    function getStorageAt(address account, uint256 index)\n        external\n        view\n        returns (uint256);\n\n    /**\n     * @notice check if current call is coming from l1\n     * @return true if the caller of this was called directly from L1\n     */\n    function isTopLevelCall() external view returns (bool);\n\n    event EthWithdrawal(address indexed destAddr, uint256 amount);\n\n    event L2ToL1Transaction(\n        address caller,\n        address indexed destination,\n        uint256 indexed uniqueId,\n        uint256 indexed batchNumber,\n        uint256 indexInBatch,\n        uint256 arbBlockNum,\n        uint256 ethBlockNum,\n        uint256 timestamp,\n        uint256 callvalue,\n        bytes data\n    );\n}\n"
+    }
+  },
+  "settings": {
+    "outputSelection": {
+      "*": {
+        "*": [
+          "storageLayout",
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

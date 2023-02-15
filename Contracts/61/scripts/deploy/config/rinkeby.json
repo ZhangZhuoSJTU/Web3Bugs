@@ -1,0 +1,64 @@
+{
+    "StrategyRegistry": {
+        "maxStrategies": 5
+    },
+    "yields": {
+        "compound": {
+            "__repo__": "https://compound.finance/docs#networks",
+            "pairs": [
+                {
+                    "asset": "0xbf7a7169562078c96f0ec1a8afd6ae50f12e5a99",
+                    "liquidityToken": "0xebf1a11532b93a529b5bc942b4baa98647913002"
+                },
+                {
+                    "asset": "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea",
+                    "liquidityToken": "0x6d7f0754ffeb405d23c51ce938289d4835be3b14"
+                },
+                {
+                    "asset": "0x0000000000000000000000000000000000000000",
+                    "liquidityToken": "0xd6801a1dffcd0a410336ef88def4320d6df1883e"
+                }
+            ]
+        }
+    },
+    "priceFeeds": [
+        {
+            "tokenAddress": "0xbf7a7169562078c96f0ec1a8afd6ae50f12e5a99",
+            "feedAggregator": "0x031dB56e01f82f20803059331DC6bEe9b17F7fC9"
+        },
+        {
+            "tokenAddress": "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea",
+            "feedAggregator": "0x2bA49Aaa16E6afD2a993473cfB70Fa8559B523cF"
+        },
+        {
+            "tokenAddress": "0x0000000000000000000000000000000000000000",
+            "feedAggregator": "0x8A753747A1Fa494EC906cE90E9f37563A8AF630e"
+        }
+    ],
+    "extension": {
+        "votingPassRatio": 0.5
+    },
+    "repayments": {
+        "gracePenalityRate": 3,
+        "gracePeriodFraction": 0.4
+    },
+    "poolFactory": {
+        "collectionPeriod": 600,
+        "loanWithdrawalDuration": 120,
+        "marginCallDuration": 300,
+        "gracePeriodPenaltyFraction": 0,
+        "liquidatorRewardFraction": 0.05,
+        "poolCancelPenalityFraction": 1.2,
+        "minBorrowFraction": 0.5,
+        "protocolFeeFraction": 0.01,
+        "protocolFeeCollector": "0x0000000000000000000000000000000000000000"
+    },
+    "creditLines": {
+        "defaultStrategy": "0x0000000000000000000000000000000000000000",
+        "protocolFee": {
+            "fraction": 0.02,
+            "collector": "0x0000000000000000000000000000000000000000"
+        },
+        "liquidatorRewardFraction": 0.04
+    }
+}

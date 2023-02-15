@@ -1,0 +1,56 @@
+syntax = "proto3";
+package gravity.v1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/althea-net/cosmos-gravity-bridge/module/x/gravity/types";
+
+// ClaimType is the cosmos type of an event from the counterpart chain that can
+// be handled
+
+enum ClaimType {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  CLAIM_TYPE_UNSPECIFIED         = 0;
+  CLAIM_TYPE_SEND_TO_COSMOS      = 1;
+  CLAIM_TYPE_BATCH_SEND_TO_ETH   = 2;
+  CLAIM_TYPE_ERC20_DEPLOYED      = 3;
+  CLAIM_TYPE_LOGIC_CALL_EXECUTED = 4;
+  CLAIM_TYPE_VALSET_UPDATED      = 5;
+}
+
+// Attestation is an aggregate of `claims` that eventually becomes `observed` by
+// all orchestrators
+// EVENT_NONCE:
+// EventNonce a nonce provided by the gravity contract that is unique per event fired
+// These event nonces must be relayed in order. This is a correctness issue,
+// if relaying out of order transaction replay attacks become possible
+// OBSERVED:
+// Observed indicates that >67% of validators have attested to the event,
+// and that the event should be executed by the gravity state machine
+//
+// The actual content of the claims is passed in with the transaction making the claim
+// and then passed through the call stack alongside the attestation while it is processed
+// the key in which the attestation is stored is keyed on the exact details of the claim
+// but there is no reason to store those exact details becuause the next message sender
+// will kindly provide you with them.
+message Attestation {
+  bool                observed = 1;
+  repeated string     votes    = 2;
+  uint64              height   = 3;
+  google.protobuf.Any claim    = 4;
+}
+
+// ERC20Token unique identifier for an Ethereum ERC20 token.
+// CONTRACT:
+// The contract address on ETH of the token, this could be a Cosmos
+// originated token, if so it will be the ERC20 address of the representation
+// (note: developers should look up the token symbol using the address on ETH to display for UI)
+message ERC20Token {
+  string contract = 1;
+  string amount   = 2 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable)   = false
+  ];
+}

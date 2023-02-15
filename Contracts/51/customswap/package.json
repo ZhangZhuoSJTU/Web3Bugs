@@ -1,0 +1,92 @@
+{
+  "name": "saddle-contract",
+  "version": "0.0.1",
+  "description": "The smart contracts behind saddle.finance 🤠",
+  "files": [
+    "dist/**/*"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@eth-optimism/smock": "^0.2.1-alpha.0",
+    "@openzeppelin/contracts": "3.3.0",
+    "dotenv": "^8.2.0",
+    "hardhat-typechain": "^0.3.5",
+    "openzeppelin-contracts-3.4": "npm:@openzeppelin/contracts@3.4.0",
+    "openzeppelin-contracts-sol-0.5": "npm:@openzeppelin/contracts@2.5.1",
+    "synthetix": "2.39.2"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-etherscan": "^2.1.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "@typechain/ethers-v5": "^5.0.0",
+    "@types/chai": "^4.2.15",
+    "@types/mocha": "^8.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "chai": "^4.3.4",
+    "eslint": "^6.8.0",
+    "eslint-config-keep": "git+https://github.com/keep-network/eslint-config-keep.git#0.3.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.1",
+    "ethlint": "^1.2.5",
+    "hardhat": "^2.4.3",
+    "hardhat-gas-reporter": "^1.0.4",
+    "husky": "^5.0.9",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.5",
+    "shelljs": "^0.8.4",
+    "solhint": "^3.3.2",
+    "solhint-plugin-prettier": "0.0.5",
+    "solidity-coverage": "^0.7.15",
+    "solidity-docgen": "^0.5.11",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^9.1.1",
+    "typechain": "^4.0.3",
+    "typescript": "^4.1.5"
+  },
+  "scripts": {
+    "lint": "npm run lint:ts && npm run lint:sol",
+    "lint:fix": "npm run lint:fix:ts && npm run lint:fix:sol",
+    "lint:ts": "eslint --ext ts ${npm_package_config_eslintPaths} && prettier --list-different test/*.ts",
+    "lint:fix:ts": "eslint --ext ts --fix ${npm_package_config_eslintPaths} && prettier --write test/*.ts",
+    "lint:sol": "solhint 'contracts/**/*.sol'",
+    "lint:fix:sol": "prettier --write 'contracts/**/*.sol' && solhint 'contracts/**/*.sol' --fix",
+    "build": "hardhat compile && hardhat typechain && tsc",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage --temp ./build/artifacts",
+    "prepare": "npm run build",
+    "clean": "npx hardhat clean"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "config": {
+    "eslintPaths": "test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saddle-finance/saddle-contract.git"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "interoperability",
+    "bitcoin",
+    "ethereum",
+    "tbtc",
+    "defi"
+  ],
+  "author": "Satoshi Nakamoto 🤪",
+  "license": "GPLv3",
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix"
+  }
+}

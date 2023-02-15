@@ -1,0 +1,20 @@
+project_structure:
+    build: brownie/build
+    contracts: contracts
+    interfaces: contracts/interfaces
+    reports: brownie/reports
+    scripts: brownie/scripts
+    tests: brownie/tests
+
+# exclude non-core contracts from coverage analysis
+reports:
+  exclude_paths:
+    - contracts/helper/test/*.*
+
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@3.3.0
+
+compiler:
+  solc:
+    remappings:
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@3.3.0"

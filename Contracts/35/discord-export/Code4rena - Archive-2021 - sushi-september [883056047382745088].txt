@@ -1,0 +1,168 @@
+==============================================================
+Guild: Code4rena
+Channel: Archive-2021 / sushi-september
+==============================================================
+
+[02-Sep-21 12:10 PM] ⛅CloudEllie#4509
+👋🍣 All right, y'all - SushiSept is coming to C4 and this right here is the contest channel!
+
+📆 **Sushi Miso** is up first
+**~$100K (8K Sushi) contest**
+Opens Sep 9, 2021 at 0:00 UTC and runs through Sep 15, 2021 at 23:59 UTC (1 week)
+
+📆 **Sushi Trident** follows
+**~$300K (24K Sushi) contest**
+Opens Sep 16, 2021 at 0:00 UTC and runs through Oct 6, 2021 at 23:59 UTC (3 weeks)
+
+…
+
+Please give a warm welcome to @clearwood, who will be available during the 🍲**Miso** contest to answer questions either here in channel or via DM. 
+
+We'll also be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, you might want to enable notifications. 🐺 ⏰
+
+{Reactions}
+👋 (4) 🍣 (6) 
+
+[03-Sep-21 05:38 AM] jonjon | float.capital#2270
+HUGE  :SushiSwapLogo:
+
+{Reactions}
+sushiswap (3) 🍣 (3) sushi (3) axie_sushi (3) 
+
+[03-Sep-21 07:48 AM] sockdrawermoney#0001
+Y’all should run a Float team for this one!
+
+{Reactions}
+👀 (3) 💯 
+
+[08-Sep-21 01:00 PM] ! Denham | float.capital#5167
+So SO enticed! The challenges are so stimulating and scream at the inner problem solvers in us but just not enough time in the day 🙈 😣 .
+
+{Reactions}
+empathy (2) 
+
+[08-Sep-21 05:53 PM] cheapgemmer#2260
+https://github.com/sushiswap/miso
+hey sushi team! which branch/commit is to be used for audit?
+
+
+[08-Sep-21 08:16 PM] clearwood#4108
+The master branch is the relevant target,
+Commit: 2cdb1486a55ded55c81898b7be8811cb68cfda9e
+
+
+[08-Sep-21 10:04 PM] sockdrawermoney#0001
+@clearwood can we have a specific commit? Sorry we missed getting that from y’all, but that’s the standard we use to ensure we’re using a level playing field.
+
+
+[11-Sep-21 08:37 PM] itsmeSTYJ#4682
+Hi, I'm trying to understand rate a little better in the Crowdsale contract. Here are 2 different examples. Assume that the token being sold has 18 decimals. 
+
+If my payment token is in ETH and I use a rate of 1000, is it correct to say that for 1 wei contributed, I get 1000 token wei i.e. if I contributed 1 ETH, I get 1k tokens? 
+
+If my payment token is in USDC and I use a rate of 10^12, is it correct to say that for each 0.000001 USDC contributed, I get 10^12 token wei i.e. if I contributed 10 USDC, I get 10 tokens?
+
+
+[12-Sep-21 06:34 AM] cmichel#0001
+Are these `Helper` contracts in scope? Are they only used from off-chain scripts?
+
+
+[12-Sep-21 09:29 AM] clearwood#4108
+Helper contracts are only used for Frontend needs
+
+
+[12-Sep-21 12:28 PM] clearwood#4108
+https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/Auctions/Crowdsale.sol#L444
+This line determines the relationship between the commitment in terms of payment token and the auction token, as the commitment is multiplied with the decimals of the auction token before being divided by the rate
+With the auction token and payment token having 18 decimals, a rate of 1e18 would therefore constitute a 1:1 relationship of 1 token payment equating one auction token
+
+{Embed}
+https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/Auctions/Crowdsale.sol
+miso/Crowdsale.sol at 2cdb1486a55ded55c81898b7be8811cb68cfda9e · su...
+Contribute to sushiswap/miso development by creating an account on GitHub.
+Code4rena - Archive-2021 - sushi-september [883056047382745088].txt_Files/miso-88E82
+
+
+[12-Sep-21 12:36 PM] clearwood#4108
+With the payment token having 6 decimals e.g. USDC, a rate of 1e6 would equate a 1 USDC to one auction token relationship.
+
+
+[12-Sep-21 06:43 PM] itsmeSTYJ#4682
+got it, thanks
+
+
+[16-Sep-21 09:33 PM] Gerard Persoon#7986
+https://twitter.com/josephdelong/status/1438712356352274433 
+Oh no.....
+
+{Embed}
+Joseph 🤝 Delong 🔱 (@josephdelong)
+https://twitter.com/josephdelong/status/1438712356352274433
+The Miso front end has become the victim of a supply chain attack. An anonymous contractor by with the GH handle AristoK3 injected malicious code into the Miso front end. We have reason to believe this is @eratos1122.
+
+864.8 ETH was stolen, address below
+https://t.co/cDZeBqFV4P
+Likes
+194
+Code4rena - Archive-2021 - sushi-september [883056047382745088].txt_Files/eMxkrhVW-DE872
+Twitter
+
+{Reactions}
+😫 (9) 
+
+[19-Sep-21 01:35 AM] cheapgemmer#2260
+anyone from sushi team i can dm to regarding trident?
+
+
+[19-Sep-21 08:15 AM] sockdrawermoney#0001
+@clearwood @Dmitry
+
+
+[19-Sep-21 08:17 AM] Dmitry#1337
+@cheapgemmer Feel free to DM me. 
+
+Everyone - I've opened my DM for members of this server. Feel free to ask any questions here or DM me.
+
+
+[27-Sep-21 10:32 PM] Dmitry#1337
+@/here I should have been clearer in code comments but some notes to avoid future duplicate submissions -
+1) Missing `isWhiteListed` check in the single functions is intentional. There are code comments in the contract that say "@/dev Ensure that the pool is trusted before calling this function. The pool can steal users' tokens.".
+
+The reason this design was taken is that using exactInput and similar functions, an attacker can steal all user tokens in a single transaction (all tokens - usdt, dai, weth etc). Therefore, we added an extra check to save users from themselves.
+
+On the other hand, exactInputSingle and similar functions only allow theft of one token in the worst case. This is the same as just transferring the token to a wrong address. Therefore, for gas efficiency, we omitted the check.
+
+2) The reason that `external` function visibility modifier can sometimes be cheaper than `public` is that Solidity keeps function parameters in calldata in external but copies them to memory in public. If there are no function parameters in a function or they are explicitly set to be kept in calldata, there is no potential gas saving. This is the case in our contracts and hence, changing public to external won't do anything.
+
+3) TridentRouter is not supposed to hold any funds. Therefore, the withdraw functions like (refundETH) have no access control. This is a feature, not a bug. This particular function allows users to unwrap weth sent to the contract or claim eth sent by a pool using batch functions.
+
+I'll update this message if I see an invalid issue being reported multiple times.
+
+{Reactions}
+thankyou (3) 
+
+[27-Sep-21 10:33 PM] Dmitry#1337
+btw, nice work from ya'll. The contest hasn't even ended and we've already gotten some juicy submissions. Cheers!
+
+{Reactions}
+🎉 (2) 
+
+[29-Sep-21 05:28 PM] itsmetechjay | C4#5294
+👋 Hey y'all, just wanted to pop in to say that the Sushi Trident phase 2 contest is now live and @Dmitry will be your go-to for any questions.  Happy hunting!
+
+
+[04-Oct-21 07:37 AM] Dmitry#1337
+Hey all, please send questions related concentrated liquidity to @0xGasper . He knows those contracts better than anyone.
+
+{Reactions}
+👍 
+
+[06-Oct-21 01:36 AM] Dmitry#1337
+Just wanted to a give a special shoutout to broccoli for their detailed reports and including links to affected lines of code. Saves a lot of time when reviewing reports.
+
+{Reactions}
+hi5 (5) nice (4) thankyou (2) 🥦 (3) 
+
+==============================================================
+Exported 22 message(s)
+==============================================================

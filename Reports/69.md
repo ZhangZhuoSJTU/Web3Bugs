@@ -1,0 +1,1081 @@
+---
+sponsor: "NFTX"
+slug: "2021-12-nftx"
+date: "2022-03-24"
+title: "NFTX contest"
+findings: "https://github.com/code-423n4/2021-12-nftx-findings/issues"
+contest: 69
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the code contest outlined in this document, C4 conducted an analysis of the NFTX smart contract system written in Solidity. The code contest took place between December 16—December 22 2021.
+
+## Wardens
+
+27 Wardens contributed reports to the NFTX contest:
+
+  1. cccz
+  1. hyh
+  1. [leastwood](https://twitter.com/liam_eastwood13)
+  1. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+  1. [cmichel](https://twitter.com/cmichelio)
+  1. robee
+  1. GreyArt ([hickuphh3](https://twitter.com/HickupH) and [itsmeSTYJ](https://twitter.com/itsmeSTYJ))
+  1. [pauliax](https://twitter.com/SolidityDev)
+  1. [gzeon](https://twitter.com/gzeon)
+  1. [Ruhum](https://twitter.com/0xruhum)
+  1. [ych18](https://www.linkedin.com/in/yahia-chaabane/)
+  1. [csanuragjain](https://twitter.com/csanuragjain)
+  1. pedroais
+  1. jayjonah8
+  1. [sirhashalot](https://twitter.com/SirH4shalot)
+  1. 0x1f8b
+  1. PPrieditis
+  1. 0x0x0x
+  1. p4st13r4 ([0x69e8](https://github.com/0x69e8) and 0xb4bb4)
+  1. [defsec](https://twitter.com/defsec_)
+  1. [Dravee](https://twitter.com/JustDravee)
+  1. [shenwilly](https://twitter.com/shenwilly_)
+  1. [BouSalman](https://twitter.com/BouSalman)
+  1. saian
+
+This contest was judged by [LSDan](https://twitter.com/lsdan_defi).
+
+Final report assembled by [liveactionllama](https://twitter.com/liveactionllama) and [itsmetechjay](https://twitter.com/itsmetechjay).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 58 unique vulnerabilities and 124 total findings. All of the issues presented here are linked back to their original finding.
+
+Of these vulnerabilities, 3 received a risk rating in the category of HIGH severity, 17 received a risk rating in the category of MEDIUM severity, and 38 received a risk rating in the category of LOW severity.
+
+C4 analysis also identified 19 non-critical recommendations and 47 gas optimizations.
+
+# Scope
+
+The code under review can be found within the [C4 NFTX contest repository](https://github.com/code-423n4/2021-12-nftx), and is composed of 11 smart contracts written in the Solidity programming language and includes 3072 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (3)
+## [[H-01] buyAndSwap1155WETH() function may cause loss of user assets](https://github.com/code-423n4/2021-12-nftx-findings/issues/2)
+_Submitted by cccz_
+
+In the NFTXMarketplaceZap.sol contract, the buyAndSwap1155WETH function uses the WETH provided by the user to exchange VaultToken, but when executing the \_buyVaultToken method, msg.value is used instead of maxWethIn. Since msg.value is 0, the call will fail.
+```solidity
+function buyAndSwap1155WETH(
+  uint256 vaultId,
+  uint256[] memory idsIn,
+  uint256[] memory amounts,
+  uint256[] memory specificIds,
+  uint256 maxWethIn,
+  address[] calldata path,
+  address to
+) public payable nonReentrant {
+  require(to != address(0));
+  require(idsIn.length != 0);
+  IERC20Upgradeable(address(WETH)).transferFrom(msg.sender, address(this), maxWethIn);
+  uint256 count;
+  for (uint256 i = 0; i <idsIn.length; i++) {
+      uint256 amount = amounts[i];
+      require(amount> 0, "Transferring <1");
+      count += amount;
+  }
+  INFTXVault vault = INFTXVault(nftxFactory.vault(vaultId));
+  uint256 redeemFees = (vault.targetSwapFee() * specificIds.length) + (
+      vault.randomSwapFee() * (count-specificIds.length)
+  );
+  uint256[] memory swapAmounts = _buyVaultToken(address(vault), redeemFees, msg.value, path);
+```
+
+In extreme cases, when the user provides both ETH and WETH (the user approves the contract WETH in advance and calls the buyAndSwap1155WETH function instead of the buyAndSwap1155 function by mistake), the \_buyVaultToken function will execute successfully, but because the buyAndSwap1155WETH function will not convert ETH to WETH, The user’s ETH will be locked in the contract, causing loss of user assets.
+```solidity
+function _buyVaultToken(
+  address vault,
+  uint256 minTokenOut,
+  uint256 maxWethIn,
+  address[] calldata path
+) internal returns (uint256[] memory) {
+  uint256[] memory amounts = sushiRouter.swapTokensForExactTokens(
+    minTokenOut,
+    maxWethIn,
+    path,
+    address(this),
+    block.timestamp
+  );
+
+  return amounts;
+}
+```
+
+#### Recommended Mitigation Steps
+```solidity
+  - uint256[] memory swapAmounts = _buyVaultToken(address(vault), redeemFees, msg.value, path);
+  + uint256[] memory swapAmounts = _buyVaultToken(address(vault), redeemFees, maxWethIn, path);
+```
+
+**[0xKiwi (NFTX) confirmed and resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/2)**
+
+
+
+***
+
+## [[H-02] The return value of the _sendForReceiver function is not set, causing the receiver to receive more fees](https://github.com/code-423n4/2021-12-nftx-findings/issues/67)
+_Submitted by cccz, also found by WatchPug_
+
+In the NFTXSimpleFeeDistributor.sol contract, the distribute function is used to distribute the fee, and the distribute function judges whether the fee is sent successfully according to the return value of the \_sendForReceiver function.
+
+```solidity
+function distribute(uint256 vaultId) external override virtual nonReentrant {
+  require(nftxVaultFactory != address(0));
+  address _vault = INFTXVaultFactory(nftxVaultFactory).vault(vaultId);
+
+  uint256 tokenBalance = IERC20Upgradeable(_vault).balanceOf(address(this));
+
+  if (distributionPaused || allocTotal == 0) {
+    IERC20Upgradeable(_vault).safeTransfer(treasury, tokenBalance);
+    return;
+  }
+
+  uint256 length = feeReceivers.length;
+  uint256 leftover;
+  for (uint256 i = 0; i <length; i++) {
+    FeeReceiver memory _feeReceiver = feeReceivers[i];
+    uint256 amountToSend = leftover + ((tokenBalance * _feeReceiver.allocPoint) / allocTotal);
+    uint256 currentTokenBalance = IERC20Upgradeable(_vault).balanceOf(address(this));
+    amountToSend = amountToSend> currentTokenBalance? currentTokenBalance: amountToSend;
+    bool complete = _sendForReceiver(_feeReceiver, vaultId, _vault, amountToSend);
+    if (!complete) {
+      leftover = amountToSend;
+    } else {
+      leftover = 0;
+    }
+  }
+```
+
+In the \_sendForReceiver function, when \_receiver is not a contract, no value is returned. By default, this will return false. This will make the distribute function think that the fee sending has failed, and will send more fees next time.
+```solidity
+function _sendForReceiver(FeeReceiver memory _receiver, uint256 _vaultId, address _vault, uint256 amountToSend) internal virtual returns (bool) {
+  if (_receiver.isContract) {
+    IERC20Upgradeable(_vault).approve(_receiver.receiver, amountToSend);
+    // If the receive is not properly processed, send it to the treasury instead.
+      
+    bytes memory payload = abi.encodeWithSelector(INFTXLPStaking.receiveRewards.selector, _vaultId, amountToSend);
+    (bool success,) = address(_receiver.receiver).call(payload);
+
+    // If the allowance has not been spent, it means we can pass it forward to next.
+    return success && IERC20Upgradeable(_vault).allowance(address(this), _receiver.receiver) == 0;
+  } else {
+    IERC20Upgradeable(_vault).safeTransfer(_receiver.receiver, amountToSend);
+  }
+}
+```
+#### Proof of Concept
+
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L157-L168>
+
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L49-L67>
+
+#### Recommended Mitigation Steps
+```solidity
+function _sendForReceiver(FeeReceiver memory _receiver, uint256 _vaultId, address _vault, uint256 amountToSend) internal virtual returns (bool) {
+  if (_receiver.isContract) {
+    IERC20Upgradeable(_vault).approve(_receiver.receiver, amountToSend);
+    // If the receive is not properly processed, send it to the treasury instead.
+      
+    bytes memory payload = abi.encodeWithSelector(INFTXLPStaking.receiveRewards.selector, _vaultId, amountToSend);
+    (bool success, ) = address(_receiver.receiver).call(payload);
+
+    // If the allowance has not been spent, it means we can pass it forward to next.
+    return success && IERC20Upgradeable(_vault).allowance(address(this), _receiver.receiver) == 0;
+  } else {
+    - IERC20Upgradeable(_vault).safeTransfer(_receiver.receiver, amountToSend);
+    + return IERC20Upgradeable(_vault).safeTransfer(_receiver.receiver, amountToSend);
+  }
+}
+```
+**[0xKiwi (NFTX) confirmed, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/67#issuecomment-1003192355):**
+ > Good catch, thank you. Disagreeing with severity though since this is a permissioned contract, no user funds are at risk and this would most likely cause some failures.
+> 
+> We aren't using any EOAs as receivers in production or testing, so this has not been caught. Thank you.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/67)**
+
+**[LSDan (judge) commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/67#issuecomment-1064471042):**
+ > I agree with the warden on this one. Funds are directly at risk and the likelihood of this occurring is 100%. I'm not sure if it matters if the funds are user funds or protocol funds. This would eventually have become a big problem that affected the protocol's ability to function.
+
+
+
+***
+
+## [[H-03] A vault can be locked from MarketplaceZap and StakingZap](https://github.com/code-423n4/2021-12-nftx-findings/issues/107)
+_Submitted by p4st13r4, also found by cmichel, GreyArt, hyh, jayjonah8, leastwood, pauliax, shenwilly, and WatchPug_
+
+Any user that owns a vToken of a particular vault can lock the functionalities of `NFTXMarketplaceZap.sol` and `NFTXStakingZap.sol` for everyone.
+
+Every operation performed by the marketplace, that deals with vToken minting, performs this check:
+
+```jsx
+require(balance == IERC20Upgradeable(vault).balanceOf(address(this)), "Did not receive expected balance");
+```
+
+A malicious user could transfer any amount > 0 of a vault’vToken to the marketplace (or staking) zap contracts, thus making the vault functionality unavailable for every user on the marketplace
+
+#### Proof of Concept
+
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXMarketplaceZap.sol#L421>
+
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXMarketplaceZap.sol#L421>
+
+#### Recommended Mitigation Steps
+
+Remove this logic from the marketplace and staking zap contracts, and add it to the vaults (if necessary)
+
+**[0xKiwi (NFTX) confirmed, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/107#issuecomment-1003193410):**
+ > Valid concern, confirmed. And disagreeing with severity.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/107)**
+
+**[LSDan (judge) commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/107#issuecomment-1064511914):**
+ > In this case I agree with the warden's severity. The attack would cause user funds to be locked and is incredibly easy to perform.
+
+
+
+***
+
+ 
+# Medium Risk Findings (17)
+## [[M-01] Missing non reentrancy modifier](https://github.com/code-423n4/2021-12-nftx-findings/issues/37)
+_Submitted by robee_
+
+The following functions are missing reentrancy modifier although some other pulbic/external functions does use reentrancy modifer.
+Even though I did not find a way to exploit it, it seems like those functions should have the nonReentrant modifier as the other functions have it as well..
+
+```bash
+  NFTXMarketplaceZap.sol, receive is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, __SimpleFeeDistributor__init__ is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, addReceiver is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, initializeVaultReceivers is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, changeReceiverAlloc is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, changeReceiverAddress is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, removeReceiver is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, setTreasuryAddress is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, setLPStakingAddress is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, setInventoryStakingAddress is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, setNFTXVaultFactory is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, pauseFeeDistribution is missing a reentrancy modifier
+  NFTXSimpleFeeDistributor.sol, rescueTokens is missing a reentrancy modifier
+  NFTXStakingZap.sol, setLPLockTime is missing a reentrancy modifier
+  NFTXStakingZap.sol, setInventoryLockTime is missing a reentrancy modifier
+  NFTXStakingZap.sol, provideInventory721 is missing a reentrancy modifier
+  NFTXStakingZap.sol, provideInventory1155 is missing a reentrancy modifier
+  NFTXStakingZap.sol, addLiquidity721ETH is missing a reentrancy modifier
+  NFTXStakingZap.sol, addLiquidity1155ETH is missing a reentrancy modifier
+  NFTXStakingZap.sol, addLiquidity721 is missing a reentrancy modifier
+  NFTXStakingZap.sol, addLiquidity1155 is missing a reentrancy modifier
+  NFTXStakingZap.sol, receive is missing a reentrancy modifier
+  NFTXStakingZap.sol, rescue is missing a reentrancy modifier
+  NFTXV1Buyout.sol, __NFTXV1Buyout_init is missing a reentrancy modifier
+  NFTXV1Buyout.sol, emergencyWithdraw is missing a reentrancy modifier
+  NFTXV1Buyout.sol, clearBuyout is missing a reentrancy modifier
+  NFTXV1Buyout.sol, addBuyout is missing a reentrancy modifier
+  NFTXV1Buyout.sol, removeBuyout is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, __NFTXVault_init is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, finalizeVault is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, setVaultMetadata is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, setVaultFeatures is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, assignDefaultFeatures is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, setFees is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, disableVaultFees is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, deployEligibilityStorage is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, setManager is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, mint is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, redeem is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, swap is missing a reentrancy modifier
+  NFTXVaultUpgradeable.sol, flashLoan is missing a reentrancy modifier
+  PalmNFTXStakingZap.sol, setLockTime is missing a reentrancy modifier
+  PalmNFTXStakingZap.sol, addLiquidity721 is missing a reentrancy modifier
+  PalmNFTXStakingZap.sol, addLiquidity1155 is missing a reentrancy modifier
+  PalmNFTXStakingZap.sol, receive is missing a reentrancy modifier
+```
+**[0xKiwi (NFTX) disputed](https://github.com/code-423n4/2021-12-nftx-findings/issues/37)**
+
+**[LSDan (judge) increased severity to medium and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/37#issuecomment-1064587166):**
+ > I'm updating this [from a low] to a medium. Reentrancy represents a real and significant risk (as evident by ETC existing) and should be protected against regardless of if you can foresee the external event that causes lack of protection to be an issue.
+> 
+> `
+> 2 — Med (M): vulns have a risk of 2 and are considered “Medium” severity when assets are not at direct risk, but the function of the protocol or its availability could be impacted, or leak value with a hypothetical attack path with stated assumptions, but external requirements.
+> `
+
+
+
+***
+
+## [[M-02] NFTXSimpleFeeDistributor#addReceiver: Failure to check for existing receiver](https://github.com/code-423n4/2021-12-nftx-findings/issues/230)
+_Submitted by GreyArt_
+
+The `addReceiver()` function fails to check if the `_receiver` already exists. This could lead to the same receiver being added multiple times, which results in erroneous fee distributions.
+
+The receiver would receive more than expected (until the duplicate entry has been removed).
+
+#### Recommended Mitigation Steps
+
+Have a mapping `address => bool isReceiver` that will update whenever receivers are added, modified to a new address or removed.
+
+**[0xKiwi (NFTX) acknowledged, but disagreed with medium severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/230#issuecomment-1003210641):**
+ > Valid concern, but this is a permissioned function.
+
+**[LSDan (judge) commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/230#issuecomment-1064558228):**
+ > I think this one is much more likely. I would suggest adding a check because the problem is easy to create and much harder to notice.
+
+
+
+***
+
+## [[M-03] `NFTXMarketplaceZap.sol#buyAnd***()` should return unused weth/eth back to `msg.sender` instead of `to`](https://github.com/code-423n4/2021-12-nftx-findings/issues/161)
+_Submitted by WatchPug_
+
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/NFTXMarketplaceZap.sol#L226-L249>
+
+```solidity
+function buyAndSwap721WETH(
+  uint256 vaultId, 
+  uint256[] memory idsIn, 
+  uint256[] memory specificIds, 
+  uint256 maxWethIn, 
+  address[] calldata path,
+  address to
+) public nonReentrant {
+  require(to != address(0));
+  require(idsIn.length != 0);
+  IERC20Upgradeable(address(WETH)).transferFrom(msg.sender, address(this), maxWethIn);
+  INFTXVault vault = INFTXVault(nftxFactory.vault(vaultId));
+  uint256 redeemFees = (vault.targetSwapFee() * specificIds.length) + (
+      vault.randomSwapFee() * (idsIn.length - specificIds.length)
+  );
+  uint256[] memory amounts = _buyVaultToken(address(vault), redeemFees, maxWethIn, path);
+  _swap721(vaultId, idsIn, specificIds, to);
+
+  emit Swap(idsIn.length, amounts[0], to);
+
+  // Return extras.
+  uint256 remaining = WETH.balanceOf(address(this));
+  WETH.transfer(to, remaining);
+}
+```
+
+For example:
+
+If Alice calls `buyAndSwap721WETH()` to buy some ERC721 and send to Bob, for slippage control, Alice put `1000 ETH` as `maxWethIn`, the actual cost should be lower.
+
+Let's say the actual cost is `900 ETH`.
+
+Expected Results: Alice spend only for the amount of the actual cost (`900 ETH`).
+
+Actual Results: Alice spent `1000 ETH`.
+
+**[0xKiwi (NFTX) acknowledged, but disagreed with medium severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/161#issuecomment-1003214046):**
+ > I think the idea in this is that if a contract is buying for someone else, the zap handles the refund instead of the contract originating the purchase.
+> But this is a valid concern, thank you
+
+**[LSDan (judge) commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/161#issuecomment-1064555316):**
+ > This does result in a loss of funds if the user sends the wrong amount. I agree with the warden's severity rating.
+
+
+
+***
+
+## [[M-04] NFTXStakingZap and NFTXMarketplaceZap's transferFromERC721 transfer Cryptokitties to the wrong address](https://github.com/code-423n4/2021-12-nftx-findings/issues/185)
+_Submitted by hyh_
+
+`transferFromERC721(address assetAddr, uint256 tokenId, address to)` should transfer from `msg.sender` to `to`.
+It transfers to `address(this)` instead when ERC721 is Cryptokitties.
+As there is no additional logic for this case it seems to be a mistake that leads to wrong NFT accounting after such a transfer as NFT will be missed in the vault (which is `to`).
+
+#### Proof of Concept
+
+NFTXStakingZap:
+transferFromERC721
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXStakingZap.sol#L416>
+
+NFTXMarketplaceZap:
+transferFromERC721
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXMarketplaceZap.sol#L556>
+
+Both functions are called by user facing Marketplace buy/sell and Staking addLiquidity/provideInventory functions.
+
+#### Recommended Mitigation Steps
+
+Fix the address:
+
+Now:
+
+```solidity
+  // Cryptokitties.
+  data = abi.encodeWithSignature("transferFrom(address,address,uint256)", msg.sender, address(this), tokenId);
+```
+
+To be:
+```solidity
+  // Cryptokitties.
+  data = abi.encodeWithSignature("transferFrom(address,address,uint256)", msg.sender, to, tokenId);
+```
+
+**[0xKiwi (NFTX) confirmed, but disagreed with medium severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/185#issuecomment-1003211591):**
+ > This was intentional, as I thought it was needed for the contract to require custody, but it should work fine to send directly to the vault.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/185)**
+
+
+***
+
+## [[M-05] Pool Manager can frontrun fees to 100% and use it to steal the value from users](https://github.com/code-423n4/2021-12-nftx-findings/issues/213)
+_Submitted by pedroais_
+
+Pool Manager can front-run entry fee to 100% and users could lose all their deposits.
+
+#### Proof of Concept
+
+Considering:<br>
+The pool manager is the creator of the pool.<br>
+Anyone can create a pool.<br>
+Manager is not a trusted actor.
+
+Anyone can create a pool and get people to join. If there is a big deposit admin could front-run the transaction and set the fee to max which is uint(1 ether) = 10\*\*18 (100% as this is a per token fee).
+
+Function that set fees :
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/NFTXVaultUpgradeable.sol#L119>
+Max fees are 1 ether :
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/NFTXVaultFactoryUpgradeable.sol#L122>
+
+The manager could benefit from this by having other pool assets deposited in staking so he would receive fees in Vtokens and could use them to withdraw the nfts.
+
+#### Recommended Mitigation Steps
+
+Add a timelock to change fees. In that way, frontrunning wouldn't be possible and users would know the fees they are agreeing with.
+
+**[0xKiwi (NFTX) acknowledged, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/213#issuecomment-1003195823):**
+ > Most users aren't on vaults that aren't finalized. We warn users for any vaults that arent finalized and we don't present them on our website. Acknowledging and disagreeing with severity.
+
+**[LSDan (judge) decreased severity to medium and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/213#issuecomment-1064508794):**
+ > In my view, this is a medium risk. While user funds are at direct risk, the likelihood of this happening or being worth the effort is low. As the sponsor states, it's very rare for a user to interact with an un-finalized vault. The user would have to be directly linked to the vault and then ignore the giant warning presented front and center in the UI. If that warning were to be removed, however, the risk would increase. This external requirement is the only reason I'm going with medium and not low. 
+
+
+
+***
+
+## [[M-06] `xToken` Approvals Allow Spenders To Spend More Tokens](https://github.com/code-423n4/2021-12-nftx-findings/issues/58)
+_Submitted by leastwood_
+
+The `approve` function has not been overridden and therefore uses `xToken` shares instead of the equivalent rebalanced amount, i.e. the underlying vault token amount.
+
+#### Proof of Concept
+
+The approved spender may spend more tokens than desired. In fact, the approved amount that can be transferred keeps growing as rewards continue to be distributed to the `XTokenUpgradeable` contract.
+
+Many contracts also use the same amount for the `approve` call as for the amount they want to have transferred in a subsequent `transferFrom` call, and in this case, they approve an amount that is too large (as the approved `shares` amount yields a higher rebalanced amount).
+
+#### Recommended Mitigation Steps
+
+The `_allowances` field should track the rebalanced amounts (i.e. the equivalent vault token amount) such that the approval value does not grow.
+
+The `transferFrom` needs to be overridden and approvals should then be subtracted by the transferred vault token `amount`, not `shares`.
+
+**[0xKiwi (NFTX) acknowledged, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/58#issuecomment-1003191456):**
+ > Not sure if I agree with this severity. If I approve for xTokens, I'm using xTokens, not the underlying token.
+
+**[LSDan (judge) decreased severity to medium and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/58#issuecomment-1064497035):**
+ > This is a medium risk, not high. External assumptions (malicious contracts) are requires for any attack regarding the approval being too high. 
+
+
+
+***
+
+## [[M-07] Rewards can be stolen](https://github.com/code-423n4/2021-12-nftx-findings/issues/136)
+_Submitted by cmichel_
+
+The `NFTXInventoryStaking` contract distributes new rewards to all previous stakers when the owner calls the `receiveRewards` function.
+This allows an attacker to frontrun this `receiveRewards` transaction when they see it in the mem pool with a `deposit` function.
+The attacker will receive the rewards pro-rata to their deposits.
+The deposit will be locked for 2 seconds only (`DEFAULT_LOCKTIME`) after which the depositor can withdraw their initial deposit & the rewards again for a profit.
+
+The rewards can be gamed this way and one does not actually have to *stake*, only be in the staking contract at the time of reward distribution for 2 seconds.
+The rest of the time they can be used for other purposes.
+
+#### Recommended Mitigation Steps
+
+Distribute the rewards equally over time to the stakers instead of in a single chunk on each `receiveRewards` call.
+This is more of a "streaming rewards" approach.
+
+**[0xKiwi (NFTX) confirmed and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/136#issuecomment-1003225759):**
+ > Thanks for the report. 
+> 
+> This is unfortunately unavoidable but streaming isn't a bad idea. Will consider. Thank you.
+> 
+> Confirming.
+
+
+
+***
+
+## [[M-08] Low-level call return value not checked](https://github.com/code-423n4/2021-12-nftx-findings/issues/140)
+_Submitted by cmichel_
+
+The `NFTXStakingZap.addLiquidity721ETHTo` function performs a low-level `.call` in `payable(to).call{value: msg.value-amountEth}` but does not check the return value if the call succeeded.
+
+#### Impact
+
+If the call fails, the refunds did not succeed and the caller will lose all refunds of `msg.value - amountEth`.
+
+#### Recommended Mitigation Steps
+
+Revert the entire transaction if the refund call fails by checking that the `success` return value of the `payable(to).call(...)` returns `true`.
+
+**[0xKiwi (NFTX) confirmed and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/140#issuecomment-1003224022):**
+ > Nice catch, thank you. Confirmed.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/140)**
+
+
+
+***
+
+## [[M-09] Bypass zap timelock](https://github.com/code-423n4/2021-12-nftx-findings/issues/178)
+_Submitted by gzeon_
+
+The default value of `inventoryLockTime` in `NFTXStakingZap` is `7 days` while `DEFAULT_LOCKTIME` in `NFTXInventoryStaking` is 2 ms. These timelock value are used in `NFTXInventoryStaking` to eventually call `_timelockMint` in `XTokenUpgradeable`.
+
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/token/XTokenUpgradeable.sol#L74>
+
+```solidity
+function _timelockMint(address account, uint256 amount, uint256 timelockLength) internal virtual {
+  uint256 timelockFinish = block.timestamp + timelockLength;
+  timelock[account] = timelockFinish;
+  emit Timelocked(account, timelockFinish);
+  _mint(account, amount);
+}
+```
+
+The applicable timelock is calculated by `block.timestamp + timelockLength`, even when the existing timelock is further in the future. Therefore, one can reduce their long (e.g. 7 days) timelock to 2 ms calling `deposit` in `NFTXInventoryStaking`
+
+#### Proof of Concept
+
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/NFTXStakingZap.sol#L160>
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/NFTXInventoryStaking.sol#L30>
+
+#### Recommended Mitigation Steps
+
+```solidity
+function _timelockMint(address account, uint256 amount, uint256 timelockLength) internal virtual {
+  uint256 timelockFinish = block.timestamp + timelockLength;
+  if(timelockFinish > timelock[account]){
+    timelock[account] = timelockFinish;
+    emit Timelocked(account, timelockFinish);
+  }
+  _mint(account, amount);
+}
+```
+
+**[0xKiwi (NFTX) disputed](https://github.com/code-423n4/2021-12-nftx-findings/issues/178)**
+
+**[0xKiwi (NFTX) confirmed and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/178#issuecomment-1007082108):**
+ > After taking another look, this is definitely accurate. Thank you!
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/178)**
+
+
+
+***
+
+## [[M-10] NFTXSimpleFeeDistributor._sendForReceiver doesn't return success if receiver is not a contract](https://github.com/code-423n4/2021-12-nftx-findings/issues/105)
+_Submitted by hyh_
+
+Double spending of fees being distributed will happen in favor of the first fee receivers in the `feeReceivers` list at the expense of the last ones.
+As `_sendForReceiver` doesn't return success for completed transfer when receiver isn't a contract, the corresponding fee amount is sent out twice, to the current and to the next fee receiver in the list. This will lead to double payments for those receivers who happen to be next in the line right after EOAs, and missed payments for the receivers positioned closer to the end of the list as the funds available are going to be already depleted when their turn comes.
+
+#### Proof of Concept
+
+`distribute` use `_sendForReceiver` to transfer current vault balance across `feeReceivers`:
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L67>
+
+`_sendForReceiver` returns a boolean that is used to move current distribution amount to the next receiver when last transfer failed.
+When `_receiver.isContract` is `false` nothing is returned, while `safeTransfer` is done:
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L168>
+
+This way `_sendForReceiver` will indicate that transfer is failed and leftover amount to be added to the next transfer, i.e. the `amountToSend` will be spent twice:
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L64>
+
+#### Recommended Mitigation Steps
+
+Now:
+
+```solidity
+function _sendForReceiver(FeeReceiver memory _receiver, uint256 _vaultId, address _vault, uint256 amountToSend) internal virtual returns (bool) {
+  if (_receiver.isContract) {
+  ...
+  } else {
+    IERC20Upgradeable(_vault).safeTransfer(_receiver.receiver, amountToSend);
+  }
+}
+```
+
+To be:
+```solidity
+function _sendForReceiver(FeeReceiver memory _receiver, uint256 _vaultId, address _vault, uint256 amountToSend) internal virtual returns (bool) {
+  if (_receiver.isContract) {
+  ...
+  } else {
+    IERC20Upgradeable(_vault).safeTransfer(_receiver.receiver, amountToSend);
+    return true;
+  }
+}
+```
+
+**[0xKiwi (NFTX) confirmed and resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/105)**
+
+
+
+***
+
+## [[M-11] NFTXVaultFactoryUpgradeable implementation can be replaced in production breaking the system](https://github.com/code-423n4/2021-12-nftx-findings/issues/177)
+_Submitted by hyh_
+
+`NFTXVaultFactory` contract holds information regarding vaults, assets and permissions (vaults, \_vaultsForAsset and excludedFromFees mappings).
+As there is no mechanics present that transfers this information to another implementation, the switch of nftxVaultFactory to another address performed while in production will break the system.
+
+#### Proof of Concept
+
+`setNFTXVaultFactory` function allows an owner to reset `nftxVaultFactory` without restrictions in the following contracts:
+
+NFTXLPStaking
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXLPStaking.sol#L59>
+
+NFTXInventoryStaking
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXInventoryStaking.sol#L51>
+
+NFTXSimpleFeeDistributor
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L135>
+
+#### Recommended Mitigation Steps
+
+Either restrict the ability to change the factory implementation to pre-production stages or make `nftxVaultFactory` immutable by allowing changing it only once:
+
+Now:
+```solidity
+function setNFTXVaultFactory(address newFactory) external virtual override onlyOwner {
+  require(newFactory != address(0));
+  nftxVaultFactory = INFTXVaultFactory(newFactory);
+}
+```
+
+To be:
+```solidity
+function setNFTXVaultFactory(address newFactory) external virtual override onlyOwner {
+  require(nftxVaultFactory == address(0), "nftxVaultFactory is immutable");
+  nftxVaultFactory = INFTXVaultFactory(newFactory);
+}
+```
+
+If the implementation upgrades in production is desired, the factory data migration logic should be implemented and then used atomically together with the implementation switch in all affected contracts.
+
+**[0xKiwi (NFTX) confirmed and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/177#issuecomment-1003213811):**
+ > This is not a contract that is designed to be replaced, but upgraded. But it is a valid concern that these assistant contracts can have their factory be changed and rendered broken. (even if it were permissioned)<br>
+> Confirming.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/177)**
+
+
+
+***
+
+## [[M-12] `buyAndSwap1155WETH` Does Not Work As Intended](https://github.com/code-423n4/2021-12-nftx-findings/issues/45)
+_Submitted by leastwood_
+
+The `buyAndSwap1155WETH` function in `NFTXMarketplaceZap` aims to facilitate buying and swapping `ERC1155` tokens within a single transaction. The function expects to transfer `WETH` tokens from the `msg.sender` account and use these tokens in purchasing vault tokens. However, the `_buyVaultToken` call in `buyAndSwap1155WETH` actually uses `msg.value` and not `maxWethIn`. As a result, the function will not work unless the user supplies both `WETH` and native `ETH` amounts, equivalent to the `maxWethIn` amount.
+
+#### Proof of Concept
+
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXMarketplaceZap.sol#L284-L314>
+
+```solidity
+function buyAndSwap1155WETH(
+  uint256 vaultId, 
+  uint256[] memory idsIn, 
+  uint256[] memory amounts, 
+  uint256[] memory specificIds, 
+  uint256 maxWethIn, 
+  address[] calldata path,
+  address to
+) public payable nonReentrant {
+  require(to != address(0));
+  require(idsIn.length != 0);
+  IERC20Upgradeable(address(WETH)).transferFrom(msg.sender, address(this), maxWethIn);
+  uint256 count;
+  for (uint256 i = 0; i < idsIn.length; i++) {
+      uint256 amount = amounts[i];
+      require(amount > 0, "Transferring < 1");
+      count += amount;
+  }
+  INFTXVault vault = INFTXVault(nftxFactory.vault(vaultId));
+  uint256 redeemFees = (vault.targetSwapFee() * specificIds.length) + (
+      vault.randomSwapFee() * (count - specificIds.length)
+  );
+  uint256[] memory swapAmounts = _buyVaultToken(address(vault), redeemFees, msg.value, path);
+  _swap1155(vaultId, idsIn, amounts, specificIds, to);
+
+  emit Swap(count, swapAmounts[0], to);
+
+  // Return extras.
+  uint256 remaining = WETH.balanceOf(address(this));
+  WETH.transfer(to, remaining);
+}
+```
+
+#### Tools Used
+
+Manual code review.
+Discussions with Kiwi.
+
+#### Recommended Mitigation Steps
+
+Consider updating the `buyAndSwap1155WETH` function such that the following line of code is used instead of [this](https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXMarketplaceZap.sol#L306).
+
+    uint256[] memory swapAmounts = _buyVaultToken(address(vault), redeemFees, maxWethIn, path);
+
+**[0xKiwi (NFTX) confirmed and resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/45)**
+
+
+
+***
+
+## [[M-13] Dishonest Stakers Can Siphon Rewards From `xToken` Holders Through The `deposit` Function In `NFTXInventoryStaking`](https://github.com/code-423n4/2021-12-nftx-findings/issues/57)
+_Submitted by leastwood_
+
+`xTokens` is intended to be a representation of staked vault tokens. As the protocol's vaults accrue fees from users, these fees are intended to be distributed to users in an inconsistent fashion. `NFTXInventoryStaking` is one of the ways users can stake vault tokens. Deposits are timelocked for `2` seconds by default, essentially rendering flash loan attacks redundant. However, it is more than likely that the same user could withdraw their `xToken` deposit in the next block (assuming an average block time of just over 13 seconds).
+
+Hence, if a well-funded attacker sees a transaction to distribute rewards to `xToken` holders, they could deposit a large sum of vault tokens and receive a majority share of the rewards before withdrawing their tokens in the following block. Additionally, the attacker can force distribute rewards in `NFTXSimpleFeeDistributor` as there is no access control on the `distribute` function.
+
+This issue allows users to siphon user's rewards from the protocol, intended to be distributed to honest vault token stakers.
+
+#### Proof of Concept
+
+Consider the following exploit scenario:
+
+*   Currently there are 1000 `shares` and 1000 `base tokens` in the `XTokenUpgradeable` contract.
+*   Honest actor, Alice, calls `distribute` in `NFTXSimpleFeeDistributor` which attempts to send 200 `base tokens` as rewards for `xToken` holders accrued via protocol usage.
+*   Bob sees a transaction to reward `xToken` holders and frontruns this transaction by staking vault tokens, minting 1000 `shares` and 1000 `base tokens`.
+*   Rewards are distributed such that `XTokenUpgradeable` has 2000 `shares` and 2200 `base tokens`.
+*   Bob unstakes his tokens and exits the pool, redeeming his 1000 `shares` for 1100 `base tokens`.
+*   As a result, Bob was able to siphon off 100 `base tokens` without having to stake their tokens for the same time period that Alice had staked her tokens for.
+*   This unfair distribution can be abused again and again to essentially reward dishonest actors over honest staking participants such as Alice.
+
+#### Tools Used
+
+Manual code review.
+Discussions with Kiwi.
+
+#### Recommended Mitigation Steps
+
+Consider adding a delay to users token deposits into the `XTokenUpgradeable` such that miners cannot feasibly censor a transaction for the specified time interval and users cannot frontrun a transaction to distribute rewards. The interval should be chosen such that enough time is provided for the transaction to be included in a block, given poor network conditions.
+
+I.e. If the chosen interval is 20 blocks. Miners must be able to censor the rewards distribution for 20 blocks. This is unlikely as there would need to be sufficient miner collusion for value to be extracted from the protocol. Additionally, an interval of 20 blocks means that stakers who attempt to enter the pool upon seeing the transaction in the mempool won't be rewarded for such behaviour.
+
+It is also essential that the `distribute` function in `NFTXSimpleFeeDistributor` is restricted to a given role, ensuring malicious users cannot control at what point rewards are distributed.
+
+Alternatively, PoolTogether has a Time-Weighted-Average-Balance (TWAB) implementation which can be used as [reference](https://v4.docs.pooltogether.com/protocol/concepts/time-weight-average-balance/). This would ensure the fairest distribution of rewards to stakers, however, there are additional gas costs associated with this implementation. Hence, unless the protocol intends to be used primarily on L2 protocols, this solution should be avoided.
+
+**[0xKiwi (NFTX) acknowledged, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/57#issuecomment-1007912676):**
+ > While this attack is possible, without available flash liquidity, this attack vector requires a lot of (possibly difficult to acquire) capital to execute. Disagreeing with severity and acknowledging.
+
+**[LSDan (judge) decreased severity to medium and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/57#issuecomment-1064495218):**
+ > I agree with the sponsor that the risk of this happening is almost zero. Yes it's technically possible but the funds lost are going to be minimal and the attacker will almost definitely pay more in slippage and gas fees than they make. That said, this is a direct attack which results in a loss of user funds so making it less than medium risk seems disingenuous.
+
+
+
+***
+
+## [[M-14] Return variable can remain unassigned in _sendForReceiver](https://github.com/code-423n4/2021-12-nftx-findings/issues/121)
+_Submitted by sirhashalot, also found by pauliax_
+
+The `_sendForReceiver()` function only sets a return function in the "if" code block, not the "else" case. If the "else" case is true, no value is returned. The result of this oversight is that the `_sendForReceiver()` function called from the `distribute()` function could sucessfully enter its `else` block if a receiver has `isContract` set to False and successfully transfer the `amountToSend` value. The `ditribute()` function will then have `leftover > 0` and send `currentTokenBalance` to the treasury. This issue is partially due to [Solidity using implicit returns](https://github.com/ethereum/solidity/issues/2951), so if no bool value is explicitly returned, the default bool value of False will be returned.
+
+This problem currently occurs for any receiver with `isContract` set to False. The `_addReceiver` function allows for `isContract` to be set to False, so such a condition should not result in tokens being sent to the treasury as though it was an emergency scenario.
+
+#### Proof of Concept
+
+The `else` block is missing a return value
+<https://github.com/code-423n4/2021-12-nftx/blob/194073f750b7e2c9a886ece34b6382b4f1355f36/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L167-L169>
+
+#### Tools Used
+
+VS Code "Solidity Visual Developer" extension
+
+#### Recommended Mitigation Steps
+
+Verify that functions with a return value do actually return a value in all cases. Adding the line `return true;` can be added to the end of the `else` block as one way to resolve this.
+
+Alternatively, if `isContract` should never be set to False, the code should be designed to prevent a receiver from being added with this value.
+
+**[0xKiwi (NFTX) confirmed and resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/121#issuecomment-1003228547)**
+
+
+
+***
+
+## [[M-15] No access control on assignFees() function in NFTXVaultFactoryUpgradeable contract](https://github.com/code-423n4/2021-12-nftx-findings/issues/50)
+_Submitted by ych18_
+
+If the Vault owner decides to set factoryMintFee and factoryRandomRedeemFee to zero, any user could call the function NFTXVaultFactoryUpgradeable.assignFees() and hence all the fees are updated.
+
+**[0xKiwi (NFTX) confirmed and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/50#issuecomment-1003233969):**
+ > This function is left over from some upgrades. It will be removed. Thank you.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/50)**
+
+
+
+***
+
+## [[M-16] Malicious receiver can make distribute function denial of service](https://github.com/code-423n4/2021-12-nftx-findings/issues/69)
+_Submitted by cccz_
+
+In the NFTXSimpleFeeDistributor.sol contract, the distribute function calls the \_sendForReceiver function to distribute the fee
+
+```solidity
+function distribute(uint256 vaultId) external override virtual nonReentrant {
+  require(nftxVaultFactory != address(0));
+  address _vault = INFTXVaultFactory(nftxVaultFactory).vault(vaultId);
+
+  uint256 tokenBalance = IERC20Upgradeable(_vault).balanceOf(address(this));
+
+  if (distributionPaused || allocTotal == 0) {
+    IERC20Upgradeable(_vault).safeTransfer(treasury, tokenBalance);
+    return;
+  }
+
+  uint256 length = feeReceivers.length;
+  uint256 leftover;
+  for (uint256 i = 0; i <length; i++) {
+    FeeReceiver memory _feeReceiver = feeReceivers[i];
+    uint256 amountToSend = leftover + ((tokenBalance * _feeReceiver.allocPoint) / allocTotal);
+    uint256 currentTokenBalance = IERC20Upgradeable(_vault).balanceOf(address(this));
+    amountToSend = amountToSend> currentTokenBalance? currentTokenBalance: amountToSend;
+    bool complete = _sendForReceiver(_feeReceiver, vaultId, _vault, amountToSend);
+    if (!complete) {
+      leftover = amountToSend;
+    } else {
+      leftover = 0;
+    }
+  }
+```
+
+In the \_sendForReceiver function, when the \_receiver is a contract, the receiver's receiveRewards function will be called. If the receiver is malicious, it can execute revert() in the receiveRewards function, resulting in DOS.
+
+```solidity
+function _sendForReceiver(FeeReceiver memory _receiver, uint256 _vaultId, address _vault, uint256 amountToSend) internal virtual returns (bool) {
+  if (_receiver.isContract) {
+    IERC20Upgradeable(_vault).approve(_receiver.receiver, amountToSend);
+    // If the receive is not properly processed, send it to the treasury instead.
+      
+    bytes memory payload = abi.encodeWithSelector(INFTXLPStaking.receiveRewards.selector, _vaultId, amountToSend);
+    (bool success,) = address(_receiver.receiver).call(payload);
+
+    // If the allowance has not been spent, it means we can pass it forward to next.
+    return success && IERC20Upgradeable(_vault).allowance(address(this), _receiver.receiver) == 0;
+  } else {
+    IERC20Upgradeable(_vault).safeTransfer(_receiver.receiver, amountToSend);
+  }
+}
+```
+
+#### Proof of Concept
+
+<https://github.com/code-423n4/2021-12-nftx/blob/main/nftx-protocol-v2/contracts/solidity/NFTXSimpleFeeDistributor.sol#L157-L166>
+
+#### Recommended Mitigation Steps
+
+The contract can store the fee sent to the receiver in a state variable, and then the receiver can take it out by calling a function.
+
+**[0xKiwi (NFTX) confirmed, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/69#issuecomment-1003192680):**
+ > This is a permissioned entity, but this is a valid concern. User funds not at risk and the dao can remove the malciious receiver (if it ever gets there in the first place). Good thinking. 
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/69)**
+
+**[LSDan (judge) decreased severity to medium and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/69#issuecomment-1064475286):**
+ > This is a medium risk, not high. The attack has external requirements and is relatively easy for the DAO to mitigate.
+
+
+
+***
+
+## [[M-17] transfer return value is ignored](https://github.com/code-423n4/2021-12-nftx-findings/issues/40)
+_Submitted by robee, also found by 0x1f8b, cmichel, csanuragjain, defsec, hyh, leastwood, sirhashalot, and WatchPug_
+
+Need to use safeTransfer instead of transfer. As there are popular tokens, such as USDT that transfer/transferFrom method doesn’t return anything. The transfer return value has to be checked (as there are some other tokens that returns false instead revert), that means you must
+
+1.  Check the transfer return value
+
+Another popular possibility is to add a whiteList.
+Those are the appearances (solidity file, line number, actual line):
+
+```solidity
+NFTXStakingZap.sol, 401, IERC20Upgradeable(vault).transfer(to, minTokenIn-amountToken); 
+NFTXStakingZap.sol, 474, IERC20Upgradeable(token).transfer(msg.sender, IERC20Upgradeable(token).balanceOf(address(this))); 
+PalmNFTXStakingZap.sol, 190, pairedToken.transferFrom(msg.sender, address(this), wethIn); 
+PalmNFTXStakingZap.sol, 195, pairedToken.transfer(to, wethIn-amountEth); 
+PalmNFTXStakingZap.sol, 219, pairedToken.transferFrom(msg.sender, address(this), wethIn); 
+PalmNFTXStakingZap.sol, 224, pairedToken.transfer(to, wethIn-amountEth); 
+PalmNFTXStakingZap.sol, 316, IERC20Upgradeable(vault).transfer(to, minTokenIn-amountToken); 
+XTokenUpgradeable.sol, 54, baseToken.transfer(who, what); 
+NFTXFlashSwipe.sol, 51, IERC20Upgradeable(vault).transferFrom(msg.sender, address(this), mintFee + targetRedeemFee);
+```
+
+**[0xKiwi (NFTX) confirmed, but disagreed with high severity and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/40#issuecomment-1003186753):**
+ > Disagreeing with the severity, but will make sure I stick to safeTransferFrom, thank you.
+
+**[0xKiwi (NFTX) resolved](https://github.com/code-423n4/2021-12-nftx-findings/issues/40)**
+
+**[LSDan (judge) decreased severity to medium and commented](https://github.com/code-423n4/2021-12-nftx-findings/issues/40#issuecomment-1064472797):**
+ > This is medium risk, not high. Loss of funds requires external factors.
+
+
+
+***
+
+# Low Risk Findings (38)
+- [[L-01] safeApprove of openZeppelin is deprecated](https://github.com/code-423n4/2021-12-nftx-findings/issues/31) _Submitted by robee_
+- [[L-02] Validations](https://github.com/code-423n4/2021-12-nftx-findings/issues/234) _Submitted by pauliax_
+- [[L-03] NFTXVaultFactoryUpgradeable.sol function assignFees() does not have onlyOwner modifier](https://github.com/code-423n4/2021-12-nftx-findings/issues/196) _Submitted by PPrieditis_
+- [[L-04] Users can create vaults with a malicious _assetAddress ](https://github.com/code-423n4/2021-12-nftx-findings/issues/56) _Submitted by jayjonah8_
+- [[L-05] Timelock functionality for `xToken` is applied on all existing balance](https://github.com/code-423n4/2021-12-nftx-findings/issues/80) _Submitted by 0x0x0x_
+- [[L-06] Unsafe approve in NFTXSimpleFeeDistributor](https://github.com/code-423n4/2021-12-nftx-findings/issues/186) _Submitted by 0x1f8b_
+- [[L-07] Outdated comment in `TimelockRewardDistributionTokenImpl.burnFrom`](https://github.com/code-423n4/2021-12-nftx-findings/issues/150) _Submitted by cmichel_
+- [[L-08] PausableUpgradeable: Document lockId code 10 = deposit](https://github.com/code-423n4/2021-12-nftx-findings/issues/221) _Submitted by GreyArt_
+- [[L-09] Cached lpStaking and inventoryStaking in Zap contracts](https://github.com/code-423n4/2021-12-nftx-findings/issues/214) _Submitted by pauliax_
+- [[L-10] NFTXMarketplaceZap: Restrict native ETH transfers to WETH contract](https://github.com/code-423n4/2021-12-nftx-findings/issues/224) _Submitted by GreyArt, also found by defsec and pauliax_
+- [[L-11] NFTXSimpleFeeDistributor: Inconsistency between implementation and comment](https://github.com/code-423n4/2021-12-nftx-findings/issues/222) _Submitted by GreyArt, also found by hyh_
+- [[L-12] NFTXMarketplaceZap: Add rescue() function](https://github.com/code-423n4/2021-12-nftx-findings/issues/226) _Submitted by GreyArt_
+- [[L-13] NFTXStakingZap: Sanity checks on “to” (dest) address](https://github.com/code-423n4/2021-12-nftx-findings/issues/227) _Submitted by GreyArt_
+- [[L-14] Marketplace allows functions made for ERC721 vaults to interact with ERC1155 vaults](https://github.com/code-423n4/2021-12-nftx-findings/issues/51) _Submitted by Ruhum_
+- [[L-15] InventoryStaking `deposit()` and `withdraw()` don't validate passed vaultId](https://github.com/code-423n4/2021-12-nftx-findings/issues/61) _Submitted by Ruhum_
+- [[L-16] `NFTXSimpleFeeDistributor#__SimpleFeeDistributor__init__()` Missing `__ReentrancyGuard_init()`](https://github.com/code-423n4/2021-12-nftx-findings/issues/90) _Submitted by WatchPug_
+- [[L-17] Race condition in approve() 收件箱](https://github.com/code-423n4/2021-12-nftx-findings/issues/134) _Submitted by cccz, also found by WatchPug_
+- [[L-18] Same module can be added several times](https://github.com/code-423n4/2021-12-nftx-findings/issues/135) _Submitted by cmichel, also found by csanuragjain_
+- [[L-19] Zaps should verify paths](https://github.com/code-423n4/2021-12-nftx-findings/issues/137) _Submitted by cmichel, also found by leastwood_
+- [[L-20] Init frontrun](https://github.com/code-423n4/2021-12-nftx-findings/issues/33) _Submitted by robee_
+- [[L-21] Unbounded iteration in `NFTXVaultUpgradeable.allHoldings` over all holdings](https://github.com/code-423n4/2021-12-nftx-findings/issues/147) _Submitted by cmichel_
+- [[L-22] Inconsistency in fee distribution](https://github.com/code-423n4/2021-12-nftx-findings/issues/41) _Submitted by csanuragjain_
+- [[L-23] Unfair fee distribution](https://github.com/code-423n4/2021-12-nftx-findings/issues/108) _Submitted by p4st13r4, also found by cccz and cmichel_
+- [[L-24] Missing OOB check in `changeReceiverAlloc`](https://github.com/code-423n4/2021-12-nftx-findings/issues/181) _Submitted by gzeon_
+- [[L-25] `NFTXLPStaking.rewardDistTokenImpl` is never initialized](https://github.com/code-423n4/2021-12-nftx-findings/issues/54) _Submitted by Ruhum_
+- [[L-26] NFTXVaultUpgradeable.mintTo and swapTo do not check for user supplied arrays length](https://github.com/code-423n4/2021-12-nftx-findings/issues/111) _Submitted by hyh_
+- [[L-27] DOS on withdrawal](https://github.com/code-423n4/2021-12-nftx-findings/issues/13) _Submitted by csanuragjain_
+- [[L-28] NFTXInventoryStaking._deployXToken create2 deploy result isn't zero checked](https://github.com/code-423n4/2021-12-nftx-findings/issues/115) _Submitted by hyh_
+- [[L-29] NFTXStakingZap, NFTXMarketplaceZap and NFTXVaultUpgradeable use hard coded Cryptokitties and CryptoPunks addresses](https://github.com/code-423n4/2021-12-nftx-findings/issues/155) _Submitted by hyh_
+- [[L-30] onlyOwnerIfPaused(0) argument should not be hard coded ](https://github.com/code-423n4/2021-12-nftx-findings/issues/52) _Submitted by jayjonah8_
+- [[L-31] Missing address(0) checks](https://github.com/code-423n4/2021-12-nftx-findings/issues/122) _Submitted by sirhashalot, also found by BouSalman and robee_
+- [[L-32] `timelockMint` In `TimelockRewardDistributionTokenImpl` Does Not Ensure Mint Is Greater Than Zero](https://github.com/code-423n4/2021-12-nftx-findings/issues/64) _Submitted by leastwood_
+- [[L-33] `assignDefaultFeatures` Does Nothing](https://github.com/code-423n4/2021-12-nftx-findings/issues/65) _Submitted by leastwood_
+- [[L-34] Rewards Cannot Be Claimed If LP Tokens Are Unstaked](https://github.com/code-423n4/2021-12-nftx-findings/issues/73) _Submitted by leastwood_
+- [[L-35] max timelockLength](https://github.com/code-423n4/2021-12-nftx-findings/issues/172) _Submitted by pauliax_
+- [[L-36] Require with empty message](https://github.com/code-423n4/2021-12-nftx-findings/issues/29) _Submitted by robee, also found by hyh and WatchPug_
+- [[L-37] Require with not comprehensive message](https://github.com/code-423n4/2021-12-nftx-findings/issues/30) _Submitted by robee_
+- [[L-38] Two Steps Verification before Transferring Ownership](https://github.com/code-423n4/2021-12-nftx-findings/issues/36) _Submitted by robee, also found by Dravee and leastwood_
+
+# Non-Critical Findings (19)
+- [[N-01] Wrong code style](https://github.com/code-423n4/2021-12-nftx-findings/issues/190) _Submitted by 0x1f8b_
+- [[N-02] Local variables shadowing](https://github.com/code-423n4/2021-12-nftx-findings/issues/123) _Submitted by sirhashalot_
+- [[N-03] Weak nonce usage](https://github.com/code-423n4/2021-12-nftx-findings/issues/126) _Submitted by sirhashalot_
+- [[N-04] NFTXMarketplaceZap: incorrect parameter name](https://github.com/code-423n4/2021-12-nftx-findings/issues/228) _Submitted by GreyArt_
+- [[N-05] NFTXInventoryStaking: Index vaultId in events](https://github.com/code-423n4/2021-12-nftx-findings/issues/218) _Submitted by GreyArt_
+- [[N-06] NFTXLPStaking: Implementation Upgrade Storage Layout Caution](https://github.com/code-423n4/2021-12-nftx-findings/issues/220) _Submitted by GreyArt_
+- [[N-07] Staking Zap approves wrong LP token](https://github.com/code-423n4/2021-12-nftx-findings/issues/143) _Submitted by cmichel_
+- [[N-08] isContract() duplication and Address.sol library usage](https://github.com/code-423n4/2021-12-nftx-findings/issues/199) _Submitted by PPrieditis_
+- [[N-09] TimelockRewardDistributionTokenImpl.sol function withdrawableRewardOf() visibility can be changed from internal to public](https://github.com/code-423n4/2021-12-nftx-findings/issues/201) _Submitted by PPrieditis_
+- [[N-10] Unused function input argument "vault"](https://github.com/code-423n4/2021-12-nftx-findings/issues/205) _Submitted by PPrieditis_
+- [[N-11] Internal functions names should start with underscore](https://github.com/code-423n4/2021-12-nftx-findings/issues/124) _Submitted by sirhashalot_
+- [[N-12] Constants are not explicitly declared](https://github.com/code-423n4/2021-12-nftx-findings/issues/82) _Submitted by WatchPug_
+- [[N-13] Incorrect contract referenced in test](https://github.com/code-423n4/2021-12-nftx-findings/issues/116) _Submitted by sirhashalot_
+- [[N-14] Unchecked return value for `ERC20.approve` call](https://github.com/code-423n4/2021-12-nftx-findings/issues/87) _Submitted by WatchPug_
+- [[N-15] Outdated compiler version](https://github.com/code-423n4/2021-12-nftx-findings/issues/88) _Submitted by WatchPug_
+- [[N-16] `transfer()` is not recommended for sending ETH](https://github.com/code-423n4/2021-12-nftx-findings/issues/94) _Submitted by WatchPug_
+- [[N-17] Use of floating pragma](https://github.com/code-423n4/2021-12-nftx-findings/issues/179) _Submitted by saian_
+- [[N-18] Sell event amounts[1]](https://github.com/code-423n4/2021-12-nftx-findings/issues/173) _Submitted by pauliax_
+- [[N-19] Misleading comments](https://github.com/code-423n4/2021-12-nftx-findings/issues/109) _Submitted by p4st13r4_
+
+# Gas Optimizations (47)
+- [[G-01] Upgrade pragma to at least 0.8.4](https://github.com/code-423n4/2021-12-nftx-findings/issues/189) _Submitted by Dravee, also found by defsec_
+- [[G-02] Using 10**X for constants isn't gas efficient](https://github.com/code-423n4/2021-12-nftx-findings/issues/193) _Submitted by Dravee, also found by WatchPug_
+- [[G-03] Unnecessary checked arithmetic in for-loops](https://github.com/code-423n4/2021-12-nftx-findings/issues/198) _Submitted by Dravee, also found by 0x0x0x, defsec, PPrieditis, robee, and WatchPug_
+- [[G-04] `++i` costs less gass compared to `i++`](https://github.com/code-423n4/2021-12-nftx-findings/issues/195) _Submitted by Dravee, also found by 0x0x0x, robee, and WatchPug_
+- [[G-05] Unused local variables](https://github.com/code-423n4/2021-12-nftx-findings/issues/163) _Submitted by WatchPug, also found by gzeon and sirhashalot_
+- [[G-06] Explicit initialization with zero not required](https://github.com/code-423n4/2021-12-nftx-findings/issues/207) _Submitted by Dravee, also found by robee_
+- [[G-07] Constants can be made internal / private](https://github.com/code-423n4/2021-12-nftx-findings/issues/209) _Submitted by Dravee_
+- [[G-08] Avoid unnecessary external call can save gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/89) _Submitted by WatchPug_
+- [[G-09] NFTXStakingZap: Unused xTokenMinted variable ](https://github.com/code-423n4/2021-12-nftx-findings/issues/217) _Submitted by GreyArt_
+- [[G-10] Use immutable variables can save gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/100) _Submitted by WatchPug_
+- [[G-11] Remove unnecessary variables can make the code simpler and save some gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/101) _Submitted by WatchPug_
+- [[G-12] Public functions to external](https://github.com/code-423n4/2021-12-nftx-findings/issues/23) _Submitted by robee, also found by cccz, csanuragjain, and WatchPug_
+- [[G-13] `NFTXMarketplaceZap.sol#buyAndSwap1155WETH()` Implementation can be simpler and save some gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/156) _Submitted by WatchPug_
+- [[G-14] Move kitties/punk addresses to constants](https://github.com/code-423n4/2021-12-nftx-findings/issues/110) _Submitted by p4st13r4_
+- [[G-15] Inline unnecessary function can make the code simpler and save some gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/159) _Submitted by WatchPug_
+- [[G-16] Unused events](https://github.com/code-423n4/2021-12-nftx-findings/issues/162) _Submitted by WatchPug_
+- [[G-17] Unused function parameters](https://github.com/code-423n4/2021-12-nftx-findings/issues/164) _Submitted by WatchPug_
+- [[G-18] Check if amount > 0 before token transfer can save gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/165) _Submitted by WatchPug_
+- [[G-19] Cache storage variables in the stack can save gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/191) _Submitted by WatchPug_
+- [[G-20] Unused imports](https://github.com/code-423n4/2021-12-nftx-findings/issues/19) _Submitted by robee, also found by PPrieditis_
+- [[G-21] Using constants instead of local variables can save some gas](https://github.com/code-423n4/2021-12-nftx-findings/issues/97) _Submitted by WatchPug_
+- [[G-22] Named return issue](https://github.com/code-423n4/2021-12-nftx-findings/issues/34) _Submitted by robee_
+- [[G-23] Gas savings](https://github.com/code-423n4/2021-12-nftx-findings/issues/11) _Submitted by csanuragjain_
+- [[G-24] Unnecessary assignment of 0 to an uninitialized variable](https://github.com/code-423n4/2021-12-nftx-findings/issues/53) _Submitted by Ruhum_
+- [[G-25] Gas saving by storing modulesCopy.length in local variable](https://github.com/code-423n4/2021-12-nftx-findings/issues/5) _Submitted by csanuragjain_
+- [[G-26] Store totalSupply() in variable](https://github.com/code-423n4/2021-12-nftx-findings/issues/119) _Submitted by sirhashalot_
+- [[G-27] Gas saving by using mapping instead of computeAddress](https://github.com/code-423n4/2021-12-nftx-findings/issues/7) _Submitted by csanuragjain_
+- [[G-28] Unnecessary check for a condition ](https://github.com/code-423n4/2021-12-nftx-findings/issues/49) _Submitted by ych18_
+- [[G-29] After Solidity 0.8.1, The Inline Assembly Contract Check Can Be replaced with the new function](https://github.com/code-423n4/2021-12-nftx-findings/issues/130) _Submitted by defsec_
+- [[G-30] Use a constant instead of block.timestamp for the deadline](https://github.com/code-423n4/2021-12-nftx-findings/issues/131) _Submitted by defsec_
+- [[G-31]  Use `calldata` instead of `memory` for function parameters](https://github.com/code-423n4/2021-12-nftx-findings/issues/132) _Submitted by defsec, also found by Dravee_
+- [[G-32] `> 0` can be replaced with `!= 0` for gas optimization](https://github.com/code-423n4/2021-12-nftx-findings/issues/176) _Submitted by defsec, also found by 0x0x0x, Dravee, and pedroais_
+- [[G-33] Gas Optimization: Use uint232 for `allocPoint`](https://github.com/code-423n4/2021-12-nftx-findings/issues/183) _Submitted by gzeon_
+- [[G-34] Gas Optimization: Use immutable to cache beaconhash](https://github.com/code-423n4/2021-12-nftx-findings/issues/187) _Submitted by gzeon_
+- [[G-35] isContract() code is duplicated in multiple files ](https://github.com/code-423n4/2021-12-nftx-findings/issues/48) _Submitted by jayjonah8_
+- [[G-36] Cache duplicate external calls](https://github.com/code-423n4/2021-12-nftx-findings/issues/167) _Submitted by pauliax_
+- [[G-37] Unused state variables](https://github.com/code-423n4/2021-12-nftx-findings/issues/169) _Submitted by pauliax, also found by GreyArt_
+- [[G-38] uint64 state variable is less efficient than uint256](https://github.com/code-423n4/2021-12-nftx-findings/issues/170) _Submitted by pauliax_
+- [[G-39] Use cached version of sushiRouter.WETH()](https://github.com/code-423n4/2021-12-nftx-findings/issues/171) _Submitted by pauliax, also found by cmichel_
+- [[G-40] Use unchecked math and cache values](https://github.com/code-423n4/2021-12-nftx-findings/issues/208) _Submitted by pauliax, also found by WatchPug_
+- [[G-41] Refactor `distribute()` logic](https://github.com/code-423n4/2021-12-nftx-findings/issues/120) _Submitted by sirhashalot_
+- [[G-42] Use bytes32 instead of string to save gas whenever possible](https://github.com/code-423n4/2021-12-nftx-findings/issues/20) _Submitted by robee_
+- [[G-43] Short the following require messages](https://github.com/code-423n4/2021-12-nftx-findings/issues/21) _Submitted by robee, also found by pauliax, sirhashalot, and WatchPug_
+- [[G-44] Storage double reading. Could save SLOAD](https://github.com/code-423n4/2021-12-nftx-findings/issues/22) _Submitted by robee, also found by WatchPug_
+- [[G-45] Unnecessary array boundaries check when loading an array element twice](https://github.com/code-423n4/2021-12-nftx-findings/issues/25) _Submitted by robee_
+- [[G-46] Importing unused contract](https://github.com/code-423n4/2021-12-nftx-findings/issues/180) _Submitted by saian_
+- [[G-47] provideInventory1155 assumes tokenIds.length == amounts.length](https://github.com/code-423n4/2021-12-nftx-findings/issues/117) _Submitted by sirhashalot_
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

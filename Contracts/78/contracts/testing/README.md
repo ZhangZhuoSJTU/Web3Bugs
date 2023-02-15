@@ -1,0 +1,2 @@
+# Important disclaimer for code checkers, auditors, bounty hunters, and other pedantic types 
+All contracts in this directory are for testing purposes. They have not and will not be NatSpec documented since their existence in conjunction with formal tests is a form of documentation. They are not user facing and will not be deployed to Mainnet with the exception of contracts that are replicas of existing Mainnet contracts such as Multicall.

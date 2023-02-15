@@ -1,0 +1,103 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-Q1-2022 / ☑behodler-jan27
+==============================================================
+
+[26-Jan-22 03:52 AM] itsmetechjay | C4#5294
+👋 Hello and welcome to the contest channel for the $90K USDC **Behodler** contest!
+
+📆 Contest opens January 27, 2022, at 0:00 UTC and runs through February 2, 2022 at 23:59 UTC (7 days).
+
+Please give a warm welcome to the Behodler team, specifically @Justin Goro, @Wiggum, and @Arren, who will be available for questions either here in the channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+
+[26-Jan-22 03:54 AM] Wiggum#1287
+hello everyone and welcome to Behodler's contest. Looking forward to this week and working with you all!
+
+{Reactions}
+🥂 (5) 👋 (4) 
+
+[26-Jan-22 04:34 AM] Arren#0352
+Hi All!! Exciting stuff, it will be great to see what you all find. I will be here to help out where I can.
+
+{Reactions}
+🙌 (2) 
+
+[26-Jan-22 04:11 PM] Justin Goro#1527
+Good luck contestants! Im looking forward to your findings. Feel free to send me technical questions.
+
+{Reactions}
+hi5 (4) 
+
+[26-Jan-22 05:49 PM] Justin Goro#1527
+@here Hi wardens, the README has been updated with a link to a video explaining things, first from a high level overview and then drilling into code. Understanding the motivations and having a grasp of the cryptoeconomics will make reading the code quite a bit easier but if you prefer the written word to video, the documentation both on the repo and on our site should be more than enough.
+
+For now the video is an mp4 that opens in your browser. Tomorrow it will be a youtube playlist.
+
+{Reactions}
+🙌 (7) 
+
+[30-Jan-22 07:10 PM] Justin Goro#1527
+PSA
+Hi wardens. One issue I see coming up a lot is something that appears as a vulnerability in a vacuum but in the correct context isn't. Limbo is basically open to admin manipulation until the conigured bool is set to true. The purpose of this is so that when I deploy Limbo initially, I can configure it quickly. If this wasn't in place, I'd have to issue proposals and vote on them just to set up the contract. Once configured is set to true, the admin powers are permanently removed.
+The pre configured state will be during a time where I'm the only person who knows the contract exists. And since there are no value flows, there will be no detection by mining bots.
+
+
+[30-Jan-22 07:12 PM] Justin Goro#1527
+On a similar note, with governance, the proposals which cause havoc to their target contract are not considered threats since the community can simply vote them down. And we might have some perculiar reason to want such proposals. Perhaps it's the only way to thwart a more dangerous exploit.
+
+
+[30-Jan-22 07:58 PM] Justin Goro#1527
+Gas optimizations are prized for Limbo, Flan and FlanBackstop since they are user facing and involve value calculations of APYs vs gas cost. Minor gas optimizations for LimboDAO and so on are not highly sought after. Only significant gas optimizations on the latter would be welcome.
+
+
+[31-Jan-22 11:47 AM] GeekyLumberjack#3244
+“If it’s all one big video carry on” 😂 I appreciate the time you’ve put into this explanation!
+
+{Reactions}
+😆 
+
+[31-Jan-22 02:12 PM] Justin Goro#1527
+Thanks, @GeekyLumberjack. I was a bit surprised it added up to almost 3 hours. I was aiming for 45 min but got a bit carried away.
+
+{Reactions}
+😂 (3) 
+
+[31-Jan-22 02:14 PM] Justin Goro#1527
+PSA to prevent logging an issue I won't accept:
+Some of you may have noticed that it's impossible to list Scarcity on Limbo as a stakeable token because the migration mechanics would break due to balanceOf calculations being thrown off. The solution is to use the ProxyRegister contract to wrap Scarcity in a generic ERC20 token and to list that as a perpetual soul for staking. No code change is required.
+
+
+[02-Feb-22 09:58 AM] Dravee#7832
+Lol @ the comments:
+> Limbo.sol:487: [...] Anticipates moving tokens to Limbo2 (wen Limbo2??)
+> UniswapHelper.sol:17:  [...] managing a just-in-time (Justin Time?) oracle
+
+{Reactions}
+😆 (2) 
+
+[02-Feb-22 02:04 PM] ComradePotato#4464
+"FlanBackstop.sol:45: //USDC and USDT have 6 decimal places because large stablecoin transfers are exactly where you'd like to find accidental bugs" is a favourite of mine
+
+{Reactions}
+🤣 (4) 
+
+[02-Feb-22 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **Behodler **contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: the **Behodler** team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+
+[02-Feb-22 04:07 PM] Justin Goro#1527
+Thanks, everyone! Very high quality submissions. I haven't reviewed them all but I have reviewed most and I have to say I'm really impressed at the effort, quality and scrutiny put in. 10/10 would recommend this process to other crypto projects.
+
+{Reactions}
+💜 (14) C4Keycap (13) 🐶 (7) 🐺 (8) hi5 (8) chefskiss (6) thankyou (3) ring (4) 
+
+==============================================================
+Exported 15 message(s)
+==============================================================

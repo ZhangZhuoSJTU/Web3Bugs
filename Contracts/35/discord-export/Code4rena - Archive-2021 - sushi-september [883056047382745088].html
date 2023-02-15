@@ -1,0 +1,1612 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Code4rena - sushi-september</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-300.woff);
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-400.woff);
+            font-weight: 400;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-500.woff);
+            font-weight: 500;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-600.woff);
+            font-weight: 600;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-700.woff);
+            font-weight: 700;
+        }
+
+        body {
+            background-color: #36393e;
+            color: #dcddde;
+            font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        a {
+            color: #00aff4;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        img {
+            object-fit: contain;
+        }
+
+        .markdown {
+            max-width: 100%;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+
+        .preserve-whitespace {
+            white-space: pre-wrap;
+        }
+
+        .spoiler-text {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .spoiler-text--hidden {
+            cursor: pointer;
+            background-color: #202225;
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .spoiler-text--hidden:hover {
+            background-color: rgba(32, 34, 37, 0.8);
+        }
+
+        .spoiler-text--hidden::selection {
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .quote {
+            display: flex;
+            margin: 0.05em 0;
+        }
+
+        .quote-border {
+            margin-right: 0.5em;
+            border: 2px solid #4f545c;
+            border-radius: 3px;
+        }
+
+        .pre {
+            background-color: #2f3136;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+        }
+
+        .pre--multiline {
+            margin-top: 0.25em;
+            padding: 0.5em;
+            border: 2px solid #282b30;
+            border-radius: 5px;
+            color: #b9bbbe;
+        }
+
+        .pre--multiline.hljs {
+            background-color: #2f3136;
+            color: #b9bbbe;
+        }
+
+        .pre--inline {
+            padding: 2px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        .mention {
+            border-radius: 3px;
+            padding: 0 2px;
+            color: #dee0fc;
+            background-color: rgba(88, 101, 242, .3);
+            font-weight: 500;
+        }
+
+        .mention:hover {
+            background-color: #5865f2;
+            color: #ffffff
+        }
+
+        .timestamp {
+            border-radius: 3px;
+            padding: 0 2px;
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .emoji {
+            width: 1.325em;
+            height: 1.325em;
+            margin: 0 0.06em;
+            vertical-align: -0.4em;
+        }
+
+        .emoji--small {
+            width: 1em;
+            height: 1em;
+        }
+
+        .emoji--large {
+            width: 2.8em;
+            height: 2.8em;
+        }
+
+        .preamble {
+            display: grid;
+            margin: 0 0.3em 0.6em 0.3em;
+            max-width: 100%;
+            grid-template-columns: auto 1fr;
+        }
+
+        .preamble__guild-icon-container {
+            grid-column: 1;
+        }
+
+        .preamble__guild-icon {
+            max-width: 88px;
+            max-height: 88px;
+        }
+
+        .preamble__entries-container {
+            grid-column: 2;
+            margin-left: 0.6em;
+        }
+
+        .preamble__entry {
+            font-size: 1.4em;
+            color: #ffffff;
+        }
+
+        .preamble__entry--small {
+            font-size: 1em;
+        }
+
+        .chatlog {
+            max-width: 100%;
+        }
+
+        .chatlog__message-group {
+            display: grid;
+            margin: 0 0.6em;
+            padding: 0.9em 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            grid-template-columns: auto 1fr;
+        }
+
+        .chatlog__reference-symbol {
+            grid-column: 1;
+            margin: 8px 4px 4px 18px;
+            border-left: 2px solid #4f545c;
+            border-top: 2px solid #4f545c;
+            border-radius: 8px 0 0 0;
+        }
+
+        .chatlog__reference {
+            display: flex;
+            grid-column: 2;
+            margin-bottom: 0.25em;
+            font-size: 0.875em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            align-items: center;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-avatar {
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            margin-right: 0.25em;
+        }
+
+        .chatlog__reference-name {
+            margin-right: 0.3em;
+            font-weight: 600;
+        }
+
+        .chatlog__reference-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__reference-content a:hover {
+            text-decoration: none;
+        }
+
+        .chatlog__reference-link {
+            cursor: pointer;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-link * {
+            display: inline;
+            pointer-events: none;
+        }
+
+        .chatlog__reference-link:hover {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-link:hover *:not(.spoiler-text) {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-edited-timestamp {
+            margin-left: 0.25em;
+            font-size: 0.8em;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__author-avatar-container {
+            grid-column: 1;
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+        }
+
+        .chatlog__author-avatar {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .chatlog__messages {
+            grid-column: 2;
+            min-width: 50%;
+            direction: ltr;
+        }
+
+        .chatlog__author-name {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .chatlog__timestamp {
+            margin-left: 0.3em;
+            font-size: 0.75em;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__message {
+            padding: 0.1em 0.3em;
+            margin: 0 -0.3em;
+            background-color: transparent;
+            transition: background-color 1s ease;
+        }
+
+        .chatlog__message--highlighted {
+            background-color: rgba(114, 137, 218, 0.2);
+        }
+
+        .chatlog__message--pinned {
+            background-color: rgba(249, 168, 37, 0.05);
+        }
+
+        .chatlog__content {
+            font-size: 0.95em;
+            word-wrap: break-word;
+        }
+
+        .chatlog__edited-timestamp {
+            margin-left: 0.15em;
+            font-size: 0.8em;
+        }
+
+        .chatlog__attachment {
+            display: inline-block;
+            position: relative;
+            margin-top: 0.3em;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden {
+            cursor: pointer;
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatlog__attachment--hidden * {
+            pointer-events: none;
+        }
+
+        .chatlog__attachment-spoiler-caption {
+            display: none;
+            z-index: 999;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0.4em 0.8em;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: #dcddde;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-spoiler-caption {
+            display: block;
+        }
+
+        .chatlog__attachment--hidden:hover .chatlog__attachment-spoiler-caption {
+            color: #fff;
+        }
+
+        .chatlog__attachment-media {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-media {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic {
+            width: 100%;
+            max-width: 520px;
+            height: 40px;
+            padding: 10px;
+            background-color: #2f3136;
+            border: 1px solid #292b2f;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-generic {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic-icon {
+            float: left;
+            width: 30px;
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        .chatlog__attachment-generic-size {
+            color: #72767d;
+            font-size: 12px;
+        }
+
+        .chatlog__attachment-generic-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__edited-timestamp {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__embed {
+            display: flex;
+            margin-top: 0.3em;
+            max-width: 520px;
+        }
+
+        .chatlog__embed-color-pill {
+            flex-shrink: 0;
+            width: 0.25em;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        .chatlog__embed-color-pill--default {
+            background-color: #202225;
+        }
+
+        .chatlog__embed-content-container {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5em 0.6em;
+            background-color: rgba(46, 48, 54, 0.3);
+            border: 1px solid rgba(46, 48, 54, 0.6);
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chatlog__embed-content {
+            display: flex;
+            width: 100%;
+        }
+
+        .chatlog__embed-text {
+            flex: 1;
+        }
+
+        .chatlog__embed-author {
+            display: flex;
+            margin-bottom: 0.3em;
+            align-items: center;
+        }
+
+        .chatlog__embed-author-icon {
+            margin-right: 0.5em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .chatlog__embed-author-name {
+            font-size: 0.875em;
+            font-weight: 600;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: #ffffff
+        }
+
+        .chatlog__embed-author-name-link {
+            color: #ffffff;
+        }
+
+        .chatlog__embed-title {
+            margin-bottom: 0.2em;
+            font-size: 0.875em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-description {
+            font-weight: 500;
+            font-size: 0.85em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0 0.5em;
+        }
+
+        .chatlog__embed-field {
+            flex: 0;
+            min-width: 100%;
+            max-width: 506px;
+            padding-top: 0.6em;
+            font-size: 0.875em;
+        }
+
+        .chatlog__embed-field--inline {
+            flex: 1;
+            flex-basis: auto;
+            min-width: 150px;
+        }
+
+        .chatlog__embed-field-name {
+            margin-bottom: 0.2em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-field-value {
+            font-weight: 500;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-thumbnail {
+            flex: 0;
+            margin-left: 1.2em;
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-image-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-image {
+            max-width: 500px;
+            max-height: 400px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-footer {
+            margin-top: 0.6em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-footer-icon {
+            margin-right: 0.2em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .chatlog__embed-footer-text {
+            vertical-align: middle;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+
+        .chatlog__embed-plainimage {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-spotify {
+            border: 0;
+        }
+
+        .chatlog__embed-youtube-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-youtube {
+            border: 0;
+            border-radius: 3px;
+        }
+
+        .chatlog__sticker {
+            width: 180px;
+            height: 180px;
+        }
+
+        .chatlog__sticker--media {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .chatlog__reactions {
+            display: flex;
+        }
+
+        .chatlog__reaction {
+            display: flex;
+            align-items: center;
+            margin: 0.35em 0.1em 0.1em 0;
+            padding: .125rem .375rem;
+            background-color: #2f3136;
+            border-radius: 8px;
+            border-color: transparent;
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .chatlog__reaction:hover {
+            border-color: hsla(0,0%,100%,.2);
+            border-width: 1px;
+            border-style: solid;
+            background-color: transparent;
+        }
+
+        .chatlog__reaction-count {
+            min-width: 9px;
+            margin-left: 0.35em;
+            font-size: 0.875em;
+            color: #b9bbbe;
+        }
+
+        .chatlog__reaction:hover .chatlog__reaction-count {
+            color: #dcddde;
+        }
+
+        .chatlog__bot-tag {
+            position: relative;
+            top: -.1em;
+            margin-left: 0.3em;
+            padding: 0.05em 0.3em;
+            border-radius: 3px;
+            line-height: 1.3;
+            background-color: #5865F2;
+            color: #ffffff;
+            font-size: 0.625em;
+            font-weight: 500;
+        }
+
+        .postamble {
+            margin: 1.4em 0.3em 0.6em 0.3em;
+            padding: 1em;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .postamble__entry {
+            color: #ffffff;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(e => hljs.highlightBlock(e));
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.8.1/lottie.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.chatlog__sticker--media[data-source]').forEach(e => {
+                const imageDataUrl = e.getAttribute('data-source');
+
+                const anim = lottie.loadAnimation({
+                  container: e,
+                  renderer: 'svg',
+                  loop: true,
+                  autoplay: true,
+                  path: imageDataUrl
+                });
+
+                anim.addEventListener('data_failed', () =>
+                    e.innerHTML = '<strong>[Sticker cannot be rendered]</strong>'
+                );
+            });
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+
+        function showSpoiler(event, element) {
+            if (element && element.classList.contains('spoiler-text--hidden')) {
+                event.preventDefault();
+                element.classList.remove('spoiler-text--hidden');
+            }
+            if (element && element.classList.contains('chatlog__attachment--hidden')) {
+                event.preventDefault();
+                element.classList.remove('chatlog__attachment--hidden');
+            }
+        }
+    </script>
+
+    <svg style="display: none">
+        <symbol id="icon-attachment" viewBox="0 0 720 960">
+            <path fill="#f4f5fb" d="M50,935a25,25,0,0,1-25-25V50A25,25,0,0,1,50,25H519.6L695,201.32V910a25,25,0,0,1-25,25Z" />
+            <path fill="#7789c4" d="M509.21,50,670,211.63V910H50V50H509.21M530,0H50A50,50,0,0,0,0,50V910a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50h0V191Z" />
+            <path fill="#f4f5fb" d="M530,215a25,25,0,0,1-25-25V50a25,25,0,0,1,16.23-23.41L693.41,198.77A25,25,0,0,1,670,215Z" />
+            <path fill="#7789c4" d="M530,70.71,649.29,190H530V70.71M530,0a50,50,0,0,0-50,50V190a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50Z" />
+        </symbol>
+    </svg>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/3026b81d5ab56c4d2a773cb9b5dbd3a5-8CB58.png" alt="Guild icon" loading="lazy">
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">Code4rena</div>
+        <div class="preamble__entry">Archive-2021 / sushi-september</div>
+
+
+    </div>
+</div>
+
+<div class="chatlog">
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">02-Sep-21 12:10 PM</span>
+
+            <div class="chatlog__message " data-message-id="883066305412993064" id="message-883066305412993064" title="Message sent: 02-Sep-21 12:10 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img loading="lazy" class="emoji " alt="👋" title="wave" src="https://twemoji.maxcdn.com/2/svg/1f44b.svg"><img loading="lazy" class="emoji " alt="🍣" title="sushi" src="https://twemoji.maxcdn.com/2/svg/1f363.svg"> All right, y&#39;all - SushiSept is coming to C4 and this right here is the contest channel!
+
+<img loading="lazy" class="emoji " alt="📆" title="calendar" src="https://twemoji.maxcdn.com/2/svg/1f4c6.svg"> <strong>Sushi Miso</strong> is up first
+<strong>~$100K (8K Sushi) contest</strong>
+Opens Sep 9, 2021 at 0:00 UTC and runs through Sep 15, 2021 at 23:59 UTC (1 week)
+
+<img loading="lazy" class="emoji " alt="📆" title="calendar" src="https://twemoji.maxcdn.com/2/svg/1f4c6.svg"> <strong>Sushi Trident</strong> follows
+<strong>~$300K (24K Sushi) contest</strong>
+Opens Sep 16, 2021 at 0:00 UTC and runs through Oct 6, 2021 at 23:59 UTC (3 weeks)
+
+…
+
+Please give a warm welcome to <span class="mention" title="clearwood#4108">@clearwood</span>, who will be available during the <img loading="lazy" class="emoji " alt="🍲" title="stew" src="https://twemoji.maxcdn.com/2/svg/1f372.svg"><strong>Miso</strong> contest to answer questions either here in channel or via DM. 
+
+We&#39;ll also be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, you might want to enable notifications. <img loading="lazy" class="emoji " alt="🐺" title="wolf" src="https://twemoji.maxcdn.com/2/svg/1f43a.svg"> ⏰</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wave">
+                                <img class="emoji emoji--small" alt="&#128075;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f44b-9E658.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">4</span>
+                            </div>
+                            <div class="chatlog__reaction" title="sushi">
+                                <img class="emoji emoji--small" alt="&#127843;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f363-B0476.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">6</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c9f2c0d04c0efc4d89095f6875d15b64-05AD5.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="jonjon | float.capital#2270" data-user-id="490758919744913419" style="color: rgb(241,196,15)">jonjon | float.capital</span>
+
+
+        <span class="chatlog__timestamp">03-Sep-21 05:38 AM</span>
+
+            <div class="chatlog__message " data-message-id="883330131396030476" id="message-883330131396030476" title="Message sent: 03-Sep-21 05:38 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">HUGE  <img loading="lazy" class="emoji " alt="SushiSwapLogo" title="SushiSwapLogo" src="https://cdn.discordapp.com/emojis/839932018451677264.png"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="sushiswap">
+                                <img class="emoji emoji--small" alt="sushiswap" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/784136248616550470-3232E.png" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                            <div class="chatlog__reaction" title="sushi">
+                                <img class="emoji emoji--small" alt="&#127843;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f363-B0476.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                            <div class="chatlog__reaction" title="sushi">
+                                <img class="emoji emoji--small" alt="sushi" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/748270651168522261-4B749.png" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                            <div class="chatlog__reaction" title="axie_sushi">
+                                <img class="emoji emoji--small" alt="axie_sushi" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/438193727840714763-5C084.png" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c9f2c0d04c0efc4d89095f6875d15b64-05AD5.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="jonjon | float.capital#2270" style="color: rgb(241,196,15)">jonjon | float.capital</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;883330131396030476&#39;)">
+HUGE  <img loading="lazy" class="emoji " alt="SushiSwapLogo" title="SushiSwapLogo" src="https://cdn.discordapp.com/emojis/839932018451677264.png">                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Sep-21 07:48 AM</span>
+
+            <div class="chatlog__message " data-message-id="883362929825677312" id="message-883362929825677312" title="Message sent: 03-Sep-21 07:48 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Y’all should run a Float team for this one!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="eyes">
+                                <img class="emoji emoji--small" alt="&#128064;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f440-31786.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                            <div class="chatlog__reaction" title="100">
+                                <img class="emoji emoji--small" alt="&#128175;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f4af-2188D.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="sockdrawermoney#0001" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;883362929825677312&#39;)">
+Y’all should run a Float team for this one!                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/4c6e5a6fc6086c99ce7f2c79eee6119a-F6697.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="! Denham | float.capital#5167" data-user-id="652906363550433291" style="color: rgb(153,45,34)">! Denham | float.capital</span>
+
+
+        <span class="chatlog__timestamp">08-Sep-21 01:00 PM</span>
+
+            <div class="chatlog__message " data-message-id="885253322133622904" id="message-885253322133622904" title="Message sent: 08-Sep-21 01:00 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">So SO enticed! The challenges are so stimulating and scream at the inner problem solvers in us but just not enough time in the day <img loading="lazy" class="emoji " alt="🙈" title="see_no_evil" src="https://twemoji.maxcdn.com/2/svg/1f648.svg"> <img loading="lazy" class="emoji " alt="😣" title="persevere" src="https://twemoji.maxcdn.com/2/svg/1f623.svg"> .</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="empathy">
+                                <img class="emoji emoji--small" alt="empathy" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/851893157188599838-C23B5.png" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/0-EB806.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="cheapgemmer#2260" data-user-id="370231100850831380" style="color: rgb(241,196,15)">cheapgemmer(hack3r-0m)</span>
+
+
+        <span class="chatlog__timestamp">08-Sep-21 05:53 PM</span>
+
+            <div class="chatlog__message " data-message-id="885327022472187915" id="message-885327022472187915" title="Message sent: 08-Sep-21 05:53 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://github.com/sushiswap/miso">https://github.com/sushiswap/miso</a>
+hey sushi team! which branch/commit is to be used for audit?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/0-EB806.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="cheapgemmer#2260" style="color: rgb(241,196,15)">cheapgemmer(hack3r-0m)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;885327022472187915&#39;)">
+<a href="https://github.com/sushiswap/miso">https://github.com/sushiswap/miso</a>
+hey sushi team! which branch/commit is to be used for audit?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c410f3159d171ab19bf71130bce8866c-400FB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="clearwood#4108" data-user-id="258678360794857472" style="color: rgb(153,45,34)">clearwood</span>
+
+
+        <span class="chatlog__timestamp">08-Sep-21 08:16 PM</span>
+
+            <div class="chatlog__message " data-message-id="885363020946087936" id="message-885363020946087936" title="Message sent: 08-Sep-21 08:16 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">The master branch is the relevant target,
+Commit: 2cdb1486a55ded55c81898b7be8811cb68cfda9e</span>
+
+                                <span class="chatlog__edited-timestamp" title="09-Sep-21 06:45 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">08-Sep-21 10:04 PM</span>
+
+            <div class="chatlog__message " data-message-id="885390296660193370" id="message-885390296660193370" title="Message sent: 08-Sep-21 10:04 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="clearwood#4108">@clearwood</span> can we have a specific commit? Sorry we missed getting that from y’all, but that’s the standard we use to ensure we’re using a level playing field.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c5b9e0805d6f330fa4bbfc66104b154f-321BB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmeSTYJ#4682" data-user-id="732147507047563276" style="color: rgb(241,196,15)">itsmeSTYJ</span>
+
+
+        <span class="chatlog__timestamp">11-Sep-21 08:37 PM</span>
+
+            <div class="chatlog__message " data-message-id="886455420602966066" id="message-886455420602966066" title="Message sent: 11-Sep-21 08:37 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi, I&#39;m trying to understand rate a little better in the Crowdsale contract. Here are 2 different examples. Assume that the token being sold has 18 decimals. 
+
+If my payment token is in ETH and I use a rate of 1000, is it correct to say that for 1 wei contributed, I get 1000 token wei i.e. if I contributed 1 ETH, I get 1k tokens? 
+
+If my payment token is in USDC and I use a rate of 10^12, is it correct to say that for each 0.000001 USDC contributed, I get 10^12 token wei i.e. if I contributed 10 USDC, I get 10 tokens?</span>
+
+                                <span class="chatlog__edited-timestamp" title="11-Sep-21 09:02 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/d15fbf76a99051d9b2a85010861fc7bb-BB6FA.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="cmichel#0001" data-user-id="218099767283023873" style="color: rgb(241,196,15)">cmichel</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-21 06:34 AM</span>
+
+            <div class="chatlog__message " data-message-id="886605707124813834" id="message-886605707124813834" title="Message sent: 12-Sep-21 06:34 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Are these <span class="pre pre--inline">Helper</span> contracts in scope? Are they only used from off-chain scripts?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/d15fbf76a99051d9b2a85010861fc7bb-BB6FA.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="cmichel#0001" style="color: rgb(241,196,15)">cmichel</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;886605707124813834&#39;)">
+Are these <span class="pre pre--inline">Helper</span> contracts in scope? Are they only used from off-chain scripts?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c410f3159d171ab19bf71130bce8866c-400FB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="clearwood#4108" data-user-id="258678360794857472" style="color: rgb(153,45,34)">clearwood</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-21 09:29 AM</span>
+
+            <div class="chatlog__message " data-message-id="886649808184569917" id="message-886649808184569917" title="Message sent: 12-Sep-21 09:29 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Helper contracts are only used for Frontend needs</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c410f3159d171ab19bf71130bce8866c-400FB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="clearwood#4108" data-user-id="258678360794857472" style="color: rgb(153,45,34)">clearwood</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-21 12:28 PM</span>
+
+            <div class="chatlog__message " data-message-id="886694689326104666" id="message-886694689326104666" title="Message sent: 12-Sep-21 12:28 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/Auctions/Crowdsale.sol#L444">https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/Auctions/Crowdsale.sol#L444</a>
+This line determines the relationship between the commitment in terms of payment token and the auction token, as the commitment is multiplied with the decimals of the auction token before being divided by the rate
+With the auction token and payment token having 18 decimals, a rate of 1e18 would therefore constitute a 1:1 relationship of 1 token payment equating one auction token</span>
+
+                                <span class="chatlog__edited-timestamp" title="12-Sep-21 12:34 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(30,35,39,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://github.com/sushiswap/miso/blob/2cdb1486a55ded55c81898b7be8811cb68cfda9e/contracts/Auctions/Crowdsale.sol">
+                                                        <div class="markdown preserve-whitespace">miso/Crowdsale.sol at 2cdb1486a55ded55c81898b7be8811cb68cfda9e &#183; su...</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">Contribute to sushiswap/miso development by creating an account on GitHub.</div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/miso-88E82">
+                                                <img class="chatlog__embed-thumbnail" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/miso-88E82" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c410f3159d171ab19bf71130bce8866c-400FB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="clearwood#4108" data-user-id="258678360794857472" style="color: rgb(153,45,34)">clearwood</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-21 12:36 PM</span>
+
+            <div class="chatlog__message " data-message-id="886696674657980436" id="message-886696674657980436" title="Message sent: 12-Sep-21 12:36 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">With the payment token having 6 decimals e.g. USDC, a rate of 1e6 would equate a 1 USDC to one auction token relationship.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/c5b9e0805d6f330fa4bbfc66104b154f-321BB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmeSTYJ#4682" data-user-id="732147507047563276" style="color: rgb(241,196,15)">itsmeSTYJ</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-21 06:43 PM</span>
+
+            <div class="chatlog__message " data-message-id="886789093894262834" id="message-886789093894262834" title="Message sent: 12-Sep-21 06:43 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">got it, thanks</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/a5206ac46ce91d176a22b99ce947ef2d-DC215.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Gerard Persoon#7986" data-user-id="525687122233917471" style="color: rgb(241,196,15)">Gerard Persoon</span>
+
+
+        <span class="chatlog__timestamp">16-Sep-21 09:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="888281421637099520" id="message-888281421637099520" title="Message sent: 16-Sep-21 09:33 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://twitter.com/josephdelong/status/1438712356352274433">https://twitter.com/josephdelong/status/1438712356352274433</a> 
+Oh no.....</span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(29,161,242,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+                                            <div class="chatlog__embed-author">
+                                                    <img class="chatlog__embed-author-icon" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/gUyDS_Hh_bigger-6411C.png" alt="Author icon" loading="lazy" onerror="this.style.visibility='hidden'">
+
+                                                    <span class="chatlog__embed-author-name">
+                                                            <a class="chatlog__embed-author-name-link" href="https://twitter.com/josephdelong">Joseph &#129309; Delong &#128305; (@josephdelong)</a>
+                                                    </span>
+                                            </div>
+
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">The Miso front end has become the victim of a supply chain attack. An anonymous contractor by with the GH handle AristoK3 injected malicious code into the Miso front end. We have reason to believe this is @eratos1122.
+
+864.8 ETH was stolen, address below
+<a href="https://t.co/cDZeBqFV4P">https://t.co/cDZeBqFV4P</a></div>
+                                            </div>
+
+                                            <div class="chatlog__embed-fields">
+                                                    <div class="chatlog__embed-field chatlog__embed-field--inline">
+                                                            <div class="chatlog__embed-field-name">
+                                                                <div class="markdown preserve-whitespace">Likes</div>
+                                                            </div>
+
+                                                            <div class="chatlog__embed-field-value">
+                                                                <div class="markdown preserve-whitespace">194</div>
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                    </div>
+
+                                </div>
+
+                                    <div class="chatlog__embed-image-container">
+                                        <a class="chatlog__embed-image-link" href="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/eMxkrhVW-DE872">
+                                            <img class="chatlog__embed-image" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/eMxkrhVW-DE872" alt="Image" loading="lazy">
+                                        </a>
+                                    </div>
+
+                                    <div class="chatlog__embed-footer">
+                                            <img class="chatlog__embed-footer-icon" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/apple-touch-icon-192x192-E344C.png" alt="Footer icon" loading="lazy">
+
+                                        <span class="chatlog__embed-footer-text">
+Twitter
+ • 
+16-Sep-21 08:52 PM                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="tired_face">
+                                <img class="emoji emoji--small" alt="&#128555;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f62b-13F57.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">9</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/0-EB806.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="cheapgemmer#2260" data-user-id="370231100850831380" style="color: rgb(241,196,15)">cheapgemmer(hack3r-0m)</span>
+
+
+        <span class="chatlog__timestamp">19-Sep-21 01:35 AM</span>
+
+            <div class="chatlog__message " data-message-id="889067135274475550" id="message-889067135274475550" title="Message sent: 19-Sep-21 01:35 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">anyone from sushi team i can dm to regarding trident?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">19-Sep-21 08:15 AM</span>
+
+            <div class="chatlog__message " data-message-id="889167874701275168" id="message-889167874701275168" title="Message sent: 19-Sep-21 08:15 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="clearwood#4108">@clearwood</span> <span class="mention" title="Dmitry#1337">@Max</span></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1206b4a2baeca40ecd974cdd85321e36-94CAB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Dmitry#1337" data-user-id="298292690297159681" style="color: rgb(241,196,15)">Max</span>
+
+
+        <span class="chatlog__timestamp">19-Sep-21 08:17 AM</span>
+
+            <div class="chatlog__message " data-message-id="889168381213823016" id="message-889168381213823016" title="Message sent: 19-Sep-21 08:17 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="cheapgemmer#2260">@cheapgemmer(hack3r-0m)</span> Feel free to DM me. 
+
+Everyone - I&#39;ve opened my DM for members of this server. Feel free to ask any questions here or DM me.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1206b4a2baeca40ecd974cdd85321e36-94CAB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Dmitry#1337" data-user-id="298292690297159681" style="color: rgb(241,196,15)">Max</span>
+
+
+        <span class="chatlog__timestamp">27-Sep-21 10:32 PM</span>
+
+            <div class="chatlog__message " data-message-id="892282692849254402" id="message-892282692849254402" title="Message sent: 27-Sep-21 10:32 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">@/here I should have been clearer in code comments but some notes to avoid future duplicate submissions -
+1) Missing <span class="pre pre--inline">isWhiteListed</span> check in the single functions is intentional. There are code comments in the contract that say &quot;@/dev Ensure that the pool is trusted before calling this function. The pool can steal users&#39; tokens.&quot;.
+
+The reason this design was taken is that using exactInput and similar functions, an attacker can steal all user tokens in a single transaction (all tokens - usdt, dai, weth etc). Therefore, we added an extra check to save users from themselves.
+
+On the other hand, exactInputSingle and similar functions only allow theft of one token in the worst case. This is the same as just transferring the token to a wrong address. Therefore, for gas efficiency, we omitted the check.
+
+2) The reason that <span class="pre pre--inline">external</span> function visibility modifier can sometimes be cheaper than <span class="pre pre--inline">public</span> is that Solidity keeps function parameters in calldata in external but copies them to memory in public. If there are no function parameters in a function or they are explicitly set to be kept in calldata, there is no potential gas saving. This is the case in our contracts and hence, changing public to external won&#39;t do anything.
+
+3) TridentRouter is not supposed to hold any funds. Therefore, the withdraw functions like (refundETH) have no access control. This is a feature, not a bug. This particular function allows users to unwrap weth sent to the contract or claim eth sent by a pool using batch functions.
+
+I&#39;ll update this message if I see an invalid issue being reported multiple times.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="892282887578189834" id="message-892282887578189834" title="Message sent: 27-Sep-21 10:33 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">btw, nice work from ya&#39;ll. The contest hasn&#39;t even ended and we&#39;ve already gotten some juicy submissions. Cheers!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="tada">
+                                <img class="emoji emoji--small" alt="&#127881;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f389-28196.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">29-Sep-21 05:28 PM</span>
+
+            <div class="chatlog__message " data-message-id="892930748615655434" id="message-892930748615655434" title="Message sent: 29-Sep-21 05:28 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img loading="lazy" class="emoji " alt="👋" title="wave" src="https://twemoji.maxcdn.com/2/svg/1f44b.svg"> Hey y&#39;all, just wanted to pop in to say that the Sushi Trident phase 2 contest is now live and <span class="mention" title="Dmitry#1337">@Max</span> will be your go-to for any questions.  Happy hunting!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1206b4a2baeca40ecd974cdd85321e36-94CAB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Dmitry#1337" data-user-id="298292690297159681" style="color: rgb(241,196,15)">Max</span>
+
+
+        <span class="chatlog__timestamp">04-Oct-21 07:37 AM</span>
+
+            <div class="chatlog__message " data-message-id="894594111280132146" id="message-894594111280132146" title="Message sent: 04-Oct-21 07:37 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey all, please send questions related concentrated liquidity to <span class="mention" title="0xGasper#7576">@0xGasper</span> . He knows those contracts better than anyone.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f44d-B3F5F.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1206b4a2baeca40ecd974cdd85321e36-94CAB.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Dmitry#1337" data-user-id="298292690297159681" style="color: rgb(241,196,15)">Max</span>
+
+
+        <span class="chatlog__timestamp">06-Oct-21 01:36 AM</span>
+
+            <div class="chatlog__message " data-message-id="895228059924439040" id="message-895228059924439040" title="Message sent: 06-Oct-21 01:36 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Just wanted to a give a special shoutout to broccoli for their detailed reports and including links to affected lines of code. Saves a lot of time when reviewing reports.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="hi5">
+                                <img class="emoji emoji--small" alt="hi5" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/851893827089727568-5FD38.png" loading="lazy">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                            <div class="chatlog__reaction" title="nice">
+                                <img class="emoji emoji--small" alt="nice" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/851893826846457866-1AD3D.png" loading="lazy">
+                                <span class="chatlog__reaction-count">4</span>
+                            </div>
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                            <div class="chatlog__reaction" title="broccoli">
+                                <img class="emoji emoji--small" alt="&#129382;" src="Code4rena%20-%20Archive-2021%20-%20sushi-september%20%5B883056047382745088%5D.html_Files/1f966-FA339.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 22 message(s)</div>
+</div>
+
+</body>
+
+</html>

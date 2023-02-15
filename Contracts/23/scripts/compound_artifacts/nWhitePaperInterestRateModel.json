@@ -1,0 +1,8267 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "baseRatePerYear",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "multiplierPerYear",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "baseRatePerBlock",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "multiplierPerBlock",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewInterestParams",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "baseRatePerBlock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "blocksPerYear",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cash",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrows",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserves",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBorrowRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cash",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrows",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserves",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserveFactorMantissa",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSupplyRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isInterestRateModel",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "multiplierPerBlock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cash",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrows",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserves",
+          "type": "uint256"
+        }
+      ],
+      "name": "utilizationRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "allSourcePaths": {
+    "14": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/InterestRateModel.sol",
+    "17": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/SafeMath.sol",
+    "20": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/WhitePaperInterestRateModel.sol",
+    "21": "contracts/mocks/CompoundImports.sol"
+  },
+  "ast": {
+    "absolutePath": "contracts/mocks/CompoundImports.sol",
+    "exportedSymbols": {
+      "nCErc20": [
+        52
+      ],
+      "nCEther": [
+        82
+      ],
+      "nComptroller": [
+        16
+      ],
+      "nJumpRateModel": [
+        103
+      ],
+      "nPriceOracle": [
+        19
+      ],
+      "nWhitePaperInterestRateModel": [
+        118
+      ]
+    },
+    "id": 119,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".16"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:21"
+      },
+      {
+        "absolutePath": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/Comptroller.sol",
+        "file": "compound-finance/compound-protocol@2.8.1/contracts/Comptroller.sol",
+        "id": 2,
+        "nodeType": "ImportDirective",
+        "scope": 119,
+        "sourceUnit": 4289,
+        "src": "26:76:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/CErc20Immutable.sol",
+        "file": "compound-finance/compound-protocol@2.8.1/contracts/CErc20Immutable.sol",
+        "id": 3,
+        "nodeType": "ImportDirective",
+        "scope": 119,
+        "sourceUnit": 164,
+        "src": "103:80:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/CEther.sol",
+        "file": "compound-finance/compound-protocol@2.8.1/contracts/CEther.sol",
+        "id": 4,
+        "nodeType": "ImportDirective",
+        "scope": 119,
+        "sourceUnit": 540,
+        "src": "184:71:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/WhitePaperInterestRateModel.sol",
+        "file": "compound-finance/compound-protocol@2.8.1/contracts/WhitePaperInterestRateModel.sol",
+        "id": 5,
+        "nodeType": "ImportDirective",
+        "scope": 119,
+        "sourceUnit": 4834,
+        "src": "256:92:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/JumpRateModel.sol",
+        "file": "compound-finance/compound-protocol@2.8.1/contracts/JumpRateModel.sol",
+        "id": 6,
+        "nodeType": "ImportDirective",
+        "scope": 119,
+        "sourceUnit": 4518,
+        "src": "349:78:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/jwu/.brownie/packages/compound-finance/compound-protocol@2.8.1/contracts/SimplePriceOracle.sol",
+        "file": "compound-finance/compound-protocol@2.8.1/contracts/SimplePriceOracle.sol",
+        "id": 7,
+        "nodeType": "ImportDirective",
+        "scope": 119,
+        "sourceUnit": 4667,
+        "src": "428:82:21",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 8,
+              "name": "Comptroller",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4288,
+              "src": "537:11:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Comptroller_$4288",
+                "typeString": "contract Comptroller"
+              }
+            },
+            "id": 9,
+            "nodeType": "InheritanceSpecifier",
+            "src": "537:11:21"
+          }
+        ],
+        "contractDependencies": [
+          4288,
+          8830,
+          8843,
+          8859,
+          8895,
+          8936,
+          9037,
+          10360,
+          12657
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 16,
+        "linearizedBaseContracts": [
+          16,
+          4288,
+          10360,
+          12657,
+          9037,
+          8830,
+          8936,
+          8895,
+          8859,
+          8843
+        ],
+        "name": "nComptroller",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 14,
+              "nodeType": "Block",
+              "src": "590:2:21",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 15,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [
+              {
+                "arguments": [],
+                "id": 12,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 11,
+                  "name": "Comptroller",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4288,
+                  "src": "576:11:21",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_Comptroller_$4288_$",
+                    "typeString": "type(contract Comptroller)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "576:13:21"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 10,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "566:2:21"
+            },
+            "returnParameters": {
+              "id": 13,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "590:0:21"
+            },
+            "scope": 16,
+            "src": "555:37:21",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 119,
+        "src": "512:82:21"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 17,
+              "name": "SimplePriceOracle",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4666,
+              "src": "621:17:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SimplePriceOracle_$4666",
+                "typeString": "contract SimplePriceOracle"
+              }
+            },
+            "id": 18,
+            "nodeType": "InheritanceSpecifier",
+            "src": "621:17:21"
+          }
+        ],
+        "contractDependencies": [
+          4666,
+          11332
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 19,
+        "linearizedBaseContracts": [
+          19,
+          4666,
+          11332
+        ],
+        "name": "nPriceOracle",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 119,
+        "src": "596:46:21"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 20,
+              "name": "CErc20Immutable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 163,
+              "src": "664:15:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_CErc20Immutable_$163",
+                "typeString": "contract CErc20Immutable"
+              }
+            },
+            "id": 21,
+            "nodeType": "InheritanceSpecifier",
+            "src": "664:15:21"
+          }
+        ],
+        "contractDependencies": [
+          163,
+          5118,
+          8623,
+          9196,
+          10360,
+          11922,
+          12223,
+          12226,
+          12291,
+          12657
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 52,
+        "linearizedBaseContracts": [
+          52,
+          163,
+          5118,
+          12291,
+          12226,
+          8623,
+          9196,
+          10360,
+          12657,
+          12223,
+          11922
+        ],
+        "name": "nCErc20",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 50,
+              "nodeType": "Block",
+              "src": "1140:3:21",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 51,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 40,
+                    "name": "underlying_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 23,
+                    "src": "1028:11:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 41,
+                    "name": "comptroller_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 25,
+                    "src": "1041:12:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ComptrollerInterface_$8830",
+                      "typeString": "contract ComptrollerInterface"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 42,
+                    "name": "interestRateModel_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 27,
+                    "src": "1055:18:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_InterestRateModel_$11612",
+                      "typeString": "contract InterestRateModel"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 43,
+                    "name": "initialExchangeRateMantissa_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 29,
+                    "src": "1075:28:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 44,
+                    "name": "name_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 31,
+                    "src": "1105:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 45,
+                    "name": "symbol_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 33,
+                    "src": "1112:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 46,
+                    "name": "decimals_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 35,
+                    "src": "1121:9:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 47,
+                    "name": "admin_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 37,
+                    "src": "1132:6:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  }
+                ],
+                "id": 48,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 39,
+                  "name": "CErc20Immutable",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 163,
+                  "src": "1012:15:21",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_CErc20Immutable_$163_$",
+                    "typeString": "type(contract CErc20Immutable)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1012:127:21"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 38,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 23,
+                  "name": "underlying_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "699:19:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 22,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "699:7:21",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 25,
+                  "name": "comptroller_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "732:33:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ComptrollerInterface_$8830",
+                    "typeString": "contract ComptrollerInterface"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 24,
+                    "name": "ComptrollerInterface",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 8830,
+                    "src": "732:20:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ComptrollerInterface_$8830",
+                      "typeString": "contract ComptrollerInterface"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 27,
+                  "name": "interestRateModel_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "779:36:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_InterestRateModel_$11612",
+                    "typeString": "contract InterestRateModel"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 26,
+                    "name": "InterestRateModel",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 11612,
+                    "src": "779:17:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_InterestRateModel_$11612",
+                      "typeString": "contract InterestRateModel"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 29,
+                  "name": "initialExchangeRateMantissa_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "829:33:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 28,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "829:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 31,
+                  "name": "name_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "876:19:21",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 30,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "876:6:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 33,
+                  "name": "symbol_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "909:21:21",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 32,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "909:6:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 35,
+                  "name": "decimals_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "944:15:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 34,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "944:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 37,
+                  "name": "admin_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 51,
+                  "src": "973:22:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 36,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "973:15:21",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "698:298:21"
+            },
+            "returnParameters": {
+              "id": 49,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1140:0:21"
+            },
+            "scope": 52,
+            "src": "687:456:21",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 119,
+        "src": "644:501:21"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 53,
+              "name": "CEther",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 539,
+              "src": "1167:6:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_CEther_$539",
+                "typeString": "contract CEther"
+              }
+            },
+            "id": 54,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1167:6:21"
+          }
+        ],
+        "contractDependencies": [
+          539,
+          8623,
+          9196,
+          10360,
+          11922,
+          12223,
+          12657
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 82,
+        "linearizedBaseContracts": [
+          82,
+          539,
+          8623,
+          9196,
+          10360,
+          12657,
+          12223,
+          11922
+        ],
+        "name": "nCEther",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 80,
+              "nodeType": "Block",
+              "src": "1603:3:21",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 81,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 71,
+                    "name": "comptroller_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 56,
+                    "src": "1504:12:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ComptrollerInterface_$8830",
+                      "typeString": "contract ComptrollerInterface"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 72,
+                    "name": "interestRateModel_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 58,
+                    "src": "1518:18:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_InterestRateModel_$11612",
+                      "typeString": "contract InterestRateModel"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 73,
+                    "name": "initialExchangeRateMantissa_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 60,
+                    "src": "1538:28:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 74,
+                    "name": "name_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 62,
+                    "src": "1568:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 75,
+                    "name": "symbol_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 64,
+                    "src": "1575:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 76,
+                    "name": "decimals_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 66,
+                    "src": "1584:9:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 77,
+                    "name": "admin_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 68,
+                    "src": "1595:6:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  }
+                ],
+                "id": 78,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 70,
+                  "name": "CEther",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 539,
+                  "src": "1497:6:21",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_CEther_$539_$",
+                    "typeString": "type(contract CEther)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1497:105:21"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 69,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 56,
+                  "name": "comptroller_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1193:33:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ComptrollerInterface_$8830",
+                    "typeString": "contract ComptrollerInterface"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 55,
+                    "name": "ComptrollerInterface",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 8830,
+                    "src": "1193:20:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ComptrollerInterface_$8830",
+                      "typeString": "contract ComptrollerInterface"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 58,
+                  "name": "interestRateModel_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1244:36:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_InterestRateModel_$11612",
+                    "typeString": "contract InterestRateModel"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 57,
+                    "name": "InterestRateModel",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 11612,
+                    "src": "1244:17:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_InterestRateModel_$11612",
+                      "typeString": "contract InterestRateModel"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 60,
+                  "name": "initialExchangeRateMantissa_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1298:33:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 59,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1298:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 62,
+                  "name": "name_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1349:19:21",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 61,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1349:6:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 64,
+                  "name": "symbol_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1386:21:21",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 63,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1386:6:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 66,
+                  "name": "decimals_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1425:15:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 65,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1425:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 68,
+                  "name": "admin_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "1458:22:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 67,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1458:15:21",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1192:289:21"
+            },
+            "returnParameters": {
+              "id": 79,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1603:0:21"
+            },
+            "scope": 82,
+            "src": "1181:425:21",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 119,
+        "src": "1147:461:21"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 83,
+              "name": "JumpRateModel",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4517,
+              "src": "1637:13:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_JumpRateModel_$4517",
+                "typeString": "contract JumpRateModel"
+              }
+            },
+            "id": 84,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1637:13:21"
+          }
+        ],
+        "contractDependencies": [
+          4517,
+          11612
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 103,
+        "linearizedBaseContracts": [
+          103,
+          4517,
+          11612
+        ],
+        "name": "nJumpRateModel",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 101,
+              "nodeType": "Block",
+              "src": "1851:3:21",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 102,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 95,
+                    "name": "baseRatePerYear",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 86,
+                    "src": "1785:15:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 96,
+                    "name": "multiplierPerYear",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 88,
+                    "src": "1802:17:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 97,
+                    "name": "jumpMultiplierPerYear",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 90,
+                    "src": "1821:21:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 98,
+                    "name": "kink_",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 92,
+                    "src": "1844:5:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  }
+                ],
+                "id": 99,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 94,
+                  "name": "JumpRateModel",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4517,
+                  "src": "1771:13:21",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_JumpRateModel_$4517_$",
+                    "typeString": "type(contract JumpRateModel)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1771:79:21"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 93,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 86,
+                  "name": "baseRatePerYear",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 102,
+                  "src": "1669:20:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 85,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1669:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 88,
+                  "name": "multiplierPerYear",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 102,
+                  "src": "1691:22:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 87,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1691:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 90,
+                  "name": "jumpMultiplierPerYear",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 102,
+                  "src": "1715:26:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 89,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1715:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 92,
+                  "name": "kink_",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 102,
+                  "src": "1743:10:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 91,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1743:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1668:86:21"
+            },
+            "returnParameters": {
+              "id": 100,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1851:0:21"
+            },
+            "scope": 103,
+            "src": "1657:197:21",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 119,
+        "src": "1610:246:21"
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 104,
+              "name": "WhitePaperInterestRateModel",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4833,
+              "src": "1899:27:21",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_WhitePaperInterestRateModel_$4833",
+                "typeString": "contract WhitePaperInterestRateModel"
+              }
+            },
+            "id": 105,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1899:27:21"
+          }
+        ],
+        "contractDependencies": [
+          4833,
+          11612
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 118,
+        "linearizedBaseContracts": [
+          118,
+          4833,
+          11612
+        ],
+        "name": "nWhitePaperInterestRateModel",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 116,
+              "nodeType": "Block",
+              "src": "2070:2:21",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 117,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 112,
+                    "name": "baseRatePerYear",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 107,
+                    "src": "2034:15:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 113,
+                    "name": "multiplierPerYear",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 109,
+                    "src": "2051:17:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  }
+                ],
+                "id": 114,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 111,
+                  "name": "WhitePaperInterestRateModel",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4833,
+                  "src": "2006:27:21",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_WhitePaperInterestRateModel_$4833_$",
+                    "typeString": "type(contract WhitePaperInterestRateModel)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "2006:63:21"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 110,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 107,
+                  "name": "baseRatePerYear",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 117,
+                  "src": "1945:20:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 106,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1945:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 109,
+                  "name": "multiplierPerYear",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 117,
+                  "src": "1967:22:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 108,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1967:4:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1944:46:21"
+            },
+            "returnParameters": {
+              "id": 115,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2070:0:21"
+            },
+            "scope": 118,
+            "src": "1933:139:21",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 119,
+        "src": "1858:216:21"
+      }
+    ],
+    "src": "0:2074:21"
+  },
+  "bytecode": "608060405234801561001057600080fd5b506040516106e03803806106e08339818101604052604081101561003357600080fd5b50805160209182015190918290829061005a90839062201480906102ee6100c2821b17901c565b60015561007581622014806100c2602090811b6102ee17901c565b600081905560015460408051918252602082019290925281517ff35fa19c15e9ba782633a5df62a98b20217151addc68e3ff2cd623a48d37ec27929181900390910190a1505050506101b3565b600061010a83836040518060400160405280601a81526020017f536166654d6174683a206469766973696f6e206279207a65726f00000000000081525061011160201b60201c565b9392505050565b6000818361019d5760405162461bcd60e51b81526004018080602001828103825283818151815260200191508051906020019080838360005b8381101561016257818101518382015260200161014a565b50505050905090810190601f16801561018f5780820380516001836020036101000a031916815260200191505b509250505060405180910390fd5b5060008385816101a957fe5b0495945050505050565b61051e806101c26000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c80638726bb891161005b5780638726bb8914610102578063a385fb961461010a578063b816881614610112578063f14039de146101415761007d565b806315f24053146100825780632191f92a146100bd5780636e71e2d8146100d9575b600080fd5b6100ab6004803603606081101561009857600080fd5b5080359060208101359060400135610149565b60408051918252519081900360200190f35b6100c56101a3565b604080519115158252519081900360200190f35b6100ab600480360360608110156100ef57600080fd5b50803590602081013590604001356101a8565b6100ab6101fa565b6100ab610200565b6100ab6004803603608081101561012857600080fd5b5080359060208101359060408101359060600135610207565b6100ab610286565b6000806101578585856101a8565b905061019860015461018c670de0b6b3a76400006101806000548661028c90919063ffffffff16565b9063ffffffff6102ee16565b9063ffffffff61033016565b9150505b9392505050565b600181565b6000826101b75750600061019c565b6101f26101da836101ce878763ffffffff61033016565b9063ffffffff61038a16565b61018085670de0b6b3a764000063ffffffff61028c16565b949350505050565b60005481565b6220148081565b600080610222670de0b6b3a76400008463ffffffff61038a16565b90506000610231878787610149565b90506000610251670de0b6b3a7640000610180848663ffffffff61028c16565b905061027a670de0b6b3a76400006101808361026e8c8c8c6101a8565b9063ffffffff61028c16565b98975050505050505050565b60015481565b60008261029b575060006102e8565b828202828482816102a857fe5b04146102e55760405162461bcd60e51b81526004018080602001828103825260218152602001806104c96021913960400191505060405180910390fd5b90505b92915050565b60006102e583836040518060400160405280601a81526020017f536166654d6174683a206469766973696f6e206279207a65726f0000000000008152506103cc565b6000828201838110156102e5576040805162461bcd60e51b815260206004820152601b60248201527f536166654d6174683a206164646974696f6e206f766572666c6f770000000000604482015290519081900360640190fd5b60006102e583836040518060400160405280601f81526020017f536166654d6174683a207375627472616374696f6e20756e646572666c6f770081525061046e565b600081836104585760405162461bcd60e51b81526004018080602001828103825283818151815260200191508051906020019080838360005b8381101561041d578181015183820152602001610405565b50505050905090810190601f16801561044a5780820380516001836020036101000a031916815260200191505b509250505060405180910390fd5b50600083858161046457fe5b0495945050505050565b600081848411156104c05760405162461bcd60e51b815260206004820181815283516024840152835190928392604490910191908501908083836000831561041d578181015183820152602001610405565b50505090039056fe536166654d6174683a206d756c7469706c69636174696f6e206f766572666c6f77a265627a7a72315820003580cf5c89c68429e74076190c5985bb610b07e3b4469e567ca31b590225b564736f6c63430005110032",
+  "bytecodeSha1": "406ca4b734e3461f71bdacffc06d94a8cbcae754",
+  "compiler": {
+    "evm_version": "istanbul",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "version": "0.5.17+commit.d19bba13"
+  },
+  "contractName": "nWhitePaperInterestRateModel",
+  "coverageMap": {
+    "branches": {
+      "14": {},
+      "17": {
+        "SafeMath.add": {
+          "14": [
+            1071,
+            1077,
+            true
+          ]
+        },
+        "SafeMath.div": {
+          "15": [
+            5051,
+            5056,
+            true
+          ]
+        },
+        "SafeMath.mul": {
+          "12": [
+            2955,
+            2961,
+            false
+          ],
+          "13": [
+            3041,
+            3051,
+            true
+          ]
+        },
+        "SafeMath.sub": {
+          "16": [
+            2349,
+            2355,
+            true
+          ]
+        }
+      },
+      "20": {
+        "WhitePaperInterestRateModel.utilizationRate": {
+          "17": [
+            1986,
+            1998,
+            false
+          ]
+        }
+      },
+      "21": {}
+    },
+    "statements": {
+      "14": {},
+      "17": {
+        "SafeMath.add": {
+          "8": [
+            1063,
+            1109
+          ]
+        },
+        "SafeMath.div": {
+          "7": [
+            4344,
+            4390
+          ],
+          "10": [
+            5043,
+            5071
+          ]
+        },
+        "SafeMath.mul": {
+          "4": [
+            2977,
+            2985
+          ],
+          "5": [
+            3033,
+            3089
+          ],
+          "6": [
+            3100,
+            3108
+          ]
+        },
+        "SafeMath.sub": {
+          "9": [
+            1899,
+            1950
+          ],
+          "11": [
+            2341,
+            2370
+          ]
+        }
+      },
+      "20": {
+        "WhitePaperInterestRateModel.getBorrowRate": {
+          "0": [
+            2650,
+            2715
+          ]
+        },
+        "WhitePaperInterestRateModel.getSupplyRate": {
+          "3": [
+            3480,
+            3553
+          ]
+        },
+        "WhitePaperInterestRateModel.utilizationRate": {
+          "1": [
+            2014,
+            2022
+          ],
+          "2": [
+            2043,
+            2104
+          ]
+        }
+      },
+      "21": {}
+    }
+  },
+  "dependencies": [
+    "compound-finance/compound-protocol@2.8.1/InterestRateModel",
+    "compound-finance/compound-protocol@2.8.1/SafeMath",
+    "compound-finance/compound-protocol@2.8.1/WhitePaperInterestRateModel"
+  ],
+  "deployedBytecode": "608060405234801561001057600080fd5b506004361061007d5760003560e01c80638726bb891161005b5780638726bb8914610102578063a385fb961461010a578063b816881614610112578063f14039de146101415761007d565b806315f24053146100825780632191f92a146100bd5780636e71e2d8146100d9575b600080fd5b6100ab6004803603606081101561009857600080fd5b5080359060208101359060400135610149565b60408051918252519081900360200190f35b6100c56101a3565b604080519115158252519081900360200190f35b6100ab600480360360608110156100ef57600080fd5b50803590602081013590604001356101a8565b6100ab6101fa565b6100ab610200565b6100ab6004803603608081101561012857600080fd5b5080359060208101359060408101359060600135610207565b6100ab610286565b6000806101578585856101a8565b905061019860015461018c670de0b6b3a76400006101806000548661028c90919063ffffffff16565b9063ffffffff6102ee16565b9063ffffffff61033016565b9150505b9392505050565b600181565b6000826101b75750600061019c565b6101f26101da836101ce878763ffffffff61033016565b9063ffffffff61038a16565b61018085670de0b6b3a764000063ffffffff61028c16565b949350505050565b60005481565b6220148081565b600080610222670de0b6b3a76400008463ffffffff61038a16565b90506000610231878787610149565b90506000610251670de0b6b3a7640000610180848663ffffffff61028c16565b905061027a670de0b6b3a76400006101808361026e8c8c8c6101a8565b9063ffffffff61028c16565b98975050505050505050565b60015481565b60008261029b575060006102e8565b828202828482816102a857fe5b04146102e55760405162461bcd60e51b81526004018080602001828103825260218152602001806104c96021913960400191505060405180910390fd5b90505b92915050565b60006102e583836040518060400160405280601a81526020017f536166654d6174683a206469766973696f6e206279207a65726f0000000000008152506103cc565b6000828201838110156102e5576040805162461bcd60e51b815260206004820152601b60248201527f536166654d6174683a206164646974696f6e206f766572666c6f770000000000604482015290519081900360640190fd5b60006102e583836040518060400160405280601f81526020017f536166654d6174683a207375627472616374696f6e20756e646572666c6f770081525061046e565b600081836104585760405162461bcd60e51b81526004018080602001828103825283818151815260200191508051906020019080838360005b8381101561041d578181015183820152602001610405565b50505050905090810190601f16801561044a5780820380516001836020036101000a031916815260200191505b509250505060405180910390fd5b50600083858161046457fe5b0495945050505050565b600081848411156104c05760405162461bcd60e51b815260206004820181815283516024840152835190928392604490910191908501908083836000831561041d578181015183820152602001610405565b50505090039056fe536166654d6174683a206d756c7469706c69636174696f6e206f766572666c6f77a265627a7a72315820003580cf5c89c68429e74076190c5985bb610b07e3b4469e567ca31b590225b564736f6c63430005110032",
+  "deployedSourceMap": "1858:216:21:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1858:216:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2490:232:20;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;2490:232:20;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;225:47:14;;;:::i;:::-;;;;;;;;;;;;;;;;;;1821:290:20;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1821:290:20;;;;;;;;;;;;:::i;728:30::-;;;:::i;569:44::-;;;:::i;3135:425::-;;;;;;13:3:-1;8;5:12;2:2;;;30:1;27;20:12;2:2;-1:-1;3135:425:20;;;;;;;;;;;;;;;;;:::i;871:28::-;;;:::i;2490:232::-;2574:4;2590:7;2600:40;2616:4;2622:7;2631:8;2600:15;:40::i;:::-;2590:50;;2657:58;2698:16;;2657:36;2688:4;2657:26;2664:18;;2657:2;:6;;:26;;;;:::i;:::-;:30;:36;:30;:36;:::i;:::-;:40;:58;:40;:58;:::i;:::-;2650:65;;;2490:232;;;;;;:::o;225:47:14:-;268:4;225:47;:::o;1821:290:20:-;1907:4;1986:12;1982:51;;-1:-1:-1;2021:1:20;2014:8;;1982:51;2050:54;2072:31;2094:8;2072:17;:4;2081:7;2072:17;:8;:17;:::i;:::-;:21;:31;:21;:31;:::i;:::-;2050:17;:7;2062:4;2050:17;:11;:17;:::i;:54::-;2043:61;1821:290;-1:-1:-1;;;;1821:290:20:o;728:30::-;;;;:::o;569:44::-;606:7;569:44;:::o;3135:425::-;3247:4;;3292:37;3297:4;3307:21;3292:37;:14;:37;:::i;:::-;3263:66;;3339:15;3357:38;3371:4;3377:7;3386:8;3357:13;:38::i;:::-;3339:56;-1:-1:-1;3405:15:20;3423:47;3465:4;3423:37;3339:56;3438:21;3423:37;:14;:37;:::i;:47::-;3405:65;;3487:66;3548:4;3487:56;3532:10;3487:40;3503:4;3509:7;3518:8;3487:15;:40::i;:::-;:44;:56;:44;:56;:::i;:66::-;3480:73;3135:425;-1:-1:-1;;;;;;;;3135:425:20:o;871:28::-;;;;:::o;2656:459:17:-;2714:7;2955:6;2951:45;;-1:-1:-1;2984:1:17;2977:8;;2951:45;3018:5;;;3022:1;3018;:5;:1;3041:5;;;;;:10;3033:56;;;;-1:-1:-1;;;3033:56:17;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3107:1;-1:-1:-1;2656:459:17;;;;;:::o;4267:130::-;4325:7;4351:39;4355:1;4358;4351:39;;;;;;;;;;;;;;;;;:3;:39::i;959:176::-;1017:7;1048:5;;;1071:6;;;;1063:46;;;;;-1:-1:-1;;;1063:46:17;;;;;;;;;;;;;;;;;;;;;;;;;;;1822:135;1880:7;1906:44;1910:1;1913;1906:44;;;;;;;;;;;;;;;;;:3;:44::i;4872:338::-;4958:7;5058:12;5051:5;5043:28;;;;-1:-1:-1;;;5043:28:17;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;5043:28:17;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5081:9;5097:1;5093;:5;;;;;;;4872:338;-1:-1:-1;;;;;4872:338:17:o;2236:187::-;2322:7;2357:12;2349:6;;;;2341:29;;;;-1:-1:-1;;;2341:29:17;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;27:10:-1;;8:100;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;2341:29:17;-1:-1:-1;;;2392:5:17;;;2236:187::o",
+  "language": "Solidity",
+  "natspec": {
+    "methods": {
+      "getBorrowRate(uint256,uint256,uint256)": {
+        "notice": "Calculates the current borrow rate per block, with the error code expected by the market",
+        "params": {
+          "borrows": "The amount of borrows in the market",
+          "cash": "The amount of cash in the market",
+          "reserves": "The amount of reserves in the market"
+        },
+        "return": "The borrow rate percentage per block as a mantissa (scaled by 1e18)"
+      },
+      "getSupplyRate(uint256,uint256,uint256,uint256)": {
+        "notice": "Calculates the current supply rate per block",
+        "params": {
+          "borrows": "The amount of borrows in the market",
+          "cash": "The amount of cash in the market",
+          "reserveFactorMantissa": "The current reserve factor for the market",
+          "reserves": "The amount of reserves in the market"
+        },
+        "return": "The supply rate percentage per block as a mantissa (scaled by 1e18)"
+      },
+      "utilizationRate(uint256,uint256,uint256)": {
+        "notice": "Calculates the utilization rate of the market: `borrows / (cash + borrows - reserves)`",
+        "params": {
+          "borrows": "The amount of borrows in the market",
+          "cash": "The amount of cash in the market",
+          "reserves": "The amount of reserves in the market (currently unused)"
+        },
+        "return": "The utilization rate as a mantissa between [0, 1e18]"
+      }
+    }
+  },
+  "offset": [
+    1858,
+    2074
+  ],
+  "opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x4 CALLDATASIZE LT PUSH2 0x7D JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x8726BB89 GT PUSH2 0x5B JUMPI DUP1 PUSH4 0x8726BB89 EQ PUSH2 0x102 JUMPI DUP1 PUSH4 0xA385FB96 EQ PUSH2 0x10A JUMPI DUP1 PUSH4 0xB8168816 EQ PUSH2 0x112 JUMPI DUP1 PUSH4 0xF14039DE EQ PUSH2 0x141 JUMPI PUSH2 0x7D JUMP JUMPDEST DUP1 PUSH4 0x15F24053 EQ PUSH2 0x82 JUMPI DUP1 PUSH4 0x2191F92A EQ PUSH2 0xBD JUMPI DUP1 PUSH4 0x6E71E2D8 EQ PUSH2 0xD9 JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0xAB PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x60 DUP2 LT ISZERO PUSH2 0x98 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 DUP2 ADD CALLDATALOAD SWAP1 PUSH1 0x40 ADD CALLDATALOAD PUSH2 0x149 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP2 DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xC5 PUSH2 0x1A3 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD SWAP2 ISZERO ISZERO DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xAB PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x60 DUP2 LT ISZERO PUSH2 0xEF JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 DUP2 ADD CALLDATALOAD SWAP1 PUSH1 0x40 ADD CALLDATALOAD PUSH2 0x1A8 JUMP JUMPDEST PUSH2 0xAB PUSH2 0x1FA JUMP JUMPDEST PUSH2 0xAB PUSH2 0x200 JUMP JUMPDEST PUSH2 0xAB PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x80 DUP2 LT ISZERO PUSH2 0x128 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 DUP2 ADD CALLDATALOAD SWAP1 PUSH1 0x40 DUP2 ADD CALLDATALOAD SWAP1 PUSH1 0x60 ADD CALLDATALOAD PUSH2 0x207 JUMP JUMPDEST PUSH2 0xAB PUSH2 0x286 JUMP JUMPDEST PUSH1 0x0 DUP1 PUSH2 0x157 DUP6 DUP6 DUP6 PUSH2 0x1A8 JUMP JUMPDEST SWAP1 POP PUSH2 0x198 PUSH1 0x1 SLOAD PUSH2 0x18C PUSH8 0xDE0B6B3A7640000 PUSH2 0x180 PUSH1 0x0 SLOAD DUP7 PUSH2 0x28C SWAP1 SWAP2 SWAP1 PUSH4 0xFFFFFFFF AND JUMP JUMPDEST SWAP1 PUSH4 0xFFFFFFFF PUSH2 0x2EE AND JUMP JUMPDEST SWAP1 PUSH4 0xFFFFFFFF PUSH2 0x330 AND JUMP JUMPDEST SWAP2 POP POP JUMPDEST SWAP4 SWAP3 POP POP POP JUMP JUMPDEST PUSH1 0x1 DUP2 JUMP JUMPDEST PUSH1 0x0 DUP3 PUSH2 0x1B7 JUMPI POP PUSH1 0x0 PUSH2 0x19C JUMP JUMPDEST PUSH2 0x1F2 PUSH2 0x1DA DUP4 PUSH2 0x1CE DUP8 DUP8 PUSH4 0xFFFFFFFF PUSH2 0x330 AND JUMP JUMPDEST SWAP1 PUSH4 0xFFFFFFFF PUSH2 0x38A AND JUMP JUMPDEST PUSH2 0x180 DUP6 PUSH8 0xDE0B6B3A7640000 PUSH4 0xFFFFFFFF PUSH2 0x28C AND JUMP JUMPDEST SWAP5 SWAP4 POP POP POP POP JUMP JUMPDEST PUSH1 0x0 SLOAD DUP2 JUMP JUMPDEST PUSH3 0x201480 DUP2 JUMP JUMPDEST PUSH1 0x0 DUP1 PUSH2 0x222 PUSH8 0xDE0B6B3A7640000 DUP5 PUSH4 0xFFFFFFFF PUSH2 0x38A AND JUMP JUMPDEST SWAP1 POP PUSH1 0x0 PUSH2 0x231 DUP8 DUP8 DUP8 PUSH2 0x149 JUMP JUMPDEST SWAP1 POP PUSH1 0x0 PUSH2 0x251 PUSH8 0xDE0B6B3A7640000 PUSH2 0x180 DUP5 DUP7 PUSH4 0xFFFFFFFF PUSH2 0x28C AND JUMP JUMPDEST SWAP1 POP PUSH2 0x27A PUSH8 0xDE0B6B3A7640000 PUSH2 0x180 DUP4 PUSH2 0x26E DUP13 DUP13 DUP13 PUSH2 0x1A8 JUMP JUMPDEST SWAP1 PUSH4 0xFFFFFFFF PUSH2 0x28C AND JUMP JUMPDEST SWAP9 SWAP8 POP POP POP POP POP POP POP POP JUMP JUMPDEST PUSH1 0x1 SLOAD DUP2 JUMP JUMPDEST PUSH1 0x0 DUP3 PUSH2 0x29B JUMPI POP PUSH1 0x0 PUSH2 0x2E8 JUMP JUMPDEST DUP3 DUP3 MUL DUP3 DUP5 DUP3 DUP2 PUSH2 0x2A8 JUMPI INVALID JUMPDEST DIV EQ PUSH2 0x2E5 JUMPI PUSH1 0x40 MLOAD PUSH3 0x461BCD PUSH1 0xE5 SHL DUP2 MSTORE PUSH1 0x4 ADD DUP1 DUP1 PUSH1 0x20 ADD DUP3 DUP2 SUB DUP3 MSTORE PUSH1 0x21 DUP2 MSTORE PUSH1 0x20 ADD DUP1 PUSH2 0x4C9 PUSH1 0x21 SWAP2 CODECOPY PUSH1 0x40 ADD SWAP2 POP POP PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 REVERT JUMPDEST SWAP1 POP JUMPDEST SWAP3 SWAP2 POP POP JUMP JUMPDEST PUSH1 0x0 PUSH2 0x2E5 DUP4 DUP4 PUSH1 0x40 MLOAD DUP1 PUSH1 0x40 ADD PUSH1 0x40 MSTORE DUP1 PUSH1 0x1A DUP2 MSTORE PUSH1 0x20 ADD PUSH32 0x536166654D6174683A206469766973696F6E206279207A65726F000000000000 DUP2 MSTORE POP PUSH2 0x3CC JUMP JUMPDEST PUSH1 0x0 DUP3 DUP3 ADD DUP4 DUP2 LT ISZERO PUSH2 0x2E5 JUMPI PUSH1 0x40 DUP1 MLOAD PUSH3 0x461BCD PUSH1 0xE5 SHL DUP2 MSTORE PUSH1 0x20 PUSH1 0x4 DUP3 ADD MSTORE PUSH1 0x1B PUSH1 0x24 DUP3 ADD MSTORE PUSH32 0x536166654D6174683A206164646974696F6E206F766572666C6F770000000000 PUSH1 0x44 DUP3 ADD MSTORE SWAP1 MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x64 ADD SWAP1 REVERT JUMPDEST PUSH1 0x0 PUSH2 0x2E5 DUP4 DUP4 PUSH1 0x40 MLOAD DUP1 PUSH1 0x40 ADD PUSH1 0x40 MSTORE DUP1 PUSH1 0x1F DUP2 MSTORE PUSH1 0x20 ADD PUSH32 0x536166654D6174683A207375627472616374696F6E20756E646572666C6F7700 DUP2 MSTORE POP PUSH2 0x46E JUMP JUMPDEST PUSH1 0x0 DUP2 DUP4 PUSH2 0x458 JUMPI PUSH1 0x40 MLOAD PUSH3 0x461BCD PUSH1 0xE5 SHL DUP2 MSTORE PUSH1 0x4 ADD DUP1 DUP1 PUSH1 0x20 ADD DUP3 DUP2 SUB DUP3 MSTORE DUP4 DUP2 DUP2 MLOAD DUP2 MSTORE PUSH1 0x20 ADD SWAP2 POP DUP1 MLOAD SWAP1 PUSH1 0x20 ADD SWAP1 DUP1 DUP4 DUP4 PUSH1 0x0 JUMPDEST DUP4 DUP2 LT ISZERO PUSH2 0x41D JUMPI DUP2 DUP2 ADD MLOAD DUP4 DUP3 ADD MSTORE PUSH1 0x20 ADD PUSH2 0x405 JUMP JUMPDEST POP POP POP POP SWAP1 POP SWAP1 DUP2 ADD SWAP1 PUSH1 0x1F AND DUP1 ISZERO PUSH2 0x44A JUMPI DUP1 DUP3 SUB DUP1 MLOAD PUSH1 0x1 DUP4 PUSH1 0x20 SUB PUSH2 0x100 EXP SUB NOT AND DUP2 MSTORE PUSH1 0x20 ADD SWAP2 POP JUMPDEST POP SWAP3 POP POP POP PUSH1 0x40 MLOAD DUP1 SWAP2 SUB SWAP1 REVERT JUMPDEST POP PUSH1 0x0 DUP4 DUP6 DUP2 PUSH2 0x464 JUMPI INVALID JUMPDEST DIV SWAP6 SWAP5 POP POP POP POP POP JUMP JUMPDEST PUSH1 0x0 DUP2 DUP5 DUP5 GT ISZERO PUSH2 0x4C0 JUMPI PUSH1 0x40 MLOAD PUSH3 0x461BCD PUSH1 0xE5 SHL DUP2 MSTORE PUSH1 0x20 PUSH1 0x4 DUP3 ADD DUP2 DUP2 MSTORE DUP4 MLOAD PUSH1 0x24 DUP5 ADD MSTORE DUP4 MLOAD SWAP1 SWAP3 DUP4 SWAP3 PUSH1 0x44 SWAP1 SWAP2 ADD SWAP2 SWAP1 DUP6 ADD SWAP1 DUP1 DUP4 DUP4 PUSH1 0x0 DUP4 ISZERO PUSH2 0x41D JUMPI DUP2 DUP2 ADD MLOAD DUP4 DUP3 ADD MSTORE PUSH1 0x20 ADD PUSH2 0x405 JUMP JUMPDEST POP POP POP SWAP1 SUB SWAP1 JUMP INVALID MSTORE8 PUSH2 0x6665 0x4D PUSH2 0x7468 GASPRICE KECCAK256 PUSH14 0x756C7469706C69636174696F6E20 PUSH16 0x766572666C6F77A265627A7A72315820 STOP CALLDATALOAD DUP1 0xCF 0x5C DUP10 0xC6 DUP5 0x29 0xE7 BLOCKHASH PUSH23 0x190C5985BB610B07E3B4469E567CA31B590225B564736F PUSH13 0x63430005110032000000000000 ",
+  "pcMap": {
+    "0": {
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH1",
+      "path": "21",
+      "value": "0x80"
+    },
+    "2": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH1",
+      "path": "21",
+      "value": "0x40"
+    },
+    "4": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "MSTORE",
+      "path": "21"
+    },
+    "5": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "CALLVALUE",
+      "path": "21"
+    },
+    "6": {
+      "op": "DUP1"
+    },
+    "7": {
+      "op": "ISZERO"
+    },
+    "8": {
+      "op": "PUSH2",
+      "value": "0x10"
+    },
+    "11": {
+      "op": "JUMPI"
+    },
+    "12": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "14": {
+      "op": "DUP1"
+    },
+    "15": {
+      "dev": "Cannot send ether to nonpayable function",
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "REVERT",
+      "path": "21"
+    },
+    "16": {
+      "op": "JUMPDEST"
+    },
+    "17": {
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "POP",
+      "path": "21"
+    },
+    "18": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH1",
+      "path": "21",
+      "value": "0x4"
+    },
+    "20": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "CALLDATASIZE",
+      "path": "21"
+    },
+    "21": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "LT",
+      "path": "21"
+    },
+    "22": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x7D"
+    },
+    "25": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "26": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH1",
+      "path": "21",
+      "value": "0x0"
+    },
+    "28": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "CALLDATALOAD",
+      "path": "21"
+    },
+    "29": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH1",
+      "path": "21",
+      "value": "0xE0"
+    },
+    "31": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "SHR",
+      "path": "21"
+    },
+    "32": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "33": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0x8726BB89"
+    },
+    "38": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "GT",
+      "path": "21"
+    },
+    "39": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x5B"
+    },
+    "42": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "43": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "44": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0x8726BB89"
+    },
+    "49": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "50": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x102"
+    },
+    "53": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "54": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "55": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0xA385FB96"
+    },
+    "60": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "61": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x10A"
+    },
+    "64": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "65": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "66": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0xB8168816"
+    },
+    "71": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "72": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x112"
+    },
+    "75": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "76": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "77": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0xF14039DE"
+    },
+    "82": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "83": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x141"
+    },
+    "86": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "87": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x7D"
+    },
+    "90": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMP",
+      "path": "21"
+    },
+    "91": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPDEST",
+      "path": "21"
+    },
+    "92": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "93": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0x15F24053"
+    },
+    "98": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "99": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0x82"
+    },
+    "102": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "103": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "104": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0x2191F92A"
+    },
+    "109": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "110": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0xBD"
+    },
+    "113": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "114": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "115": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH4",
+      "path": "21",
+      "value": "0x6E71E2D8"
+    },
+    "120": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "EQ",
+      "path": "21"
+    },
+    "121": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH2",
+      "path": "21",
+      "value": "0xD9"
+    },
+    "124": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPI",
+      "path": "21"
+    },
+    "125": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "JUMPDEST",
+      "path": "21"
+    },
+    "126": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "PUSH1",
+      "path": "21",
+      "value": "0x0"
+    },
+    "128": {
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "DUP1",
+      "path": "21"
+    },
+    "129": {
+      "first_revert": true,
+      "fn": null,
+      "offset": [
+        1858,
+        2074
+      ],
+      "op": "REVERT",
+      "path": "21"
+    },
+    "130": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "131": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0xAB"
+    },
+    "134": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x4"
+    },
+    "136": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "137": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "CALLDATASIZE",
+      "path": "20"
+    },
+    "138": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SUB",
+      "path": "20"
+    },
+    "139": {
+      "op": "PUSH1",
+      "value": "0x60"
+    },
+    "141": {
+      "op": "DUP2"
+    },
+    "142": {
+      "op": "LT"
+    },
+    "143": {
+      "op": "ISZERO"
+    },
+    "144": {
+      "op": "PUSH2",
+      "value": "0x98"
+    },
+    "147": {
+      "op": "JUMPI"
+    },
+    "148": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "150": {
+      "op": "DUP1"
+    },
+    "151": {
+      "op": "REVERT"
+    },
+    "152": {
+      "op": "JUMPDEST"
+    },
+    "153": {
+      "op": "POP"
+    },
+    "154": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "155": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "156": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "157": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x20"
+    },
+    "159": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "160": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "161": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "162": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "163": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x40"
+    },
+    "165": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "166": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "167": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x149"
+    },
+    "170": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "i",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "171": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "172": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x40"
+    },
+    "174": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "175": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "MLOAD",
+      "path": "20"
+    },
+    "176": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP2",
+      "path": "20"
+    },
+    "177": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "DUP3",
+      "path": "20"
+    },
+    "178": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "MSTORE",
+      "path": "20"
+    },
+    "179": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "MLOAD",
+      "path": "20"
+    },
+    "180": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "181": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "182": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "183": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SUB",
+      "path": "20"
+    },
+    "184": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x20"
+    },
+    "186": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "187": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "188": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "RETURN",
+      "path": "20"
+    },
+    "189": {
+      "offset": [
+        225,
+        272
+      ],
+      "op": "JUMPDEST",
+      "path": "14"
+    },
+    "190": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "PUSH2",
+      "path": "14",
+      "value": "0xC5"
+    },
+    "193": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "PUSH2",
+      "path": "14",
+      "value": "0x1A3"
+    },
+    "196": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "i",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "JUMP",
+      "path": "14"
+    },
+    "197": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "JUMPDEST",
+      "path": "14"
+    },
+    "198": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "PUSH1",
+      "path": "14",
+      "value": "0x40"
+    },
+    "200": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "DUP1",
+      "path": "14"
+    },
+    "201": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "MLOAD",
+      "path": "14"
+    },
+    "202": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "SWAP2",
+      "path": "14"
+    },
+    "203": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "ISZERO",
+      "path": "14"
+    },
+    "204": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "ISZERO",
+      "path": "14"
+    },
+    "205": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "DUP3",
+      "path": "14"
+    },
+    "206": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "MSTORE",
+      "path": "14"
+    },
+    "207": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "MLOAD",
+      "path": "14"
+    },
+    "208": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "SWAP1",
+      "path": "14"
+    },
+    "209": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "DUP2",
+      "path": "14"
+    },
+    "210": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "SWAP1",
+      "path": "14"
+    },
+    "211": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "SUB",
+      "path": "14"
+    },
+    "212": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "PUSH1",
+      "path": "14",
+      "value": "0x20"
+    },
+    "214": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "ADD",
+      "path": "14"
+    },
+    "215": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "SWAP1",
+      "path": "14"
+    },
+    "216": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "RETURN",
+      "path": "14"
+    },
+    "217": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "218": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0xAB"
+    },
+    "221": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x4"
+    },
+    "223": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "224": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "CALLDATASIZE",
+      "path": "20"
+    },
+    "225": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "SUB",
+      "path": "20"
+    },
+    "226": {
+      "op": "PUSH1",
+      "value": "0x60"
+    },
+    "228": {
+      "op": "DUP2"
+    },
+    "229": {
+      "op": "LT"
+    },
+    "230": {
+      "op": "ISZERO"
+    },
+    "231": {
+      "op": "PUSH2",
+      "value": "0xEF"
+    },
+    "234": {
+      "op": "JUMPI"
+    },
+    "235": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "237": {
+      "op": "DUP1"
+    },
+    "238": {
+      "op": "REVERT"
+    },
+    "239": {
+      "op": "JUMPDEST"
+    },
+    "240": {
+      "op": "POP"
+    },
+    "241": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "242": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "243": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "244": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x20"
+    },
+    "246": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "247": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "248": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "249": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "250": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x40"
+    },
+    "252": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "253": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "254": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1A8"
+    },
+    "257": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "i",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "258": {
+      "offset": [
+        728,
+        758
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "259": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0xAB"
+    },
+    "262": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1FA"
+    },
+    "265": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "i",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "266": {
+      "offset": [
+        569,
+        613
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "267": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        569,
+        613
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0xAB"
+    },
+    "270": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        569,
+        613
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x200"
+    },
+    "273": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "i",
+      "offset": [
+        569,
+        613
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "274": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "275": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0xAB"
+    },
+    "278": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x4"
+    },
+    "280": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "281": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "CALLDATASIZE",
+      "path": "20"
+    },
+    "282": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "SUB",
+      "path": "20"
+    },
+    "283": {
+      "op": "PUSH1",
+      "value": "0x80"
+    },
+    "285": {
+      "op": "DUP2"
+    },
+    "286": {
+      "op": "LT"
+    },
+    "287": {
+      "op": "ISZERO"
+    },
+    "288": {
+      "op": "PUSH2",
+      "value": "0x128"
+    },
+    "291": {
+      "op": "JUMPI"
+    },
+    "292": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "294": {
+      "op": "DUP1"
+    },
+    "295": {
+      "op": "REVERT"
+    },
+    "296": {
+      "op": "JUMPDEST"
+    },
+    "297": {
+      "op": "POP"
+    },
+    "298": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "299": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "300": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "301": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x20"
+    },
+    "303": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "304": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "305": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "306": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "307": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x40"
+    },
+    "309": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "310": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "311": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "312": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "313": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x60"
+    },
+    "315": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "ADD",
+      "path": "20"
+    },
+    "316": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "CALLDATALOAD",
+      "path": "20"
+    },
+    "317": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x207"
+    },
+    "320": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "321": {
+      "offset": [
+        871,
+        899
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "322": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0xAB"
+    },
+    "325": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x286"
+    },
+    "328": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "329": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "330": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2574,
+        2578
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "332": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2590,
+        2597
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "333": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2600,
+        2640
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x157"
+    },
+    "336": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2616,
+        2620
+      ],
+      "op": "DUP6",
+      "path": "20"
+    },
+    "337": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2622,
+        2629
+      ],
+      "op": "DUP6",
+      "path": "20"
+    },
+    "338": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2631,
+        2639
+      ],
+      "op": "DUP6",
+      "path": "20"
+    },
+    "339": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2600,
+        2615
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1A8"
+    },
+    "342": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "i",
+      "offset": [
+        2600,
+        2640
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "343": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2600,
+        2640
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "344": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2590,
+        2640
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "345": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2590,
+        2640
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "346": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2715
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "statement": 0,
+      "value": "0x198"
+    },
+    "349": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2698,
+        2714
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x1"
+    },
+    "351": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2698,
+        2714
+      ],
+      "op": "SLOAD",
+      "path": "20"
+    },
+    "352": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2693
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x18C"
+    },
+    "355": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2688,
+        2692
+      ],
+      "op": "PUSH8",
+      "path": "20",
+      "value": "0xDE0B6B3A7640000"
+    },
+    "364": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x180"
+    },
+    "367": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2664,
+        2682
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "369": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2664,
+        2682
+      ],
+      "op": "SLOAD",
+      "path": "20"
+    },
+    "370": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2659
+      ],
+      "op": "DUP7",
+      "path": "20"
+    },
+    "371": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2663
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x28C"
+    },
+    "374": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2663
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "375": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "SWAP2",
+      "path": "20"
+    },
+    "376": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "377": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "382": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "383": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "i",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "384": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2683
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "385": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2687
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "386": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2693
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "391": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2687
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x2EE"
+    },
+    "394": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2693
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "395": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "i",
+      "offset": [
+        2657,
+        2693
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "396": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2693
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "397": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2697
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "398": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2715
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "403": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2697
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x330"
+    },
+    "406": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2715
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "407": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "i",
+      "offset": [
+        2657,
+        2715
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "408": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2657,
+        2715
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "409": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2650,
+        2715
+      ],
+      "op": "SWAP2",
+      "path": "20"
+    },
+    "410": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2650,
+        2715
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "411": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2650,
+        2715
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "412": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "413": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP4",
+      "path": "20"
+    },
+    "414": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "SWAP3",
+      "path": "20"
+    },
+    "415": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "416": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "417": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "418": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "o",
+      "offset": [
+        2490,
+        2722
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "419": {
+      "offset": [
+        225,
+        272
+      ],
+      "op": "JUMPDEST",
+      "path": "14"
+    },
+    "420": {
+      "offset": [
+        268,
+        272
+      ],
+      "op": "PUSH1",
+      "path": "14",
+      "value": "0x1"
+    },
+    "422": {
+      "offset": [
+        225,
+        272
+      ],
+      "op": "DUP2",
+      "path": "14"
+    },
+    "423": {
+      "fn": "WhitePaperInterestRateModel.getBorrowRate",
+      "jump": "o",
+      "offset": [
+        225,
+        272
+      ],
+      "op": "JUMP",
+      "path": "14"
+    },
+    "424": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "425": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1907,
+        1911
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "427": {
+      "branch": 17,
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1986,
+        1998
+      ],
+      "op": "DUP3",
+      "path": "20"
+    },
+    "428": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1982,
+        2033
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1B7"
+    },
+    "431": {
+      "branch": 17,
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1982,
+        2033
+      ],
+      "op": "JUMPI",
+      "path": "20"
+    },
+    "432": {
+      "op": "POP"
+    },
+    "433": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2021,
+        2022
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "statement": 1,
+      "value": "0x0"
+    },
+    "435": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2014,
+        2022
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x19C"
+    },
+    "438": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2014,
+        2022
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "439": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1982,
+        2033
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "440": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2104
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "statement": 2,
+      "value": "0x1F2"
+    },
+    "443": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2103
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1DA"
+    },
+    "446": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2094,
+        2102
+      ],
+      "op": "DUP4",
+      "path": "20"
+    },
+    "447": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2089
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1CE"
+    },
+    "450": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2076
+      ],
+      "op": "DUP8",
+      "path": "20"
+    },
+    "451": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2081,
+        2088
+      ],
+      "op": "DUP8",
+      "path": "20"
+    },
+    "452": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2089
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "457": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2080
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x330"
+    },
+    "460": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2089
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "461": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "i",
+      "offset": [
+        2072,
+        2089
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "462": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2089
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "463": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2093
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "464": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2103
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "469": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2093
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x38A"
+    },
+    "472": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2103
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "473": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "i",
+      "offset": [
+        2072,
+        2103
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "474": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2072,
+        2103
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "475": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2067
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x180"
+    },
+    "478": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2057
+      ],
+      "op": "DUP6",
+      "path": "20"
+    },
+    "479": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2062,
+        2066
+      ],
+      "op": "PUSH8",
+      "path": "20",
+      "value": "0xDE0B6B3A7640000"
+    },
+    "488": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2067
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "493": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2061
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x28C"
+    },
+    "496": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2067
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "497": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "i",
+      "offset": [
+        2050,
+        2067
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "498": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2050,
+        2104
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "499": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        2043,
+        2104
+      ],
+      "op": "SWAP5",
+      "path": "20"
+    },
+    "500": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "SWAP4",
+      "path": "20"
+    },
+    "501": {
+      "op": "POP"
+    },
+    "502": {
+      "op": "POP"
+    },
+    "503": {
+      "op": "POP"
+    },
+    "504": {
+      "op": "POP"
+    },
+    "505": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "o",
+      "offset": [
+        1821,
+        2111
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "506": {
+      "offset": [
+        728,
+        758
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "507": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "509": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "SLOAD",
+      "path": "20"
+    },
+    "510": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "511": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "o",
+      "offset": [
+        728,
+        758
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "512": {
+      "offset": [
+        569,
+        613
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "513": {
+      "offset": [
+        606,
+        613
+      ],
+      "op": "PUSH3",
+      "path": "20",
+      "value": "0x201480"
+    },
+    "517": {
+      "offset": [
+        569,
+        613
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "518": {
+      "fn": "WhitePaperInterestRateModel.utilizationRate",
+      "jump": "o",
+      "offset": [
+        569,
+        613
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "519": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "520": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3247,
+        3251
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "522": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3247,
+        3251
+      ],
+      "op": "DUP1",
+      "path": "20"
+    },
+    "523": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3292,
+        3329
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x222"
+    },
+    "526": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3297,
+        3301
+      ],
+      "op": "PUSH8",
+      "path": "20",
+      "value": "0xDE0B6B3A7640000"
+    },
+    "535": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3307,
+        3328
+      ],
+      "op": "DUP5",
+      "path": "20"
+    },
+    "536": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3292,
+        3329
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "541": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3292,
+        3306
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x38A"
+    },
+    "544": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3292,
+        3329
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "545": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        3292,
+        3329
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "546": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3292,
+        3329
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "547": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3263,
+        3329
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "548": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3263,
+        3329
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "549": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3339,
+        3354
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "551": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3357,
+        3395
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x231"
+    },
+    "554": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3371,
+        3375
+      ],
+      "op": "DUP8",
+      "path": "20"
+    },
+    "555": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3377,
+        3384
+      ],
+      "op": "DUP8",
+      "path": "20"
+    },
+    "556": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3386,
+        3394
+      ],
+      "op": "DUP8",
+      "path": "20"
+    },
+    "557": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3357,
+        3370
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x149"
+    },
+    "560": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        3357,
+        3395
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "561": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3357,
+        3395
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "562": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3339,
+        3395
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "563": {
+      "op": "POP"
+    },
+    "564": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3405,
+        3420
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x0"
+    },
+    "566": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3423,
+        3470
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x251"
+    },
+    "569": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3465,
+        3469
+      ],
+      "op": "PUSH8",
+      "path": "20",
+      "value": "0xDE0B6B3A7640000"
+    },
+    "578": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3423,
+        3460
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x180"
+    },
+    "581": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3339,
+        3395
+      ],
+      "op": "DUP5",
+      "path": "20"
+    },
+    "582": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3438,
+        3459
+      ],
+      "op": "DUP7",
+      "path": "20"
+    },
+    "583": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3423,
+        3460
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "588": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3423,
+        3437
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x28C"
+    },
+    "591": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3423,
+        3460
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "592": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        3423,
+        3460
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "593": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3423,
+        3470
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "594": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3405,
+        3470
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "595": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3405,
+        3470
+      ],
+      "op": "POP",
+      "path": "20"
+    },
+    "596": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3553
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "statement": 3,
+      "value": "0x27A"
+    },
+    "599": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3548,
+        3552
+      ],
+      "op": "PUSH8",
+      "path": "20",
+      "value": "0xDE0B6B3A7640000"
+    },
+    "608": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3543
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x180"
+    },
+    "611": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3532,
+        3542
+      ],
+      "op": "DUP4",
+      "path": "20"
+    },
+    "612": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3527
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x26E"
+    },
+    "615": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3503,
+        3507
+      ],
+      "op": "DUP13",
+      "path": "20"
+    },
+    "616": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3509,
+        3516
+      ],
+      "op": "DUP13",
+      "path": "20"
+    },
+    "617": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3518,
+        3526
+      ],
+      "op": "DUP13",
+      "path": "20"
+    },
+    "618": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3502
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x1A8"
+    },
+    "621": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        3487,
+        3527
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "622": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3527
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "623": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3531
+      ],
+      "op": "SWAP1",
+      "path": "20"
+    },
+    "624": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3543
+      ],
+      "op": "PUSH4",
+      "path": "20",
+      "value": "0xFFFFFFFF"
+    },
+    "629": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3531
+      ],
+      "op": "PUSH2",
+      "path": "20",
+      "value": "0x28C"
+    },
+    "632": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3543
+      ],
+      "op": "AND",
+      "path": "20"
+    },
+    "633": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "i",
+      "offset": [
+        3487,
+        3543
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "634": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3487,
+        3553
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "635": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3480,
+        3553
+      ],
+      "op": "SWAP9",
+      "path": "20"
+    },
+    "636": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "SWAP8",
+      "path": "20"
+    },
+    "637": {
+      "op": "POP"
+    },
+    "638": {
+      "op": "POP"
+    },
+    "639": {
+      "op": "POP"
+    },
+    "640": {
+      "op": "POP"
+    },
+    "641": {
+      "op": "POP"
+    },
+    "642": {
+      "op": "POP"
+    },
+    "643": {
+      "op": "POP"
+    },
+    "644": {
+      "op": "POP"
+    },
+    "645": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "o",
+      "offset": [
+        3135,
+        3560
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "646": {
+      "offset": [
+        871,
+        899
+      ],
+      "op": "JUMPDEST",
+      "path": "20"
+    },
+    "647": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "PUSH1",
+      "path": "20",
+      "value": "0x1"
+    },
+    "649": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "SLOAD",
+      "path": "20"
+    },
+    "650": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "DUP2",
+      "path": "20"
+    },
+    "651": {
+      "fn": "WhitePaperInterestRateModel.getSupplyRate",
+      "jump": "o",
+      "offset": [
+        871,
+        899
+      ],
+      "op": "JUMP",
+      "path": "20"
+    },
+    "652": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "653": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2714,
+        2721
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "655": {
+      "branch": 12,
+      "fn": "SafeMath.mul",
+      "offset": [
+        2955,
+        2961
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "656": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2951,
+        2996
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x29B"
+    },
+    "659": {
+      "branch": 12,
+      "fn": "SafeMath.mul",
+      "offset": [
+        2951,
+        2996
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "660": {
+      "op": "POP"
+    },
+    "661": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2984,
+        2985
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "statement": 4,
+      "value": "0x0"
+    },
+    "663": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2977,
+        2985
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x2E8"
+    },
+    "666": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2977,
+        2985
+      ],
+      "op": "JUMP",
+      "path": "17"
+    },
+    "667": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2951,
+        2996
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "668": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3018,
+        3023
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "669": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3018,
+        3023
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "670": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3018,
+        3023
+      ],
+      "op": "MUL",
+      "path": "17"
+    },
+    "671": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3022,
+        3023
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "672": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3018,
+        3019
+      ],
+      "op": "DUP5",
+      "path": "17"
+    },
+    "673": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3018,
+        3023
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "674": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3018,
+        3019
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "675": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3041,
+        3046
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "statement": 5,
+      "value": "0x2A8"
+    },
+    "678": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3041,
+        3046
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "679": {
+      "dev": "Division by zero",
+      "fn": "SafeMath.mul",
+      "offset": [
+        3041,
+        3046
+      ],
+      "op": "INVALID",
+      "path": "17"
+    },
+    "680": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3041,
+        3046
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "681": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3041,
+        3046
+      ],
+      "op": "DIV",
+      "path": "17"
+    },
+    "682": {
+      "branch": 13,
+      "fn": "SafeMath.mul",
+      "offset": [
+        3041,
+        3051
+      ],
+      "op": "EQ",
+      "path": "17"
+    },
+    "683": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x2E5"
+    },
+    "686": {
+      "branch": 13,
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "687": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "689": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "690": {
+      "op": "PUSH3",
+      "value": "0x461BCD"
+    },
+    "694": {
+      "op": "PUSH1",
+      "value": "0xE5"
+    },
+    "696": {
+      "op": "SHL"
+    },
+    "697": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "698": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "699": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x4"
+    },
+    "701": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "702": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "703": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "704": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "706": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "707": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "708": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "709": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "710": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "711": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "712": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x21"
+    },
+    "714": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "715": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "716": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "718": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "719": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "720": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x4C9"
+    },
+    "723": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x21"
+    },
+    "725": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "726": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "CODECOPY",
+      "path": "17"
+    },
+    "727": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "729": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "730": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "731": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "732": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "733": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "735": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "736": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "737": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "738": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "739": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "740": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "REVERT",
+      "path": "17"
+    },
+    "741": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3033,
+        3089
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "742": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        3107,
+        3108
+      ],
+      "op": "SWAP1",
+      "path": "17",
+      "statement": 6
+    },
+    "743": {
+      "op": "POP"
+    },
+    "744": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "745": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "SWAP3",
+      "path": "17"
+    },
+    "746": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "747": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "748": {
+      "fn": "SafeMath.mul",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "749": {
+      "fn": "SafeMath.mul",
+      "jump": "o",
+      "offset": [
+        2656,
+        3115
+      ],
+      "op": "JUMP",
+      "path": "17"
+    },
+    "750": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4267,
+        4397
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "751": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4325,
+        4332
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "753": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "statement": 7,
+      "value": "0x2E5"
+    },
+    "756": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4355,
+        4356
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "757": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4358,
+        4359
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "758": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "760": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "761": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "762": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "764": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "765": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "767": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "768": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "769": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x1A"
+    },
+    "771": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "772": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "773": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "775": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "776": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "PUSH32",
+      "path": "17",
+      "value": "0x536166654D6174683A206469766973696F6E206279207A65726F000000000000"
+    },
+    "809": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "810": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "811": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "812": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4351,
+        4354
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x3CC"
+    },
+    "815": {
+      "fn": "SafeMath.div",
+      "jump": "i",
+      "offset": [
+        4351,
+        4390
+      ],
+      "op": "JUMP",
+      "path": "17"
+    },
+    "816": {
+      "fn": "SafeMath.add",
+      "offset": [
+        959,
+        1135
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "817": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1017,
+        1024
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "819": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1048,
+        1053
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "820": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1048,
+        1053
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "821": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1048,
+        1053
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "822": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1071,
+        1077
+      ],
+      "op": "DUP4",
+      "path": "17",
+      "statement": 8
+    },
+    "823": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1071,
+        1077
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "824": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1071,
+        1077
+      ],
+      "op": "LT",
+      "path": "17"
+    },
+    "825": {
+      "branch": 14,
+      "fn": "SafeMath.add",
+      "offset": [
+        1071,
+        1077
+      ],
+      "op": "ISZERO",
+      "path": "17"
+    },
+    "826": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x2E5"
+    },
+    "829": {
+      "branch": 14,
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "830": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "832": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "833": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "834": {
+      "op": "PUSH3",
+      "value": "0x461BCD"
+    },
+    "838": {
+      "op": "PUSH1",
+      "value": "0xE5"
+    },
+    "840": {
+      "op": "SHL"
+    },
+    "841": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "842": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "843": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "845": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x4"
+    },
+    "847": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "848": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "849": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "850": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x1B"
+    },
+    "852": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x24"
+    },
+    "854": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "855": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "856": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "857": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH32",
+      "path": "17",
+      "value": "0x536166654D6174683A206164646974696F6E206F766572666C6F770000000000"
+    },
+    "890": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x44"
+    },
+    "892": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "893": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "894": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "895": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "896": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "897": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "898": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "899": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "900": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "901": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x64"
+    },
+    "903": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "904": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "905": {
+      "fn": "SafeMath.add",
+      "offset": [
+        1063,
+        1109
+      ],
+      "op": "REVERT",
+      "path": "17"
+    },
+    "906": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1822,
+        1957
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "907": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1880,
+        1887
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "909": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "statement": 9,
+      "value": "0x2E5"
+    },
+    "912": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1910,
+        1911
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "913": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1913,
+        1914
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "914": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "916": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "917": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "918": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "920": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "921": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "923": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "924": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "925": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x1F"
+    },
+    "927": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "928": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "929": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "931": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "932": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "PUSH32",
+      "path": "17",
+      "value": "0x536166654D6174683A207375627472616374696F6E20756E646572666C6F7700"
+    },
+    "965": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "966": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "967": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "968": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        1906,
+        1909
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x46E"
+    },
+    "971": {
+      "fn": "SafeMath.sub",
+      "jump": "i",
+      "offset": [
+        1906,
+        1950
+      ],
+      "op": "JUMP",
+      "path": "17"
+    },
+    "972": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4872,
+        5210
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "973": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4958,
+        4965
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "975": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5058,
+        5070
+      ],
+      "op": "DUP2",
+      "path": "17",
+      "statement": 10
+    },
+    "976": {
+      "branch": 15,
+      "fn": "SafeMath.div",
+      "offset": [
+        5051,
+        5056
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "977": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x458"
+    },
+    "980": {
+      "branch": 15,
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "981": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "983": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "984": {
+      "op": "PUSH3",
+      "value": "0x461BCD"
+    },
+    "988": {
+      "op": "PUSH1",
+      "value": "0xE5"
+    },
+    "990": {
+      "op": "SHL"
+    },
+    "991": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "992": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "993": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x4"
+    },
+    "995": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "996": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "997": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "998": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "1000": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1001": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "1002": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1003": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "1004": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "1005": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "1006": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1007": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1008": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1009": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1010": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1011": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "1012": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "1014": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1015": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "1016": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1017": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1018": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1019": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1020": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "1022": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1023": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1024": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1025": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1026": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1027": {
+      "op": "PUSH1",
+      "value": "0x0"
+    },
+    "1029": {
+      "op": "JUMPDEST"
+    },
+    "1030": {
+      "op": "DUP4"
+    },
+    "1031": {
+      "op": "DUP2"
+    },
+    "1032": {
+      "op": "LT"
+    },
+    "1033": {
+      "op": "ISZERO"
+    },
+    "1034": {
+      "op": "PUSH2",
+      "value": "0x41D"
+    },
+    "1037": {
+      "op": "JUMPI"
+    },
+    "1038": {
+      "op": "DUP2"
+    },
+    "1039": {
+      "op": "DUP2"
+    },
+    "1040": {
+      "op": "ADD"
+    },
+    "1041": {
+      "op": "MLOAD"
+    },
+    "1042": {
+      "op": "DUP4"
+    },
+    "1043": {
+      "op": "DUP3"
+    },
+    "1044": {
+      "op": "ADD"
+    },
+    "1045": {
+      "op": "MSTORE"
+    },
+    "1046": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "1048": {
+      "op": "ADD"
+    },
+    "1049": {
+      "op": "PUSH2",
+      "value": "0x405"
+    },
+    "1052": {
+      "op": "JUMP"
+    },
+    "1053": {
+      "op": "JUMPDEST"
+    },
+    "1054": {
+      "op": "POP"
+    },
+    "1055": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1056": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1057": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1058": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1059": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1060": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1061": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1062": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1063": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1064": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x1F"
+    },
+    "1066": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "AND",
+      "path": "17"
+    },
+    "1067": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1068": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ISZERO",
+      "path": "17"
+    },
+    "1069": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x44A"
+    },
+    "1072": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "1073": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1074": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "1075": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "1076": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1077": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1078": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x1"
+    },
+    "1080": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1081": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "1083": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "1084": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x100"
+    },
+    "1087": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "EXP",
+      "path": "17"
+    },
+    "1088": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "1089": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "NOT",
+      "path": "17"
+    },
+    "1090": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "AND",
+      "path": "17"
+    },
+    "1091": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1092": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "1093": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "1095": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1096": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "1097": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1098": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "1099": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1100": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP3",
+      "path": "17"
+    },
+    "1101": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1102": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1103": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1104": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "1106": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1107": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1108": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "1109": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "1110": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1111": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "REVERT",
+      "path": "17"
+    },
+    "1112": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "1113": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5043,
+        5071
+      ],
+      "op": "POP",
+      "path": "17"
+    },
+    "1114": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5081,
+        5090
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "1116": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5097,
+        5098
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1117": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5094
+      ],
+      "op": "DUP6",
+      "path": "17"
+    },
+    "1118": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1119": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x464"
+    },
+    "1122": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "1123": {
+      "dev": "Division by zero",
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "INVALID",
+      "path": "17"
+    },
+    "1124": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "1125": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "DIV",
+      "path": "17"
+    },
+    "1126": {
+      "fn": "SafeMath.div",
+      "offset": [
+        5093,
+        5098
+      ],
+      "op": "SWAP6",
+      "path": "17"
+    },
+    "1127": {
+      "fn": "SafeMath.div",
+      "offset": [
+        4872,
+        5210
+      ],
+      "op": "SWAP5",
+      "path": "17"
+    },
+    "1128": {
+      "op": "POP"
+    },
+    "1129": {
+      "op": "POP"
+    },
+    "1130": {
+      "op": "POP"
+    },
+    "1131": {
+      "op": "POP"
+    },
+    "1132": {
+      "op": "POP"
+    },
+    "1133": {
+      "fn": "SafeMath.div",
+      "jump": "o",
+      "offset": [
+        4872,
+        5210
+      ],
+      "op": "JUMP",
+      "path": "17"
+    },
+    "1134": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2236,
+        2423
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "1135": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2322,
+        2329
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "1137": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2357,
+        2369
+      ],
+      "op": "DUP2",
+      "path": "17",
+      "statement": 11
+    },
+    "1138": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2349,
+        2355
+      ],
+      "op": "DUP5",
+      "path": "17"
+    },
+    "1139": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2349,
+        2355
+      ],
+      "op": "DUP5",
+      "path": "17"
+    },
+    "1140": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2349,
+        2355
+      ],
+      "op": "GT",
+      "path": "17"
+    },
+    "1141": {
+      "branch": 16,
+      "fn": "SafeMath.sub",
+      "offset": [
+        2349,
+        2355
+      ],
+      "op": "ISZERO",
+      "path": "17"
+    },
+    "1142": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH2",
+      "path": "17",
+      "value": "0x4C0"
+    },
+    "1145": {
+      "branch": 16,
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "JUMPI",
+      "path": "17"
+    },
+    "1146": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x40"
+    },
+    "1148": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1149": {
+      "op": "PUSH3",
+      "value": "0x461BCD"
+    },
+    "1153": {
+      "op": "PUSH1",
+      "value": "0xE5"
+    },
+    "1155": {
+      "op": "SHL"
+    },
+    "1156": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1157": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "1158": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x20"
+    },
+    "1160": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x4"
+    },
+    "1162": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP3",
+      "path": "17"
+    },
+    "1163": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1164": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1165": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP2",
+      "path": "17"
+    },
+    "1166": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "1167": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1168": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1169": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x24"
+    },
+    "1171": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP5",
+      "path": "17"
+    },
+    "1172": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1173": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "MSTORE",
+      "path": "17"
+    },
+    "1174": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1175": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "MLOAD",
+      "path": "17"
+    },
+    "1176": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1177": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP3",
+      "path": "17"
+    },
+    "1178": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1179": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP3",
+      "path": "17"
+    },
+    "1180": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x44"
+    },
+    "1182": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1183": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "1184": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1185": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP2",
+      "path": "17"
+    },
+    "1186": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1187": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP6",
+      "path": "17"
+    },
+    "1188": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "ADD",
+      "path": "17"
+    },
+    "1189": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1190": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP1",
+      "path": "17"
+    },
+    "1191": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1192": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "DUP4",
+      "path": "17"
+    },
+    "1193": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "PUSH1",
+      "path": "17",
+      "value": "0x0"
+    },
+    "1195": {
+      "op": "DUP4"
+    },
+    "1196": {
+      "op": "ISZERO"
+    },
+    "1197": {
+      "op": "PUSH2",
+      "value": "0x41D"
+    },
+    "1200": {
+      "op": "JUMPI"
+    },
+    "1201": {
+      "op": "DUP2"
+    },
+    "1202": {
+      "op": "DUP2"
+    },
+    "1203": {
+      "op": "ADD"
+    },
+    "1204": {
+      "op": "MLOAD"
+    },
+    "1205": {
+      "op": "DUP4"
+    },
+    "1206": {
+      "op": "DUP3"
+    },
+    "1207": {
+      "op": "ADD"
+    },
+    "1208": {
+      "op": "MSTORE"
+    },
+    "1209": {
+      "op": "PUSH1",
+      "value": "0x20"
+    },
+    "1211": {
+      "op": "ADD"
+    },
+    "1212": {
+      "op": "PUSH2",
+      "value": "0x405"
+    },
+    "1215": {
+      "op": "JUMP"
+    },
+    "1216": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2341,
+        2370
+      ],
+      "op": "JUMPDEST",
+      "path": "17"
+    },
+    "1217": {
+      "op": "POP"
+    },
+    "1218": {
+      "op": "POP"
+    },
+    "1219": {
+      "op": "POP"
+    },
+    "1220": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2392,
+        2397
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1221": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2392,
+        2397
+      ],
+      "op": "SUB",
+      "path": "17"
+    },
+    "1222": {
+      "fn": "SafeMath.sub",
+      "offset": [
+        2392,
+        2397
+      ],
+      "op": "SWAP1",
+      "path": "17"
+    },
+    "1223": {
+      "fn": "SafeMath.sub",
+      "jump": "o",
+      "offset": [
+        2236,
+        2423
+      ],
+      "op": "JUMP",
+      "path": "17"
+    }
+  },
+  "sha1": "3e0a6058b405997034e1efacda8bc7c11b7212e8",
+  "source": "pragma solidity ^0.5.16;\n\nimport \"compound-finance/compound-protocol@2.8.1/contracts/Comptroller.sol\";\nimport \"compound-finance/compound-protocol@2.8.1/contracts/CErc20Immutable.sol\";\nimport \"compound-finance/compound-protocol@2.8.1/contracts/CEther.sol\";\nimport \"compound-finance/compound-protocol@2.8.1/contracts/WhitePaperInterestRateModel.sol\";\nimport \"compound-finance/compound-protocol@2.8.1/contracts/JumpRateModel.sol\";\nimport \"compound-finance/compound-protocol@2.8.1/contracts/SimplePriceOracle.sol\";\n\ncontract nComptroller is Comptroller {\n    constructor() public Comptroller() {}\n}\n\ncontract nPriceOracle is SimplePriceOracle { }\n\ncontract nCErc20 is CErc20Immutable { \n    constructor(address underlying_,\n            ComptrollerInterface comptroller_,\n            InterestRateModel interestRateModel_,\n            uint initialExchangeRateMantissa_,\n            string memory name_,\n            string memory symbol_,\n            uint8 decimals_,\n            address payable admin_) public\n        CErc20Immutable(underlying_, comptroller_, interestRateModel_, initialExchangeRateMantissa_, name_, symbol_, decimals_, admin_) { }\n}\n\ncontract nCEther is CEther { \n    constructor(ComptrollerInterface comptroller_,\n                InterestRateModel interestRateModel_,\n                uint initialExchangeRateMantissa_,\n                string memory name_,\n                string memory symbol_,\n                uint8 decimals_,\n                address payable admin_) public\n        CEther(comptroller_, interestRateModel_, initialExchangeRateMantissa_, name_, symbol_, decimals_, admin_) { }\n}\n\ncontract nJumpRateModel is JumpRateModel {\n    constructor(uint baseRatePerYear, uint multiplierPerYear, uint jumpMultiplierPerYear, uint kink_) public \n        JumpRateModel(baseRatePerYear, multiplierPerYear, jumpMultiplierPerYear, kink_) { }\n}\n\ncontract nWhitePaperInterestRateModel is WhitePaperInterestRateModel {\n    constructor(uint baseRatePerYear, uint multiplierPerYear) public\n        WhitePaperInterestRateModel(baseRatePerYear, multiplierPerYear) {}\n}",
+  "sourceMap": "1858:216:21:-;;;1933:139;8:9:-1;5:2;;;30:1;27;20:12;5:2;1933:139:21;;;;;;;;;;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;-1:-1;1933:139:21;;;;;;;;;;;;;1261:34:20;;1933:139:21;;606:7:20;;1261:19;;;;;:34;;:::i;:::-;1242:16;:53;1326:36;:17;606:7;1326:21;;;;;;;:36;;:::i;:::-;1305:18;:57;;;1396:16;;1378:55;;;;;;;;;;;;;;;;;;;;;;;;;;1167:273;;1933:139:21;;1858:216;;4267:130:17;4325:7;4351:39;4355:1;4358;4351:39;;;;;;;;;;;;;;;;;:3;;;:39;;:::i;:::-;4344:46;4267:130;-1:-1:-1;;;4267:130:17:o;4872:338::-;4958:7;5058:12;5051:5;5043:28;;;;-1:-1:-1;;;5043:28:17;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;90:11;;;84:18;71:11;;;64:39;52:2;45:10;8:100;;;12:14;5043:28:17;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;5081:9;5097:1;5093;:5;;;;;;;4872:338;-1:-1:-1;;;;;4872:338:17:o;1858:216:21:-;;;;;;;",
+  "sourcePath": "contracts/mocks/CompoundImports.sol",
+  "type": "contract"
+}

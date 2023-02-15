@@ -1,0 +1,69 @@
+{
+    "StrategyRegistry": {
+        "maxStrategies": 5
+    },
+    "yields": {
+        "aave": {
+            "wethGateway": "0xA61ca04DF33B72b235a8A28CfB535bb7A5271B70",
+            "protocolDataProvider": "0x3c73A5E5785cAC854D468F727c606C07488a29D6",
+            "lendingPoolAddressesProvider": "0x88757f2f99175387ab4c6a4b3067c77a695b0349"
+        },
+        "compound": {
+            "__repo__": "https://compound.finance/docs#networks",
+            "pairs": [
+                {
+                    "asset": "0x482dc9bb08111cb875109b075a40881e48ae02cd",
+                    "liquidityToken": "0x4a77faee9650b09849ff459ea1476eab01606c7a"
+                },
+                {
+                    "asset": "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+                    "liquidityToken": "0xf0d0eb522cfa50b716b3b1604c4f0fa6f04376ad"
+                },
+                {
+                    "asset": "0x0000000000000000000000000000000000000000",
+                    "liquidityToken": "0x41b5844f4680a8c38fbb695b7f9cfd1f64474a72"
+                }
+            ]
+        }
+    },
+    "priceFeeds": [
+        {
+            "tokenAddress": "0x482dc9bb08111cb875109b075a40881e48ae02cd",
+            "feedAggregator": "0x8e67A0CFfbbF6A346ce87DFe06daE2dc782b3219"
+        },
+        {
+            "tokenAddress": "0x4f96fe3b7a6cf9725f59d353f723c1bdb64ca6aa",
+            "feedAggregator": "0x777A68032a88E5A84678A77Af2CD65A7b3c0775a"
+        },
+        {
+            "tokenAddress": "0x0000000000000000000000000000000000000000",
+            "feedAggregator": "0x9326BFA02ADD2366b30bacB125260Af641031331"
+        }
+    ],
+    "extension": {
+        "votingPassRatio": 0.5
+    },
+    "repayments": {
+        "gracePenalityRate": 3,
+        "gracePeriodFraction": 0.4
+    },
+    "poolFactory": {
+        "collectionPeriod": 600,
+        "loanWithdrawalDuration": 120,
+        "marginCallDuration": 300,
+        "gracePeriodPenaltyFraction": 0,
+        "liquidatorRewardFraction": 0.05,
+        "poolCancelPenalityFraction": 1.2,
+        "minBorrowFraction": 0.5,
+        "protocolFeeFraction": 0.01,
+        "protocolFeeCollector": "0x0000000000000000000000000000000000000000"
+    },
+    "creditLines": {
+        "defaultStrategy": "0x0000000000000000000000000000000000000000",
+        "protocolFee": {
+            "fraction": 0.02,
+            "collector": "0x0000000000000000000000000000000000000000"
+        },
+        "liquidatorRewardFraction": 0.04
+    }
+}

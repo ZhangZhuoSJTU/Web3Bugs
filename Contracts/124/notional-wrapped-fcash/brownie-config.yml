@@ -1,0 +1,31 @@
+compiler:
+  solc:
+    optimizer:
+      enabled: true
+      runs: 200
+    remappings:
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.5.0"
+      - "@openzeppelin-upgradeable=OpenZeppelin/openzeppelin-contracts-upgradeable@4.5.2"
+
+networks:
+  default: development
+  development:
+    hardhat-fork:
+      cmd_settings:
+        fork_block: 13986174
+  hardhat-fork:
+    cmd_settings:
+      fork_block: 13986174
+  kovan-fork:
+    cmd_settings:
+      fork_block: 31456000
+
+reports:
+  exclude_paths:
+    - interfaces/**/*.*
+
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.5.0
+  - OpenZeppelin/openzeppelin-contracts-upgradeable@4.5.2
+
+dotenv: .env

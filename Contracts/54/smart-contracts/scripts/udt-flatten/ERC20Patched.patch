@@ -1,0 +1,261 @@
+--- contracts/ERC20Patched.ref	2021-07-08 16:58:54.000000000 +0200
++++ contracts/ERC20Patched.generated.sol	2021-07-08 16:58:58.000000000 +0200
+@@ -1,8 +1,9 @@
+ // Sources flattened with hardhat v2.4.1 https://hardhat.org
+-pragma solidity ^0.8.0;
+ 
+ // File @openzeppelin/contracts-ethereum-package/contracts/access/Roles.sol@v2.5.0
+ 
++pragma solidity ^0.5.0;
++
+ /**
+  * @title Roles
+  * @dev Library for managing addresses assigned to a Role.
+@@ -42,6 +43,7 @@
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-IERC20PermitUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
+@@ -103,6 +105,7 @@
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev Interface of the ERC20 standard as defined in the EIP.
+@@ -186,6 +189,7 @@
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20MetadataUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev Interface for the optional metadata functions from the ERC20 standard.
+@@ -213,6 +217,7 @@
+ // File @openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed
+@@ -230,29 +235,29 @@
+     /**
+      * @dev Indicates that the contract has been initialized.
+      */
+-    bool private initialized;
++    bool private _initialized;
+ 
+     /**
+      * @dev Indicates that the contract is in the process of being initialized.
+      */
+-    bool private initializing;
++    bool private _initializing;
+ 
+     /**
+      * @dev Modifier to protect an initializer function from being invoked twice.
+      */
+     modifier initializer() {
+-        require(initializing || !initialized, "Initializable: contract is already initialized");
++        require(_initializing || !_initialized, "Initializable: contract is already initialized");
+ 
+-        bool isTopLevelCall = !initializing;
++        bool isTopLevelCall = !_initializing;
+         if (isTopLevelCall) {
+-            initializing = true;
+-            initialized = true;
++            _initializing = true;
++            _initialized = true;
+         }
+ 
+         _;
+ 
+         if (isTopLevelCall) {
+-            initializing = false;
++            _initializing = false;
+         }
+     }
+ }
+@@ -261,6 +266,7 @@
+ // File @openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /*
+  * @dev Provides information about the current execution context, including the
+@@ -286,13 +292,14 @@
+     function _msgData() internal view virtual returns (bytes calldata) {
+         return msg.data;
+     }
+-    uint256[50] private ______gap;
++    uint256[50] private __gap;
+ }
+ 
+ 
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ 
+ 
+@@ -321,15 +328,15 @@
+  * functions have been added to mitigate the well-known issues around setting
+  * allowances. See {IERC20-approve}.
+  */
+-abstract contract ERC20Upgradeable is Initializable, ContextUpgradeable, IERC20Upgradeable, IERC20MetadataUpgradeable {
++contract ERC20Upgradeable is Initializable, ContextUpgradeable, IERC20Upgradeable, IERC20MetadataUpgradeable {
+     mapping(address => uint256) private _balances;
+ 
+     mapping(address => mapping(address => uint256)) private _allowances;
+ 
+     uint256 private _totalSupply;
+ 
+-    // string private _name;
+-    // string private _symbol;
++    string private _name;
++    string private _symbol;
+ 
+     /**
+      * @dev Sets the values for {name} and {symbol}.
+@@ -346,24 +353,24 @@
+     }
+ 
+     function __ERC20_init_unchained(string memory name_, string memory symbol_) internal initializer {
+-        // _name = name_;
+-        // _symbol = symbol_;
++        _name = name_;
++        _symbol = symbol_;
+     }
+ 
+     /**
+      * @dev Returns the name of the token.
+      */
+-    // function name() public view virtual override returns (string memory) {
+-    //     return _name;
+-    // }
++    function name() public view virtual override returns (string memory) {
++        return _name;
++    }
+ 
+     /**
+      * @dev Returns the symbol of the token, usually a shorter version of the
+      * name.
+      */
+-    // function symbol() public view virtual override returns (string memory) {
+-    //     return _symbol;
+-    // }
++    function symbol() public view virtual override returns (string memory) {
++        return _symbol;
++    }
+ 
+     /**
+      * @dev Returns the number of decimals used to get its user representation.
+@@ -647,13 +654,14 @@
+         address to,
+         uint256 amount
+     ) internal virtual {}
+-    uint256[50] private ______gap;
++    uint256[45] private __gap;
+ }
+ 
+ 
+ // File @openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev Elliptic Curve Digital Signature Algorithm (ECDSA) operations.
+@@ -795,6 +803,7 @@
+ // File @openzeppelin/contracts-upgradeable/utils/cryptography/draft-EIP712Upgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ 
+ /**
+@@ -907,6 +916,7 @@
+ // File @openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @title Counters
+@@ -951,6 +961,7 @@
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ 
+ 
+@@ -1045,6 +1056,7 @@
+ // File @openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev Standard math utilities missing in the Solidity language.
+@@ -1089,6 +1101,7 @@
+ // File @openzeppelin/contracts-upgradeable/utils/math/SafeCastUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ /**
+  * @dev Wrappers over Solidity's uintXX/intXX casting operators with added overflow
+@@ -1331,6 +1344,7 @@
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ 
+ 
+@@ -1594,6 +1608,7 @@
+ // File @openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesCompUpgradeable.sol@v4.2.0
+ 
+ 
++pragma solidity ^0.8.0;
+ 
+ 
+ /**
+@@ -1644,10 +1659,11 @@
+ 
+ // File scripts/udt-upgrade/ERC20Patched.template.sol
+ 
++pragma solidity ^0.8.0;
+ 
+ // import '@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol';
+ 
+-abstract contract MinterRoleUpgradeable is Initializable, ContextUpgradeable {
++contract MinterRoleUpgradeable is Initializable, ContextUpgradeable {
+     using Roles for Roles.Role;
+ 
+     event MinterAdded(address indexed account);
+@@ -1691,7 +1707,7 @@
+     uint256[50] private ______gap;
+ }
+ 
+-abstract contract ERC20DetailedUpgradeable is Initializable, IERC20Upgradeable {
++abstract contract ERC20DetailedUpgradeable is Initializable, ERC20VotesUpgradeable {
+     string private _name;
+     string private _symbol;
+     uint8 private _decimals;
+@@ -1717,7 +1733,7 @@
+     uint256[50] private ______gap;
+ }
+ 
+-abstract contract ERC20MintableUpgradeable is Initializable, ERC20Upgradeable, MinterRoleUpgradeable {
++abstract contract ERC20MintableUpgradeable is Initializable, ERC20VotesUpgradeable, MinterRoleUpgradeable {
+     function initialize(address sender) public virtual override initializer {
+         MinterRoleUpgradeable.initialize(sender);
+     }

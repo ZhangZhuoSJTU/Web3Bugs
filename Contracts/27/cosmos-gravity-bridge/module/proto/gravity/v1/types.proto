@@ -1,0 +1,44 @@
+syntax = "proto3";
+package gravity.v1;
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+option  go_package = "github.com/althea-net/cosmos-gravity-bridge/module/x/gravity/types";
+
+// BridgeValidator represents a validator's ETH address and its power
+message BridgeValidator {
+  uint64 power            = 1;
+  string ethereum_address = 2;
+}
+
+// Valset is the Ethereum Bridge Multsig Set, each gravity validator also
+// maintains an ETH key to sign messages, these are used to check signatures on
+// ETH because of the significant gas savings
+message Valset {
+  uint64                   nonce   = 1;
+  repeated BridgeValidator members = 2;
+  uint64                   height  = 3;
+  string reward_amount         = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable)   = false
+  ];
+  // the reward token in it's Ethereum hex address representation
+  string reward_token               = 5;
+  
+}
+
+// LastObservedEthereumBlockHeight stores the last observed
+// Ethereum block height along with the Cosmos block height that
+// it was observed at. These two numbers can be used to project
+// outward and always produce batches with timeouts in the future
+// even if no Ethereum block height has been relayed for a long time
+message LastObservedEthereumBlockHeight {
+  uint64 cosmos_block_height   = 1;
+  uint64 ethereum_block_height = 2;
+}
+
+// This records the relationship between an ERC20 token and the denom
+// of the corresponding Cosmos originated asset
+message ERC20ToDenom {
+  string erc20 = 1;
+  string denom = 2;
+}

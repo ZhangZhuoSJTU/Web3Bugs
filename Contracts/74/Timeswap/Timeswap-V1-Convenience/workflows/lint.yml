@@ -1,0 +1,38 @@
+name: Lint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
+      - name: Install Dependecies
+        run: npm ci
+
+      - name: Run prettier
+        run: npx prettier --write .
+      
+      - name: Auto commit lint errors
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: applies prettier lint changes

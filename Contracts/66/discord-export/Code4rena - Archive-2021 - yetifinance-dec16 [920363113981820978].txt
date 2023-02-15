@@ -1,0 +1,102 @@
+==============================================================
+Guild: Code4rena
+Channel: Archive-2021 / yetifinance-dec16
+==============================================================
+
+[14-Dec-21 09:26 AM] itsmetechjay | C4#5294
+👋 Hello and welcome to the contest channel for the $100K USDC **Yeti Finance **contest!
+
+📆 Contest opens December 16, 2021, at 0:00 UTC and runs through December 22, 2021 at 23:59 UTC (7 days).
+
+Please give a warm welcome to the Yeti Finance team - particularly @RoboYeti and @11xTruco | Yeti Finance - who will be available for questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+{Reactions}
+👋 (3) 
+
+[14-Dec-21 11:50 AM] 11xTruco | Yeti Finance#1467
+Hello! 👋
+
+{Reactions}
+👋 (5) 
+
+[15-Dec-21 06:08 PM] Kenzo Agada | AFK for a while#5926
+Do you guys succeed in running `yarn` on the repo?
+I'm getting this
+```
+warning package.json: "dependencies" has dependency "hardhat" with range "^2.7.0" that collides with a dependency in "devDependencies" of the same name with version "^2.1.1"
+warning package.json: "dependencies" has dependency "web3" with range "^1.6.1" that collides with a dependency in "devDependencies" of the same name with version "^1.3.4"
+$ node scripts/set-version.js
+internal/modules/cjs/loader.js:892
+  throw err;
+  ^
+
+Error: Cannot find module '/home/assaf/c4bounties/yeti/packages/contracts/scripts/set-version.js'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:889:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:745:27)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:76:12)
+    at internal/main/run_main_module.js:17:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+error Command failed with exit code 1.
+```
+
+
+[15-Dec-21 06:34 PM] broccolirob#8828
+Ya, I got that too. In the root directory, in `package.json` under `"scripts"`, remove the script for `prepare` and try again.
+
+
+[15-Dec-21 06:36 PM] broccolirob#8828
+Also, `cd packages/contracts` from root before running `npx hardhat test`
+
+
+[15-Dec-21 06:36 PM] Kenzo Agada | AFK for a while#5926
+Are the tests running successfully afterwards?
+
+
+[15-Dec-21 06:36 PM] Kenzo Agada | AFK for a while#5926
+I mean, relatively successfully. 🙂
+
+
+[15-Dec-21 06:37 PM] broccolirob#8828
+Ya, `cd packages/contracts` and then `npx hardhat test` they're passing, but they haven't finished yet for me
+
+
+[15-Dec-21 06:37 PM] Kenzo Agada | AFK for a while#5926
+Thanks 👍
+
+
+[15-Dec-21 06:37 PM] broccolirob#8828
+np
+
+
+[15-Dec-21 08:08 PM] 11xTruco | Yeti Finance#1467
+Hey wardens, apologies for the confusion, the problem arose while uploading the files to the C4 repo. The package.json file has been modified and `yarn` just has to be run in the `./packages/contracts` directory. Then you can run `npx hardhat test` to run the tests. Running a specific test is done like `npx hardhat test ./test/AccessControlTest.js`. I would recommend running an individual test first to make sure it works before running the entire suite. If you get an error like `ECONNRESET` then just run the test again. Thanks!
+
+
+[20-Dec-21 09:47 PM] UncleGrandpa925#5820
+Hi, can I ask that in recovery mode, ICR <= 100% and the system does redistribution, it means that all troves will receive more debt than collateral right?
+
+{Attachments}
+Code4rena - Archive-2021 - yetifinance-dec16 [920363113981820978].txt_Files/unknown-37AEA.png
+
+
+[20-Dec-21 11:36 PM] 11xTruco | Yeti Finance#1467
+That is correct. This is just so the system still has defined behavior in this case, though it is very unlikely to happen
+
+{Reactions}
+👍 
+
+[22-Dec-21 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **Yeti Finance** contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: The Yeti Finance team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+
+==============================================================
+Exported 14 message(s)
+==============================================================

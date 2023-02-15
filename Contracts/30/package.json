@@ -1,0 +1,55 @@
+{
+  "name": "metavault",
+  "version": "3.0.0",
+  "license": "MIT",
+  "description": "MetaVault Contracts and ABI",
+  "scripts": {
+    "compile": "hardhat compile",
+    "coverage": "hardhat coverage --testfiles 'test/v3/*.js'",
+    "deploy:v3:kovan": "hardhat deploy --network kovan --tags v3,v3-strategies --gasprice 1000000000",
+    "deploy:merkledrop:kovan": "hardhat deploy --network kovan --tags merkledrop --gasprice 1000000000",
+    "deploy:merkledrop:mainnet": "hardhat deploy --network mainnet --tags merkledrop",
+    "deploy:token:kovan": "hardhat deploy --network kovan --tags token --gasprice 1000000000",
+    "deploy:v3:mainnet": "LIVE=true hardhat deploy --network mainnet --tags v3",
+    "fork": "LIVE=true FORK=true hardhat node --no-deploy --fork https://mainnet.infura.io/v3/$INFURA_PROJECT_ID",
+    "lint": "eslint . && solhint contracts/**/*.sol",
+    "lint:contracts": "solhint contracts/**/*.sol",
+    "lint:fix": "eslint . --fix",
+    "lint:js": "eslint.",
+    "test": "./run_tests.sh",
+    "test:v3": "hardhat test test/v3/*",
+    "test:live": "VERBOSE=true LIVE=true hardhat test test/live/*",
+    "test:governance": "hardhat --show-stack-traces test test/governance/*",
+    "test:token": "hardhat --show-stack-traces test test/token/*",
+    "verify:kovan": "hardhat --network kovan etherscan-verify --api-key $ETHERSCAN_API_KEY",
+    "verify:mainnet": "hardhat --network mainnet etherscan-verify --api-key $ETHERSCAN_API_KEY"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yaxis-project/metavault"
+  },
+  "bugs": {
+    "url": "https://github.com/yaxis-project/metavault/issues"
+  },
+  "homepage": "https://github.com/yaxis-project/metavault#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.1.0"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-vyper": "^2.0.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.2.0",
+    "eslint": "^7.16.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "ethereum-waffle": "^3.2.1",
+    "ethers": "^5.0.24",
+    "hardhat": "^2.4.3",
+    "hardhat-deploy": "^0.8.11",
+    "hardhat-deploy-ethers": "^0.3.0-beta.10",
+    "prettier": "^2.2.1",
+    "solhint": "^3.3.2",
+    "solidity-coverage": "^0.7.14"
+  }
+}

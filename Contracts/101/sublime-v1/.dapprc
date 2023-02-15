@@ -1,0 +1,28 @@
+# Basic build/test configuration.
+export DAPP_REMAPPINGS=$(cat remappings.txt)
+export DAPP_SRC=contracts
+export DAPP_SOLC_VERSION=0.7.6
+export DAPP_BUILD_OPTIMIZE=1
+export DAPP_BUILD_OPTIMIZE_RUNS=20000
+export DAPP_LINK_TEST_LIBRARIES=0
+export DAPP_TEST_VERBOSITY=1
+export DAPP_TEST_SMTTIMEOUT=500000
+# export DAPP_SKIP_BUILD=1
+
+# These normally default to 0 which breaks some tests.
+export DAPP_TEST_TIMESTAMP=1000000000
+export DAPP_TEST_NUMBER=10000000
+export ETH_RPC_URL=https://eth-mainnet.alchemyapi.io/v2/snGskhAXMQaRLnJaxbcfOL7U5_bSZl_Y
+
+export FORK_URL=https://eth-mainnet.alchemyapi.io/v2/snGskhAXMQaRLnJaxbcfOL7U5_bSZl_Y
+
+export FORK_BLOCK_NUMBER=14081404
+
+# export DAPP_SKIP_BUILD=1
+
+if [ "$DEEP_FUZZ" = "true" ]
+then 
+  export DAPP_TEST_FUZZ_RUNS=10000 # Fuzz for a long time if DEEP_FUZZ is set to true.
+else
+  export DAPP_TEST_FUZZ_RUNS=100 # Only fuzz briefly if DEEP_FUZZ is not set to true.
+fi

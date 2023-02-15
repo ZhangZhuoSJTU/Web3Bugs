@@ -1,0 +1,162 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-Q1-2022 / ☑sherlock-jan20
+==============================================================
+
+[18-Jan-22 02:19 PM] itsmetechjay | C4#5294
+👋 Hello and welcome to the contest channel for the $80K USDC **Sherlock** contest!
+
+📆 Contest opens January 20, 2022, at 0:00 UTC and runs through January 26, 2022 at 23:59 UTC (7 days).
+
+Please give a warm welcome back to the Sherlock team, particularly @Evert Kors and @Jack Sanford | Sherlock, who will be available for questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+
+[18-Jan-22 07:02 PM] Spirit.Kenk#2147
+hello!
+
+{Reactions}
+👋 (7) 
+
+[18-Jan-22 07:53 PM] Evert Kors#2684
+Hi everyone! Excited to bring our new code base to the arena. :chefskiss:
+
+{Reactions}
+👋 (8) 
+
+[19-Jan-22 11:03 PM] StErMi.eth#0277
+Hi there!
+
+
+[19-Jan-22 11:03 PM] StErMi.eth#0277
+from the description I didn't understand which is the commit from which I should start the audit, could you clarify?
+
+
+[19-Jan-22 11:22 PM] StErMi.eth#0277
+if it's possible:
+
+- point us to the correct github snapshot from which we should do the audit
+- be more specific on area of concerns because I don't understand if all the "audit fixes" and the "PR" are already in the snapshot we need to review or if we need to jump from one snapshot to another (that would be an hell of a task)
+- if ShareBuy and SherClaim are correctly included (or at least the version we should audit) in the snapshot
+- is the V2 already in mainnet? I need to know that to understand if some more finding can be proposed or not
+
+{Reactions}
+💯 (4) 
+
+[20-Jan-22 07:26 AM] Evert Kors#2684
+Hi
+- The readme contains the following sentence "Code can also be viewed at https://github.com/sherlock-protocol/sherlock-v2-core @ 25b0897c236a" does that answer your first question? 
+- "Audit fixes" and "PR" are in the snapshot, I threw in some commit hashes so it's possible for Wardens to view the diff between the audit commit hash and the current code base for example `git diff 25b0897c236a..8ae51c5a2ec`.  (on the sherlock-v2-core repo)
+- Yes the code in the repo is the correct snapshot.
+- No it's not on mainnet 🙂
+
+{Reactions}
+chefskiss (2) thankyou 
+
+[20-Jan-22 07:39 AM] GeekyLumberjack#3244
+Great concept on this project
+
+{Reactions}
+😍 
+
+[20-Jan-22 08:43 AM] StErMi.eth#0277
+@Evert Kors what I was trying to unerstand if everything was into the commit hash `25b0897c236a`
+
+
+[20-Jan-22 08:44 AM] StErMi.eth#0277
+ok
+
+
+[20-Jan-22 08:52 AM] Evert Kors#2684
+Yes everything is in there!
+
+
+[20-Jan-22 09:01 AM] StErMi.eth#0277
+cool thanks!
+
+
+[20-Jan-22 03:28 PM] Pedroais#1630
+In what way is aave yield distributed to stakers ?
+
+
+[20-Jan-22 08:35 PM] Kenzo Agada#5926
+My VScode doesn't recognize Sherlock's function definitions - I can't ctrl+click a function to go to it / do "go to definition". It happened in some other projects before. Anybody knows what am I missing / how to fix it?
+
+{Reactions}
+same (2) 
+
+[20-Jan-22 09:13 PM] Kenzo Agada#5926
+Hmm... I get the problem on Sherlock.sol but not on SherlockProtocolManager.sol
+
+
+[21-Jan-22 10:15 AM] Pedroais#1630
+I always get that problem at random. Sometimes I close and open vscode and it works.
+
+{Reactions}
+👍 
+
+[21-Jan-22 03:52 PM] RamiRond#1730
+Yeah I was also annoyed by this, so I spent some time. It seems to be a parser error for empty try-blocks (line 286). Just add some dummy command and it should work
+
+
+[21-Jan-22 03:53 PM] RamiRond#1730
+The bug should be located in this repo if someone wants to fix it 😄
+<https://github.com/juanfranblanco/solparse/issues/2>
+
+
+[21-Jan-22 03:58 PM] Kenzo Agada#5926
+Awesome, thanks 🙏
+
+{Reactions}
+👍 (2) 
+
+[21-Jan-22 06:30 PM] Spirit.Kenk#2147
+Hi how does the contest work? Audit the whole repository?
+
+
+[22-Jan-22 04:14 AM] vlad#0001
+~~any eta on when https://www.sherlock.xyz/ is gonna be up?(or is it just me that has issues with it)~~
+
+
+[22-Jan-22 07:42 PM] wuwe1#3707
+Hi, I'm curious about this line https://github.com/code-423n4/2022-01-sherlock/blob/main/contracts/managers/AaveV2Strategy.sol#L93. So, why not check _amount == 0?
+
+{Embed}
+https://github.com/code-423n4/2022-01-sherlock/blob/main/contracts/managers/AaveV2Strategy.sol
+2022-01-sherlock/AaveV2Strategy.sol at main · code-423n4/2022-01-sh...
+Contribute to code-423n4/2022-01-sherlock development by creating an account on GitHub.
+Code4rena - ARCHIVE-Q1-2022 - ☑sherlock-jan20 [933074238716387398].txt_Files/fce9ec60-bb59-45d5-8d31-a514121f6d9d-B78EB
+
+
+[23-Jan-22 07:11 PM] Evert Kors#2684
+Hey good question, and thanks for pointing out I need to clarify that comment lol. Basically `== 0` is already checked for in the preceding call in Sherlock.sol. This check ensures that it doesn't execute a `withdrawAll()` call (AAVE uses uint256.max as a magic number to withdraw max)
+
+
+[23-Jan-22 08:04 PM] wuwe1#3707
+Cool, thank you.
+
+
+[26-Jan-22 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The** Sherlock **contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: the Sherlock team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+{Reactions}
+🔥 (2) 
+
+[03-Mar-22 04:04 PM] iceusurp#0001
+Hey, just wondering how is this contest going, has it gone to judging yet?
+
+
+[03-Mar-22 04:16 PM] itsmetechjay | C4#5294
+Yep it is now in judging.
+
+{Reactions}
+coolDoge 
+
+==============================================================
+Exported 27 message(s)
+==============================================================

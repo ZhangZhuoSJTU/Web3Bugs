@@ -1,0 +1,119 @@
+{
+  "name": "@setprotocol/set-protocol-v2",
+  "version": "0.11.0",
+  "description": "",
+  "main": "dist",
+  "files": [
+    "artifacts",
+    "dist",
+    "contracts",
+    "external",
+    "utils",
+    "scripts",
+    "typechain",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn compile && yarn build:ts:latest",
+    "build:ts:latest": "yarn typechain && yarn transpile:dist:latest",
+    "chain": "npx hardhat node",
+    "clean": "./scripts/clean.sh",
+    "compile": "npx hardhat compile",
+    "compile:latest": "SKIP_ABI_GAS_MODS=true npx hardhat compile",
+    "test": "yarn test:unit && yarn test:integration",
+    "test:unit": "npx hardhat test",
+    "test:integration": "FORK=true npx hardhat test",
+    "test:clean": "yarn clean && yarn build && yarn test",
+    "transpile:dist:latest": "tsc --project tsconfig.dist.json",
+    "transpile:dist:hardhat": "tsc --project tsconfig.hardhat.json",
+    "typechain": "npx hardhat typechain"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SetProtocol/set-protocol-v2.git"
+  },
+  "author": "felix2feng",
+  "license": "MIT",
+  "homepage": "https://github.com/SetProtocol",
+  "resolutions": {
+    "babel-code-frame/chalk": "4.1.0"
+  },
+  "engines": {
+    "yarn": ">=1.10.1"
+  },
+  "devDependencies": {
+    "@0x/utils": "^6.4.3",
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@openzeppelin/contracts": "^3.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@typechain/ethers-v5": "8.0.5",
+    "@typechain/hardhat": "3.1.0",
+    "@types/chai": "^4.2.11",
+    "@types/fs-extra": "^5.0.0",
+    "@types/lodash": "^4.14.86",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "@uniswap/lib": "^4.0.1-alpha",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jsdoc": "^38.0.6",
+    "eslint-plugin-no-null": "^1.0.2",
+    "ethereum-waffle": "^3.4.0",
+    "hardhat": "^2.6.4",
+    "hardhat-contract-sizer": "^2.5.0",
+    "husky": "^4.2.5",
+    "istanbul-combine-updated": "^0.3.0",
+    "lint-staged": "^10.2.11",
+    "lodash": "^4.17.4",
+    "semantic-release": "^19.0.2",
+    "solc": "^0.6.10",
+    "solhint": "^3.1.0",
+    "solidity-coverage": "^0.7.17",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.3",
+    "tslint-eslint-rules": "^5.3.1",
+    "typechain": "6.1.0",
+    "typescript": "^4.4.3",
+    "web3": "^1.2.9"
+  },
+  "dependencies": {
+    "@uniswap/v3-core": "1.0.1",
+    "@uniswap/v3-sdk": "^3.5.1",
+    "ethers": "^5.5.2",
+    "fs-extra": "^9.0.0",
+    "jsbi": "^3.2.5",
+    "module-alias": "^2.2.2",
+    "notional-solidity-sdk": "https://github.com/ckoopmann/notional-solidity-sdk.git#77aa2f8fd8a72b8f5865e561f2d39d4606c3740c",
+    "wrapped-fcash": "https://github.com/ckoopmann/wrapped-fcash.git#6b7d870c9b750aa343f0405f3543c9bbb0e3cdfc",
+    "openzeppelin-contracts-V4": "npm:@openzeppelin/contracts@4.5",
+    "@openzeppelin-upgradeable/contracts": "npm:@openzeppelin/contracts-upgradeable@4.5.2",
+    "replace-in-file": "^6.1.0"
+  },
+  "peerDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.1",
+    "ethereum-waffle": "^3.2.1",
+    "hardhat": "^2.2.1"
+  },
+  "_moduleAliases": {
+    "@utils": "utils",
+    "@typechain": "typechain"
+  },
+  "lint-staged": {
+    "contracts/**/*.sol": [
+      "yarn lint-sol --fix"
+    ],
+    "test/**/*.ts": [
+      "yarn lint-ts --fix"
+    ],
+    "utils/**/*.ts": [
+      "yarn lint-ts --fix"
+    ]
+  }
+}

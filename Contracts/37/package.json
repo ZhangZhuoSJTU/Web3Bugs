@@ -1,0 +1,58 @@
+{
+  "private": true,
+  "name": "tempus-protocol",
+  "version": "0.0.0",
+  "description": "Tempus Protocol Contracts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tempus-finance/tempus-protocol.git"
+  },
+  "author": "Tempus",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/tempus-finance/tempus-protocol/issues"
+  },
+  "homepage": "https://github.com/tempus-finance/tempus-protocol#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.10",
+    "@nomiclabs/hardhat-waffle": "2.0.1",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/hardhat": "^2.2.0",
+    "@types/chai": "^4.2.17",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.0.1",
+    "chai": "^4.3.4",
+    "coveralls": "^3.1.0",
+    "cross-env": "^7.0.3",
+    "decimal.js": "^10.3.1",
+    "dotenv": "^10.0.0",
+    "eth-ens-namehash": "^2.0.8",
+    "ethereum-waffle": "^3.3.0",
+    "ethers": "^5.4.1",
+    "hardhat": "^2.2.1",
+    "hardhat-abi-exporter": "^2.2.1",
+    "hardhat-deploy": "^0.8.9",
+    "hardhat-gas-reporter": "^1.0.4",
+    "prettier": "^2.2.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.10",
+    "solhint": "^3.3.4",
+    "solhint-plugin-prettier": "^0.0.5",
+    "solidity-coverage": "^0.7.16",
+    "ts-node": "^10.0.0",
+    "typechain": "^5.1.1",
+    "typescript": "^4.2.4",
+    "yahoo-finance": "^0.3.7"
+  },
+  "scripts": {
+    "build": "npx hardhat compile",
+    "test": "npx hardhat test test/*.ts test/amm/*.ts test/mocks/**/*.ts test/token/*.ts"
+  },
+  "dependencies": {
+    "@balancer-labs/v2-asset-manager-utils": "https://gitpkg.now.sh/balancer-labs/balancer-v2-monorepo/pkg/asset-manager-utils?ccb2d594a893cd4b7ce79698e373cb100b28aaa2",
+    "@balancer-labs/v2-pool-utils": "https://gitpkg.now.sh/balancer-labs/balancer-v2-monorepo/pkg/pool-utils?ccb2d594a893cd4b7ce79698e373cb100b28aaa2",
+    "@balancer-labs/v2-solidity-utils": "https://gitpkg.now.sh/balancer-labs/balancer-v2-monorepo/pkg/solidity-utils?ccb2d594a893cd4b7ce79698e373cb100b28aaa2",
+    "@balancer-labs/v2-vault": "https://gitpkg.now.sh/balancer-labs/balancer-v2-monorepo/pkg/vault?ccb2d594a893cd4b7ce79698e373cb100b28aaa2",
+    "@balancer-labs/v2-pool-stable": "https://gitpkg.now.sh/balancer-labs/balancer-v2-monorepo/pkg/pool-stable?ccb2d594a893cd4b7ce79698e373cb100b28aaa2",
+    "@openzeppelin/contracts": "^4.1.0"
+  }
+}

@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+
+my $envfile = ".env";
+open(ENVFILE, $envfile) || die("Failed to find a .env file: $ !");
+
+while(<ENVFILE>) {
+    my ($name, $value) = split /=/;
+    chomp $value;
+    $ENV{$name} = $value;
+}
+
+close(ENVFILE);
+
+exec "@ARGV";

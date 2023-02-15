@@ -1,0 +1,20 @@
+hypothesis:
+  max_examples: 500
+
+# require OpenZepplin Contracts
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@3.4.2
+
+# path remapping to support OpenZepplin imports with NPM-style path
+compiler:
+  solc:
+    remappings:
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@3.4.2"
+
+reports:
+  exclude_paths:
+    - contracts/test
+  exclude_contracts:
+    - SafeMath
+    - SafeERC20
+    - Address

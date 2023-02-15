@@ -1,0 +1,3537 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Code4rena - &#127937;xdefi-jan4</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-300.woff);
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-400.woff);
+            font-weight: 400;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-500.woff);
+            font-weight: 500;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-600.woff);
+            font-weight: 600;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-700.woff);
+            font-weight: 700;
+        }
+
+        body {
+            background-color: #36393e;
+            color: #dcddde;
+            font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        a {
+            color: #00aff4;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        img {
+            object-fit: contain;
+        }
+
+        .markdown {
+            max-width: 100%;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+
+        .preserve-whitespace {
+            white-space: pre-wrap;
+        }
+
+        .spoiler-text {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .spoiler-text--hidden {
+            cursor: pointer;
+            background-color: #202225;
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .spoiler-text--hidden:hover {
+            background-color: rgba(32, 34, 37, 0.8);
+        }
+
+        .spoiler-text--hidden::selection {
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .quote {
+            display: flex;
+            margin: 0.05em 0;
+        }
+
+        .quote-border {
+            margin-right: 0.5em;
+            border: 2px solid #4f545c;
+            border-radius: 3px;
+        }
+
+        .pre {
+            background-color: #2f3136;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+        }
+
+        .pre--multiline {
+            margin-top: 0.25em;
+            padding: 0.5em;
+            border: 2px solid #282b30;
+            border-radius: 5px;
+            color: #b9bbbe;
+        }
+
+        .pre--multiline.hljs {
+            background-color: #2f3136;
+            color: #b9bbbe;
+        }
+
+        .pre--inline {
+            padding: 2px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        .mention {
+            border-radius: 3px;
+            padding: 0 2px;
+            color: #dee0fc;
+            background-color: rgba(88, 101, 242, .3);
+            font-weight: 500;
+        }
+
+        .mention:hover {
+            background-color: #5865f2;
+            color: #ffffff
+        }
+
+        .timestamp {
+            border-radius: 3px;
+            padding: 0 2px;
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .emoji {
+            width: 1.325em;
+            height: 1.325em;
+            margin: 0 0.06em;
+            vertical-align: -0.4em;
+        }
+
+        .emoji--small {
+            width: 1em;
+            height: 1em;
+        }
+
+        .emoji--large {
+            width: 2.8em;
+            height: 2.8em;
+        }
+
+        .preamble {
+            display: grid;
+            margin: 0 0.3em 0.6em 0.3em;
+            max-width: 100%;
+            grid-template-columns: auto 1fr;
+        }
+
+        .preamble__guild-icon-container {
+            grid-column: 1;
+        }
+
+        .preamble__guild-icon {
+            max-width: 88px;
+            max-height: 88px;
+        }
+
+        .preamble__entries-container {
+            grid-column: 2;
+            margin-left: 0.6em;
+        }
+
+        .preamble__entry {
+            font-size: 1.4em;
+            color: #ffffff;
+        }
+
+        .preamble__entry--small {
+            font-size: 1em;
+        }
+
+        .chatlog {
+            max-width: 100%;
+        }
+
+        .chatlog__message-group {
+            display: grid;
+            margin: 0 0.6em;
+            padding: 0.9em 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            grid-template-columns: auto 1fr;
+        }
+
+        .chatlog__reference-symbol {
+            grid-column: 1;
+            margin: 8px 4px 4px 18px;
+            border-left: 2px solid #4f545c;
+            border-top: 2px solid #4f545c;
+            border-radius: 8px 0 0 0;
+        }
+
+        .chatlog__reference {
+            display: flex;
+            grid-column: 2;
+            margin-bottom: 0.25em;
+            font-size: 0.875em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            align-items: center;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-avatar {
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            margin-right: 0.25em;
+        }
+
+        .chatlog__reference-name {
+            margin-right: 0.3em;
+            font-weight: 600;
+        }
+
+        .chatlog__reference-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__reference-content a:hover {
+            text-decoration: none;
+        }
+
+        .chatlog__reference-link {
+            cursor: pointer;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-link * {
+            display: inline;
+            pointer-events: none;
+        }
+
+        .chatlog__reference-link:hover {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-link:hover *:not(.spoiler-text) {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-edited-timestamp {
+            margin-left: 0.25em;
+            font-size: 0.8em;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__author-avatar-container {
+            grid-column: 1;
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+        }
+
+        .chatlog__author-avatar {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .chatlog__messages {
+            grid-column: 2;
+            min-width: 50%;
+            direction: ltr;
+        }
+
+        .chatlog__author-name {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .chatlog__timestamp {
+            margin-left: 0.3em;
+            font-size: 0.75em;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__message {
+            padding: 0.1em 0.3em;
+            margin: 0 -0.3em;
+            background-color: transparent;
+            transition: background-color 1s ease;
+        }
+
+        .chatlog__message--highlighted {
+            background-color: rgba(114, 137, 218, 0.2);
+        }
+
+        .chatlog__message--pinned {
+            background-color: rgba(249, 168, 37, 0.05);
+        }
+
+        .chatlog__content {
+            font-size: 0.95em;
+            word-wrap: break-word;
+        }
+
+        .chatlog__edited-timestamp {
+            margin-left: 0.15em;
+            font-size: 0.8em;
+        }
+
+        .chatlog__attachment {
+            display: inline-block;
+            position: relative;
+            margin-top: 0.3em;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden {
+            cursor: pointer;
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatlog__attachment--hidden * {
+            pointer-events: none;
+        }
+
+        .chatlog__attachment-spoiler-caption {
+            display: none;
+            z-index: 999;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0.4em 0.8em;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: #dcddde;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-spoiler-caption {
+            display: block;
+        }
+
+        .chatlog__attachment--hidden:hover .chatlog__attachment-spoiler-caption {
+            color: #fff;
+        }
+
+        .chatlog__attachment-media {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-media {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic {
+            width: 100%;
+            max-width: 520px;
+            height: 40px;
+            padding: 10px;
+            background-color: #2f3136;
+            border: 1px solid #292b2f;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-generic {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic-icon {
+            float: left;
+            width: 30px;
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        .chatlog__attachment-generic-size {
+            color: #72767d;
+            font-size: 12px;
+        }
+
+        .chatlog__attachment-generic-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__edited-timestamp {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__embed {
+            display: flex;
+            margin-top: 0.3em;
+            max-width: 520px;
+        }
+
+        .chatlog__embed-color-pill {
+            flex-shrink: 0;
+            width: 0.25em;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        .chatlog__embed-color-pill--default {
+            background-color: #202225;
+        }
+
+        .chatlog__embed-content-container {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5em 0.6em;
+            background-color: rgba(46, 48, 54, 0.3);
+            border: 1px solid rgba(46, 48, 54, 0.6);
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chatlog__embed-content {
+            display: flex;
+            width: 100%;
+        }
+
+        .chatlog__embed-text {
+            flex: 1;
+        }
+
+        .chatlog__embed-author {
+            display: flex;
+            margin-bottom: 0.3em;
+            align-items: center;
+        }
+
+        .chatlog__embed-author-icon {
+            margin-right: 0.5em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .chatlog__embed-author-name {
+            font-size: 0.875em;
+            font-weight: 600;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: #ffffff
+        }
+
+        .chatlog__embed-author-name-link {
+            color: #ffffff;
+        }
+
+        .chatlog__embed-title {
+            margin-bottom: 0.2em;
+            font-size: 0.875em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-description {
+            font-weight: 500;
+            font-size: 0.85em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0 0.5em;
+        }
+
+        .chatlog__embed-field {
+            flex: 0;
+            min-width: 100%;
+            max-width: 506px;
+            padding-top: 0.6em;
+            font-size: 0.875em;
+        }
+
+        .chatlog__embed-field--inline {
+            flex: 1;
+            flex-basis: auto;
+            min-width: 150px;
+        }
+
+        .chatlog__embed-field-name {
+            margin-bottom: 0.2em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-field-value {
+            font-weight: 500;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-thumbnail {
+            flex: 0;
+            margin-left: 1.2em;
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-image-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-image {
+            max-width: 500px;
+            max-height: 400px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-footer {
+            margin-top: 0.6em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-footer-icon {
+            margin-right: 0.2em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .chatlog__embed-footer-text {
+            vertical-align: middle;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+
+        .chatlog__embed-plainimage {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-spotify {
+            border: 0;
+        }
+
+        .chatlog__embed-youtube-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-youtube {
+            border: 0;
+            border-radius: 3px;
+        }
+
+        .chatlog__sticker {
+            width: 180px;
+            height: 180px;
+        }
+
+        .chatlog__sticker--media {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .chatlog__reactions {
+            display: flex;
+        }
+
+        .chatlog__reaction {
+            display: flex;
+            align-items: center;
+            margin: 0.35em 0.1em 0.1em 0;
+            padding: .125rem .375rem;
+            background-color: #2f3136;
+            border-radius: 8px;
+            border-color: transparent;
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .chatlog__reaction:hover {
+            border-color: hsla(0,0%,100%,.2);
+            border-width: 1px;
+            border-style: solid;
+            background-color: transparent;
+        }
+
+        .chatlog__reaction-count {
+            min-width: 9px;
+            margin-left: 0.35em;
+            font-size: 0.875em;
+            color: #b9bbbe;
+        }
+
+        .chatlog__reaction:hover .chatlog__reaction-count {
+            color: #dcddde;
+        }
+
+        .chatlog__bot-tag {
+            position: relative;
+            top: -.1em;
+            margin-left: 0.3em;
+            padding: 0.05em 0.3em;
+            border-radius: 3px;
+            line-height: 1.3;
+            background-color: #5865F2;
+            color: #ffffff;
+            font-size: 0.625em;
+            font-weight: 500;
+        }
+
+        .postamble {
+            margin: 1.4em 0.3em 0.6em 0.3em;
+            padding: 1em;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .postamble__entry {
+            color: #ffffff;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(e => hljs.highlightBlock(e));
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.8.1/lottie.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.chatlog__sticker--media[data-source]').forEach(e => {
+                const imageDataUrl = e.getAttribute('data-source');
+
+                const anim = lottie.loadAnimation({
+                  container: e,
+                  renderer: 'svg',
+                  loop: true,
+                  autoplay: true,
+                  path: imageDataUrl
+                });
+
+                anim.addEventListener('data_failed', () =>
+                    e.innerHTML = '<strong>[Sticker cannot be rendered]</strong>'
+                );
+            });
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+
+        function showSpoiler(event, element) {
+            if (element && element.classList.contains('spoiler-text--hidden')) {
+                event.preventDefault();
+                element.classList.remove('spoiler-text--hidden');
+            }
+            if (element && element.classList.contains('chatlog__attachment--hidden')) {
+                event.preventDefault();
+                element.classList.remove('chatlog__attachment--hidden');
+            }
+        }
+    </script>
+
+    <svg style="display: none">
+        <symbol id="icon-attachment" viewBox="0 0 720 960">
+            <path fill="#f4f5fb" d="M50,935a25,25,0,0,1-25-25V50A25,25,0,0,1,50,25H519.6L695,201.32V910a25,25,0,0,1-25,25Z" />
+            <path fill="#7789c4" d="M509.21,50,670,211.63V910H50V50H509.21M530,0H50A50,50,0,0,0,0,50V910a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50h0V191Z" />
+            <path fill="#f4f5fb" d="M530,215a25,25,0,0,1-25-25V50a25,25,0,0,1,16.23-23.41L693.41,198.77A25,25,0,0,1,670,215Z" />
+            <path fill="#7789c4" d="M530,70.71,649.29,190H530V70.71M530,0a50,50,0,0,0-50,50V190a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50Z" />
+        </symbol>
+    </svg>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/3026b81d5ab56c4d2a773cb9b5dbd3a5-8CB58.png" alt="Guild icon" loading="lazy">
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">Code4rena</div>
+        <div class="preamble__entry">archive-2022 / &#127937;xdefi-jan4</div>
+
+
+    </div>
+</div>
+
+<div class="chatlog">
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/759f8cc5f5d3a90e11a0003e003aec16-B19DE.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ninek | C4#1475" data-user-id="404341666477113355" style="color: rgb(233,30,99)">&#129430; eric (ninek) | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 10:12 AM</span>
+
+            <div class="chatlog__message " data-message-id="922914542386831390" id="message-922914542386831390" title="Message sent: 21-Dec-21 10:12 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span>! i&#39;m pleased to intro you to my teammates <span class="mention" title="⛅CloudEllie#4509">@⛅CloudEllie | C4</span> and <span class="mention" title="itsmetechjay | C4#5294">@&#128105;&#127997;&#128187; Jay | C4</span> - they&#39;ll be guiding you through the contest setup process, expect to hear soon on next steps.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 10:13 AM</span>
+
+            <div class="chatlog__message " data-message-id="922914658564866069" id="message-922914658564866069" title="Message sent: 21-Dec-21 10:13 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Awesome! Thanks! And great to meet you all.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 10:14 AM</span>
+
+            <div class="chatlog__message " data-message-id="922915004011921429" id="message-922915004011921429" title="Message sent: 21-Dec-21 10:14 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Well <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> , we meet again! <img loading="lazy" class="emoji " alt="🎉" title="tada" src="https://twemoji.maxcdn.com/2/svg/1f389.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 10:15 AM</span>
+
+            <div class="chatlog__message " data-message-id="922915121867653170" id="message-922915121867653170" title="Message sent: 21-Dec-21 10:15 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Had such a great experience last time!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="922915143355101224" id="message-922915143355101224" title="Message sent: 21-Dec-21 10:15 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Keep coming back</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 10:15 AM</span>
+
+            <div class="chatlog__message " data-message-id="922915156026093609" id="message-922915156026093609" title="Message sent: 21-Dec-21 10:15 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img loading="lazy" class="emoji emoji--large" alt="😄" title="smile" src="https://twemoji.maxcdn.com/2/svg/1f604.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="922915191258234930" id="message-922915191258234930" title="Message sent: 21-Dec-21 10:15 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Well it&#39;s great to have you back!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="922915740208734238" id="message-922915740208734238" title="Message sent: 21-Dec-21 10:17 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I think you know the drill, but let&#39;s revisit, for the sake of this channel being useful <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"> 
+
+I&#39;m Ellie, and <span class="mention" title="itsmetechjay | C4#5294">@&#128105;&#127997;&#128187; Jay | C4</span> and I will be your liaisons of sorts with the C4 warden community. We&#39;ll do our best to walk you through all the things that can help make your contest as successful as possible, and you can feel free to ping us with any questions along the way.
+
+Couple of things to kick things off: 
+
+1️⃣ We&#39;re setting up private repos for your contest. Can you send us a list of github accounts we should invite? 
+
+There are two repos:
+<strong>- Contest repo: </strong>will house the contest docs, code for review, and any additional notes for wardens
+<strong>- Findings repo: </strong>where issues are submitted (so, most of your to-dos there are for after the contest closes)
+
+Usually it&#39;s the same group of people on both repos, but wanted to flag this in case you want different people on the two repos. 
+
+2️⃣  Here&#39;s a doc that summarizes all the key info you&#39;ll need — basically a one-pager/checklist for your contest: <a href="https://code4rena.notion.site/Key-info-for-Code4rena-sponsors-f60764c4c4574bbf8e7a6dbd72cc49b4">https://code4rena.notion.site/Key-info-for-Code4rena-sponsors-f60764c4c4574bbf8e7a6dbd72cc49b4</a>
+
+Normally I offer to jump on an intro call as well, but given we&#39;re out of office from Dec 23 - Jan 2, I think we&#39;re cutting it pretty close! But LMK if there&#39;s anything at all I can help with in the next &lt;checks watch&gt; 25 hours or so. <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Jan-22 12:56 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://code4rena.notion.site/Key-info-for-Code4rena-sponsors-f60764c4c4574bbf8e7a6dbd72cc49b4">
+                                                        <div class="markdown preserve-whitespace">Key info for Code4rena sponsors</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">This doc is divided into several sections, roughly in order of importance:</div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/https%25253A%25252F%25252Fs3-us-west-2.amazonaws-59A84.png">
+                                                <img class="chatlog__embed-thumbnail" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/https%25253A%25252F%25252Fs3-us-west-2.amazonaws-59A84.png" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 10:18 AM</span>
+
+            <div class="chatlog__message " data-message-id="922916038927081512" id="message-922916038927081512" title="Message sent: 21-Dec-21 10:18 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Thanks. I&#39;ll go over all of this and have the info for your shortly.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                            <div class="chatlog__reaction" title="hi5">
+                                <img class="emoji emoji--small" alt="hi5" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827089727568-5FD38.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 11:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="922933039313584168" id="message-922933039313584168" title="Message sent: 21-Dec-21 11:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Awesome. Also, just as a heads-up, the C4 team will be out of the office for winter break from December 23rd through January 2nd. If you need anything urgently during that time, you can ping <span class="mention" title="ninek | C4#1475">@&#129430; eric (ninek) | C4</span> , but he may also be slow to respond. <img loading="lazy" class="emoji " alt="☃" title="☃" src="https://twemoji.maxcdn.com/2/svg/2603.svg">️ 
+
+Meanwhile, if you have questions for us, now is a good time for that! <img loading="lazy" class="emoji " alt="😁" title="grin" src="https://twemoji.maxcdn.com/2/svg/1f601.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="922933653779120168" id="message-922933653779120168" title="Message sent: 21-Dec-21 11:28 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Basically, your contest launches at the end of our first day back from vacation (0:00 UTC on Jan 4 = 6pm CST on Jan 3), so it would be enormously helpful if you could have your code &amp; readme all set up in your repo on that Monday morning (Jan 3). Does that sound feasible?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/759f8cc5f5d3a90e11a0003e003aec16-B19DE.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ninek | C4#1475" data-user-id="404341666477113355" style="color: rgb(233,30,99)">&#129430; eric (ninek) | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 11:38 AM</span>
+
+            <div class="chatlog__message " data-message-id="922936210253561878" id="message-922936210253561878" title="Message sent: 21-Dec-21 11:38 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">and i will be checking in over break while the team is out to help with timely needs</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/1f44d-B3F5F.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 12:25 PM</span>
+
+            <div class="chatlog__message chatlog__message--pinned" data-message-id="922947875703492648" id="message-922947875703492648" title="Message sent: 21-Dec-21 12:25 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi again <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span>! <img loading="lazy" class="emoji " alt="👋" title="wave" src="https://twemoji.maxcdn.com/2/svg/1f44b.svg">  Here are the repos for the contest:
+
+<strong>Contest repo: </strong><a href="https://github.com/code-423n4/2022-01-xdefi">https://github.com/code-423n4/2022-01-xdefi</a>
+<strong>Findings repo:</strong> <a href="https://github.com/code-423n4/2022-01-xdefi-findings">https://github.com/code-423n4/2022-01-xdefi-findings</a>
+
+I invited your GitHub handle but let us know if there are others. <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Dec-21 12:39 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <span class="chatlog__reference-unknown">
+                    Original message was deleted or could not be loaded.
+                </span>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Dec-21 12:27 PM</span>
+
+            <div class="chatlog__message " data-message-id="922948514261139486" id="message-922948514261139486" title="Message sent: 21-Dec-21 12:27 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Pinned a message.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 07:10 AM</span>
+
+            <div class="chatlog__message " data-message-id="927579715240353792" id="message-927579715240353792" title="Message sent: 03-Jan-22 07:10 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Happy New Year <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span>, checking in to see if you have all that you need to get the contest repo set up.  The contest goes live in about 9 hours.
+
+And please let us know if there are other folks we should tag for warden questions.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 08:27 AM</span>
+
+            <div class="chatlog__message " data-message-id="927599161208082443" id="message-927599161208082443" title="Message sent: 03-Jan-22 08:27 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi <span class="mention" title="itsmetechjay | C4#5294">@&#128105;&#127997;&#128187; Jay | C4</span> yes, I have everything I need. holidays kinda slowed me down, naturally.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927599267407888445" id="message-927599267407888445" title="Message sent: 03-Jan-22 08:28 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I will be configuring and committing stuff asap to get ready for the contest opening.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927599161208082443&#39;)">
+Hi <span class="mention" title="itsmetechjay | C4#5294">@&#128105;&#127997;&#128187; Jay | C4</span> yes, I have everything I need. holidays kinda slowed me down, naturally.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 08:29 AM</span>
+
+            <div class="chatlog__message " data-message-id="927599574653210644" id="message-927599574653210644" title="Message sent: 03-Jan-22 08:29 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Awesome and sounds great.  I&#39;ll set up the contest channel for warden questions and tag you shortly.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 08:56 AM</span>
+
+            <div class="chatlog__message " data-message-id="927606261447528478" id="message-927606261447528478" title="Message sent: 03-Jan-22 08:56 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> I know you&#39;re busy getting the repo set up, but I just realized we haven&#39;t received the award funds from you, so when you have a moment, could you transfer those over? I believe we&#39;ve received the $5k org fee, but have not yet received the $25k in prize funds. Thanks!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 09:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="927613846573695027" id="message-927613846573695027" title="Message sent: 03-Jan-22 09:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I&#39;ll alert the team right now. Thanks!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 10:00 AM</span>
+
+            <div class="chatlog__message " data-message-id="927622516699185263" id="message-927622516699185263" title="Message sent: 03-Jan-22 10:00 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="⛅CloudEllie#4509">@⛅CloudEllie | C4</span> remaining $25k was just sent
+<a href="https://etherscan.io/tx/0xa78d577d2d9a364216acd8ba71313586f54b9f170d41aff2d2e78569044e8d65">https://etherscan.io/tx/0xa78d577d2d9a364216acd8ba71313586f54b9f170d41aff2d2e78569044e8d65</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="03-Jan-22 10:02 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://etherscan.io/tx/0xa78d577d2d9a364216acd8ba71313586f54b9f170d41aff2d2e78569044e8d65">
+                                                        <div class="markdown preserve-whitespace">Ethereum Transaction Hash (Txhash) Details | Etherscan</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">Ethereum (ETH) detailed transaction info for txhash 0xa78d577d2d9a364216acd8ba71313586f54b9f170d41aff2d2e78569044e8d65. The transaction status, block confirmation, gas fee, Ether (ETH), and token transfer are shown.</div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/etherscan-logo-circle-A29B1.jpg">
+                                                <img class="chatlog__embed-thumbnail" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/etherscan-logo-circle-A29B1.jpg" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927622516699185263&#39;)">
+<span class="mention" title="⛅CloudEllie#4509">@⛅CloudEllie | C4</span> remaining $25k was just sent
+<a href="https://etherscan.io/tx/0xa78d577d2d9a364216acd8ba71313586f54b9f170d41aff2d2e78569044e8d65">https://etherscan.io/tx/0xa78d577d2d9a364216acd8ba71313586f54b9f170d41aff2d2e78569044e8d65</a>                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="03-Jan-22 10:02 AM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 10:31 AM</span>
+
+            <div class="chatlog__message " data-message-id="927630156888162354" id="message-927630156888162354" title="Message sent: 03-Jan-22 10:31 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Perfect, thank you!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 12:11 PM</span>
+
+            <div class="chatlog__message " data-message-id="927655386499145800" id="message-927655386499145800" title="Message sent: 03-Jan-22 12:11 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> just wanted to share your contest artwork in case you want to use it. Feel free to share wherever, just credit Jaime Robles at Code4rena <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment " onclick="">
+
+                            <a href="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/xdefi-BEA64.jpg">
+                                <img class="chatlog__attachment-media" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/xdefi-BEA64.jpg" alt="Image attachment" title="Image: xdefi.jpg (159.11 KB)" loading="lazy">
+                            </a>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 12:38 PM</span>
+
+            <div class="chatlog__message " data-message-id="927662338625118269" id="message-927662338625118269" title="Message sent: 03-Jan-22 12:38 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Haha awesome!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="hi5">
+                                <img class="emoji emoji--small" alt="hi5" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827089727568-5FD38.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:21 PM</span>
+
+            <div class="chatlog__message " data-message-id="927673119534104576" id="message-927673119534104576" title="Message sent: 03-Jan-22 01:21 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span>, checking in on the repo ETA. We are about 2.5 hours from the contest launch and will need some time to review and do any needed cleanup before we go live.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:23 PM</span>
+
+            <div class="chatlog__message " data-message-id="927673464272355358" id="message-927673464272355358" title="Message sent: 03-Jan-22 01:23 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yup, I am about 15 minutes way from completing the <span class="pre pre--inline">2022-01-xdefi</span> readme</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927673544513572945" id="message-927673544513572945" title="Message sent: 03-Jan-22 01:23 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">and the <span class="pre pre--inline">XDeFi-tech/xdefi-distribution</span> at <a href="https://github.com/XDeFi-tech/xdefi-distribution/releases/tag/v1.0.0-beta.0">https://github.com/XDeFi-tech/xdefi-distribution/releases/tag/v1.0.0-beta.0</a> is locked in</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927673464272355358&#39;)">
+Yup, I am about 15 minutes way from completing the <span class="pre pre--inline">2022-01-xdefi</span> readme                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:26 PM</span>
+
+            <div class="chatlog__message " data-message-id="927674211152068658" id="message-927674211152068658" title="Message sent: 03-Jan-22 01:26 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Awesome thank you!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:29 PM</span>
+
+            <div class="chatlog__message " data-message-id="927674979519189023" id="message-927674979519189023" title="Message sent: 03-Jan-22 01:29 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Do I decide the split between main award pot and gas optimization pot (say $22k and $3k), or is it all $25k for general rewards?</span>
+
+                                <span class="chatlog__edited-timestamp" title="03-Jan-22 01:29 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927675549139230750" id="message-927675549139230750" title="Message sent: 03-Jan-22 01:31 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Or should I just say <span class="pre pre--inline">$25,000 USDC main award pot</span>?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927674979519189023&#39;)">
+Do I decide the split between main award pot and gas optimization pot (say $22k and $3k), or is it all $25k for general rewards?                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="03-Jan-22 01:29 PM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:32 PM</span>
+
+            <div class="chatlog__message " data-message-id="927675793600032888" id="message-927675793600032888" title="Message sent: 03-Jan-22 01:32 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">We typically allocate 5% to gas opt unless you tell us otherwise</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927675854249660418" id="message-927675854249660418" title="Message sent: 03-Jan-22 01:32 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">But you can leave that section for us to review &amp; firm up</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:45 PM</span>
+
+            <div class="chatlog__message " data-message-id="927678994281816114" id="message-927678994281816114" title="Message sent: 03-Jan-22 01:45 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">ok, the Readme is ready</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="927680737665241138" id="message-927680737665241138" title="Message sent: 03-Jan-22 01:52 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> so for the award pool, are we taking 5% of the $25K for gas optimization?  I&#39;ll update the name back to XDEFI as well.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="927680942649270272" id="message-927680942649270272" title="Message sent: 03-Jan-22 01:52 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Sure, I don&#39;t mind. To be honest, I care about gas optimizations in the <span class="pre pre--inline">XDEFIDistribution</span> contract only, and would be happy with 10% dedication</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927680969513766912" id="message-927680969513766912" title="Message sent: 03-Jan-22 01:52 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">What do you think?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 01:59 PM</span>
+
+            <div class="chatlog__message " data-message-id="927682645800943757" id="message-927682645800943757" title="Message sent: 03-Jan-22 01:59 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">tagging in <span class="mention" title="ninek | C4#1475">@&#129430; eric (ninek) | C4</span> to help answer the gas optimization question.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:25 PM</span>
+
+            <div class="chatlog__message " data-message-id="927689073026535514" id="message-927689073026535514" title="Message sent: 03-Jan-22 02:25 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Thanks for spotting that error in the Readme. If you don&#39;t mind, I force-pushed the correction (and another correction, 2.55x instead of 100x) so that the history is &quot;clean&quot;</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927680942649270272&#39;)">
+Sure, I don&#39;t mind. To be honest, I care about gas optimizations in the <span class="pre pre--inline">XDEFIDistribution</span> contract only, and would be happy with 10% dedication                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/759f8cc5f5d3a90e11a0003e003aec16-B19DE.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ninek | C4#1475" data-user-id="404341666477113355" style="color: rgb(233,30,99)">&#129430; eric (ninek) | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:26 PM</span>
+
+            <div class="chatlog__message " data-message-id="927689478594764821" id="message-927689478594764821" title="Message sent: 03-Jan-22 02:26 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">we can&#39;t separate gas awards per contract, so if we did 10% it&#39;d apply to all valid gas optimizations. is that ok with you?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:26 PM</span>
+
+            <div class="chatlog__message " data-message-id="927689527005442088" id="message-927689527005442088" title="Message sent: 03-Jan-22 02:26 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Sure, sounds good</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:30 PM</span>
+
+            <div class="chatlog__message " data-message-id="927690466923798578" id="message-927690466923798578" title="Message sent: 03-Jan-22 02:30 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">So we are good to update the awards in the repo to:
+
+$22,500 main 
+$2,500 gas?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="itsmetechjay | C4#5294" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927690466923798578&#39;)">
+So we are good to update the awards in the repo to:
+
+$22,500 main 
+$2,500 gas?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:30 PM</span>
+
+            <div class="chatlog__message " data-message-id="927690532665319464" id="message-927690532665319464" title="Message sent: 03-Jan-22 02:30 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yup!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;927690532665319464&#39;)">
+Yup!                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="927691053321039872" id="message-927691053321039872" title="Message sent: 03-Jan-22 02:33 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Ok great - the repo is good to go. I&#39;ll make it public in a little bit. And then our helpful C4 bot will pop in here once the contest goes live.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="927691238138847252" id="message-927691238138847252" title="Message sent: 03-Jan-22 02:33 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Just out of curiosity, if only one person finds a single minuscule gas optimization, they get $2,500? And it will apply to both contacts?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927691490166181968" id="message-927691490166181968" title="Message sent: 03-Jan-22 02:34 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Sorry for the last minute audible, but I guess I would rather split the $25k to all based on severity of the bug, info, or size of the gas optimization. I guess I was confused about how exactly we would reward gas vs info vs bugs</span>
+
+                                <span class="chatlog__edited-timestamp" title="03-Jan-22 02:36 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="927691724778790912" id="message-927691724778790912" title="Message sent: 03-Jan-22 02:35 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">If we/you/I think we can be fair in how we reward (and I think we can) then perhaps no separate specific gas reward? Does that make sense? Looking for your experience/guidance here.</span>
+
+                                <span class="chatlog__edited-timestamp" title="03-Jan-22 02:36 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/759f8cc5f5d3a90e11a0003e003aec16-B19DE.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="ninek | C4#1475" data-user-id="404341666477113355" style="color: rgb(233,30,99)">&#129430; eric (ninek) | C4</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="927695943015497758" id="message-927695943015497758" title="Message sent: 03-Jan-22 02:52 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">the lowest number of gas optimizations we&#39;ve awarded out of 50+ contests is 4. it is possible only 1 awardable gas opt is found although in my view the likelihood is low. it seems likely to me that a handful of useful optimizations will come in. if there are zero, we can shift all the funds to other findings.
+
+with the way our awarding algorithm works, we have to set aside a specific amount for gas optimizations, otherwise gas optimizations would not be awarded at all, so we require a minimum 5% allocation.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Jan-22 02:54 PM</span>
+
+            <div class="chatlog__message " data-message-id="927696520046854184" id="message-927696520046854184" title="Message sent: 03-Jan-22 02:54 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Fair enough. The way the current 10% is structured seems reasonable to me.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/1f44d-B3F5F.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/ae70f07a06c1c7e983291bb14a1bed7f-B8C71.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="C4#0000" data-user-id="927637015900610561" style="">C4</span>
+
+            <span class="chatlog__bot-tag">BOT</span>
+
+        <span class="chatlog__timestamp">03-Jan-22 04:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="927713460488400916" id="message-927713460488400916" title="Message sent: 03-Jan-22 04:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong>Your contest is LIVE! <img loading="lazy" class="emoji " alt="🎉" title="tada" src="https://twemoji.maxcdn.com/2/svg/1f389.svg"></strong>
+
+Hi <span class="mention" style="color: rgb(153, 45, 34); background-color: rgba(153, 45, 34, 0.1);">@&#128188;sponsors</span> — your contest is now LIVE! 
+
+❗<strong>Note: </strong>This also means the code freeze on your contest repo is now in effect.
+
+Just a quick note - Don&#39;t be surprised if things are quiet at first; that&#39;s very typical, as the wardens get to work. The visible activity tends to happen towards the end of the contest, so &quot;quiet&quot; ≠ &quot;nothing is happening&quot;</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="yay">
+                                <img class="emoji emoji--small" alt="yay" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827127214090-56B72.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">04-Jan-22 06:28 PM</span>
+
+            <div class="chatlog__message " data-message-id="928112801724112966" id="message-928112801724112966" title="Message sent: 04-Jan-22 06:28 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">How do I reply to a user to ask them to verify or confirm something? I don&#39;t want to mark something invalid if perhaps they lacked a clearer explanation</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="928113774152536135" id="message-928113774152536135" title="Message sent: 04-Jan-22 06:32 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I assume with the <span class="pre pre--inline">question</span> label.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928112801724112966&#39;)">
+How do I reply to a user to ask them to verify or confirm something? I don&#39;t want to mark something invalid if perhaps they lacked a clearer explanation                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 08:06 AM</span>
+
+            <div class="chatlog__message " data-message-id="928318585783328778" id="message-928318585783328778" title="Message sent: 05-Jan-22 08:06 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">You can reach out to them directly via Discord DM.</span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Jan-22 08:06 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 08:51 AM</span>
+
+            <div class="chatlog__message " data-message-id="928329789788545084" id="message-928329789788545084" title="Message sent: 05-Jan-22 08:51 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span>, just a reminder for what comes next.  Once the contest closes, we&#39;ll ask you to review the findings repo just to give it a first pass, before we pass it off to the judge. This initial review period (ideally 2-3 days after the contest closes) is intended to de-duplicate the findings as well as to give you an opportunity to comment on risk severity if you disagree with the wardens&#39; assessment.  It looks like you have already started the labeling process. <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"> 
+
+Once you&#39;re finished with de-duping and labelling, let us know and we&#39;ll pass things off to the judge. And of course, let us know if you have questions along the way. Thanks!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="itsmetechjay | C4#5294" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928318585783328778&#39;)">
+You can reach out to them directly via Discord DM.                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="05-Jan-22 08:06 AM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 10:25 AM</span>
+
+            <div class="chatlog__message " data-message-id="928353493146820619" id="message-928353493146820619" title="Message sent: 05-Jan-22 10:25 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Are those user handles in the findings their Discord handle?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="itsmetechjay | C4#5294" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928329789788545084&#39;)">
+Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span>, just a reminder for what comes next.  Once the contest closes, we&#39;ll ask you to review the findings repo just to give it a first pass, before we pass it off to the judge. This initial review period (ideally 2-3 days after the contest closes) is intended to de-duplicate the findings as well as to give you an opportunity to comment on risk severity if you disagree with the wardens&#39; assessment.  It looks like you have already started the labeling process. <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"> 
+
+Once you&#39;re finished with de-duping and labelling, let us know and we&#39;ll pass things off to the judge. And of course, let us know if you have questions along the way. Thanks!                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 10:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="928353755873816616" id="message-928353755873816616" title="Message sent: 05-Jan-22 10:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yep. I&#39;m just doing first passes to filter out or acknowledge issues, since, from experience, it&#39;s easier to mark duplicate labels once all the issues are in</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/1f44d-B3F5F.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="928353877076607016" id="message-928353877076607016" title="Message sent: 05-Jan-22 10:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">And often, there&#39;s one issue in each set of duplicates that ends up being the most verbose or well described that I link to as the &quot;original&quot;</span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Jan-22 10:27 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="928353951131254884" id="message-928353951131254884" title="Message sent: 05-Jan-22 10:27 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Even if it&#39;s not really the original</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928353493146820619&#39;)">
+Are those user handles in the findings their Discord handle?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 10:27 AM</span>
+
+            <div class="chatlog__message " data-message-id="928354014607855726" id="message-928354014607855726" title="Message sent: 05-Jan-22 10:27 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">for the most part. If there are ones you can&#39;t track down, we can help you with those.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928353755873816616&#39;)">
+Yep. I&#39;m just doing first passes to filter out or acknowledge issues, since, from experience, it&#39;s easier to mark duplicate labels once all the issues are in                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 10:27 AM</span>
+
+            <div class="chatlog__message " data-message-id="928354072719925249" id="message-928354072719925249" title="Message sent: 05-Jan-22 10:27 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yup all of that sounds great!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="itsmetechjay | C4#5294" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928354014607855726&#39;)">
+for the most part. If there are ones you can&#39;t track down, we can help you with those.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 11:59 AM</span>
+
+            <div class="chatlog__message " data-message-id="928377283935354912" id="message-928377283935354912" title="Message sent: 05-Jan-22 11:59 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I can&#39;t find user <span class="pre pre--inline">csanuragjain</span> for issue: <a href="https://github.com/code-423n4/2022-01-xdefi-findings/issues/23">https://github.com/code-423n4/2022-01-xdefi-findings/issues/23</a></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928377283935354912&#39;)">
+I can&#39;t find user <span class="pre pre--inline">csanuragjain</span> for issue: <a href="https://github.com/code-423n4/2022-01-xdefi-findings/issues/23">https://github.com/code-423n4/2022-01-xdefi-findings/issues/23</a>                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 12:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="928378014272725072" id="message-928378014272725072" title="Message sent: 05-Jan-22 12:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">here is their full discord handle. does that help? csanuragjain#5772</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 12:04 PM</span>
+
+            <div class="chatlog__message " data-message-id="928378343831765062" id="message-928378343831765062" title="Message sent: 05-Jan-22 12:04 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yes, thanks!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">05-Jan-22 12:04 PM</span>
+
+            <div class="chatlog__message " data-message-id="928378421745184788" id="message-928378421745184788" title="Message sent: 05-Jan-22 12:04 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Sweet!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">06-Jan-22 12:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="928752981082533888" id="message-928752981082533888" title="Message sent: 06-Jan-22 12:52 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">So I recall from the Maple audit that we needed to create PRs to demonstrate how each non-duplicate issue was resolved, but there is a bit of a problem in this case. A handful of these very valid raised issues have resulted in some larger changes, which I think will make it more difficult to make one-to-one PRs for each, given how much some of the code will change (in terms of lines). Is this a strict requirement?</span>
+
+                                <span class="chatlog__edited-timestamp" title="06-Jan-22 12:53 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/ae70f07a06c1c7e983291bb14a1bed7f-B8C71.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="C4#0000" data-user-id="927637015900610561" style="">C4</span>
+
+            <span class="chatlog__bot-tag">BOT</span>
+
+        <span class="chatlog__timestamp">06-Jan-22 04:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="928800614085976104" id="message-928800614085976104" title="Message sent: 06-Jan-22 04:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><strong><img loading="lazy" class="emoji " alt="🏁" title="checkered_flag" src="https://twemoji.maxcdn.com/2/svg/1f3c1.svg"> Your contest is now closed</strong>
+
+Hi <span class="mention" style="color: rgb(153, 45, 34); background-color: rgba(153, 45, 34, 0.1);">@&#128188;sponsors</span>, your contest just ended but we may still see a few issues trickle in. 
+
+Next up is the <strong>Sponsor Review</strong> process that Jay mentioned previously. Our ideal timeline on that would be to have it wrapped up in 2-3 days, so we can shift into judging and awarding in a timely fashion. But please let us know if you have any questions or need more time.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="chefskiss">
+                                <img class="emoji emoji--small" alt="chefskiss" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827027075142-F23DF.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                            <div class="chatlog__reaction" title="hi5">
+                                <img class="emoji emoji--small" alt="hi5" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827089727568-5FD38.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;928752981082533888&#39;)">
+So I recall from the Maple audit that we needed to create PRs to demonstrate how each non-duplicate issue was resolved, but there is a bit of a problem in this case. A handful of these very valid raised issues have resulted in some larger changes, which I think will make it more difficult to make one-to-one PRs for each, given how much some of the code will change (in terms of lines). Is this a strict requirement?                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="06-Jan-22 12:53 PM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">07-Jan-22 06:28 AM</span>
+
+            <div class="chatlog__message " data-message-id="929018662663356447" id="message-929018662663356447" title="Message sent: 07-Jan-22 06:28 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nope, not at all strict. <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="929018930377392148" id="message-929018930377392148" title="Message sent: 07-Jan-22 06:29 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">More of a nice to have for our report -- like it&#39;s nice to have a comment on a per-issue basis because then it&#39;s crystal clear that Mitigation A resolved Finding X, if you know what I mean. But that&#39;s the primary way those comments/PR links are used on our end.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">09-Jan-22 03:11 AM</span>
+
+            <div class="chatlog__message " data-message-id="929693966071398441" id="message-929693966071398441" title="Message sent: 09-Jan-22 03:11 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Ok, I responded to and tagged all issues, and marked all duplicates</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+            <div class="chatlog__message " data-message-id="929694135030534235" id="message-929694135030534235" title="Message sent: 09-Jan-22 03:12 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I also finished all the code changes, but will try to segregate them into easier to manage commits so they can be more easily linked to the individual issues they address</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="hi5">
+                                <img class="emoji emoji--small" alt="hi5" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827089727568-5FD38.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;929693966071398441&#39;)">
+Ok, I responded to and tagged all issues, and marked all duplicates                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">10-Jan-22 07:35 AM</span>
+
+            <div class="chatlog__message " data-message-id="930122743289114644" id="message-930122743289114644" title="Message sent: 10-Jan-22 07:35 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Amazing, thanks so much! I&#39;ll review ASAP.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="⛅CloudEllie#4509" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;930122743289114644&#39;)">
+Amazing, thanks so much! I&#39;ll review ASAP.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">10-Jan-22 07:59 AM</span>
+
+            <div class="chatlog__message " data-message-id="930128690581471354" id="message-930128690581471354" title="Message sent: 10-Jan-22 07:59 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Great. I already made all the changes needed, but will wait for you to confirm the deduped issues before I cherrypick them into individual commits. Does that make sense?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;930128690581471354&#39;)">
+Great. I already made all the changes needed, but will wait for you to confirm the deduped issues before I cherrypick them into individual commits. Does that make sense?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">10-Jan-22 08:20 AM</span>
+
+            <div class="chatlog__message " data-message-id="930133919272169543" id="message-930133919272169543" title="Message sent: 10-Jan-22 08:20 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yep, I think so <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/1f44d-B3F5F.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">12-Jan-22 12:02 PM</span>
+
+            <div class="chatlog__message " data-message-id="930914605071466556" id="message-930914605071466556" title="Message sent: 12-Jan-22 12:02 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Just want to confirm that I&#39;m waiting for C4 wardens to validate issues and my tags before I proceed to link each issue, or set of issues, to resolving commits.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;930914605071466556&#39;)">
+Just want to confirm that I&#39;m waiting for C4 wardens to validate issues and my tags before I proceed to link each issue, or set of issues, to resolving commits.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">13-Jan-22 06:30 AM</span>
+
+            <div class="chatlog__message " data-message-id="931193434616774706" id="message-931193434616774706" title="Message sent: 13-Jan-22 06:30 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">IMO you should feel free to proceed with linking your commits based on the tags you created. The judge will be working on it for the next few days and we don&#39;t open the repo up to wardens until the judging is complete, awards announced, and report published.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="931193835374145546" id="message-931193835374145546" title="Message sent: 13-Jan-22 06:31 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">BTW I&#39;ve been meaning to drop you a note of appreciation for your clear and thoughtful comments on the wardens&#39; submissions. I can already tell this will be a really educational report. You&#39;ve done an outstanding job.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="⛅CloudEllie#4509" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;931193835374145546&#39;)">
+BTW I&#39;ve been meaning to drop you a note of appreciation for your clear and thoughtful comments on the wardens&#39; submissions. I can already tell this will be a really educational report. You&#39;ve done an outstanding job.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">13-Jan-22 08:57 PM</span>
+
+            <div class="chatlog__message " data-message-id="931411768792735835" id="message-931411768792735835" title="Message sent: 13-Jan-22 08:57 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Thanks! It was fun and educational for myself as well.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="931412124985618473" id="message-931412124985618473" title="Message sent: 13-Jan-22 08:59 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I resolved all the issues. It was harder than I thought to link issues to commits, since needed refactoring resulted in impossible to isolate commits. Hopefully the detailed resolve comments I left to each issue, with specific links to lines and blocks in the release candidate contracts, is sufficient. Let me know!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;931412124985618473&#39;)">
+I resolved all the issues. It was harder than I thought to link issues to commits, since needed refactoring resulted in impossible to isolate commits. Hopefully the detailed resolve comments I left to each issue, with specific links to lines and blocks in the release candidate contracts, is sufficient. Let me know!                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">14-Jan-22 07:19 AM</span>
+
+            <div class="chatlog__message " data-message-id="931568257641615421" id="message-931568257641615421" title="Message sent: 14-Jan-22 07:19 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">That sounds just great. Really appreciate the thought and care you&#39;re putting into all this -- makes our work much easier!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">20-Jan-22 08:40 AM</span>
+
+            <div class="chatlog__message " data-message-id="933762805738381382" id="message-933762805738381382" title="Message sent: 20-Jan-22 08:40 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey all. Any updates or questions? No rush, just checking.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;933762805738381382&#39;)">
+Hey all. Any updates or questions? No rush, just checking.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">20-Jan-22 09:09 AM</span>
+
+            <div class="chatlog__message " data-message-id="933770110479511602" id="message-933770110479511602" title="Message sent: 20-Jan-22 09:09 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Yep, the judge handed everything back yesterday and we&#39;re just running the validations &amp; award calculations. Will hopefully have awards announced by EOD tomorrow <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="933770204956217444" id="message-933770204956217444" title="Message sent: 20-Jan-22 09:09 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">And then we can get to drafting up your report.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;933762805738381382&#39;)">
+Hey all. Any updates or questions? No rush, just checking.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">26-Jan-22 07:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="935918690451456000" id="message-935918690451456000" title="Message sent: 26-Jan-22 07:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi Michael, just letting you know we&#39;ve announced the awards for your contest: <a href="https://discord.com/channels/810916927919620096/810929015509483554/935905673055731782" onclick="scrollToMessage(event, '935905673055731782')">https://discord.com/channels/810916927919620096/810929015509483554/935905673055731782</a>
+
+Next up will be drafting the report for your review. <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="chefskiss">
+                                <img class="emoji emoji--small" alt="chefskiss" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827027075142-F23DF.png" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">27-Jan-22 02:38 PM</span>
+
+            <div class="chatlog__message " data-message-id="936389743036485702" id="message-936389743036485702" title="Message sent: 27-Jan-22 02:38 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> -- we have a draft of your report ready, if you&#39;d like to take a look when you have a moment: <a href="https://gist.github.com/CloudEllie/e083d0ff982f2e347508ced8f57d235f">https://gist.github.com/CloudEllie/e083d0ff982f2e347508ced8f57d235f</a>
+
+We&#39;d like to publish this next week (if possible), but let us know if that&#39;s an issue, and we can hold off so any issues can be addressed. Thanks!</span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(30,35,39,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://gist.github.com/CloudEllie/e083d0ff982f2e347508ced8f57d235f">
+                                                        <div class="markdown preserve-whitespace">DRAFT report: XDEFI Code4rena Audit Contest</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">DRAFT report: XDEFI Code4rena Audit Contest. GitHub Gist: instantly share code, notes, and snippets.</div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/gist-og-image-17482.png">
+                                                <img class="chatlog__embed-thumbnail" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/gist-og-image-17482.png" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">03-Feb-22 03:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="938757382329233439" id="message-938757382329233439" title="Message sent: 03-Feb-22 03:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Sorry, was super busy these last few days. I&#39;ll take a look at this today</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">2</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">08-Feb-22 06:41 AM</span>
+
+            <div class="chatlog__message " data-message-id="940618322985226301" id="message-940618322985226301" title="Message sent: 08-Feb-22 06:41 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> just checking in to see if you had a chance to review the draft?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Michael De Luca#2763" data-user-id="225079204192976896" style="color: rgb(153,45,34)">Michael De Luca</span>
+
+
+        <span class="chatlog__timestamp">09-Feb-22 10:49 PM</span>
+
+            <div class="chatlog__message " data-message-id="941224375565307904" id="message-941224375565307904" title="Message sent: 09-Feb-22 10:49 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Just finished (had a busy last week, and this slipped me). Looks awesome! Approved! And again, sorry for the delay. I should have dealt with this sooner. My bad.</span>
+
+                                <span class="chatlog__edited-timestamp" title="09-Feb-22 10:50 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;941224375565307904&#39;)">
+Just finished (had a busy last week, and this slipped me). Looks awesome! Approved! And again, sorry for the delay. I should have dealt with this sooner. My bad.                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="09-Feb-22 10:50 PM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">10-Feb-22 05:32 AM</span>
+
+            <div class="chatlog__message " data-message-id="941325702165327962" id="message-941325702165327962" title="Message sent: 10-Feb-22 05:32 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">No worries at all. Thanks for the review. We&#39;ll get it in our queue to publish and post a link here once it&#39;s up!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/35d585c4b2e03b25863b414476db367f-20EC0.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Michael De Luca#2763" style="color: rgb(153,45,34)">Michael De Luca</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;941224375565307904&#39;)">
+Just finished (had a busy last week, and this slipped me). Looks awesome! Approved! And again, sorry for the delay. I should have dealt with this sooner. My bad.                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="09-Feb-22 10:50 PM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">10-Feb-22 06:22 AM</span>
+
+            <div class="chatlog__message " data-message-id="941338354950213642" id="message-941338354950213642" title="Message sent: 10-Feb-22 06:22 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">No need to apologize, <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> -- you&#39;ve been awesome to work with, and I especially appreciate how thorough you&#39;ve been in reviewing and responding to issues! Hope we can work together again in the near future.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20archive-2022%20-%20%F0%9F%8F%81xdefi-jan4%20%5B922914286748184576%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">10-Feb-22 10:13 AM</span>
+
+            <div class="chatlog__message " data-message-id="941396582853668915" id="message-941396582853668915" title="Message sent: 10-Feb-22 10:13 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hey <span class="mention" title="Michael De Luca#2763">@Michael De Luca</span> -- your report is now published <img loading="lazy" class="emoji " alt="🎉" title="tada" src="https://twemoji.maxcdn.com/2/svg/1f389.svg"> 
+
+<a href="https://code4rena.com/reports/2022-01-xdefi">https://code4rena.com/reports/2022-01-xdefi</a>
+
+And the findings repo is public.
+
+We look forward to having you in the arena in the future!</span>
+
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://code4rena.com/reports/2022-01-xdefi">
+                                                        <div class="markdown preserve-whitespace">XDEFI contest</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">Hack DeFi. Compete. Get paid.</div>
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 89 message(s)</div>
+</div>
+
+</body>
+
+</html>

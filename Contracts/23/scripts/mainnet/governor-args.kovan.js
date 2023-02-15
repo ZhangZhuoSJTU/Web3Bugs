@@ -1,0 +1,9 @@
+module.exports = [
+  4_000_000e8,
+  1_000_000e8,
+  1,
+  13292,
+  "0xCFEAead4947f0705A14ec42aC3D44129E1Ef3eD5",
+  "0x6F7F94E4fdC3eDa4693d8FC5da94014B11572B3F",
+  43200
+]

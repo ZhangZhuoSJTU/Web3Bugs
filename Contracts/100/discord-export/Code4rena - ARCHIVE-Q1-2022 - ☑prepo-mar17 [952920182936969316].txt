@@ -1,0 +1,173 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-Q1-2022 / ☑prepo-mar17
+==============================================================
+
+[14-Mar-22 06:26 AM] itsmetechjay | C4#5294
+👋 Hello and welcome to the contest channel for the $30K USDC **prePO** contest!
+
+📆 Contest opens March 17, 2022, at 0:00 UTC and runs through March 19, 2022 at 23:59 UTC (3 days).
+
+Please give a warm welcome to the prePO team, particularly @Xavier | prePO 🔮 and @mlohc137, who will be available for questions either here in the channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+{Reactions}
+prepo (5) firee (7) 🥳 (6) 🐺 (4) 
+
+[16-Mar-22 01:14 AM] Xavier | prePO 🔮#8980
+Hey wardens! 👋 Thanks heaps in advance for checking out our protocol, and we're looking forward to your findings! 🔎 
+@mlohc137 and I will both be here to answer any of your questions :blobsalute: 
+
+As a bonus, all wardens who submit a valid finding will also be gifted an Enterprise NFT + Rebrand Token + Rename Token from our battle royale game Acquisition Royale 🙂
+
+Here are some resources if you want to start learning about prePO before the contest begins: 📚 
+- Blog: Introducing prePO <https://prepo.io/blog/introducing-prepo/>
+- Blog: How does prePO Work? <https://prepo.io/blog/how-does-prepo-work/>
+- prePO Documentation <https://docs.prepo.io/>
+- prePO Developer Docs <https://docs.prepo.io/developer/core-contracts>
+- Blog: Augur market economics (particularly the ‘Scalar markets’ section) <https://medium.com/veil-blog/a-guide-to-augur-market-economics-16c66d956b6c>
+
+{Reactions}
+PPOglasses (8) C4Keycap (6) 🔥 (5) 
+
+[16-Mar-22 06:41 PM] liqwiz#8888
+Hi everyone, a video walkthrough of the prePO architecture and contracts in scope for the contest can be found here https://candle-orbit-4fb.notion.site/prePO-C4-Contest-Video-Walkthrough-2387fc0f305746c091291bcdc7b9437f
+
+FYI we're working on a much more polished video which will be ready in the coming hours, will ping here again when it's available.
+
+{Embed}
+https://candle-orbit-4fb.notion.site/prePO-C4-Contest-Video-Walkthrough-2387fc0f305746c091291bcdc7b9437f
+prePO C4 Contest Video Walkthrough
+Video walkthrough of the prePO protocol, and contracts in scope for the March 17 C4 contest.
+
+{Reactions}
+🙏 (4) C4Keycap (5) thankyou 
+
+[16-Mar-22 09:42 PM] liqwiz#8888
+Video has been updated
+
+{Reactions}
+pepeparty (2) 💯 (2) 
+
+[17-Mar-22 03:38 AM] berndartmueller#1928
+Thanks a lot for this video! Great explanation which helps a lot to get into prePO
+
+{Reactions}
+tadaa (3) 
+
+[17-Mar-22 07:41 AM] hickuphh3#4268
+FYI some of us could be participating as a team, will we each person in the team be given an NFT, or must we fractionalise it ourselves? 😂😂
+
+
+[17-Mar-22 08:10 AM] Xavier | prePO 🔮#8980
+Each person will get one :)
+
+{Reactions}
+💜 (5) 
+
+[17-Mar-22 04:33 PM] 0xDjango#1481
+Hi PrePO team, really cool project you have here! Is the base token that will be deposited for PreCT going to be USDC? So there’s only one path into obtaining PreCT?
+
+
+[17-Mar-22 05:09 PM] mlohc137#6239
+Going to include @Xavier | prePO 🔮 on this, but yes the idea is for launch we are most likely going to be sticking with USDC. 
+
+The `Collateral` vault was originally designed with the intention of using a 18 decimal token like DAI, and we recognize that there will need to be some slight modification to accommodate the 6 decimal precision of USDC.
+
+{Reactions}
+👍 (2) thisfinger 
+
+[18-Mar-22 10:43 AM] Pedroais#1630
+Hi ! In SingleStrategyController what would be an example strategy ?
+
+
+[18-Mar-22 10:45 AM] Pedroais#1630
+Could the strategy deposit collateral into various protocols? Is that out of scope for the contest ?
+
+
+[18-Mar-22 11:00 AM] Pedroais#1630
+Could a strategy potentially lose money ?
+
+
+[18-Mar-22 11:10 AM] mlohc137#6239
+The `Strategy` itself is outside of the scope of this contest, but for the purposes of analyzing the `SingleStrategyController` and `Collateral` vault, you could imagine in its place perhaps a simple contract that simply lends `USDC` on AAVE or deposits into a Yearn vault for yield.
+
+So yes, a strategy could potentially incur a loss.
+
+
+[19-Mar-22 06:16 AM] berndartmueller#1928
+Hello, what's the point of having both an `_allowedAccounts` and `_blockedAccounts` access control in `AccountAccessController.sol`?
+
+
+[19-Mar-22 06:30 AM] Xavier | prePO 🔮#8980
+by default, no one is allowed. a user can change themselves to allowed if they can show that theyre in the merkle tree of allowed addresses.
+but any address on the block list will be blocked regardless of whether theyre allowed or not. this means we can individually block without needing to update the whole merkle tree again.
+feel free to DM me for further questions/clarifications!
+
+{Reactions}
+👍 
+
+[19-Mar-22 09:46 AM] sorryNotsorry#1586
+Hello, I really enjoyed reading your repo and it is a multi-billion dollar code indeed.
+
+{Reactions}
+tadaa (4) 
+
+[19-Mar-22 05:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **prePO** contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: the prePO team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping a gardener if you have questions along the way!
+
+
+[22-Mar-22 09:12 AM] peritoflores#0011
+Hi  some of you didnt receive confirmation when sending a bug?
+
+
+[22-Mar-22 09:12 AM] peritoflores#0011
+I sent 2 reports but didnt receive confirmation email
+
+
+[22-Mar-22 09:12 AM] peritoflores#0011
+for PrePO
+
+
+[22-Mar-22 09:13 AM] peritoflores#0011
+@itsmetechjay | C4
+
+
+[22-Mar-22 09:17 AM] itsmetechjay | C4#5294
+If anyone did not receive a confirmation for a bug they submitted, if you can submit a help desk request (https://code4rena.com/help/), we can have a member of our team check for you.
+
+{Embed}
+https://code4rena.com/help/),
+The future of audits is decentralized.
+Code4rena - ARCHIVE-Q1-2022 - ☑prepo-mar17 [952920182936969316].txt_Files/C4-banner-7C19B.png
+
+
+[22-Mar-22 09:31 AM] peritoflores#0011
+thanks!
+
+{Reactions}
+hi5 
+
+[21-Apr-22 07:42 PM] Xavier | prePO 🔮#8980
+@kirk-baird @cmichel @JTP @Ming @0xleastwood @csanuragjain @Ruhum @IllIllI @hickuphh3 @itsmeSTYJ @rayn @danb @egjlmn1 @Ori Dabush @PeakSmile @shakedwinder @0xDjango @DefSec @Tom | Balancer @Dravee @hake @TerrierLover @Itaip @0xkatana @berndartmueller @Shargon @Funen @kenta @0xNazgul @saian @wagyu @minhquanym @samruna @rfa @Kenshin @thinklab @sorryNotsorry @bugwriter001 @cccz @GeekyLumberjack @peritoflores @remora0 @wuwe1 @Jujic @ng @Tadashi @Khrisn4nspicy @0v3rf10w @Meidhike 
+
+as promised, you've all been gifted a bonus Enterprise NFT + Rename Token + Rebrand Token from our battle royale game Acquisition Royale (https://acquisitionroyale.com/) on Polygon 🎁 
+thanks again for all your findings, and hope to see you on the platform in future! :prepo:
+
+{Embed}
+https://acquisitionroyale.com/
+Acquisition Royale by prePO
+Found an enterprise and become an empire in a battle-royale game for runway, wealth, and domination.
+Code4rena - ARCHIVE-Q1-2022 - ☑prepo-mar17 [952920182936969316].txt_Files/preview-card-0C72D.png
+
+{Reactions}
+🥳 (15) yay (2) 😻 
+
+==============================================================
+Exported 24 message(s)
+==============================================================

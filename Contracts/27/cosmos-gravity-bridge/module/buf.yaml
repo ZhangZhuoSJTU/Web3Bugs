@@ -1,0 +1,39 @@
+version: v1beta1
+
+build:
+  roots:
+    - proto
+    - third_party/proto
+  excludes:
+    - third_party/proto/google/protobuf
+lint:
+  use:
+    - DEFAULT
+    - COMMENTS
+    - FILE_LOWER_SNAKE_CASE
+  except:
+    - UNARY_RPC
+    - COMMENT_FIELD
+    - COMMENT_ENUM
+    - COMMENT_ENUM_VALUE
+    - COMMENT_RPC
+    - COMMENT_MESSAGE
+    - SERVICE_SUFFIX
+    - PACKAGE_VERSION_SUFFIX
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+  ignore:
+    - tendermint
+    - gogoproto
+    - cosmos_proto
+    - google
+breaking:
+  use:
+    - FILE
+  except:
+    - FIELD_NO_DELETE
+  ignore:
+    - tendermint
+    - gogoproto
+    - cosmos_proto
+    - google

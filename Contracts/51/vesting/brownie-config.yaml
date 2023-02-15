@@ -1,0 +1,20 @@
+project_structure:
+  build: build
+  contracts: contracts
+  interfaces: contracts/interfaces
+  reports: reports
+  tests: tests
+
+# exclude non-core contracts from coverage analysis
+reports:
+  exclude_paths:
+    - contracts/utils/*.*
+
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.3.0
+
+compiler:
+  solc:
+    remappings:
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.3.0"
+      - "hardhat=node_modules/hardhat"

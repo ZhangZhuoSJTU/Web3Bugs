@@ -1,0 +1,173 @@
+==============================================================
+Guild: Code4rena
+Channel: archive-2022 / sandclock-jan6
+==============================================================
+
+[05-Jan-22 11:48 AM] itsmetechjay | C4#5294
+👋 Hello and welcome to the contest channel for the $60K USDC** Sandclock** contest!
+
+📆 Contest opens January 6, 2022, at 0:00 UTC and runs through January 12, 2022 at 23:59 UTC (7 days).
+
+Please give a warm welcome to the Sandclock team, particularly @naps62 and @gabrielpoca who will be available for questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+
+[05-Jan-22 03:24 PM] itsmetechjay | C4#5294
+Hey wardens, please note that for this contest, **gas optimizations are out of scope. **The Sandclock team has gas optimizations in their pipeline, but they will not be awarding prize funds for gas-specific submissions.
+
+{Reactions}
+👍 (3) 
+
+[07-Jan-22 01:42 AM] danb#6193
+Is someone from the dev team available? I've got a question
+
+
+[07-Jan-22 02:39 AM] gabrielpoca#1685
+I am!
+
+
+[07-Jan-22 04:56 AM] naps62#6355
+@danb sorry I was cleaning bot friend request, and canceled yours as well by mistake 😬 feel free to add me again if you still need to
+
+
+[07-Jan-22 04:58 AM] danb#6193
+thanks! DMd you
+
+
+[07-Jan-22 07:32 AM] svcrypto#4603
+@itsmetechjay | C4 we noticed that there are some gas optimization issues which were out of scope. which label is the best to indicate it in github findings repo?
+
+
+[07-Jan-22 08:01 AM] ⛅CloudEllie#4509
+You can label those as "sponsor disputed" and leave a comment to clarify your reasoning.
+
+
+[07-Jan-22 08:05 AM] ⛅CloudEllie#4509
+@🐺wardens please note that as @itsmetechjay | C4 shared at the outset of the contest (and as noted in the readme in the contest repo), **gas optimizations are out of scope for this contest.** 
+
+That means there are no payouts earmarked for gas opts, so if you submit them, they will be considered invalid.
+
+{Reactions}
+👍 (3) 
+
+[09-Jan-22 06:58 PM] hickuphh3#4268
+what are the advantage(s) of performing a sponsor instead of a deposit?
+
+
+[09-Jan-22 11:01 PM] Pedroais#1630
+Hi devs could you please explain what are shares supposed to represent ? What's the relation between total shares and total principal ? Thanks
+
+
+[09-Jan-22 11:41 PM] Pedroais#1630
+Also how should withdraws work for invested funds? If I have funds in the vault that are invested in a strategy how can I take them out ?
+
+
+[10-Jan-22 01:23 AM] hickuphh3#4268
+1 or more deposit NFTs (dependent on no. of claimers u allocated) are minted whenever u call `deposit()`. Burn these NFTs to receive the principal amount.
+
+
+[10-Jan-22 05:09 AM] gabrielpoca#1685
+the sponsor is when you want to boot the yield for everyone in the vault, the deposit is when you want to give the yield to a specific account
+
+
+[10-Jan-22 05:10 AM] gabrielpoca#1685
+It's tricky, the shares represent everything but the sponsor deposits, the total principal is the sum of the deposits (except sponsors)
+
+
+[10-Jan-22 05:13 AM] Kenzo Agada | AFK for a while#5926
+Did you develop the shares math/mechanism? Or did you borrow it from some other protocol / there's a description of it somewhere? It's pretty cool
+
+
+[10-Jan-22 05:19 AM] gabrielpoca#1685
+It's based on other protocols with a few tweaks for our use case. I think these are called elastic shares? We just changed it so the shares kind of move from the depositor to the claimer as they gain value
+
+{Reactions}
+👍 (2) 
+
+[10-Jan-22 07:14 AM] hickuphh3#4268
+Yeah, I get it from a technical perspective, but not from a business / financial one. What benefit / incentive do I get from being a sponsor? Why would I want to boost the yield of everyone else's and not my own?
+
+
+[10-Jan-22 07:16 AM] Pedroais#1630
+Sorry I still don't get it. What's the difference between shares and totalUnderlyingMinusSponsored ?
+
+
+[10-Jan-22 07:18 AM] Pedroais#1630
+What I meant is what happens if I want to withdraw funds that are currently invested inside the strategy. The withdraw function will only give me funds in the vault contract right ? What about the funds inside the strategy or even invested funds in eth-ancor ?
+
+
+[10-Jan-22 07:20 AM] Kenzo Agada | AFK for a while#5926
+The protocol uses the shares to calculate how much of totalUnderlyingMinusSponsored should go to each depositor/claimer
+
+
+[10-Jan-22 07:25 AM] Pedroais#1630
+So myshares/totalshares is the fraction of totalUnderlyingMinusSponsored  I own  ?
+
+
+[10-Jan-22 07:26 AM] Pedroais#1630
+If i have 5 shares and total shares = 15 I own a third of the vault funds - sponsors ?
+
+
+[10-Jan-22 07:37 AM] hickuphh3#4268
+ahhh right, got what u mean. am wondering too... 🧐
+
+
+[10-Jan-22 08:44 AM] danb#6193
+https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/Vault.sol#L550
+is it even possible that depositShares > claimerShares? shares value only increases
+
+{Embed}
+https://github.com/code-423n4/2022-01-sandclock/blob/main/sandclock/contracts/Vault.sol
+2022-01-sandclock/Vault.sol at main · code-423n4/2022-01-sandclock
+Contribute to code-423n4/2022-01-sandclock development by creating an account on GitHub.
+Code4rena - archive-2022 - sandclock-jan6 [928052146170114058].txt_Files/2942d0e3-cea6-4cc0-807e-1183b422c647-38587
+
+
+[10-Jan-22 08:46 AM] danb#6193
+@naps62
+
+
+[10-Jan-22 09:20 AM] gabrielpoca#1685
+None, at the moment, the only organization that could be a sponsor is sandclock itself
+
+
+[10-Jan-22 09:21 AM] gabrielpoca#1685
+the shares represent that totalUnderlyingMinusSponsored. Owning a shares means owning a piece of totalUnderlyingMinusSponsored
+
+
+[10-Jan-22 09:23 AM] gabrielpoca#1685
+We are still not 100% sure what the mechanics will be, but we'll keep around a percentage of the total underlying in the vault for withdraws. So you don't take money from the strategy, you always take it from the vault. We'll then rebalance the strategy to make sure enough funds are in the vault.
+
+
+[10-Jan-22 09:24 AM] gabrielpoca#1685
+The shares's value can decrease if the strategy is losing money
+
+
+[12-Jan-22 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The** Sandclock** contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: the Sandclock team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+
+[10-Feb-22 06:19 PM] bugwriter001#5271
+hi is the report released?
+
+
+[10-Feb-22 06:20 PM] bugwriter001#5271
+@itsmetechjay | C4
+
+
+[10-Feb-22 06:20 PM] bugwriter001#5271
+i just notice that the result is released for this project, but how about the bug report?
+
+
+[11-Feb-22 06:01 AM] itsmetechjay | C4#5294
+We are still working on the report so it's not out quite yet.
+
+
+==============================================================
+Exported 35 message(s)
+==============================================================

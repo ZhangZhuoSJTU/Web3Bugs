@@ -1,0 +1,24 @@
+networks:
+  default: development
+  development:
+    gas_limit: max
+    cmd_settings:
+      gas_limit: 9007199254740991
+
+compiler:
+  evm_version: "london"
+  solc:
+    version: 0.8.7
+    remappings:
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.3.2"
+    optimizer:
+      enabled: true
+      runs: 400
+    outputSelection:
+        "*":
+          "*":
+            - "storageLayout"
+
+autofetch_sources: True
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.3.2

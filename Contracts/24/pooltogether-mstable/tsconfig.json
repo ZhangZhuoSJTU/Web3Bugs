@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "target": "ES2019",
+        "lib": ["dom", "ES2019"],
+        "module": "CommonJS",
+        "baseUrl": ".",
+        "rootDir": ".",
+        "strict": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "paths": {
+          "@utils/*": ["node_modules/@mstable/protocol/dist/test-utils/*"],
+          "types/*": ["node_modules/@mstable/protocol/dist/types/*"],
+          "types/pooltogether/*": ["types/pooltogether/*"],
+        },
+    },
+    "include": [
+        "./test/**/*.ts",
+        "./test-fork/**/*.ts",
+        "./tasks/**/*.ts",
+        "./types/**/*.ts"
+    ],
+    "files": ["./hardhat.config.ts", "./hardhat-fork.config.ts", "./tasks.config.ts", "./tasks-fork.config.ts"]
+}

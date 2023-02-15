@@ -1,0 +1,552 @@
+{
+  "address": "0xF66698695eC940078Ef6C102675F83608Ab693aA",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "FactoryDeprecated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "oldFee",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "MinimumFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "MisoInitListFactory",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "pointList",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "PointListDeployed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "accessControls",
+      "outputs": [
+        {
+          "internalType": "contract MISOAccessControls",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_listOwner",
+          "type": "address"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_accounts",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_amounts",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "deployPointList",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "pointList",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "deprecateFactory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_accessControls",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_pointListTemplate",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minimumFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "initListFactory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isChild",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "lists",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minimumFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "misoDiv",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "newAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "numberOfChildren",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pointListTemplate",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address payable",
+          "name": "_divaddr",
+          "type": "address"
+        }
+      ],
+      "name": "setDividends",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_minimumFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMinimumFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_tokenAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tokens",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferAnyERC20Token",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0xcee7eb5e2e7a8aea8f0b21efb92e4616368e0f14b38a9a81e61b37e68eb99110",
+  "receipt": {
+    "to": null,
+    "from": "0x08A736438df6c23e17CE2fBbc877A4CDC2DC7B84",
+    "contractAddress": "0xF66698695eC940078Ef6C102675F83608Ab693aA",
+    "transactionIndex": 3,
+    "gasUsed": "869596",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x495f9c59c5e77f6f225c8a9e2b294b926f81c9acc5544afb17ed29b0c4fe4ac5",
+    "transactionHash": "0xcee7eb5e2e7a8aea8f0b21efb92e4616368e0f14b38a9a81e61b37e68eb99110",
+    "logs": [],
+    "blockNumber": 4808388,
+    "cumulativeGasUsed": "1143772",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "d1b4fa5f316a6a8ee3524e1600e2925f",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newAddress\",\"type\":\"address\"}],\"name\":\"FactoryDeprecated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"oldFee\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newFee\",\"type\":\"uint256\"}],\"name\":\"MinimumFeeUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"MisoInitListFactory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"pointList\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"PointListDeployed\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"accessControls\",\"outputs\":[{\"internalType\":\"contract MISOAccessControls\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_listOwner\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"_accounts\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_amounts\",\"type\":\"uint256[]\"}],\"name\":\"deployPointList\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"pointList\",\"type\":\"address\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newAddress\",\"type\":\"address\"}],\"name\":\"deprecateFactory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_accessControls\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_pointListTemplate\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_minimumFee\",\"type\":\"uint256\"}],\"name\":\"initListFactory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isChild\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"lists\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minimumFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"misoDiv\",\"outputs\":[{\"internalType\":\"address payable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"newAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"numberOfChildren\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pointListTemplate\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_divaddr\",\"type\":\"address\"}],\"name\":\"setDividends\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_minimumFee\",\"type\":\"uint256\"}],\"name\":\"setMinimumFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_tokens\",\"type\":\"uint256\"}],\"name\":\"transferAnyERC20Token\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"deployPointList(address,address[],uint256[])\":{\"params\":{\"_accounts\":\"An array of account addresses.\",\"_amounts\":\"An array of corresponding point amounts.\",\"_listOwner\":\"List owner address.\"},\"returns\":{\"pointList\":\"Point list address.\"}},\"deprecateFactory(address)\":{\"params\":{\"_newAddress\":\"Blank address.\"}},\"initListFactory(address,address,uint256)\":{\"params\":{\"_accessControls\":\"Access control contract address.\",\"_minimumFee\":\"Minimum fee number.\",\"_pointListTemplate\":\"Point list template address.\"}},\"numberOfChildren()\":{\"returns\":{\"_0\":\"uint Number of point lists.\"}},\"setDividends(address)\":{\"params\":{\"_divaddr\":\"Dividend address.\"}},\"setMinimumFee(uint256)\":{\"params\":{\"_minimumFee\":\"Minimum fee number.\"}},\"transferAnyERC20Token(address,uint256)\":{\"params\":{\"_tokenAddress\":\"Address to send from.\",\"_tokens\":\"Number of tokens.\"},\"returns\":{\"success\":\"True.\"}}},\"version\":1},\"userdoc\":{\"events\":{\"FactoryDeprecated(address)\":{\"notice\":\"Event emitted when factory is deprecated.\"},\"MinimumFeeUpdated(uint256,uint256)\":{\"notice\":\"Event emitted when minimum fee is updated.\"},\"MisoInitListFactory()\":{\"notice\":\"Event emitted when point list factory is initialised.\"},\"PointListDeployed(address,address,address,address)\":{\"notice\":\"Event emitted when point list is deployed.\"}},\"kind\":\"user\",\"methods\":{\"accessControls()\":{\"notice\":\"Responsible for access rights to the contract.\"},\"deployPointList(address,address[],uint256[])\":{\"notice\":\"Deploys new point list.\"},\"deprecateFactory(address)\":{\"notice\":\"Deprecates factory.\"},\"initListFactory(address,address,uint256)\":{\"notice\":\"Initializes point list factory variables.\"},\"isChild(address)\":{\"notice\":\"Tracks if list is made by the factory.\"},\"lists(uint256)\":{\"notice\":\"An array of list addresses.\"},\"minimumFee()\":{\"notice\":\"Minimum fee number.\"},\"misoDiv()\":{\"notice\":\"Any MISO dividends collected are sent here.\"},\"newAddress()\":{\"notice\":\"New point list address.\"},\"numberOfChildren()\":{\"notice\":\"Gets the number of point lists created by factory.\"},\"pointListTemplate()\":{\"notice\":\"Address of the point list template.\"},\"setDividends(address)\":{\"notice\":\"Sets dividend address.\"},\"setMinimumFee(uint256)\":{\"notice\":\"Sets minimum fee.\"},\"transferAnyERC20Token(address,uint256)\":{\"notice\":\"Funtion for transfering any ERC20 token.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/Access/ListFactory.sol\":\"ListFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{\"__CACHE_BREAKER__\":\"0x00000000d41867734bbee4c6863d9255b2b06ac1\"},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/Access/ListFactory.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\nimport \\\"../OpenZeppelin/math/SafeMath.sol\\\";\\nimport \\\"../Utils/Owned.sol\\\";\\nimport \\\"../Utils/CloneFactory.sol\\\";\\nimport \\\"../interfaces/IERC20.sol\\\";\\nimport \\\"../interfaces/IPointList.sol\\\";\\nimport \\\"../Utils/SafeTransfer.sol\\\";\\nimport \\\"./MISOAccessControls.sol\\\";\\n\\n//----------------------------------------------------------------------------------\\n//    I n s t a n t\\n//\\n//        .:mmm.         .:mmm:.       .ii.  .:SSSSSSSSSSSSS.     .oOOOOOOOOOOOo.  \\n//      .mMM'':Mm.     .:MM'':Mm:.     .II:  :SSs..........     .oOO'''''''''''OOo.\\n//    .:Mm'   ':Mm.   .:Mm'   'MM:.    .II:  'sSSSSSSSSSSSSS:.  :OO.           .OO:\\n//  .'mMm'     ':MM:.:MMm'     ':MM:.  .II:  .:...........:SS.  'OOo:.........:oOO'\\n//  'mMm'        ':MMmm'         'mMm:  II:  'sSSSSSSSSSSSSS'     'oOOOOOOOOOOOO'  \\n//\\n//----------------------------------------------------------------------------------\\n//\\n// Chef Gonpachi's List Factory\\n//\\n// A factory for deploying all sorts of list based contracts\\n//\\n// This program is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU General Public License as published by\\n// the Free Software Foundation, either version 3 of the License\\n//\\n// This program is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\\n// GNU General Public License for more details.\\n//\\n// The above copyright notice and this permission notice shall be included \\n// in all copies or substantial portions of the Software.\\n//\\n// Made for Sushi.com \\n// \\n// Enjoy. (c) Chef Gonpachi 2021 \\n// <https://github.com/chefgonpachi/MISO/>\\n//\\n// ---------------------------------------------------------------------\\n// SPDX-License-Identifier: GPL-3.0                        \\n// ---------------------------------------------------------------------\\n\\n\\ncontract ListFactory is CloneFactory, SafeTransfer {\\n    using SafeMath for uint;\\n\\n    /// @notice Responsible for access rights to the contract.\\n    MISOAccessControls public accessControls;\\n\\n    /// @notice Whether market has been initialized or not.\\n    bool private initialised;\\n\\n    /// @notice Address of the point list template.\\n    address public pointListTemplate;\\n\\n    /// @notice New point list address.\\n    address public newAddress;\\n\\n    /// @notice Minimum fee number.\\n    uint256 public minimumFee;\\n\\n    /// @notice Tracks if list is made by the factory.\\n    mapping(address => bool) public isChild;\\n\\n    /// @notice An array of list addresses.\\n    address[] public lists;\\n\\n    /// @notice Any MISO dividends collected are sent here.\\n    address payable public misoDiv;\\n\\n    /// @notice Event emitted when point list is deployed.\\n    event PointListDeployed(address indexed operator, address indexed addr, address pointList, address owner);\\n\\n    /// @notice Event emitted when factory is deprecated.\\n    event FactoryDeprecated(address newAddress);\\n\\n    /// @notice Event emitted when minimum fee is updated.\\n    event MinimumFeeUpdated(uint oldFee, uint newFee);\\n\\n    /// @notice Event emitted when point list factory is initialised.\\n    event MisoInitListFactory();\\n\\n    /**\\n     * @notice Initializes point list factory variables.\\n     * @param _accessControls Access control contract address.\\n     * @param _pointListTemplate Point list template address.\\n     * @param _minimumFee Minimum fee number.\\n     */\\n    function initListFactory(address _accessControls, address _pointListTemplate, uint256 _minimumFee) external  {\\n        require(!initialised);\\n        accessControls = MISOAccessControls(_accessControls);\\n        pointListTemplate = _pointListTemplate;\\n        minimumFee = _minimumFee;\\n        initialised = true;\\n        emit MisoInitListFactory();\\n    }\\n\\n    /**\\n     * @notice Gets the number of point lists created by factory.\\n     * @return uint Number of point lists.\\n     */\\n    function numberOfChildren() external view returns (uint) {\\n        return lists.length;\\n    }\\n\\n    /**\\n     * @notice Deprecates factory.\\n     * @param _newAddress Blank address.\\n     */\\n    function deprecateFactory(address _newAddress) external {\\n        require(accessControls.hasAdminRole(msg.sender), \\\"ListFactory: Sender must be admin\\\");\\n        require(newAddress == address(0));\\n        emit FactoryDeprecated(_newAddress);\\n        newAddress = _newAddress;\\n    }\\n\\n    /**\\n     * @notice Sets minimum fee.\\n     * @param _minimumFee Minimum fee number.\\n     */\\n    function setMinimumFee(uint256 _minimumFee) external {\\n        require(accessControls.hasAdminRole(msg.sender), \\\"ListFactory: Sender must be admin\\\");\\n        emit MinimumFeeUpdated(minimumFee, _minimumFee);\\n        minimumFee = _minimumFee;\\n    }\\n\\n    /**\\n     * @notice Sets dividend address.\\n     * @param _divaddr Dividend address.\\n     */\\n    function setDividends(address payable _divaddr) external  {\\n        require(accessControls.hasAdminRole(msg.sender), \\\"MISOTokenFactory: Sender must be Admin\\\");\\n        misoDiv = _divaddr;\\n    }\\n\\n    /**\\n     * @notice Deploys new point list.\\n     * @param _listOwner List owner address.\\n     * @param _accounts An array of account addresses.\\n     * @param _amounts An array of corresponding point amounts.\\n     * @return pointList Point list address.\\n     */\\n    function deployPointList(\\n        address _listOwner,\\n        address[] memory _accounts,\\n        uint256[] memory _amounts\\n    )\\n        external payable returns (address pointList)\\n    {\\n        require(msg.value >= minimumFee);\\n        pointList = createClone(pointListTemplate);\\n        if (_accounts.length > 0) {\\n            IPointList(pointList).initPointList(address(this));\\n            IPointList(pointList).setPoints(_accounts, _amounts);\\n            MISOAccessControls(pointList).addAdminRole(_listOwner);\\n            MISOAccessControls(pointList).removeAdminRole(address(this));\\n        } else {\\n            IPointList(pointList).initPointList(_listOwner);\\n        }\\n        isChild[address(pointList)] = true;\\n        lists.push(address(pointList));\\n        emit PointListDeployed(msg.sender, address(pointList), pointListTemplate, _listOwner);\\n        if (msg.value > 0) {\\n            misoDiv.transfer(msg.value);\\n        }\\n    }\\n\\n    /**\\n     * @notice Funtion for transfering any ERC20 token.\\n     * @param _tokenAddress Address to send from.\\n     * @param _tokens Number of tokens.\\n     * @return success True.\\n     */\\n    function transferAnyERC20Token(address _tokenAddress, uint256 _tokens) external returns (bool success) {\\n        require(accessControls.hasAdminRole(msg.sender), \\\"ListFactory: Sender must be operator\\\");\\n        _safeTransfer(_tokenAddress, misoDiv, _tokens);\\n        return true;\\n    }\\n\\n    receive () external payable {\\n        revert();\\n    }\\n}\\n\",\"keccak256\":\"0x56fa6ca699ae0b797604c2fc12a4c96a1dd2344fd1856880264dc0a6094bcd2c\",\"license\":\"GPL-3.0\"},\"contracts/Access/MISOAccessControls.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\nimport \\\"./MISOAdminAccess.sol\\\";\\n\\n/**\\n * @notice Access Controls\\n * @author Attr: BlockRocket.tech\\n */\\ncontract MISOAccessControls is MISOAdminAccess {\\n    /// @notice Role definitions\\n    bytes32 public constant MINTER_ROLE = keccak256(\\\"MINTER_ROLE\\\");\\n    bytes32 public constant SMART_CONTRACT_ROLE = keccak256(\\\"SMART_CONTRACT_ROLE\\\");\\n    bytes32 public constant OPERATOR_ROLE = keccak256(\\\"OPERATOR_ROLE\\\");\\n\\n    /// @notice Events for adding and removing various roles\\n\\n    event MinterRoleGranted(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    event MinterRoleRemoved(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    event OperatorRoleGranted(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    event OperatorRoleRemoved(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    event SmartContractRoleGranted(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    event SmartContractRoleRemoved(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    /**\\n     * @notice The deployer is automatically given the admin role which will allow them to then grant roles to other addresses\\n     */\\n    constructor() public {\\n    }\\n\\n\\n    /////////////\\n    // Lookups //\\n    /////////////\\n\\n    /**\\n     * @notice Used to check whether an address has the minter role\\n     * @param _address EOA or contract being checked\\n     * @return bool True if the account has the role or false if it does not\\n     */\\n    function hasMinterRole(address _address) public view returns (bool) {\\n        return hasRole(MINTER_ROLE, _address);\\n    }\\n\\n    /**\\n     * @notice Used to check whether an address has the smart contract role\\n     * @param _address EOA or contract being checked\\n     * @return bool True if the account has the role or false if it does not\\n     */\\n    function hasSmartContractRole(address _address) public view returns (bool) {\\n        return hasRole(SMART_CONTRACT_ROLE, _address);\\n    }\\n\\n    /**\\n     * @notice Used to check whether an address has the operator role\\n     * @param _address EOA or contract being checked\\n     * @return bool True if the account has the role or false if it does not\\n     */\\n    function hasOperatorRole(address _address) public view returns (bool) {\\n        return hasRole(OPERATOR_ROLE, _address);\\n    }\\n\\n    ///////////////\\n    // Modifiers //\\n    ///////////////\\n\\n    /**\\n     * @notice Grants the minter role to an address\\n     * @dev The sender must have the admin role\\n     * @param _address EOA or contract receiving the new role\\n     */\\n    function addMinterRole(address _address) external {\\n        grantRole(MINTER_ROLE, _address);\\n        emit MinterRoleGranted(_address, _msgSender());\\n    }\\n\\n    /**\\n     * @notice Removes the minter role from an address\\n     * @dev The sender must have the admin role\\n     * @param _address EOA or contract affected\\n     */\\n    function removeMinterRole(address _address) external {\\n        revokeRole(MINTER_ROLE, _address);\\n        emit MinterRoleRemoved(_address, _msgSender());\\n    }\\n\\n    /**\\n     * @notice Grants the smart contract role to an address\\n     * @dev The sender must have the admin role\\n     * @param _address EOA or contract receiving the new role\\n     */\\n    function addSmartContractRole(address _address) external {\\n        grantRole(SMART_CONTRACT_ROLE, _address);\\n        emit SmartContractRoleGranted(_address, _msgSender());\\n    }\\n\\n    /**\\n     * @notice Removes the smart contract role from an address\\n     * @dev The sender must have the admin role\\n     * @param _address EOA or contract affected\\n     */\\n    function removeSmartContractRole(address _address) external {\\n        revokeRole(SMART_CONTRACT_ROLE, _address);\\n        emit SmartContractRoleRemoved(_address, _msgSender());\\n    }\\n\\n    /**\\n     * @notice Grants the operator role to an address\\n     * @dev The sender must have the admin role\\n     * @param _address EOA or contract receiving the new role\\n     */\\n    function addOperatorRole(address _address) external {\\n        grantRole(OPERATOR_ROLE, _address);\\n        emit OperatorRoleGranted(_address, _msgSender());\\n    }\\n\\n    /**\\n     * @notice Removes the operator role from an address\\n     * @dev The sender must have the admin role\\n     * @param _address EOA or contract affected\\n     */\\n    function removeOperatorRole(address _address) external {\\n        revokeRole(OPERATOR_ROLE, _address);\\n        emit OperatorRoleRemoved(_address, _msgSender());\\n    }\\n\\n}\\n\",\"keccak256\":\"0x9476e7c179105c22e86fd05a7acb441cba8566b1ca2d06f25197217c7ee2f2d8\"},\"contracts/Access/MISOAdminAccess.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\nimport \\\"../OpenZeppelin/access/AccessControl.sol\\\";\\n\\n\\ncontract MISOAdminAccess is AccessControl {\\n\\n    /// @dev Whether access is initialised.\\n    bool private initAccess;\\n\\n    /// @notice Events for adding and removing various roles.\\n    event AdminRoleGranted(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n    event AdminRoleRemoved(\\n        address indexed beneficiary,\\n        address indexed caller\\n    );\\n\\n\\n    /// @notice The deployer is automatically given the admin role which will allow them to then grant roles to other addresses.\\n    constructor() public {\\n    }\\n\\n    /**\\n     * @notice Initializes access controls.\\n     * @param _admin Admins address.\\n     */\\n    function initAccessControls(address _admin) public {\\n        require(!initAccess, \\\"Already initialised\\\");\\n        _setupRole(DEFAULT_ADMIN_ROLE, _admin);\\n        initAccess = true;\\n    }\\n\\n    /////////////\\n    // Lookups //\\n    /////////////\\n\\n    /**\\n     * @notice Used to check whether an address has the admin role.\\n     * @param _address EOA or contract being checked.\\n     * @return bool True if the account has the role or false if it does not.\\n     */\\n    function hasAdminRole(address _address) public  view returns (bool) {\\n        return hasRole(DEFAULT_ADMIN_ROLE, _address);\\n    }\\n\\n    ///////////////\\n    // Modifiers //\\n    ///////////////\\n\\n    /**\\n     * @notice Grants the admin role to an address.\\n     * @dev The sender must have the admin role.\\n     * @param _address EOA or contract receiving the new role.\\n     */\\n    function addAdminRole(address _address) external {\\n        grantRole(DEFAULT_ADMIN_ROLE, _address);\\n        emit AdminRoleGranted(_address, _msgSender());\\n    }\\n\\n    /**\\n     * @notice Removes the admin role from an address.\\n     * @dev The sender must have the admin role.\\n     * @param _address EOA or contract affected.\\n     */\\n    function removeAdminRole(address _address) external {\\n        revokeRole(DEFAULT_ADMIN_ROLE, _address);\\n        emit AdminRoleRemoved(_address, _msgSender());\\n    }\\n}\\n\",\"keccak256\":\"0xdba125b21dec233e2f695768b130c85b5c495407e350bfbf9d6f5d9b0f26ac4a\"},\"contracts/OpenZeppelin/access/AccessControl.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\nimport \\\"../utils/EnumerableSet.sol\\\";\\nimport \\\"../utils/Address.sol\\\";\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module that allows children to implement role-based access\\n * control mechanisms.\\n *\\n * Roles are referred to by their `bytes32` identifier. These should be exposed\\n * in the external API and be unique. The best way to achieve this is by\\n * using `public constant` hash digests:\\n *\\n * ```\\n * bytes32 public constant MY_ROLE = keccak256(\\\"MY_ROLE\\\");\\n * ```\\n *\\n * Roles can be used to represent a set of permissions. To restrict access to a\\n * function call, use {hasRole}:\\n *\\n * ```\\n * function foo() public {\\n *     require(hasRole(MY_ROLE, msg.sender));\\n *     ...\\n * }\\n * ```\\n *\\n * Roles can be granted and revoked dynamically via the {grantRole} and\\n * {revokeRole} functions. Each role has an associated admin role, and only\\n * accounts that have a role's admin role can call {grantRole} and {revokeRole}.\\n *\\n * By default, the admin role for all roles is `DEFAULT_ADMIN_ROLE`, which means\\n * that only accounts with this role will be able to grant or revoke other\\n * roles. More complex role relationships can be created by using\\n * {_setRoleAdmin}.\\n *\\n * WARNING: The `DEFAULT_ADMIN_ROLE` is also its own admin: it has permission to\\n * grant and revoke this role. Extra precautions should be taken to secure\\n * accounts that have been granted it.\\n */\\nabstract contract AccessControl is Context {\\n    using EnumerableSet for EnumerableSet.AddressSet;\\n    using Address for address;\\n\\n    struct RoleData {\\n        EnumerableSet.AddressSet members;\\n        bytes32 adminRole;\\n    }\\n\\n    mapping (bytes32 => RoleData) private _roles;\\n\\n    bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;\\n\\n    /**\\n     * @dev Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole`\\n     *\\n     * `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite\\n     * {RoleAdminChanged} not being emitted signaling this.\\n     *\\n     * _Available since v3.1._\\n     */\\n    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);\\n\\n    /**\\n     * @dev Emitted when `account` is granted `role`.\\n     *\\n     * `sender` is the account that originated the contract call, an admin role\\n     * bearer except when using {_setupRole}.\\n     */\\n    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);\\n\\n    /**\\n     * @dev Emitted when `account` is revoked `role`.\\n     *\\n     * `sender` is the account that originated the contract call:\\n     *   - if using `revokeRole`, it is the admin role bearer\\n     *   - if using `renounceRole`, it is the role bearer (i.e. `account`)\\n     */\\n    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);\\n\\n    /**\\n     * @dev Returns `true` if `account` has been granted `role`.\\n     */\\n    function hasRole(bytes32 role, address account) public view returns (bool) {\\n        return _roles[role].members.contains(account);\\n    }\\n\\n    /**\\n     * @dev Returns the number of accounts that have `role`. Can be used\\n     * together with {getRoleMember} to enumerate all bearers of a role.\\n     */\\n    function getRoleMemberCount(bytes32 role) public view returns (uint256) {\\n        return _roles[role].members.length();\\n    }\\n\\n    /**\\n     * @dev Returns one of the accounts that have `role`. `index` must be a\\n     * value between 0 and {getRoleMemberCount}, non-inclusive.\\n     *\\n     * Role bearers are not sorted in any particular way, and their ordering may\\n     * change at any point.\\n     *\\n     * WARNING: When using {getRoleMember} and {getRoleMemberCount}, make sure\\n     * you perform all queries on the same block. See the following\\n     * https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]\\n     * for more information.\\n     */\\n    function getRoleMember(bytes32 role, uint256 index) public view returns (address) {\\n        return _roles[role].members.at(index);\\n    }\\n\\n    /**\\n     * @dev Returns the admin role that controls `role`. See {grantRole} and\\n     * {revokeRole}.\\n     *\\n     * To change a role's admin, use {_setRoleAdmin}.\\n     */\\n    function getRoleAdmin(bytes32 role) public view returns (bytes32) {\\n        return _roles[role].adminRole;\\n    }\\n\\n    /**\\n     * @dev Grants `role` to `account`.\\n     *\\n     * If `account` had not been already granted `role`, emits a {RoleGranted}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     */\\n    function grantRole(bytes32 role, address account) public virtual {\\n        require(hasRole(_roles[role].adminRole, _msgSender()), \\\"AccessControl: sender must be an admin to grant\\\");\\n\\n        _grantRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Revokes `role` from `account`.\\n     *\\n     * If `account` had been granted `role`, emits a {RoleRevoked} event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     */\\n    function revokeRole(bytes32 role, address account) public virtual {\\n        require(hasRole(_roles[role].adminRole, _msgSender()), \\\"AccessControl: sender must be an admin to revoke\\\");\\n\\n        _revokeRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Revokes `role` from the calling account.\\n     *\\n     * Roles are often managed via {grantRole} and {revokeRole}: this function's\\n     * purpose is to provide a mechanism for accounts to lose their privileges\\n     * if they are compromised (such as when a trusted device is misplaced).\\n     *\\n     * If the calling account had been granted `role`, emits a {RoleRevoked}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must be `account`.\\n     */\\n    function renounceRole(bytes32 role, address account) public virtual {\\n        require(account == _msgSender(), \\\"AccessControl: can only renounce roles for self\\\");\\n\\n        _revokeRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Grants `role` to `account`.\\n     *\\n     * If `account` had not been already granted `role`, emits a {RoleGranted}\\n     * event. Note that unlike {grantRole}, this function doesn't perform any\\n     * checks on the calling account.\\n     *\\n     * [WARNING]\\n     * ====\\n     * This function should only be called from the constructor when setting\\n     * up the initial roles for the system.\\n     *\\n     * Using this function in any other way is effectively circumventing the admin\\n     * system imposed by {AccessControl}.\\n     * ====\\n     */\\n    function _setupRole(bytes32 role, address account) internal virtual {\\n        _grantRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Sets `adminRole` as ``role``'s admin role.\\n     *\\n     * Emits a {RoleAdminChanged} event.\\n     */\\n    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {\\n        emit RoleAdminChanged(role, _roles[role].adminRole, adminRole);\\n        _roles[role].adminRole = adminRole;\\n    }\\n\\n    function _grantRole(bytes32 role, address account) private {\\n        if (_roles[role].members.add(account)) {\\n            emit RoleGranted(role, account, _msgSender());\\n        }\\n    }\\n\\n    function _revokeRole(bytes32 role, address account) private {\\n        if (_roles[role].members.remove(account)) {\\n            emit RoleRevoked(role, account, _msgSender());\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x33279c22849e760b03180e23a3686d97b554c680f9874c8658a23863aee6e8c3\"},\"contracts/OpenZeppelin/math/SafeMath.sol\":{\"content\":\"\\n\\npragma solidity 0.6.12;\\n\\n/**\\n * @dev Wrappers over Solidity's arithmetic operations with added overflow\\n * checks.\\n *\\n * Arithmetic operations in Solidity wrap on overflow. This can easily result\\n * in bugs, because programmers usually assume that an overflow raises an\\n * error, which is the standard behavior in high level programming languages.\\n * `SafeMath` restores this intuition by reverting the transaction when an\\n * operation overflows.\\n *\\n * Using this library instead of the unchecked operations eliminates an entire\\n * class of bugs, so it's recommended to use it always.\\n */\\nlibrary SafeMath {\\n    /**\\n     * @dev Returns the addition of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        uint256 c = a + b;\\n        if (c < a) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the substraction of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b > a) return (false, 0);\\n        return (true, a - b);\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        // Gas optimization: this is cheaper than requiring 'a' not being zero, but the\\n        // benefit is lost if 'b' is also tested.\\n        // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522\\n        if (a == 0) return (true, 0);\\n        uint256 c = a * b;\\n        if (c / a != b) return (false, 0);\\n        return (true, c);\\n    }\\n\\n    /**\\n     * @dev Returns the division of two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a / b);\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {\\n        if (b == 0) return (false, 0);\\n        return (true, a % b);\\n    }\\n\\n    /**\\n     * @dev Returns the addition of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `+` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Addition cannot overflow.\\n     */\\n    function add(uint256 a, uint256 b) internal pure returns (uint256) {\\n        uint256 c = a + b;\\n        require(c >= a, \\\"SafeMath: addition overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting on\\n     * overflow (when the result is negative).\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b <= a, \\\"SafeMath: subtraction overflow\\\");\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the multiplication of two unsigned integers, reverting on\\n     * overflow.\\n     *\\n     * Counterpart to Solidity's `*` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Multiplication cannot overflow.\\n     */\\n    function mul(uint256 a, uint256 b) internal pure returns (uint256) {\\n        if (a == 0) return 0;\\n        uint256 c = a * b;\\n        require(c / a == b, \\\"SafeMath: multiplication overflow\\\");\\n        return c;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: division by zero\\\");\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting when dividing by zero.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b) internal pure returns (uint256) {\\n        require(b > 0, \\\"SafeMath: modulo by zero\\\");\\n        return a % b;\\n    }\\n\\n    /**\\n     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on\\n     * overflow (when the result is negative).\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {trySub}.\\n     *\\n     * Counterpart to Solidity's `-` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - Subtraction cannot overflow.\\n     */\\n    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b <= a, errorMessage);\\n        return a - b;\\n    }\\n\\n    /**\\n     * @dev Returns the integer division of two unsigned integers, reverting with custom message on\\n     * division by zero. The result is rounded towards zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryDiv}.\\n     *\\n     * Counterpart to Solidity's `/` operator. Note: this function uses a\\n     * `revert` opcode (which leaves remaining gas untouched) while Solidity\\n     * uses an invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a / b;\\n    }\\n\\n    /**\\n     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),\\n     * reverting with custom message when dividing by zero.\\n     *\\n     * CAUTION: This function is deprecated because it requires allocating memory for the error\\n     * message unnecessarily. For custom revert reasons use {tryMod}.\\n     *\\n     * Counterpart to Solidity's `%` operator. This function uses a `revert`\\n     * opcode (which leaves remaining gas untouched) while Solidity uses an\\n     * invalid opcode to revert (consuming all remaining gas).\\n     *\\n     * Requirements:\\n     *\\n     * - The divisor cannot be zero.\\n     */\\n    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {\\n        require(b > 0, errorMessage);\\n        return a % b;\\n    }\\n}\\n\",\"keccak256\":\"0x7fcbd5c69cde77d3fce62f8925c1cf6c68aade8bbf33c8d231e2f5baff6124c7\"},\"contracts/OpenZeppelin/utils/Address.sol\":{\"content\":\"\\npragma solidity 0.6.12;\\n\\n/**\\n * @dev Collection of functions related to the address type\\n */\\nlibrary Address {\\n    /**\\n     * @dev Returns true if `account` is a contract.\\n     *\\n     * [IMPORTANT]\\n     * ====\\n     * It is unsafe to assume that an address for which this function returns\\n     * false is an externally-owned account (EOA) and not a contract.\\n     *\\n     * Among others, `isContract` will return false for the following\\n     * types of addresses:\\n     *\\n     *  - an externally-owned account\\n     *  - a contract in construction\\n     *  - an address where a contract will be created\\n     *  - an address where a contract lived, but was destroyed\\n     * ====\\n     */\\n    function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize, which returns 0 for contracts in\\n        // construction, since the code is only stored at the end of the\\n        // constructor execution.\\n\\n        uint256 size;\\n        // solhint-disable-next-line no-inline-assembly\\n        assembly { size := extcodesize(account) }\\n        return size > 0;\\n    }\\n\\n    /**\\n     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to\\n     * `recipient`, forwarding all available gas and reverting on errors.\\n     *\\n     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost\\n     * of certain opcodes, possibly making contracts go over the 2300 gas limit\\n     * imposed by `transfer`, making them unable to receive funds via\\n     * `transfer`. {sendValue} removes this limitation.\\n     *\\n     * https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].\\n     *\\n     * IMPORTANT: because control is transferred to `recipient`, care must be\\n     * taken to not create reentrancy vulnerabilities. Consider using\\n     * {ReentrancyGuard} or the\\n     * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].\\n     */\\n    function sendValue(address payable recipient, uint256 amount) internal {\\n        require(address(this).balance >= amount, \\\"Address: insufficient balance\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls, avoid-call-value\\n        (bool success, ) = recipient.call{ value: amount }(\\\"\\\");\\n        require(success, \\\"Address: unable to send value, recipient may have reverted\\\");\\n    }\\n\\n    /**\\n     * @dev Performs a Solidity function call using a low level `call`. A\\n     * plain`call` is an unsafe replacement for a function call: use this\\n     * function instead.\\n     *\\n     * If `target` reverts with a revert reason, it is bubbled up by this\\n     * function (like regular Solidity function calls).\\n     *\\n     * Returns the raw returned data. To convert to the expected return value,\\n     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].\\n     *\\n     * Requirements:\\n     *\\n     * - `target` must be a contract.\\n     * - calling `target` with `data` must not revert.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n      return functionCall(target, data, \\\"Address: low-level call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with\\n     * `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, 0, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but also transferring `value` wei to `target`.\\n     *\\n     * Requirements:\\n     *\\n     * - the calling contract must have an ETH balance of at least `value`.\\n     * - the called Solidity function must be `payable`.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but\\n     * with `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {\\n        require(address(this).balance >= value, \\\"Address: insufficient balance for call\\\");\\n        require(isContract(target), \\\"Address: call to non-contract\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory returndata) = target.call{ value: value }(data);\\n        return _verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {\\n        return functionStaticCall(target, data, \\\"Address: low-level static call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(address target, bytes memory data, string memory errorMessage) internal view returns (bytes memory) {\\n        require(isContract(target), \\\"Address: static call to non-contract\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory returndata) = target.staticcall(data);\\n        return _verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but performing a delegate call.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionDelegateCall(target, data, \\\"Address: low-level delegate call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],\\n     * but performing a delegate call.\\n     *\\n     * _Available since v3.4._\\n     */\\n    function functionDelegateCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {\\n        require(isContract(target), \\\"Address: delegate call to non-contract\\\");\\n\\n        // solhint-disable-next-line avoid-low-level-calls\\n        (bool success, bytes memory returndata) = target.delegatecall(data);\\n        return _verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    function _verifyCallResult(bool success, bytes memory returndata, string memory errorMessage) private pure returns(bytes memory) {\\n        if (success) {\\n            return returndata;\\n        } else {\\n            // Look for revert reason and bubble it up if present\\n            if (returndata.length > 0) {\\n                // The easiest way to bubble the revert reason is using memory via assembly\\n\\n                // solhint-disable-next-line no-inline-assembly\\n                assembly {\\n                    let returndata_size := mload(returndata)\\n                    revert(add(32, returndata), returndata_size)\\n                }\\n            } else {\\n                revert(errorMessage);\\n            }\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x39f82f1573985812031896891cb27ea1bad51aeb9e47efbf3b6798b5647f3e5c\"},\"contracts/OpenZeppelin/utils/Context.sol\":{\"content\":\"\\n\\npragma solidity 0.6.12;\\n\\n/*\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with GSN meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address payable) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes memory) {\\n        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0x408ed1e8d180f17597080e993fea24a26ec262dd56ee20dfbdcf511d261387d4\"},\"contracts/OpenZeppelin/utils/EnumerableSet.sol\":{\"content\":\"\\npragma solidity 0.6.12;\\n\\n/**\\n * @dev Library for managing\\n * https://en.wikipedia.org/wiki/Set_(abstract_data_type)[sets] of primitive\\n * types.\\n *\\n * Sets have the following properties:\\n *\\n * - Elements are added, removed, and checked for existence in constant time\\n * (O(1)).\\n * - Elements are enumerated in O(n). No guarantees are made on the ordering.\\n *\\n * ```\\n * contract Example {\\n *     // Add the library methods\\n *     using EnumerableSet for EnumerableSet.AddressSet;\\n *\\n *     // Declare a set state variable\\n *     EnumerableSet.AddressSet private mySet;\\n * }\\n * ```\\n *\\n * As of v3.3.0, sets of type `bytes32` (`Bytes32Set`), `address` (`AddressSet`)\\n * and `uint256` (`UintSet`) are supported.\\n */\\nlibrary EnumerableSet {\\n    // To implement this library for multiple types with as little code\\n    // repetition as possible, we write it in terms of a generic Set type with\\n    // bytes32 values.\\n    // The Set implementation uses private functions, and user-facing\\n    // implementations (such as AddressSet) are just wrappers around the\\n    // underlying Set.\\n    // This means that we can only create new EnumerableSets for types that fit\\n    // in bytes32.\\n\\n    struct Set {\\n        // Storage of set values\\n        bytes32[] _values;\\n\\n        // Position of the value in the `values` array, plus 1 because index 0\\n        // means a value is not in the set.\\n        mapping (bytes32 => uint256) _indexes;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function _add(Set storage set, bytes32 value) private returns (bool) {\\n        if (!_contains(set, value)) {\\n            set._values.push(value);\\n            // The value is stored at length-1, but we add 1 to all indexes\\n            // and use 0 as a sentinel value\\n            set._indexes[value] = set._values.length;\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function _remove(Set storage set, bytes32 value) private returns (bool) {\\n        // We read and store the value's index to prevent multiple reads from the same storage slot\\n        uint256 valueIndex = set._indexes[value];\\n\\n        if (valueIndex != 0) { // Equivalent to contains(set, value)\\n            // To delete an element from the _values array in O(1), we swap the element to delete with the last one in\\n            // the array, and then remove the last element (sometimes called as 'swap and pop').\\n            // This modifies the order of the array, as noted in {at}.\\n\\n            uint256 toDeleteIndex = valueIndex - 1;\\n            uint256 lastIndex = set._values.length - 1;\\n\\n            // When the value to delete is the last one, the swap operation is unnecessary. However, since this occurs\\n            // so rarely, we still do the swap anyway to avoid the gas cost of adding an 'if' statement.\\n\\n            bytes32 lastvalue = set._values[lastIndex];\\n\\n            // Move the last value to the index where the value to delete is\\n            set._values[toDeleteIndex] = lastvalue;\\n            // Update the index for the moved value\\n            set._indexes[lastvalue] = toDeleteIndex + 1; // All indexes are 1-based\\n\\n            // Delete the slot where the moved value was stored\\n            set._values.pop();\\n\\n            // Delete the index for the deleted slot\\n            delete set._indexes[value];\\n\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function _contains(Set storage set, bytes32 value) private view returns (bool) {\\n        return set._indexes[value] != 0;\\n    }\\n\\n    /**\\n     * @dev Returns the number of values on the set. O(1).\\n     */\\n    function _length(Set storage set) private view returns (uint256) {\\n        return set._values.length;\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function _at(Set storage set, uint256 index) private view returns (bytes32) {\\n        require(set._values.length > index, \\\"EnumerableSet: index out of bounds\\\");\\n        return set._values[index];\\n    }\\n\\n    // Bytes32Set\\n\\n    struct Bytes32Set {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(Bytes32Set storage set, bytes32 value) internal returns (bool) {\\n        return _add(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(Bytes32Set storage set, bytes32 value) internal returns (bool) {\\n        return _remove(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(Bytes32Set storage set, bytes32 value) internal view returns (bool) {\\n        return _contains(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(Bytes32Set storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function at(Bytes32Set storage set, uint256 index) internal view returns (bytes32) {\\n        return _at(set._inner, index);\\n    }\\n\\n    // AddressSet\\n\\n    struct AddressSet {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(AddressSet storage set, address value) internal returns (bool) {\\n        return _add(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(AddressSet storage set, address value) internal returns (bool) {\\n        return _remove(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(AddressSet storage set, address value) internal view returns (bool) {\\n        return _contains(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(AddressSet storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function at(AddressSet storage set, uint256 index) internal view returns (address) {\\n        return address(uint160(uint256(_at(set._inner, index))));\\n    }\\n\\n\\n    // UintSet\\n\\n    struct UintSet {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(UintSet storage set, uint256 value) internal returns (bool) {\\n        return _add(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(UintSet storage set, uint256 value) internal returns (bool) {\\n        return _remove(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(UintSet storage set, uint256 value) internal view returns (bool) {\\n        return _contains(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Returns the number of values on the set. O(1).\\n     */\\n    function length(UintSet storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n   /**\\n    * @dev Returns the value stored at position `index` in the set. O(1).\\n    *\\n    * Note that there are no guarantees on the ordering of values inside the\\n    * array, and it may change when more values are added or removed.\\n    *\\n    * Requirements:\\n    *\\n    * - `index` must be strictly less than {length}.\\n    */\\n    function at(UintSet storage set, uint256 index) internal view returns (uint256) {\\n        return uint256(_at(set._inner, index));\\n    }\\n}\\n\",\"keccak256\":\"0x7a5437ee09401a3d1ec98f126470362f9848afbf521510d6bfae61d7b42a8fb7\"},\"contracts/Utils/CloneFactory.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\n// ----------------------------------------------------------------------------\\n// CloneFactory.sol\\n// From\\n// https://github.com/optionality/clone-factory/blob/32782f82dfc5a00d103a7e61a17a5dedbd1e8e9d/contracts/CloneFactory.sol\\n// ----------------------------------------------------------------------------\\n\\n/*\\nThe MIT License (MIT)\\nCopyright (c) 2018 Murray Software, LLC.\\nPermission is hereby granted, free of charge, to any person obtaining\\na copy of this software and associated documentation files (the\\n\\\"Software\\\"), to deal in the Software without restriction, including\\nwithout limitation the rights to use, copy, modify, merge, publish,\\ndistribute, sublicense, and/or sell copies of the Software, and to\\npermit persons to whom the Software is furnished to do so, subject to\\nthe following conditions:\\nThe above copyright notice and this permission notice shall be included\\nin all copies or substantial portions of the Software.\\nTHE SOFTWARE IS PROVIDED \\\"AS IS\\\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\\n*/\\n//solhint-disable max-line-length\\n//solhint-disable no-inline-assembly\\n\\ncontract CloneFactory {\\n\\n  function createClone(address target) internal returns (address result) {\\n    bytes20 targetBytes = bytes20(target);\\n    assembly {\\n      let clone := mload(0x40)\\n      mstore(clone, 0x3d602d80600a3d3981f3363d3d373d3d3d363d73000000000000000000000000)\\n      mstore(add(clone, 0x14), targetBytes)\\n      mstore(add(clone, 0x28), 0x5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000)\\n      result := create(0, clone, 0x37)\\n    }\\n  }\\n\\n  function isClone(address target, address query) internal view returns (bool result) {\\n    bytes20 targetBytes = bytes20(target);\\n    assembly {\\n      let clone := mload(0x40)\\n      mstore(clone, 0x363d3d373d3d3d363d7300000000000000000000000000000000000000000000)\\n      mstore(add(clone, 0xa), targetBytes)\\n      mstore(add(clone, 0x1e), 0x5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000)\\n\\n      let other := add(clone, 0x40)\\n      extcodecopy(query, other, 0, 0x2d)\\n      result := and(\\n        eq(mload(clone), mload(other)),\\n        eq(mload(add(clone, 0xd)), mload(add(other, 0xd)))\\n      )\\n    }\\n  }\\n}\\n\",\"keccak256\":\"0xa1d5bbba3b35b50c5044a9f5989914613db64466fd82b17b39ba323e493d33e3\"},\"contracts/Utils/Owned.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\n\\n// import \\\"../../interfaces/IERC20.sol\\\";\\n\\n\\ncontract Owned {\\n\\n    address private mOwner;   \\n    bool private initialised;    \\n    address public newOwner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    modifier onlyOwner() {\\n        require(isOwner());\\n        _;\\n    }\\n\\n    function _initOwned(address _owner) internal {\\n        require(!initialised);\\n        mOwner = address(uint160(_owner));\\n        initialised = true;\\n        emit OwnershipTransferred(address(0), mOwner);\\n    }\\n\\n    function owner() public view returns (address) {\\n        return mOwner;\\n    }\\n    function isOwner() public view returns (bool) {\\n        return msg.sender == mOwner;\\n    }\\n\\n    function transferOwnership(address _newOwner) public {\\n        require(isOwner());\\n        newOwner = _newOwner;\\n    }\\n\\n    function acceptOwnership() public {\\n        require(msg.sender == newOwner);\\n        emit OwnershipTransferred(mOwner, newOwner);\\n        mOwner = address(uint160(newOwner));\\n        newOwner = address(0);\\n    }\\n}\\n\",\"keccak256\":\"0x2af405901b07cae73896ebca049238f26b524cb3b55d1185a8943e3c3301554d\"},\"contracts/Utils/SafeTransfer.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\ncontract SafeTransfer {\\n\\n    address private constant ETH_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;\\n\\n    /// @dev Helper function to handle both ETH and ERC20 payments\\n    function _safeTokenPayment(\\n        address _token,\\n        address payable _to,\\n        uint256 _amount\\n    ) internal {\\n        if (address(_token) == ETH_ADDRESS) {\\n            _safeTransferETH(_to,_amount );\\n        } else {\\n            _safeTransfer(_token, _to, _amount);\\n        }\\n    }\\n\\n\\n    /// @dev Helper function to handle both ETH and ERC20 payments\\n    function _tokenPayment(\\n        address _token,\\n        address payable _to,\\n        uint256 _amount\\n    ) internal {\\n        if (address(_token) == ETH_ADDRESS) {\\n            _to.transfer(_amount);\\n        } else {\\n            _safeTransfer(_token, _to, _amount);\\n        }\\n    }\\n\\n\\n    /// @dev Transfer helper from UniswapV2 Router\\n    function _safeApprove(address token, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('approve(address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x095ea7b3, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: APPROVE_FAILED');\\n    }\\n\\n\\n    /**\\n     * There are many non-compliant ERC20 tokens... this can handle most, adapted from UniSwap V2\\n     * Im trying to make it a habit to put external calls last (reentrancy)\\n     * You can put this in an internal function if you like.\\n     */\\n    function _safeTransfer(\\n        address token,\\n        address to,\\n        uint256 amount\\n    ) internal virtual {\\n        // solium-disable-next-line security/no-low-level-calls\\n        (bool success, bytes memory data) =\\n            token.call(\\n                // 0xa9059cbb = bytes4(keccak256(\\\"transfer(address,uint256)\\\"))\\n                abi.encodeWithSelector(0xa9059cbb, to, amount)\\n            );\\n        require(success && (data.length == 0 || abi.decode(data, (bool)))); // ERC20 Transfer failed\\n    }\\n\\n    function _safeTransferFrom(\\n        address token,\\n        address from,\\n        uint256 amount\\n    ) internal virtual {\\n        // solium-disable-next-line security/no-low-level-calls\\n        (bool success, bytes memory data) =\\n            token.call(\\n                // 0x23b872dd = bytes4(keccak256(\\\"transferFrom(address,address,uint256)\\\"))\\n                abi.encodeWithSelector(0x23b872dd, from, address(this), amount)\\n            );\\n        require(success && (data.length == 0 || abi.decode(data, (bool)))); // ERC20 TransferFrom failed\\n    }\\n\\n    function _safeTransferFrom(address token, address from, address to, uint value) internal {\\n        // bytes4(keccak256(bytes('transferFrom(address,address,uint256)')));\\n        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(0x23b872dd, from, to, value));\\n        require(success && (data.length == 0 || abi.decode(data, (bool))), 'TransferHelper: TRANSFER_FROM_FAILED');\\n    }\\n\\n    function _safeTransferETH(address to, uint value) internal {\\n        (bool success,) = to.call{value:value}(new bytes(0));\\n        require(success, 'TransferHelper: ETH_TRANSFER_FAILED');\\n    }\\n\\n\\n}\\n\",\"keccak256\":\"0xc2af6cb1d93e3358de826e42b24bb2f108855b1b17d3f40d3da285c1e52e6bd1\"},\"contracts/interfaces/IERC20.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\ninterface IERC20 {\\n    function totalSupply() external view returns (uint256);\\n    function balanceOf(address account) external view returns (uint256);\\n    function allowance(address owner, address spender) external view returns (uint256);\\n    function approve(address spender, uint256 amount) external returns (bool);\\n    function name() external view returns (string memory);\\n    function symbol() external view returns (string memory);\\n    function decimals() external view returns (uint8);\\n\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n\\n    function permit(\\n        address owner,\\n        address spender,\\n        uint256 value,\\n        uint256 deadline,\\n        uint8 v,\\n        bytes32 r,\\n        bytes32 s\\n    ) external;\\n}\",\"keccak256\":\"0x9e3da3bb9ec7a825414952ac7fdae2133f873608d059cb40e03ac0194cf1ca40\"},\"contracts/interfaces/IPointList.sol\":{\"content\":\"pragma solidity 0.6.12;\\n\\n// ----------------------------------------------------------------------------\\n// White List interface\\n// ----------------------------------------------------------------------------\\n\\ninterface IPointList {\\n    function isInList(address account) external view returns (bool);\\n    function hasPoints(address account, uint256 amount) external view  returns (bool);\\n    function setPoints(\\n        address[] memory accounts,\\n        uint256[] memory amounts\\n    ) external; \\n    function initPointList(address accessControl) external ;\\n\\n}\\n\",\"keccak256\":\"0xfd0d12ce668aa90d4a3206f8d41a75b44144c9aff7ad2eabfbd4837eefaa8c26\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610ec6806100206000396000f3fe6080604052600436106100e15760003560e01c80639e9188ea1161007f578063dc39d06d11610059578063dc39d06d1461035c578063de0946af146103a9578063e9bb4b6b146103dc578063fc91a8971461041f576100eb565b80639e9188ea146102ff578063c9907b0814610332578063ccdb3f4514610347576100eb565b8063534349f5116100bb578063534349f514610296578063726aba7f146102ab578063748365ef146102c057806396102cf4146102d5576100eb565b8063182a7506146100f05780631a7626e71461011c578063424599a314610143576100eb565b366100eb57600080fd5b600080fd5b3480156100fc57600080fd5b5061011a6004803603602081101561011357600080fd5b5035610452565b005b34801561012857600080fd5b50610131610546565b60408051918252519081900360200190f35b61027a6004803603606081101561015957600080fd5b6001600160a01b03823516919081019060408101602082013564010000000081111561018457600080fd5b82018360208201111561019657600080fd5b803590602001918460208302840111640100000000831117156101b857600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250929594936020810193503591505064010000000081111561020857600080fd5b82018360208201111561021a57600080fd5b8035906020019184602083028401116401000000008311171561023c57600080fd5b91908080602002602001604051908101604052809392919081815260200183836020028082843760009201919091525092955061054c945050505050565b604080516001600160a01b039092168252519081900360200190f35b3480156102a257600080fd5b506101316108e2565b3480156102b757600080fd5b5061027a6108e8565b3480156102cc57600080fd5b5061027a6108f7565b3480156102e157600080fd5b5061027a600480360360208110156102f857600080fd5b5035610906565b34801561030b57600080fd5b5061011a6004803603602081101561032257600080fd5b50356001600160a01b031661092d565b34801561033e57600080fd5b5061027a610a01565b34801561035357600080fd5b5061027a610a10565b34801561036857600080fd5b506103956004803603604081101561037f57600080fd5b506001600160a01b038135169060200135610a1f565b604080519115158252519081900360200190f35b3480156103b557600080fd5b5061011a600480360360208110156103cc57600080fd5b50356001600160a01b0316610af3565b3480156103e857600080fd5b5061011a600480360360608110156103ff57600080fd5b506001600160a01b03813581169160208101359091169060400135610c19565b34801561042b57600080fd5b506103956004803603602081101561044257600080fd5b50356001600160a01b0316610c9c565b6000546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b15801561049d57600080fd5b505afa1580156104b1573d6000803e3d6000fd5b505050506040513d60208110156104c757600080fd5b50516105045760405162461bcd60e51b8152600401808060200182810382526021815260200180610e266021913960400191505060405180910390fd5b600354604080519182526020820183905280517fcc2f49c6214278ae5862935eff953448e8e69118d10abfafaf63ea6aa35255cb9281900390910190a1600355565b60035481565b600060035434101561055d57600080fd5b600154610572906001600160a01b0316610cb1565b835190915015610788576040805163283ba19b60e01b815230600482015290516001600160a01b0383169163283ba19b91602480830192600092919082900301818387803b1580156105c357600080fd5b505af11580156105d7573d6000803e3d6000fd5b50505050806001600160a01b0316639a80c4a184846040518363ffffffff1660e01b8152600401808060200180602001838103835285818151815260200191508051906020019060200280838360005b8381101561063f578181015183820152602001610627565b50505050905001838103825284818151815260200191508051906020019060200280838360005b8381101561067e578181015183820152602001610666565b50505050905001945050505050600060405180830381600087803b1580156106a557600080fd5b505af11580156106b9573d6000803e3d6000fd5b50505050806001600160a01b0316636595171c856040518263ffffffff1660e01b815260040180826001600160a01b03168152602001915050600060405180830381600087803b15801561070c57600080fd5b505af1158015610720573d6000803e3d6000fd5b505060408051630dccfe3160e41b815230600482015290516001600160a01b038516935063dccfe3109250602480830192600092919082900301818387803b15801561076b57600080fd5b505af115801561077f573d6000803e3d6000fd5b505050506107f0565b806001600160a01b031663283ba19b856040518263ffffffff1660e01b815260040180826001600160a01b03168152602001915050600060405180830381600087803b1580156107d757600080fd5b505af11580156107eb573d6000803e3d6000fd5b505050505b6001600160a01b038082166000818152600460209081526040808320805460ff1916600190811790915560058054808301825594527f036b6384b5eca791c62761152d0c79bb0604c104a5fb6f4eb0703f3154bb3db090930180546001600160a01b03191685179055915482519085168152938816908401528051919233927f8a13771d198709940307fb40397206144caf6dfef0f59c2951c91c72e9844454929181900390910190a334156108db576006546040516001600160a01b03909116903480156108fc02916000818181858888f193505050501580156108d9573d6000803e3d6000fd5b505b9392505050565b60055490565b6001546001600160a01b031681565b6000546001600160a01b031681565b6005818154811061091357fe5b6000918252602090912001546001600160a01b0316905081565b6000546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b15801561097857600080fd5b505afa15801561098c573d6000803e3d6000fd5b505050506040513d60208110156109a257600080fd5b50516109df5760405162461bcd60e51b8152600401808060200182810382526026815260200180610e6b6026913960400191505060405180910390fd5b600680546001600160a01b0319166001600160a01b0392909216919091179055565b6006546001600160a01b031681565b6002546001600160a01b031681565b600080546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b158015610a6b57600080fd5b505afa158015610a7f573d6000803e3d6000fd5b505050506040513d6020811015610a9557600080fd5b5051610ad25760405162461bcd60e51b8152600401808060200182810382526024815260200180610e476024913960400191505060405180910390fd5b600654610aea9084906001600160a01b031684610d03565b50600192915050565b6000546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b158015610b3e57600080fd5b505afa158015610b52573d6000803e3d6000fd5b505050506040513d6020811015610b6857600080fd5b5051610ba55760405162461bcd60e51b8152600401808060200182810382526021815260200180610e266021913960400191505060405180910390fd5b6002546001600160a01b031615610bbb57600080fd5b604080516001600160a01b038316815290517f0ac885cfcac9d1450e80f787dbf9546001fb50414106435b10b1d27b448b86689181900360200190a1600280546001600160a01b0319166001600160a01b0392909216919091179055565b600054600160a01b900460ff1615610c3057600080fd5b60008054600180546001600160a01b038681166001600160a01b031992831617909255600385905560ff60a01b1991871692169190911716600160a01b1781556040517fe4bd612963220b47d4b6661bc82c559aaaf0350b0aad4dde4d90ce8b7ea154629190a1505050565b60046020526000908152604090205460ff1681565b6000808260601b9050604051733d602d80600a3d3981f3363d3d373d3d3d363d7360601b81528160148201526e5af43d82803e903d91602b57fd5bf360881b60288201526037816000f0949350505050565b604080516001600160a01b038481166024830152604480830185905283518084039091018152606490920183526020820180516001600160e01b031663a9059cbb60e01b178152925182516000946060949389169392918291908083835b60208310610d805780518252601f199092019160209182019101610d61565b6001836020036101000a0380198251168184511680821785525050505050509050019150506000604051808303816000865af19150503d8060008114610de2576040519150601f19603f3d011682016040523d82523d6000602084013e610de7565b606091505b5091509150818015610e15575080511580610e155750808060200190516020811015610e1257600080fd5b50515b610e1e57600080fd5b505050505056fe4c697374466163746f72793a2053656e646572206d7573742062652061646d696e4c697374466163746f72793a2053656e646572206d757374206265206f70657261746f724d49534f546f6b656e466163746f72793a2053656e646572206d7573742062652041646d696ea26469706673582212202d7806ce0ba5f9dba8df73f81f3189bbf0f6813adad0ccea845510119810dfcd64736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052600436106100e15760003560e01c80639e9188ea1161007f578063dc39d06d11610059578063dc39d06d1461035c578063de0946af146103a9578063e9bb4b6b146103dc578063fc91a8971461041f576100eb565b80639e9188ea146102ff578063c9907b0814610332578063ccdb3f4514610347576100eb565b8063534349f5116100bb578063534349f514610296578063726aba7f146102ab578063748365ef146102c057806396102cf4146102d5576100eb565b8063182a7506146100f05780631a7626e71461011c578063424599a314610143576100eb565b366100eb57600080fd5b600080fd5b3480156100fc57600080fd5b5061011a6004803603602081101561011357600080fd5b5035610452565b005b34801561012857600080fd5b50610131610546565b60408051918252519081900360200190f35b61027a6004803603606081101561015957600080fd5b6001600160a01b03823516919081019060408101602082013564010000000081111561018457600080fd5b82018360208201111561019657600080fd5b803590602001918460208302840111640100000000831117156101b857600080fd5b919080806020026020016040519081016040528093929190818152602001838360200280828437600092019190915250929594936020810193503591505064010000000081111561020857600080fd5b82018360208201111561021a57600080fd5b8035906020019184602083028401116401000000008311171561023c57600080fd5b91908080602002602001604051908101604052809392919081815260200183836020028082843760009201919091525092955061054c945050505050565b604080516001600160a01b039092168252519081900360200190f35b3480156102a257600080fd5b506101316108e2565b3480156102b757600080fd5b5061027a6108e8565b3480156102cc57600080fd5b5061027a6108f7565b3480156102e157600080fd5b5061027a600480360360208110156102f857600080fd5b5035610906565b34801561030b57600080fd5b5061011a6004803603602081101561032257600080fd5b50356001600160a01b031661092d565b34801561033e57600080fd5b5061027a610a01565b34801561035357600080fd5b5061027a610a10565b34801561036857600080fd5b506103956004803603604081101561037f57600080fd5b506001600160a01b038135169060200135610a1f565b604080519115158252519081900360200190f35b3480156103b557600080fd5b5061011a600480360360208110156103cc57600080fd5b50356001600160a01b0316610af3565b3480156103e857600080fd5b5061011a600480360360608110156103ff57600080fd5b506001600160a01b03813581169160208101359091169060400135610c19565b34801561042b57600080fd5b506103956004803603602081101561044257600080fd5b50356001600160a01b0316610c9c565b6000546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b15801561049d57600080fd5b505afa1580156104b1573d6000803e3d6000fd5b505050506040513d60208110156104c757600080fd5b50516105045760405162461bcd60e51b8152600401808060200182810382526021815260200180610e266021913960400191505060405180910390fd5b600354604080519182526020820183905280517fcc2f49c6214278ae5862935eff953448e8e69118d10abfafaf63ea6aa35255cb9281900390910190a1600355565b60035481565b600060035434101561055d57600080fd5b600154610572906001600160a01b0316610cb1565b835190915015610788576040805163283ba19b60e01b815230600482015290516001600160a01b0383169163283ba19b91602480830192600092919082900301818387803b1580156105c357600080fd5b505af11580156105d7573d6000803e3d6000fd5b50505050806001600160a01b0316639a80c4a184846040518363ffffffff1660e01b8152600401808060200180602001838103835285818151815260200191508051906020019060200280838360005b8381101561063f578181015183820152602001610627565b50505050905001838103825284818151815260200191508051906020019060200280838360005b8381101561067e578181015183820152602001610666565b50505050905001945050505050600060405180830381600087803b1580156106a557600080fd5b505af11580156106b9573d6000803e3d6000fd5b50505050806001600160a01b0316636595171c856040518263ffffffff1660e01b815260040180826001600160a01b03168152602001915050600060405180830381600087803b15801561070c57600080fd5b505af1158015610720573d6000803e3d6000fd5b505060408051630dccfe3160e41b815230600482015290516001600160a01b038516935063dccfe3109250602480830192600092919082900301818387803b15801561076b57600080fd5b505af115801561077f573d6000803e3d6000fd5b505050506107f0565b806001600160a01b031663283ba19b856040518263ffffffff1660e01b815260040180826001600160a01b03168152602001915050600060405180830381600087803b1580156107d757600080fd5b505af11580156107eb573d6000803e3d6000fd5b505050505b6001600160a01b038082166000818152600460209081526040808320805460ff1916600190811790915560058054808301825594527f036b6384b5eca791c62761152d0c79bb0604c104a5fb6f4eb0703f3154bb3db090930180546001600160a01b03191685179055915482519085168152938816908401528051919233927f8a13771d198709940307fb40397206144caf6dfef0f59c2951c91c72e9844454929181900390910190a334156108db576006546040516001600160a01b03909116903480156108fc02916000818181858888f193505050501580156108d9573d6000803e3d6000fd5b505b9392505050565b60055490565b6001546001600160a01b031681565b6000546001600160a01b031681565b6005818154811061091357fe5b6000918252602090912001546001600160a01b0316905081565b6000546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b15801561097857600080fd5b505afa15801561098c573d6000803e3d6000fd5b505050506040513d60208110156109a257600080fd5b50516109df5760405162461bcd60e51b8152600401808060200182810382526026815260200180610e6b6026913960400191505060405180910390fd5b600680546001600160a01b0319166001600160a01b0392909216919091179055565b6006546001600160a01b031681565b6002546001600160a01b031681565b600080546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b158015610a6b57600080fd5b505afa158015610a7f573d6000803e3d6000fd5b505050506040513d6020811015610a9557600080fd5b5051610ad25760405162461bcd60e51b8152600401808060200182810382526024815260200180610e476024913960400191505060405180910390fd5b600654610aea9084906001600160a01b031684610d03565b50600192915050565b6000546040805163c395fcb360e01b815233600482015290516001600160a01b039092169163c395fcb391602480820192602092909190829003018186803b158015610b3e57600080fd5b505afa158015610b52573d6000803e3d6000fd5b505050506040513d6020811015610b6857600080fd5b5051610ba55760405162461bcd60e51b8152600401808060200182810382526021815260200180610e266021913960400191505060405180910390fd5b6002546001600160a01b031615610bbb57600080fd5b604080516001600160a01b038316815290517f0ac885cfcac9d1450e80f787dbf9546001fb50414106435b10b1d27b448b86689181900360200190a1600280546001600160a01b0319166001600160a01b0392909216919091179055565b600054600160a01b900460ff1615610c3057600080fd5b60008054600180546001600160a01b038681166001600160a01b031992831617909255600385905560ff60a01b1991871692169190911716600160a01b1781556040517fe4bd612963220b47d4b6661bc82c559aaaf0350b0aad4dde4d90ce8b7ea154629190a1505050565b60046020526000908152604090205460ff1681565b6000808260601b9050604051733d602d80600a3d3981f3363d3d373d3d3d363d7360601b81528160148201526e5af43d82803e903d91602b57fd5bf360881b60288201526037816000f0949350505050565b604080516001600160a01b038481166024830152604480830185905283518084039091018152606490920183526020820180516001600160e01b031663a9059cbb60e01b178152925182516000946060949389169392918291908083835b60208310610d805780518252601f199092019160209182019101610d61565b6001836020036101000a0380198251168184511680821785525050505050509050019150506000604051808303816000865af19150503d8060008114610de2576040519150601f19603f3d011682016040523d82523d6000602084013e610de7565b606091505b5091509150818015610e15575080511580610e155750808060200190516020811015610e1257600080fd5b50515b610e1e57600080fd5b505050505056fe4c697374466163746f72793a2053656e646572206d7573742062652061646d696e4c697374466163746f72793a2053656e646572206d757374206265206f70657261746f724d49534f546f6b656e466163746f72793a2053656e646572206d7573742062652041646d696ea26469706673582212202d7806ce0ba5f9dba8df73f81f3189bbf0f6813adad0ccea845510119810dfcd64736f6c634300060c0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "deployPointList(address,address[],uint256[])": {
+        "params": {
+          "_accounts": "An array of account addresses.",
+          "_amounts": "An array of corresponding point amounts.",
+          "_listOwner": "List owner address."
+        },
+        "returns": {
+          "pointList": "Point list address."
+        }
+      },
+      "deprecateFactory(address)": {
+        "params": {
+          "_newAddress": "Blank address."
+        }
+      },
+      "initListFactory(address,address,uint256)": {
+        "params": {
+          "_accessControls": "Access control contract address.",
+          "_minimumFee": "Minimum fee number.",
+          "_pointListTemplate": "Point list template address."
+        }
+      },
+      "numberOfChildren()": {
+        "returns": {
+          "_0": "uint Number of point lists."
+        }
+      },
+      "setDividends(address)": {
+        "params": {
+          "_divaddr": "Dividend address."
+        }
+      },
+      "setMinimumFee(uint256)": {
+        "params": {
+          "_minimumFee": "Minimum fee number."
+        }
+      },
+      "transferAnyERC20Token(address,uint256)": {
+        "params": {
+          "_tokenAddress": "Address to send from.",
+          "_tokens": "Number of tokens."
+        },
+        "returns": {
+          "success": "True."
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "FactoryDeprecated(address)": {
+        "notice": "Event emitted when factory is deprecated."
+      },
+      "MinimumFeeUpdated(uint256,uint256)": {
+        "notice": "Event emitted when minimum fee is updated."
+      },
+      "MisoInitListFactory()": {
+        "notice": "Event emitted when point list factory is initialised."
+      },
+      "PointListDeployed(address,address,address,address)": {
+        "notice": "Event emitted when point list is deployed."
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "accessControls()": {
+        "notice": "Responsible for access rights to the contract."
+      },
+      "deployPointList(address,address[],uint256[])": {
+        "notice": "Deploys new point list."
+      },
+      "deprecateFactory(address)": {
+        "notice": "Deprecates factory."
+      },
+      "initListFactory(address,address,uint256)": {
+        "notice": "Initializes point list factory variables."
+      },
+      "isChild(address)": {
+        "notice": "Tracks if list is made by the factory."
+      },
+      "lists(uint256)": {
+        "notice": "An array of list addresses."
+      },
+      "minimumFee()": {
+        "notice": "Minimum fee number."
+      },
+      "misoDiv()": {
+        "notice": "Any MISO dividends collected are sent here."
+      },
+      "newAddress()": {
+        "notice": "New point list address."
+      },
+      "numberOfChildren()": {
+        "notice": "Gets the number of point lists created by factory."
+      },
+      "pointListTemplate()": {
+        "notice": "Address of the point list template."
+      },
+      "setDividends(address)": {
+        "notice": "Sets dividend address."
+      },
+      "setMinimumFee(uint256)": {
+        "notice": "Sets minimum fee."
+      },
+      "transferAnyERC20Token(address,uint256)": {
+        "notice": "Funtion for transfering any ERC20 token."
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 18,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "accessControls",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(MISOAccessControls)563"
+      },
+      {
+        "astId": 21,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "initialised",
+        "offset": 20,
+        "slot": "0",
+        "type": "t_bool"
+      },
+      {
+        "astId": 24,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "pointListTemplate",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 27,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "newAddress",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_address"
+      },
+      {
+        "astId": 30,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "minimumFee",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 35,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "isChild",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_address,t_bool)"
+      },
+      {
+        "astId": 39,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "lists",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_array(t_address)dyn_storage"
+      },
+      {
+        "astId": 42,
+        "contract": "contracts/Access/ListFactory.sol:ListFactory",
+        "label": "misoDiv",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_address_payable"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_address_payable": {
+        "encoding": "inplace",
+        "label": "address payable",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)dyn_storage": {
+        "base": "t_address",
+        "encoding": "dynamic_array",
+        "label": "address[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_contract(MISOAccessControls)563": {
+        "encoding": "inplace",
+        "label": "contract MISOAccessControls",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

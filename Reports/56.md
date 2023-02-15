@@ -1,0 +1,275 @@
+---
+sponsor: "yAxis"
+slug: "2021-11-yaxis"
+date: "2022-01-27"  
+title: "yAxis contest"
+findings: "https://github.com/code-423n4/2021-11-yaxis-findings/issues"
+contest: 56
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the code contest outlined in this document, C4 conducted an analysis of yAxis contest smart contract system written in Solidity. The code contest took place between November 16—November 18 2021.
+
+## Wardens
+
+18 Wardens contributed reports to the yAxis contest:
+
+1. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+1. harleythedog
+1. [cmichel](https://twitter.com/cmichelio)
+1. [pauliax](https://twitter.com/SolidityDev)
+1. TimmyToes 
+1. [defsec](https://twitter.com/defsec_)
+1. [ye0lde](https://twitter.com/_ye0lde)
+1. [hickuphh3](https://twitter.com/HickupH)
+1. [jonah1005](https://twitter.com/jonah1005w)
+1. [pmerkleplant](https://twitter.com/merkleplant_eth)
+1. 0x0x0x
+1. [gzeon](https://twitter.com/gzeon)
+1. [tqts](https://tqts.ar/)
+1. hubble (ksk2345 and shri4net)
+1. pants
+1. xxxxx
+1. [hack3r-0m](https://twitter.com/hack3r_0m)
+1. [Meta0xNull](https://twitter.com/Meta0xNull)
+
+This contest was judged by [0xleastwood](https://twitter.com/liam_eastwood13).
+
+Final report assembled by [itsmetechjay](https://twitter.com/itsmetechjay) and [CloudEllie](https://twitter.com/CloudEllie1).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 15 unique vulnerabilities and 67 total findings. All of the issues presented here are linked back to their original finding.
+
+Of these vulnerabilities, 2 received a risk rating in the category of HIGH severity, 1 received a risk rating in the category of MEDIUM severity, and 12 received a risk rating in the category of LOW severity.
+
+C4 analysis also identified 19 non-critical recommendations and 33 gas optimizations.
+
+# Scope
+
+The code under review can be found within the [C4 yAxis contest repository](https://github.com/code-423n4/2021-11-yaxis), and is composed of 184 smart contracts written in the Solidity programming language and includes 9265 lines of Solidity code and 7712 lines of JavaScript.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (2)
+## [[H-01] `YaxisVaultAdapter.sol#withdraw()` will most certainly fail](https://github.com/code-423n4/2021-11-yaxis-findings/issues/46)
+_Submitted by WatchPug_
+
+The actual token withdrawn from `vault.withdraw()` will most certainly less than the `_amount`, due to precision loss in `_tokensToShares()` and `vault.withdraw()`.
+
+As a result, `IDetailedERC20(_token).safeTransfer(_recipient, _amount)` will revert due to insufficant balance.
+
+Based on the simulation we ran, it will fail `99.99%` of the time unless the `pps == 1e18`.
+
+<https://github.com/code-423n4/2021-11-yaxis/blob/146febcb61ae7fe20b0920849c4f4bbe111c6ba7/contracts/v3/alchemix/adapters/YaxisVaultAdapter.sol#L68-L72>
+
+```solidity
+function withdraw(address _recipient, uint256 _amount) external override onlyAdmin {
+    vault.withdraw(_tokensToShares(_amount));
+    address _token = vault.getToken();
+    IDetailedERC20(_token).safeTransfer(_recipient, _amount);
+}
+```
+
+<https://github.com/code-423n4/2021-11-yaxis/blob/146febcb61ae7fe20b0920849c4f4bbe111c6ba7/contracts/v3/Vault.sol#L181-L187>
+
+```solidity
+function withdraw(
+    uint256 _shares
+)
+    public
+    override
+{
+    uint256 _amount = (balance().mul(_shares)).div(IERC20(address(vaultToken)).totalSupply());
+```
+
+#### Recommendation
+
+Change to:
+
+```solidity
+function withdraw(address _recipient, uint256 _amount) external override onlyAdmin {
+    address _token = vault.getToken();
+    uint256 beforeBalance = IDetailedERC20(_token).balanceOf(address(this));
+    
+    vault.withdraw(_tokensToShares(_amount));
+
+    IDetailedERC20(_token).safeTransfer(
+        _recipient,
+        IDetailedERC20(_token).balanceOf(address(this)) - beforeBalance
+    );
+}
+```
+
+**[Xuefeng-Zhu (yAxis) confirmed](https://github.com/code-423n4/2021-11-yaxis-findings/issues/46)** 
+
+## [[H-02] CDP.sol update overwrites user's credit on every positive increment](https://github.com/code-423n4/2021-11-yaxis-findings/issues/31)
+_Submitted by harleythedog_
+
+#### Impact
+
+Within `CDP.sol` (<https://github.com/code-423n4/2021-11-yaxis/blob/main/contracts/v3/alchemix/libraries/alchemist/CDP.sol>) there is a function called update. This function slowly decreases the debt of a position as yield is earned, until the debt is fully paid off, and the idea is then that the credit should begin incrementing as more yield is accumulated. However, the current logic to increment the totalCredit is this line of code (line 39 of `CDP.sol`):
+
+`\_self.totalCredit = \_earnedYield.sub(\_currentTotalDebt);`
+
+Notice that that each time update is called, this overwrites the previous totalCredit with the incremental credit accumulated. The line should instead be:
+
+`\_self.totalCredit = \_self.totalCredit.add(\_earnedYield.sub(\_currentTotalDebt));`
+
+Indeed, look at the function `getUpdatedTotalCredit`, it returns the value:
+
+`\_self.totalCredit + (\_unclaimedYield - \_currentTotalDebt);`
+
+So it is obviously intended that the `totalCredit` should keep increasing over time instead of being overwritten on each update with a small value. The impact of this issue is large - the credit of every position will always be overwritten and the correct information will be lost forever. User's credit should grow over time, but instead it is overwritten with a small value every time update is called.
+
+#### Proof of Concept
+
+See line 39 in `CDP.sol` here: <https://github.com/code-423n4/2021-11-yaxis/blob/main/contracts/v3/alchemix/libraries/alchemist/CDP.sol#:~:text=_self.totalCredit%20%3D%20_earnedYield.sub(_currentTotalDebt)%3B>
+
+#### Tools Used
+
+Manual inspection.
+
+#### Recommended Mitigation Steps
+
+Change code as described above to increment `totalCredit` instead of overwrite it.
+
+**[Xuefeng-Zhu (yAxis) disputed](https://github.com/code-423n4/2021-11-yaxis-findings/issues/31#issuecomment-985278604):**
+ > If there is debt, the credit should be zero 
+
+**[0xleastwood (judge) commented](https://github.com/code-423n4/2021-11-yaxis-findings/issues/31#issuecomment-998542307):**
+ > It seems like if `_self.totalDebt` is already zero and yield has been earned by the protocol, `_self.totalCredit` will be overwritten. This doesn't seem ideal, could you clarify why the issue is incorrect?
+
+**[0xleastwood (judge) commented](https://github.com/code-423n4/2021-11-yaxis-findings/issues/31#issuecomment-998543262):**
+ > If I'm not mistaken, yield can be earned from a positive credit (net 0 debt) position.
+
+**[Xuefeng-Zhu (yAxis) commented](https://github.com/code-423n4/2021-11-yaxis-findings/issues/31#issuecomment-999386020):**
+ > @0xleastwood `totalCredit ` is 0 if there is debt
+
+**[0xleastwood (judge) commented](https://github.com/code-423n4/2021-11-yaxis-findings/issues/31#issuecomment-999923125):**
+ > After chatting to @Xuefeng-Zhu in Discord, he was able to confirm the issue as valid. So keeping it as is.
+
+
+
+ 
+# Medium Risk Findings (1)
+## [[M-01] Prevent Minting During Emergency Exit](https://github.com/code-423n4/2021-11-yaxis-findings/issues/12)
+_Submitted by TimmyToes, also found by defsec_
+
+#### Impact
+
+Potential increased financial loss during security incident.
+
+#### Proof of Concept
+
+<https://github.com/code-423n4/2021-11-yaxis/blob/0311dd421fb78f4f174aca034e8239d1e80075fe/contracts/v3/alchemix/Alchemist.sol#L611>
+
+Consider a critical incident where a vault is being drained or in danger of being drained due to a vulnerability within the vault or its strategies.
+
+At this stage, you want to trigger emergency exit and users want to withdraw their funds and repay/liquidate to enable the withdrawal of funds. However, minting against debt does not seem like a desirable behaviour at this time. It only seems to enable unaware users to get themselves into trouble by locking up their funds, or allow an attacker to do more damage.
+
+#### Recommended Mitigation Steps
+
+Convert emergency exit check to a modifier, award wardens who made that suggestion, and then apply that modifier here.
+
+Alternatively, it is possible that the team might want to allow minting against credit: users minting against credit would effectively be cashing out their rewards. This might be seen as desirable during emergency exit, or it might be seen as a potential extra source of risk. If this is desired, then the emergency exit check could be placed at line 624 with a modified message, instructing users to only use credit.
+
+**[Xuefeng-Zhu (yAxis) confirmed](https://github.com/code-423n4/2021-11-yaxis-findings/issues/12)**
+
+# Low Risk Findings (12)
+- [[L-01] Pending governance is not cleared](https://github.com/code-423n4/2021-11-yaxis-findings/issues/63) _Submitted by cmichel_
+- [[L-02] `Alchemist.sol` does not use safeApprove](https://github.com/code-423n4/2021-11-yaxis-findings/issues/33) _Submitted by jonah1005, also found by cmichel_
+- [[L-03] `Alchemist.migrate` can push duplicate adapters to `_vaults`](https://github.com/code-423n4/2021-11-yaxis-findings/issues/65) _Submitted by cmichel_
+- [[L-04] `Transmuter.unstake` updates user without first updating distributing yield](https://github.com/code-423n4/2021-11-yaxis-findings/issues/66) _Submitted by cmichel_
+- [[L-05] No incentive to call `transmute()` instead of `forceTransmute(self)`](https://github.com/code-423n4/2021-11-yaxis-findings/issues/68) _Submitted by cmichel_
+- [[L-06] anyone can deposit to adapters directly](https://github.com/code-423n4/2021-11-yaxis-findings/issues/103) _Submitted by pauliax, also found by hickuphh3_
+- [[L-07] _setupRole not in constructor](https://github.com/code-423n4/2021-11-yaxis-findings/issues/107) _Submitted by pauliax_
+- [[L-08] setSentinel actually adds sentinel](https://github.com/code-423n4/2021-11-yaxis-findings/issues/108) _Submitted by pauliax_
+- [[L-09] Incorrect function docs](https://github.com/code-423n4/2021-11-yaxis-findings/issues/35) _Submitted by pmerkleplant, also found by pauliax_
+- [[L-10] Incorrect Event Emitted in Alchemist.sol](https://github.com/code-423n4/2021-11-yaxis-findings/issues/7) _Submitted by TimmyToes, also found by hubble, ye0lde, defsec, WatchPug, pauliax, and gzeon_
+- [[L-11] Incorrect comment or code in runPhasedDistribution (Transmuter.sol)](https://github.com/code-423n4/2021-11-yaxis-findings/issues/117) _Submitted by ye0lde_
+- [[L-12] Effects and Interactions Before Check](https://github.com/code-423n4/2021-11-yaxis-findings/issues/10) _Submitted by TimmyToes_
+
+# Non-Critical Findings (19)
+- [[N-01] Context and msg.sender](https://github.com/code-423n4/2021-11-yaxis-findings/issues/105) _Submitted by pauliax_
+- [[N-02] Convert Emergency Exit Check to Modifier.](https://github.com/code-423n4/2021-11-yaxis-findings/issues/11) _Submitted by TimmyToes_
+- [[N-04] Incorrect Info in Comment in Alchemist.sol](https://github.com/code-423n4/2021-11-yaxis-findings/issues/5) _Submitted by TimmyToes_
+- [[N-05] Incorrect Info in Comment in Alchemist.sol (138)](https://github.com/code-423n4/2021-11-yaxis-findings/issues/6) _Submitted by TimmyToes, also found by WatchPug_
+- [[N-06] Incorrect Comment](https://github.com/code-423n4/2021-11-yaxis-findings/issues/77) _Submitted by TimmyToes_
+- [[N-07] Lack of 'emit' keyword in AlToken.sol](https://github.com/code-423n4/2021-11-yaxis-findings/issues/4) _Submitted by tqts_
+- [[N-08] Use of deprecated `safeApprove`](https://github.com/code-423n4/2021-11-yaxis-findings/issues/47) _Submitted by WatchPug, also found by pants and gzeon_
+- [[N-09] Should `safeApprove(0)` first](https://github.com/code-423n4/2021-11-yaxis-findings/issues/48) _Submitted by WatchPug, also found by jonah1005 and defsec_
+- [[N-10] Lack of Proper Tests?](https://github.com/code-423n4/2021-11-yaxis-findings/issues/20) _Submitted by TimmyToes_
+- [[N-11] Open TODOs](https://github.com/code-423n4/2021-11-yaxis-findings/issues/87) _Submitted by pants_
+- [[N-12] Missing events for owner only functions that change critical parameters](https://github.com/code-423n4/2021-11-yaxis-findings/issues/34) _Submitted by defsec, also found by WatchPug_
+- [[N-13] Require statements without messages](https://github.com/code-423n4/2021-11-yaxis-findings/issues/88) _Submitted by pants_
+- [[N-14] No Transfer Ownership Pattern in AlToken.sol](https://github.com/code-423n4/2021-11-yaxis-findings/issues/56) _Submitted by Meta0xNull_
+- [[N-15] Constructor Lack of Zero Address Check for Tokens](https://github.com/code-423n4/2021-11-yaxis-findings/issues/60) _Submitted by Meta0xNull_
+- [[N-16] Tokens with fee on transfer are not supported](https://github.com/code-423n4/2021-11-yaxis-findings/issues/49) _Submitted by WatchPug, also found by TimmyToes and 0x0x0x_
+- [[N-17] No Event Emitted on Minting](https://github.com/code-423n4/2021-11-yaxis-findings/issues/76) _Submitted by TimmyToes_
+- [[N-18] Lack of Input Validation](https://github.com/code-423n4/2021-11-yaxis-findings/issues/75) _Submitted by TimmyToes_
+- [[N-19] No event for `Alchemist.sol#setPegMinimum`](https://github.com/code-423n4/2021-11-yaxis-findings/issues/24) _Submitted by 0x0x0x_
+- [[N-20] admin Variable is High Risk](https://github.com/code-423n4/2021-11-yaxis-findings/issues/15) _Submitted by TimmyToes_
+
+# Gas Optimizations (33)
+- [[G-01] `AlchemistVault.sol` can be optimised](https://github.com/code-423n4/2021-11-yaxis-findings/issues/100) _Submitted by 0x0x0x_
+- [[G-02] Optimize `Alchemist.sol#_withdrawFundsTo`](https://github.com/code-423n4/2021-11-yaxis-findings/issues/102) _Submitted by 0x0x0x_
+- [[G-03] Cache length of array when looping](https://github.com/code-423n4/2021-11-yaxis-findings/issues/17) _Submitted by 0x0x0x_
+- [[G-04] For uint `> 0` can be replaced with ` != 0` for gas optimisation](https://github.com/code-423n4/2021-11-yaxis-findings/issues/22) _Submitted by 0x0x0x_
+- [[G-05] At `Alchemist.sol#acceptGovernance`, cache `pendingGovernance` earlier to save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/23) _Submitted by 0x0x0x, also found by xxxxx_
+- [[G-06] `CDP.sol#update.sol` can be optimized](https://github.com/code-423n4/2021-11-yaxis-findings/issues/91) _Submitted by 0x0x0x_
+- [[G-07] `CDP.sol#getUpdatedTotalDebt` can be optimized](https://github.com/code-423n4/2021-11-yaxis-findings/issues/92) _Submitted by 0x0x0x_
+- [[G-08] Upgrade pragma to at least 0.8.4](https://github.com/code-423n4/2021-11-yaxis-findings/issues/26) _Submitted by defsec_
+- [[G-09] Redundant Import](https://github.com/code-423n4/2021-11-yaxis-findings/issues/28) _Submitted by defsec, also found by WatchPug_
+- [[G-10] Gas optimization: Caching variables](https://github.com/code-423n4/2021-11-yaxis-findings/issues/62) _Submitted by gzeon_
+- [[G-11] Gas Optimization: Inline instead of modifier](https://github.com/code-423n4/2021-11-yaxis-findings/issues/72) _Submitted by gzeon_
+- [[G-12] Gas optimization: Reduce storage write](https://github.com/code-423n4/2021-11-yaxis-findings/issues/97) _Submitted by gzeon_
+- [[G-13] several functions can be marked external](https://github.com/code-423n4/2021-11-yaxis-findings/issues/119) _Submitted by hack3r-0m, also found by defsec_
+- [[G-14] Remove FixedPointMath ](https://github.com/code-423n4/2021-11-yaxis-findings/issues/18) _Submitted by TimmyToes, also found by hickuphh3_
+- [[G-15] State variables can be `immutable`s](https://github.com/code-423n4/2021-11-yaxis-findings/issues/83) _Submitted by pants_
+- [[G-16] Constant expressions](https://github.com/code-423n4/2021-11-yaxis-findings/issues/110) _Submitted by pauliax_
+- [[G-17] Assigned operations to constant variables](https://github.com/code-423n4/2021-11-yaxis-findings/issues/111) _Submitted by pauliax_
+- [[G-18] Multiple Assignments to Storage Variable](https://github.com/code-423n4/2021-11-yaxis-findings/issues/9) _Submitted by TimmyToes_
+- [[G-19] Gas optimization when a paused user calls mint() in AlToken.sol](https://github.com/code-423n4/2021-11-yaxis-findings/issues/2) _Submitted by tqts, also found by Meta0xNull and WatchPug_
+- [[G-20] Gas optimization in AlToken.sol](https://github.com/code-423n4/2021-11-yaxis-findings/issues/3) _Submitted by tqts_
+- [[G-21] Unnecessary libraries](https://github.com/code-423n4/2021-11-yaxis-findings/issues/36) _Submitted by WatchPug_
+- [[G-22] Use immutable variable can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/37) _Submitted by WatchPug, also found by hickuphh3, pauliax, 0x0x0x, and TimmyToes_
+- [[G-23] Only using `SafeMath` when necessary can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/41) _Submitted by WatchPug_
+- [[G-24] Cache and read storage variables from the stack can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/44) _Submitted by WatchPug_
+- [[G-25] `YaxisVaultAdapter.sol` Use inline expression can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/45) _Submitted by WatchPug_
+- [[G-26] Use short reason strings can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/50) _Submitted by WatchPug, also found by pauliax_
+- [[G-27] Change unnecessary storage variables to constants can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/51) _Submitted by WatchPug_
+- [[G-28] Save `vault.getToken()` as an immutable variable in `YaxisVaultAdapter.sol` contract can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/52) _Submitted by WatchPug_
+- [[G-29] `Alchemist.sol#mint()` Two storage writes can be combined into one](https://github.com/code-423n4/2021-11-yaxis-findings/issues/53) _Submitted by WatchPug_
+- [[G-30] Inline internal functions that are being used only once can save gas](https://github.com/code-423n4/2021-11-yaxis-findings/issues/54) _Submitted by WatchPug_
+- [[G-31] Removing the unnecessary function](https://github.com/code-423n4/2021-11-yaxis-findings/issues/96) _Submitted by xxxxx, also found by TimmyToes, pauliax, and hack3r-0m_
+- [[G-32] Unused Named Returns](https://github.com/code-423n4/2021-11-yaxis-findings/issues/115) _Submitted by ye0lde_
+- [[G-33] TRANSMUTATION_PERIOD Issues](https://github.com/code-423n4/2021-11-yaxis-findings/issues/116) _Submitted by ye0lde_
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

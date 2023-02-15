@@ -1,0 +1,40 @@
+{
+  "name": "openleverage",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test",
+    "merge-contracts": "sol-merger --export-plugin SPDXLicenseRemovePlugin \"./contracts/*.sol\" ./build && sol-merger --export-plugin SPDXLicenseRemovePlugin \"./contracts/dex/*.sol\" ./build/dex && sol-merger --export-plugin SPDXLicenseRemovePlugin \"./contracts/farming/*.sol\" ./build/farming && sol-merger --export-plugin SPDXLicenseRemovePlugin \"./contracts/gov/*.sol\" ./build/gov && sol-merger --export-plugin SPDXLicenseRemovePlugin \"./contracts/liquidity/*.sol\" ./build/liquidity && sol-merger --export-plugin SPDXLicenseRemovePlugin \"./contracts/test/*.sol\" ./build/test",
+    "posttest": "docker stop testrpc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "3.4.2",
+    "@uniswap/v2-core": "^1.0.1",
+    "@uniswap/v2-periphery": "^1.1.0-beta.0",
+    "@uniswap/v3-periphery": "^1.1.0",
+    "bignumber.js": "^1.5.0",
+    "ethers": "^5.5.1",
+    "ganache-cli": "6.12.2",
+    "ganache-time-traveler": "^1.0.15",
+    "keccak256": "^1.0.3",
+    "lodash.template": "^4.5.0",
+    "merkletreejs": "^0.2.24",
+    "solc": "^0.7.6",
+    "truffle": "^5.4.7",
+    "truffle-contract-size": "^2.0.1"
+  },
+  "bundleDependencies": false,
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^1.5.1",
+    "eth-gas-reporter": "^0.2.20",
+    "mocha-logger": "^1.0.7",
+    "sol-merger": "^3.1.0",
+    "solidity-coverage": "^0.7.16",
+    "truffle-plugin-verify": "^0.5.18"
+  }
+}

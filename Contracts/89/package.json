@@ -1,0 +1,34 @@
+{
+  "name": "2022-02-hubble",
+  "version": "1.0.0",
+  "description": "Perpetual futures exchange on Avalanche.",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "compile:swap": "vyper -f abi,bytecode contracts/curve-v2/Swap.vy > contracts/curve-v2/Swap.txt",
+    "compile:CurveMath": "vyper -f abi,bytecode contracts/curve-v2/CurveMath.vy > contracts/curve-v2/CurveMath.txt",
+    "compile:views": "vyper -f abi,bytecode contracts/curve-v2/Views.vy > contracts/curve-v2/Views.txt",
+    "vyper-compile": "npm run compile:swap && npm run compile:CurveMath && npm run compile:views"
+  },
+  "license": "BUSL-1.1",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "@openzeppelin/contracts": "4.2.0",
+    "@openzeppelin/contracts-upgradeable": "4.3.2",
+    "chai": "^4.3.4",
+    "csv-parser": "^3.0.0",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.1",
+    "hardhat": "^2.8.3",
+    "hardhat-docgen": "^1.3.0",
+    "hardhat-gas-reporter": "^1.0.6",
+    "hardhat-spdx-license-identifier": "^2.0.3",
+    "solidity-coverage": "^0.7.17"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code-423n4/2022-02-hubble.git"
+  },
+  "homepage": "https://github.com/code-423n4/2022-02-hubble#readme"
+}

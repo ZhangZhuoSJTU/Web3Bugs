@@ -1,0 +1,490 @@
+---
+sponsor: "Nested Finance"
+slug: "2021-11-nested"
+date: "2021-01-12"
+title: "Nested Finance contest"
+findings: "https://github.com/code-423n4/2021-11-nested-findings/issues"
+contest: 53
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the code contest outlined in this document, C4 conducted an analysis of Nested Finance  smart contract system written in Solidity. The code contest took place between November 11—November 17 2021.
+
+## Wardens
+
+29 Wardens contributed reports to the Nested Finance contest:
+
+1. GreyArt ([hickuphh3](https://twitter.com/HickupH) and [itsmeSTYJ](https://twitter.com/itsmeSTYJ))
+2. jayjonah8
+3. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+4. [palina](https://twitter.com/PalinaTolmach)
+5. [cmichel](https://twitter.com/cmichelio)
+6. [pauliax](https://twitter.com/SolidityDev)
+7. hyh
+8. pants
+9. [TomFrench](https://github.com/TomAFrench)
+10. fatima_naz
+11. [hack3r-0m](https://twitter.com/hack3r_0m)
+12. [defsec](https://twitter.com/defsec_)
+13. [0xngndev](https://twitter.com/ngndev)
+14. [ye0lde](https://twitter.com/_ye0lde)
+15. [gzeon](https://twitter.com/gzeon)
+16. [GiveMeTestEther](https://twitter.com/GiveMeTestEther)
+17. [PierrickGT](https://twitter.com/PierrickGT)
+18. [xYrYuYx](https://twitter.com/xYrYuYx)
+19. [loop](https://twitter.com/loop_225)
+20. [Meta0xNull](https://twitter.com/Meta0xNull)
+21. 0x0x0x
+22. [pmerkleplant](https://twitter.com/merkleplant_eth)
+23. harleythedog
+24. elprofesor
+25. [MaCree](https://twitter.com/qwertyuiop_eth)
+26. [gpersoon](https://twitter.com/gpersoon)
+27. [nathaniel](https://twitter.com/n4th4n131?t&#x3D;ZXGbALC3q6JMMoolZddgHg&amp;s&#x3D;09)
+
+This contest was judged by [Alberto Cuesta Cañada](https://twitter.com/alcueca (judge)).
+
+Final report assembled by [moneylegobatman](https://twitter.com/money_lego) and [CloudEllie](https://twitter.com/CloudEllie1).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 31 unique vulnerabilities and 101 total findings. All of the issues presented here are linked back to their original finding.
+
+Of these vulnerabilities, 1 received a risk rating in the category of HIGH severity, 8 received a risk rating in the category of MEDIUM severity, and 22 received a risk rating in the category of LOW severity.
+
+C4 analysis also identified 20 non-critical recommendations and 50 gas optimizations.
+
+# Scope
+
+The code under review can be found within the [C4 Nested Finance contest repository](https://github.com/code-423n4/2021-11-nested), and is composed of 29 smart contracts written in the Solidity programming language and includes 1960 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (1)
+## [[H-01] Copy your own portfolio to keep earning royalties ](https://github.com/code-423n4/2021-11-nested-findings/issues/30)
+_Submitted by jayjonah8_
+
+#### Impact
+In `NestedFactory.sol` going through the `create()` function which leads to the `sendFeesWithRoyalties()` => `addShares()` function,  Im not seeing any checks preventing someone from copying their own portfolio and receiving royalty shares for it and simply repeating the process over and over again.
+
+#### Proof of Concept
+- [`FeeSplitter.sol` L152](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/FeeSplitter.sol#L152)
+- [`FeeSplitter.sol` L220](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/FeeSplitter.sol#L220)
+- [`NestedFactory.sol` L103](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L103)
+- [`NestedAsset.sol` L69](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedAsset.sol#L69)
+- [`NestedFactory.sol` L103](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L103)
+- [`NestedFactory.sol` L491](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L491)
+
+#### Tools Used
+Manual code review
+
+#### Recommended Mitigation Steps
+A require statement should be added not allowing users to copy their own portfolios.
+
+**[maximebrugel (Nested) disagreed with severity](https://github.com/code-423n4/2021-11-nested-findings/issues/30#issuecomment-970388713):**
+ > Indeed, a user can copy his own portfolio to reduce the fees, however a require statement won't fix this issue...
+>
+> This problem cannot be corrected but only mitigated, since the user can use two different wallets.
+> Currently the front-end doesn't allow to duplicate a portfolio with the same address.
+>
+> I don't consider this a "High Risk" since the assets are not really stolen. Maybe "Med Risk" ? This is by design an issue and we tolerate that users can do this (with multiple wallets).
+>
+
+**[alcueca (judge) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/30#issuecomment-985642915):**
+ > I'm reading that the vulnerability actually lowers fees to zero for a dedicated attacker, since creating a arbitrarily large number of wallets and bypassing the frontend is easy. In theory leaking protocol value would be a severity 2, but since this is effectively disabling a core feature of the protocol (fees), the severity 3 is sustained.
+
+# Medium Risk Findings (8)
+## [[M-01] `setReserve()` can be front-run](https://github.com/code-423n4/2021-11-nested-findings/issues/82)
+_Submitted by palina_
+
+#### Impact
+The `reserve` address variable in NestedFactory.sol remains equal to 0 before the `setReserve()` function is called by an owner. This may lead to incorrect transfers of tokens or invalid comparison with e.g., the asset reserve (nestedRecords.getAssetReserve(\_nftId) == address(reserve)), should they occur before the value for `reserve` was set.
+In addition, the immutabiliy of the `reserve` variable requires extra caution when setting the value.
+
+#### Proof of Concept
+`setReserve()`: [`NestedFactory.sol` L89](https://github.com/code-423n4/2021-11-nested/blob/5d113967cdf7c9ee29802e1ecb176c656386fe9b/contracts/NestedFactory.sol#L89)
+
+#### Tools Used
+Manual Analysis
+
+#### Recommended Mitigation Steps
+Consider initializing the value for the `reserve` variable in the constructor.
+
+**[maximebrugel (Nested) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/82#issuecomment-970327769):**
+ > The main issue is duplicated : #60
+>
+> The following comment can be considered as a duplicate of #83 if the extra caution is checking the zero address.
+> > In addition, the immutabiliy of the reserve variable requires extra caution when setting the value.
+>
+
+**[alcueca (judge) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/82#issuecomment-985410734):**
+ > The fact that the call to `setReserve` can be front-run is not being taken into account by the sponsor. I'm marking this one as not a duplicate.
+
+## [[M-02] FeeSplitter: No sanity check to prevent shareholder from being added twice.](https://github.com/code-423n4/2021-11-nested-findings/issues/135)
+_Submitted by GreyArt, also found by hack3r-0m_
+
+#### Impact
+It is possible for duplicate shareholders to be added. These shareholders will get more than intended when `_sendFee()` is called.
+
+#### Recommended Mitigation Steps
+Ensure that the `_accounts` array is sorted in `setShareholders()`.
+
+```jsx
+for (uint256 i = 0; i < _accounts.length; i++) {
+	if (i > 0) {
+		require(_accounts[i - 1] < _accounts[i], "FeeSplitter: ACCOUNTS_NOT_SORTED");
+	}
+	_addShareholder(_accounts[i], _weights[i]);
+}
+```
+
+**[adrien-supizet (Nested) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/135#issuecomment-975351632):**
+ > Duplicate #231
+
+**[adrien-supizet (Nested) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/135#issuecomment-975352623):**
+ > Indeed there is a fix to do here, we'll prevent adding the same shareholders instead as suggested in #231
+
+**[alcueca (judge) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/135#issuecomment-985366841):**
+ > Taking this issue as the principal, and raising #231 to medium severity.
+
+## [[M-03] NestedFactory: Ensure zero msg.value if transferring from user and `inputToken` is not ETH ](https://github.com/code-423n4/2021-11-nested-findings/issues/136)
+_Submitted by GreyArt_
+
+#### Impact
+A user that mistakenly calls either `create()` or `addToken()` with WETH (or another ERC20) as the input token, but includes native ETH with the function call will have his native ETH permanently locked in the contract.
+
+#### Recommended Mitigation Steps
+It is best to ensure that `msg.value = 0` in `_transferInputTokens()` for the scenario mentioned above.
+
+```jsx
+} else if (address(_inputToken) == ETH) {
+	...
+} else {
+	require(msg.value == 0, "NestedFactory::_transferInputTokens: ETH sent for non-ETH transfer");
+  _inputToken.safeTransferFrom(_msgSender(), address(this), _inputTokenAmount);
+}
+```
+
+**[adrien-supizet (Nested) confirmed](https://github.com/code-423n4/2021-11-nested-findings/issues/136)**
+
+## [[M-04] FeeSplitter: Unbounded number of shareholders can cause DOS](https://github.com/code-423n4/2021-11-nested-findings/issues/137)
+_Submitted by GreyArt_
+
+#### Impact
+There is no limit to the number of shareholders. It is therefore possible to set a large number of shareholders such that `_sendFees()` will run out of gas when adding shares to each shareholder.
+This will cause denial of service to all NestedFactory functions, especially the ones that will remove funds like `withdraw()` and `destroy()`.
+
+#### Recommended Mitigation Steps
+It would be best to set a sanity maximum number of shareholders that can be added.
+
+**[adrien-supizet (Nested) acknowledged](https://github.com/code-423n4/2021-11-nested-findings/issues/137)**
+
+## [[M-05] isResolverCached() will always return false after removing operator](https://github.com/code-423n4/2021-11-nested-findings/issues/139)
+_Submitted by GreyArt, also found by WatchPug_
+
+#### Impact
+While there is no loss of funds, removing an operator will cause the cache functionality to be permanently broken. If there was a function that had a modifier which requires the cache to be synced before the function can be called, it would not be callable as well.
+
+The underlying issue is how the `bytes32` operator is removed from the array when `removeOperator()` is called. Its value gets deleted (set to 0x0), but isn't taken out of the array.
+
+#### Proof of Concept
+For ease of reading, we use abbreviated strings like `0xA`, `0xB` for `bytes32` and `address` types.
+
+1.  Import 3 operators by calling `OperatorResolver.importOperators([0xA, 0xB, 0xC], [0x1, 0x2, 0x3)`.
+2.  Call `NestedFactory.addOperator()` 3 times to push these 3 operators into the `operators` state variable.
+3.  Call `NestedFactory.rebuildCache()` to build the cache.
+4.  Let's say the second operator `0xB` is to be removed. Taking reference from the `removeOperator.ts` script, `OperatorResolver.importOperators([0xA, 0xB, 0xC], [0x1, 0x2, 0x3)` is called first. This works because OperatorResolver uses a mapping(bytes32 ⇒ address) to represent the operators. Hence, by setting `0xB`'s destination address to be the null address, it is like as if he was never an operator.
+5.  Call `NestedFactory.rebuildCache()` to rebuild the cache. `resolverAddressesRequired()` will return `[0xA, 0xB, 0xC]`. `0xB` will be removed from `addressCache` because `resolver.getAddress(0xB)` returns 0x000 since it has been deleted from the OperatorResolver.
+6.  Call `NestedFactory.removeOperator(0xB)`. The `operators` array now looks like this: `[0xA, 0x0, 0xC]`.
+7.  When you try to call `NestedFactory.isResolverCached`, it will always return false because of the null `bytes32` value, where `addressCache[0x0]` will always return the null address.
+
+#### Recommended Mitigation Steps
+Instead of doing an element deletion, it should be replaced with the last element, then have the last element popped in `removeOperator()`.
+
+```jsx
+function removeOperator(bytes32 operator) external override onlyOwner {
+	for (uint256 i = 0; i < operators.length; i++) {
+		if (operators[i] == operator) {
+			operators[i] = operators[operators.length - 1];
+			operators.pop();
+			break;
+		}
+	}
+}
+```
+
+**[maximebrugel (Nested) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/139#issuecomment-975378231):**
+ > Duplicated : #58
+
+**[alcueca (judge) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/139#issuecomment-985431604):**
+ > Taking this issue apart as a non-duplicate, for finding the most severe consequence of the incorrect implementation.
+
+## [[M-06] `NestedFactory.sol#_submitInOrders()` Wrong implementation cause users to be overcharged](https://github.com/code-423n4/2021-11-nested-findings/issues/160)
+_Submitted by WatchPug_
+
+When executing orders, the actual `amountSpent + feesAmount` can be lower than `_inputTokenAmount`, the unspent amount should be returned to the user.
+
+However, in the current implementation, the unspent amount will be taken as part of the fee.
+[`NestedFactory.sol` L285-L309](https://github.com/code-423n4/2021-11-nested/blob/f646002b692ca5fa3631acfff87dda897541cf41/contracts/NestedFactory.sol#L285-L309)
+
+```solidity
+function _submitInOrders(
+    uint256 _nftId,
+    IERC20 _inputToken,
+    uint256 _inputTokenAmount,
+    Order[] calldata _orders,
+    bool _reserved,
+    bool _fromReserve
+) private returns (uint256 feesAmount, IERC20 tokenSold) {
+    _inputToken = _transferInputTokens(_nftId, _inputToken, _inputTokenAmount, _fromReserve);
+    uint256 amountSpent;
+    for (uint256 i = 0; i < _orders.length; i++) {
+        amountSpent += _submitOrder(address(_inputToken), _orders[i].token, _nftId, _orders[i], _reserved);
+    }
+    feesAmount = _calculateFees(_msgSender(), amountSpent);
+    assert(amountSpent <= _inputTokenAmount - feesAmount); // overspent
+
+    // If input is from the reserve, update the records
+    if (_fromReserve) {
+        _decreaseHoldingAmount(_nftId, address(_inputToken), _inputTokenAmount);
+    }
+
+    _handleUnderSpending(_inputTokenAmount - feesAmount, amountSpent, _inputToken);
+
+    tokenSold = _inputToken;
+}
+```
+
+##### Recommendation
+
+Change to:
+
+```solidity
+function _submitInOrders(
+    uint256 _nftId,
+    IERC20 _inputToken,
+    uint256 _inputTokenAmount,
+    Order[] calldata _orders,
+    bool _reserved,
+    bool _fromReserve
+) private returns (uint256 feesAmount, IERC20 tokenSold) {
+    _inputToken = _transferInputTokens(_nftId, _inputToken, _inputTokenAmount, _fromReserve);
+    uint256 amountSpent;
+    for (uint256 i = 0; i < _orders.length; i++) {
+        amountSpent += _submitOrder(address(_inputToken), _orders[i].token, _nftId, _orders[i], _reserved);
+    }
+    feesAmount = _calculateFees(_msgSender(), amountSpent);
+    assert(amountSpent <= _inputTokenAmount - feesAmount); // overspent
+
+    // If input is from the reserve, update the records
+    if (_fromReserve) {
+        _decreaseHoldingAmount(_nftId, address(_inputToken), amountSpent+feesAmount);
+    }
+
+    ExchangeHelpers.setMaxAllowance(_token, address(feeSplitter));
+    feeSplitter.sendFees(_token, feesAmount);
+
+    if (_inputTokenAmount > amountSpent + feesAmount) {
+        _inputToken.transfer(_fromReserve ? address(reserve) : _msgSender(), _inputTokenAmount - amountSpent - feesAmount);
+    }
+
+    tokenSold = _inputToken;
+}
+```
+
+**[adrien-supizet (Nested) disputed and then confirmed](https://github.com/code-423n4/2021-11-nested-findings/issues/160#issuecomment-976658334):**
+ > ## Rationale
+> We don't consider this an issue as this was done on purpose. We wanted to treat the positive slippage as regular fees.
+> Most times, the dust of positive slippage will cost more to the user if they are transferred rather than passed along fees.
+>
+> We made it possible for us to retrieve overcharged amounts in case of mistakes to give them back to users.
+>
+> ## New behavior
+> But for the sake of transparency, and in the spirit of DeFi, we have reviewed the business model of the protocol and decided to transfer back any amount that was unspent and which exceeds the 1% fixed fee.
+>
+> ## Resolution
+> Selecting "disputed" for now but I'll let a judge review if this should be included in the report, and if the severity was correct, as we were able to give back tokens to users if they made a mistake calling the protocol.
+
+**[alcueca (judge) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/160#issuecomment-985607076):**
+ > If stated in the README or comments, the issue would be invalid. The sponsor can choose whichever behaviour suits their business model. When not stated in the README, any asset loss to users or protocol is a valid issue. User losses are expected to be a severity 3, but in this case, and given that those losses are inferior to the gas, the issue is downgraded to severity 2.
+>
+> In the future, please state in the code any asset losses that are accepted by the protocol.
+
+## [[M-07] Ensure on-chain that cache is synced](https://github.com/code-423n4/2021-11-nested-findings/issues/217)
+_Submitted by GreyArt, also found by WatchPug_
+
+#### Impact
+Currently, many core operations (like `NestedFactory.create()`, `NestedFactory.swapTokenForTokens()`) are dependent on the assumption that the cache is synced before these functions are executed however this may not necessarily be the case.
+
+#### Proof of Concept
+1.  `OperatorResolver.importOperators()` is called to remove an operator.
+2.  A user calls `NestedFactory.create()` that uses the operator that was being removed / updated.
+3.  `NestedFactory.rebuildCache()` is called to rebuild cache.
+
+This flow is not aware that the cache is not in synced.
+
+#### Recommended Mitigation Steps
+Add a modifier to require that the cache is synced to all functions that interact with the operators.
+
+## [[M-08] Passing multiple ETH deposits in orders array will use the same `msg.value` many times](https://github.com/code-423n4/2021-11-nested-findings/issues/226)
+_Submitted by hyh, also found by jayjonah8_
+
+#### Impact
+Contract holdings can be emptied as malicious user will do deposit/withdraw to extract value. This is possible because after `transferInputTokens` system uses contract balance for user's operations, assuming that equivalent value was transferred.
+
+#### Proof of Concept
+`msg.value` persist over calls, so passing `'Order[] calldata _orders'` holding multiple ETH deposits will use the same msg.value in each of them, resulting in multiple deposits, that sums up to much bigger accounted value than actually deposited value, up to contract's ETH holdings.
+
+create / `addTokens` -> `submitInOrders` -> `transferInputTokens`
+- [`NestedFactory.sol` L103](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L103)
+- [`NestedFactory.sol` L119](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L119)
+
+`sellTokensToWallet` -> `submitOutOrders` -> `transferInputTokens`
+- [`NestedFactory.sol` L172](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L172)
+
+`sellTokensToNft` -> `submitOutOrders` -> `transferInputTokens`
+- [`NestedFactory.sol` L152](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L152)
+`transferInputTokens` uses msg.value:
+
+[`NestedFactory.sol` L462](https://github.com/code-423n4/2021-11-nested/blob/main/contracts/NestedFactory.sol#L462)
+#### Recommended Mitigation Steps
+
+Controlling ETH to be only once in orders will not help, as `NestedFactory` inherits from `Multicall`, which` multicall(bytes\[] calldata data)` function allows same reusage of msg.value, which will persist over calls.
+
+So, it is recommended to treat ETH exclusively, not allowing ETH operations to be batched at all.
+
+**[adrien-supizet (Nested) disagreed with severity](https://github.com/code-423n4/2021-11-nested-findings/issues/226#issuecomment-972785893):**
+ > Multicall is not currently used, and the funds exposed would be the NestedFactory's which should hold no funds.
+>
+> To avoid future bugs, we're going to remove the multicall library, but we don't think this is a high severity issue.
+
+**[alcueca (judge) commented](https://github.com/code-423n4/2021-11-nested-findings/issues/226#issuecomment-985376568):**
+ > Downgrading severity to 2 because the NestedFactory is not expected to hold funds, and therefore there is no risk of a loss. You can't deposit the same Ether twice in the WETH contract.
+>
+> Also keeping this as the main over #13.
+
+# Low Risk Findings (22)
+- [[L-01] 1:1 linkage between factory and reserve prevents desired upgradability path.](https://github.com/code-423n4/2021-11-nested-findings/issues/32) _Submitted by TomFrench_
+- [[L-02] `claimFees` may end up locking user funds](https://github.com/code-423n4/2021-11-nested-findings/issues/39) _Submitted by 0xngndev_
+- [[L-03] Use SafeERC20 instead of IERC20 in contracts/mocks/DummyRouter.sol ](https://github.com/code-423n4/2021-11-nested-findings/issues/41) _Submitted by fatima_naz_
+- [[L-04] FeeSplitter:` totalWeights` can be set to 0 by `onlyOwner`](https://github.com/code-423n4/2021-11-nested-findings/issues/43) _Submitted by GiveMeTestEther, also found by pauliax_
+- [[L-05] `ExchangeHelpers`: in `setMaxAllowance`, `safeApprove` shouldn't be used](https://github.com/code-423n4/2021-11-nested-findings/issues/50) _Submitted by PierrickGT, also found by harleythedog, pants, gzeon, and WatchPug_
+- [[L-06] Unchecked return value in `triggerForToken()`](https://github.com/code-423n4/2021-11-nested-findings/issues/76) _Submitted by palina, also found by pauliax_
+- [[L-07] `NestedFactory.unlockTokens` fails to use safe transfer](https://github.com/code-423n4/2021-11-nested-findings/issues/78) _Submitted by elprofesor, also found by loop, palina, WatchPug, cmichel, and pauliax_
+- [[L-08] Add zero-address checkers](https://github.com/code-423n4/2021-11-nested-findings/issues/108) _Submitted by xYrYuYx, also found by PierrickGT, loop, palina, and pauliax_
+- [[L-09] DummyRouter.sol .transfer isn't safe](https://github.com/code-423n4/2021-11-nested-findings/issues/92) _Submitted by pants_
+- [[L-10] `transferOwnership` should be two step process](https://github.com/code-423n4/2021-11-nested-findings/issues/101) _Submitted by defsec_
+- [[L-11] Missing input validation on array lengths ](https://github.com/code-423n4/2021-11-nested-findings/issues/103) _Submitted by ye0lde_
+- [[L-12] FeeSplitter: `ETH_ADDR` isn't supported](https://github.com/code-423n4/2021-11-nested-findings/issues/134) _Submitted by GreyArt_
+- [[L-13] Consider making `_calculateFees` inline to save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/167) _Submitted by WatchPug, also found by PierrickGT, loop, palina, ye0lde, hyh, and hack3r-0m_
+- [[L-14] Missing parameter validation](https://github.com/code-423n4/2021-11-nested-findings/issues/178) _Submitted by cmichel, also found by GreyArt_
+- [[L-15] Cannot change `tokenUri`](https://github.com/code-423n4/2021-11-nested-findings/issues/179) _Submitted by cmichel_
+- [[L-16] Can add duplicate operators](https://github.com/code-423n4/2021-11-nested-findings/issues/180) _Submitted by cmichel, also found by GreyArt and gzeon_
+- [[L-17] Function using `msg.value` called in loop](https://github.com/code-423n4/2021-11-nested-findings/issues/182) _Submitted by cmichel_
+- [[L-18] `_handleUnderSpending` reverts if condition is false](https://github.com/code-423n4/2021-11-nested-findings/issues/183) _Submitted by cmichel_
+- [[L-19] `NestedFactory.addTokens` and withdraw functions require NFT reserve check](https://github.com/code-423n4/2021-11-nested-findings/issues/199) _Submitted by hyh_
+- [[L-20] Can't revoke factory in NestedRecrods](https://github.com/code-423n4/2021-11-nested-findings/issues/203) _Submitted by pauliax_
+- [[L-21] `NestedFactory.removeOperator` code doesn't correspond to it's logic](https://github.com/code-423n4/2021-11-nested-findings/issues/220) _Submitted by hyh, also found by loop, MaCree, pmerkleplant, palina, elprofesor, fatima_naz, fatima_naz, ye0lde, xYrYuYx, gzeon, gpersoon, WatchPug, and pauliax_
+- [[L-22] Use of `assert()` instead of `require()`](https://github.com/code-423n4/2021-11-nested-findings/issues/166) _Submitted by WatchPug, also found by fatima_naz_
+
+# Non-Critical Findings (20)
+- [[N-01] `ZeroExOperator`](https://github.com/code-423n4/2021-11-nested-findings/issues/3) _Submitted by TomFrench_
+- [[N-02] Weak guarantees on `ZeroExOperator using correct create2 salt to recompute storage address](https://github.com/code-423n4/2021-11-nested-findings/issues/4) _Submitted by TomFrench_
+- [[N-03] Multiple Solidity pragma](https://github.com/code-423n4/2021-11-nested-findings/issues/22) _Submitted by fatima_naz_
+- [[N-04] NestedBuybacker sends NST to NestedReserve with no proper way to retrieve it.](https://github.com/code-423n4/2021-11-nested-findings/issues/33) _Submitted by TomFrench_
+- [[N-05] Typo](https://github.com/code-423n4/2021-11-nested-findings/issues/37) _Submitted by 0xngndev, also found by GreyArt_
+- [[N-06] Indexing parameters of your events](https://github.com/code-423n4/2021-11-nested-findings/issues/40) _Submitted by 0xngndev_
+- [[N-07] Missing events for critical privileged functions](https://github.com/code-423n4/2021-11-nested-findings/issues/42) _Submitted by GiveMeTestEther, also found by 0x0x0x, elprofesor, pants, and WatchPug_
+- [[N-08] Comment for PaymentReceived event should state "received" instead of "released"](https://github.com/code-423n4/2021-11-nested-findings/issues/44) _Submitted by GiveMeTestEther_
+- [[N-09] Different coding style for same pattern: x += y and sometimes x = x + y](https://github.com/code-423n4/2021-11-nested-findings/issues/45) _Submitted by GiveMeTestEther_
+- [[N-10] Remove empty file OwnableOperator.so](https://github.com/code-423n4/2021-11-nested-findings/issues/47) _Submitted by GiveMeTestEther, also found by WatchPug_
+- [[N-11] OperatorHelpers.sol: function decodeDataAndRequire state mutability can be restricted to pure](https://github.com/code-423n4/2021-11-nested-findings/issues/48) _Submitted by GiveMeTestEther, also found by palina and WatchPug_
+- [[N-12] Wrong Error Message in _transferInputTokens()](https://github.com/code-423n4/2021-11-nested-findings/issues/53) _Submitted by Meta0xNull_
+- [[N-13] Missing events on changes](https://github.com/code-423n4/2021-11-nested-findings/issues/84) _Submitted by palina_
+- [[N-14] Unused Named Return](https://github.com/code-423n4/2021-11-nested-findings/issues/105) _Submitted by ye0lde, also found by pants_
+- [[N-15] NestedFactory._decreaseHoldingAmount needs explicit amount control for spending reserve](https://github.com/code-423n4/2021-11-nested-findings/issues/223) _Submitted by hyh_
+- [[N-16] No used library added](https://github.com/code-423n4/2021-11-nested-findings/issues/114) _Submitted by xYrYuYx_
+- [[N-17] Misleading error message](https://github.com/code-423n4/2021-11-nested-findings/issues/161) _Submitted by WatchPug_
+- [[N-18] NestedAsset.setFactory should be named addFactory](https://github.com/code-423n4/2021-11-nested-findings/issues/204) _Submitted by hyh_
+- [[N-19] INestedToken interface](https://github.com/code-423n4/2021-11-nested-findings/issues/206) _Submitted by pauliax_
+- [[N-20] OperatorResolver.areAddressesImported doesn't check lengths of argument arrays](https://github.com/code-423n4/2021-11-nested-findings/issues/210) _Submitted by hyh_
+
+# Gas Optimizations (50)
+- [[G-01] use msg.sender rather than _msgSender() in FeeSplitter.receive](https://github.com/code-423n4/2021-11-nested-findings/issues/1) _Submitted by TomFrench_
+- [[G-02] NestedFactory: _transferToReserveAndStore can be simplified to save on gas](https://github.com/code-423n4/2021-11-nested-findings/issues/5) _Submitted by PierrickGT_
+- [[G-03] Save gas by caching array length used in for loops](https://github.com/code-423n4/2021-11-nested-findings/issues/7) _Submitted by 0x0x0x, also found by pants, xYrYuYx, gzeon, WatchPug, defsec, and pauliax_
+- [[G-04] For `uint` replace `> 0` with `!= 0`](https://github.com/code-423n4/2021-11-nested-findings/issues/8) _Submitted by 0x0x0x, also found by defsec_
+- [[G-05] `updateShareholder` in `FeeSplitter.sol` can be implemented more efficiently](https://github.com/code-423n4/2021-11-nested-findings/issues/11) _Submitted by 0x0x0x_
+- [[G-06] Reduce require messages length to save contract size](https://github.com/code-423n4/2021-11-nested-findings/issues/14) _Submitted by 0xngndev, also found by GiveMeTestEther, gzeon, WatchPug, pauliax, and ye0lde_
+- [[G-07] unchecked { ++i }  is more gas efficient than i++ for loops](https://github.com/code-423n4/2021-11-nested-findings/issues/25) _Submitted by GiveMeTestEther, also found and pants_
+- [[G-08] FlatOperator can be inlined into NestedFactory to save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/26) _Submitted by TomFrench_
+- [[G-09] `NestedReserve.transferFromFactory` function increases deployment gas costs unnecessarily](https://github.com/code-423n4/2021-11-nested-findings/issues/27) _Submitted by TomFrench_
+- [[G-10] More gas efficient calculation of weights](https://github.com/code-423n4/2021-11-nested-findings/issues/28) _Submitted by GiveMeTestEther, also found by WatchPug_
+- [[G-11] Mix of external and public function visibility with the same access modifier](https://github.com/code-423n4/2021-11-nested-findings/issues/29) _Submitted by GiveMeTestEther, also found by defsec_
+- [[G-12] Move from a pull to a push pattern for sending fees to the FeeSplitter](https://github.com/code-423n4/2021-11-nested-findings/issues/34) _Submitted by TomFrench, also found by pauliax_
+- [[G-13] Store hash of `type(ZeroExStorage).creationCode` rather than recalculating it on each call](https://github.com/code-423n4/2021-11-nested-findings/issues/35) _Submitted by TomFrench_
+- [[G-14] Adding an if check to avoid unnecessary call](https://github.com/code-423n4/2021-11-nested-findings/issues/38) _Submitted by 0xngndev_
+- [[G-15] Subtraction from` totalWeights` can be done unchecked to save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/46) _Submitted by GiveMeTestEther, also found by WatchPug, defsec, and pauliax_
+- [[G-16] NestedFactory: in deleteAsset and freeToken, tokens should only be declared once ](https://github.com/code-423n4/2021-11-nested-findings/issues/49) _Submitted by PierrickGT_
+- [[G-17] function mintWithMetadata() Unused](https://github.com/code-423n4/2021-11-nested-findings/issues/55) _Submitted by Meta0xNull_
+- [[G-18] _sendFees() Repeat SLOAD shareholders In Loop](https://github.com/code-423n4/2021-11-nested-findings/issues/57) _Submitted by Meta0xNull_
+- [[G-19] `removeFactory` has `==true` comparison in require statement](https://github.com/code-423n4/2021-11-nested-findings/issues/63) _Submitted by loop, also found by palina_
+- [[G-20] Remove unnecessary `balanceOf` call in `NestedBuybacker::triggerForToken`](https://github.com/code-423n4/2021-11-nested-findings/issues/65) _Submitted by pmerkleplant, also found by palina, nathaniel, WatchPug, and cmichel_
+- [[G-21] Refactor `FeeSplitter::getAmountDue` to save one variable slot](https://github.com/code-423n4/2021-11-nested-findings/issues/68) _Submitted by pmerkleplant_
+- [[G-22] Public functions can be declared external](https://github.com/code-423n4/2021-11-nested-findings/issues/72) _Submitted by palina, also found by xYrYuYx_
+- [[G-23] Gas-consuming way to add shareholders](https://github.com/code-423n4/2021-11-nested-findings/issues/81) _Submitted by palina_
+- [[G-24] WETHMock withdraw function unnecessary safe math](https://github.com/code-423n4/2021-11-nested-findings/issues/90) _Submitted by pants_
+- [[G-25] reordering struct fields](https://github.com/code-423n4/2021-11-nested-findings/issues/96) _Submitted by pants_
+- [[G-26] double reading of state variable inside a loop](https://github.com/code-423n4/2021-11-nested-findings/issues/98) _Submitted by pants_
+- [[G-27] Use existing memory version of state variables](https://github.com/code-423n4/2021-11-nested-findings/issues/102) _Submitted by ye0lde, also found by pauliax_
+- [[G-28] Use `calldata` keyword instead of `memory` keyword in function arguments](https://github.com/code-423n4/2021-11-nested-findings/issues/107) _Submitted by xYrYuYx_
+- [[G-29] Add index param to remove in function argument to reduce gas.](https://github.com/code-423n4/2021-11-nested-findings/issues/115) _Submitted by xYrYuYx_
+- [[G-30] OperatorResolver: importOperators() function redeclares local variable multiple times](https://github.com/code-423n4/2021-11-nested-findings/issues/119) _Submitted by GreyArt_
+- [[G-31] NestedRecords: Unnecessary variable in the Holding struct](https://github.com/code-423n4/2021-11-nested-findings/issues/121) _Submitted by GreyArt_
+- [[G-32] MixinOperatorResolver: variables are declared multiple times in rebuildCache()](https://github.com/code-423n4/2021-11-nested-findings/issues/122) _Submitted by GreyArt_
+- [[G-33] NestedReserve: Redundant valid token address checks](https://github.com/code-423n4/2021-11-nested-findings/issues/123) _Submitted by GreyArt_
+- [[G-34] NestedRecords: createRecord() can be made internal](https://github.com/code-423n4/2021-11-nested-findings/issues/124) _Submitted by GreyArt_
+- [[G-35] NestedRecords: createRecord()'s isActive check is redundant](https://github.com/code-423n4/2021-11-nested-findings/issues/125) _Submitted by GreyArt_
+- [[G-36] NestedRecords: createRecord() can have modifier check removed](https://github.com/code-423n4/2021-11-nested-findings/issues/126) _Submitted by GreyArt_
+- [[G-37] NestedFactory: _fromReserve param in _submitOutOrders() is redundant](https://github.com/code-423n4/2021-11-nested-findings/issues/128) _Submitted by GreyArt_
+- [[G-38] Gas Optimization: Pack struct in FeeSplitter.sol](https://github.com/code-423n4/2021-11-nested-findings/issues/146) _Submitted by gzeon_
+- [[G-39] Gas Optimization: Set allowance only when needed](https://github.com/code-423n4/2021-11-nested-findings/issues/151) _Submitted by gzeon_
+- [[G-40] Avoid unnecessary storage writes can save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/162) _Submitted by WatchPug_
+- [[G-41] `NestedFactory#removeOperator()` Avoid empty items can save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/170) _Submitted by WatchPug_
+- [[G-42] Adding unchecked directive can save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/173) _Submitted by WatchPug, also found by xYrYuYx_
+- [[G-43] Cache and read storage variables from the stack can save gas](https://github.com/code-423n4/2021-11-nested-findings/issues/175) _Submitted by WatchPug_
+- [[G-44] Unnecessary Use of _msgSender()](https://github.com/code-423n4/2021-11-nested-findings/issues/185) _Submitted by defsec_
+- [[G-45] Small refactor for functions to save some gas](https://github.com/code-423n4/2021-11-nested-findings/issues/193) _Submitted by 0xngndev_
+- [[G-46] Check condition before calling NestedFactory._handleUnderSpending](https://github.com/code-423n4/2021-11-nested-findings/issues/198) _Submitted by hyh_
+- [[G-47] index + 1 can be simplified](https://github.com/code-423n4/2021-11-nested-findings/issues/207) _Submitted by pauliax, also found by GreyArt_
+- [[G-48] _burnNST](https://github.com/code-423n4/2021-11-nested-findings/issues/208) _Submitted by pauliax_
+- [[G-49] mintWithMetadata onlyFactory ](https://github.com/code-423n4/2021-11-nested-findings/issues/213) _Submitted by pauliax_
+- [[G-50] Unused local variables ](https://github.com/code-423n4/2021-11-nested-findings/issues/195) _Submitted by ye0lde, also found by PierrickGT, pmerkleplant, WatchPug, and hack3r-0m_
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

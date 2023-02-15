@@ -1,0 +1,187 @@
+==============================================================
+Guild: Code4rena
+Channel: Archive-2021 / mochi-oct21
+==============================================================
+
+[20-Oct-21 08:53 AM] itsmetechjay | C4#5294 (pinned)
+👋 Hello and welcome to the contest channel for the $80K worth of ETH **Mochi** contest!
+
+📆 Contest opens Oct 21, 2021 at 0:00 UTC and runs through October 27, 2021 at 23:59 UTC (3 days).
+
+Please give a warm welcome to the Mochi team -- and specifically @terMAX,@leekt216 and @svcrypto -- who will be available during the contest to answer questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, you might want to enable notifications. 🐺 ⏰
+
+{Reactions}
+🎉 
+
+[20-Oct-21 09:27 AM] terMAX#0690
+Hello Everyone !
+
+{Stickers}
+Code4rena - Archive-2021 - mochi-oct21 [900410727905492992].txt_Files/754108890559283200-34A76.json
+
+{Reactions}
+👋 (10) 
+
+[21-Oct-21 12:16 PM] Tim Coulter (tjc.eth)#8850
+👋 Hello!
+
+
+[21-Oct-21 12:20 PM] Tim Coulter (tjc.eth)#8850
+@terMAX @leekt216 I'm in the middle of getting the project set up and am running the tests in `mochi-core`. Looks like the MockCssrRouter is looking for the `SushiswapV2TokenAdapter.sol` file from the @mochify/cssr package, but it doesn't exist. Closest thing is either `SushiswapV2LPAdapter.sol` , or `UniswapV2TokenAdapter.sol`. Do you know what it's supposed to be? Here's the error message:
+
+{Attachments}
+Code4rena - Archive-2021 - mochi-oct21 [900410727905492992].txt_Files/unknown-F74DC.png
+
+
+[21-Oct-21 12:20 PM] Tim Coulter (tjc.eth)#8850
+Here's everything that came with the `npm install`:
+
+{Attachments}
+Code4rena - Archive-2021 - mochi-oct21 [900410727905492992].txt_Files/unknown-0CD0C.png
+
+
+[21-Oct-21 12:22 PM] terMAX#0690
+We will double check and get back to you asap.
+
+{Reactions}
+🙇‍♂️ 
+
+[21-Oct-21 12:27 PM] Tim Coulter (tjc.eth)#8850
+It looks like that file has a bunch of imports it doesn't need. I have the tests running now. If they all pass (so far so good) I'll submit a PR with the (few) changes I needed to make to make things pass.
+
+
+[21-Oct-21 12:34 PM] Tim Coulter (tjc.eth)#8850
+As an update, these two tests failed. Looks like they only differ by 1 line (first `vault.borrow(...)` in the second test). Would recommend renaming them, in general, to help explain the differentiation. The second one looks like it's perhaps expecting a different revert (or at least getting one it didn't expect).  I'll post the results too.
+
+{Attachments}
+Code4rena - Archive-2021 - mochi-oct21 [900410727905492992].txt_Files/unknown-A7017.png
+
+
+[21-Oct-21 12:35 PM] Tim Coulter (tjc.eth)#8850
+
+{Attachments}
+Code4rena - Archive-2021 - mochi-oct21 [900410727905492992].txt_Files/unknown-16DAE.png
+
+
+[21-Oct-21 12:35 PM] Tim Coulter (tjc.eth)#8850
+I don't know what counts as a submission, since this is my first time using code4rena. Since this is within your tests, and is getting the project set up, let's consider it a freebie! 🙂
+
+
+[21-Oct-21 01:35 PM] Tim Coulter (tjc.eth)#8850
+@terMAX It looks like the two tests above aren't correct (or at least, they don't match with the MochiVault contract within the repo). My observations I've found so far: 
+
+- The only check that results in the `">cf"` error message is within the `withdraw()` function, and from what I can tell, `withdraw()` is not called from within the `borrow()` function, which is the function under test. (And conceptually, calling `withdraw()` within `borrow()` doesn't make much sense).
+- Based on what I can see in the `withdraw()` function, if a collateral factor check were intended for the `borrow()` function, I would assume the check would need to occur after calculating the new debt (`details[_id].debt + _amount`). There is a check for minimum debt, but nothing for collateral factor.
+- Line 228 of MochiVault.sol appears to squash the ability to borrow more than your collateral factor (https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L228). Compare that line with the `>cf` check within the `withdraw()` function (https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L204), and you'll see that the new debt (`_amount`) can never be greater than the collateral factor, since line 228 readjusts `_amount` such that it's always less than or equal to `maxMinted`. 
+
+Given the above, perhaps this is why the tests fail? Looks like the `borrow()` function is not supposed to revert with `>cf`, so there may be an issue with the tests.
+
+{Embed}
+https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol
+2021-10-mochi/MochiVault.sol at main · code-423n4/2021-10-mochi
+Contribute to code-423n4/2021-10-mochi development by creating an account on GitHub.
+Code4rena - Archive-2021 - mochi-oct21 [900410727905492992].txt_Files/ab8dc129-e8e0-43e0-b7c2-ea5538e4bd51-57EF7
+
+
+[21-Oct-21 01:36 PM] Tim Coulter (tjc.eth)#8850
+@ninek | C4 (or whoever). I need help - is this the kind of stuff that counts as a submission?
+
+
+[21-Oct-21 01:50 PM] ⛅CloudEllie#4509
+Hi Tim - IMO you might want to move this to a DM convo with @terMAX and figure out between the two of you if they warrant a formal submission
+
+
+[21-Oct-21 01:51 PM] ⛅CloudEllie#4509
+I'm afraid I'm not in a position to make that judgment call myself
+
+
+[21-Oct-21 01:52 PM] sockdrawermoney#0001
+you are free to submit it, but the C4 team lets the contest judge make 100% of the calls.
+
+
+[21-Oct-21 01:59 PM] Tim Coulter (tjc.eth)#8850
+Ah, makes sense @⛅CloudEllie @sockdrawermoney, thanks!
+
+{Reactions}
+👍 
+
+[21-Oct-21 02:01 PM] sockdrawermoney#0001
+as @⛅CloudEllie said, it's generally a good idea to keep discussions like this to DMs in the spirit of competition though 🙂
+
+
+[21-Oct-21 02:01 PM] sockdrawermoney#0001
+(feel free to delete if you like)
+
+
+[21-Oct-21 02:03 PM] Tim Coulter (tjc.eth)#8850
+Nah, all good. A fresh set of green tests is pretty important as a jumping off point for exploration (it's where I start). Definitely want everyone to be on the same playing field (and make sure it's worth their time!)
+
+
+[21-Oct-21 02:05 PM] sockdrawermoney#0001
+all good, I hadn't followed the whole conversation to catch what sort of issue was being discussed.
+
+
+[21-Oct-21 07:42 PM] leekt216#7585
+seems irrelavant file has been submitted to github will clean it up
+
+
+[21-Oct-21 08:57 PM] terMAX#0690
+Thanks @leekt216
+
+
+[23-Oct-21 08:15 AM] Laezo#5406
+@terMAX @leekt216 can you accept?
+
+
+[23-Oct-21 09:11 AM] terMAX#0690
++
+
+
+[25-Oct-21 01:00 AM] elprofesor#7324
+Hi sorry just clarifying, is the mochi-library part of the scope for the latest mochi contest? Just making sure I didn't misunderstand anything.
+
+
+[25-Oct-21 03:26 AM] leekt216#7585
+no it is not in the scope, just need that for compiling the core/cssr
+
+
+[25-Oct-21 05:49 AM] ⛅CloudEllie#4509
+Pinned a message.
+
+
+[25-Oct-21 05:50 AM] ⛅CloudEllie#4509
+Hi all - please welcome @svcrypto from the Mochi team, who is also available to answer questions (either here or via DM)!
+
+{Reactions}
+thankyou (3) 
+
+[26-Oct-21 01:33 PM] dmitriia#8141
+Hi! Is there a list of live deployed contracts available?
+
+
+[26-Oct-21 02:17 PM] sockdrawermoney#0001
+I’m curious why you’re asking. (You might have missed the detail but the contest prohibits testing against live contracts)
+
+
+[26-Oct-21 02:32 PM] dmitriia#8141
+Checking live contract parameters is usually useful.
+Any public testing should be prohibited, of course
+
+
+[26-Oct-21 02:41 PM] sockdrawermoney#0001
+Cool cool. Just wanted to make sure you knew 🙂
+
+
+[27-Oct-21 05:08 PM] itsmetechjay | C4#5294
+@🐺wardens The Mochi contest is now **closed**! Huge thanks to everyone who participated 🔍, whether you submitted a finding or not.
+
+**What's next:** the Mochi team will review the findings over the next couple of days, and then we'll pass them off to the judge. We'll announce awards 🤑🏆 in #🐺wardens, and keep an eye on #📢announcements for regular updates on how the contest is progressing through judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+{Reactions}
+thankyou (5) hi5 (5) 
+
+==============================================================
+Exported 33 message(s)
+==============================================================

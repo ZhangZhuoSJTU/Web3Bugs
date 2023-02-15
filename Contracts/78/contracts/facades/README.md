@@ -1,0 +1,4 @@
+# Explanation by Justin Goro
+Interfaces are not as flexible in solidity as they are in other languages. In particular, all interface functions must be external. In general abstract contracts are preferred as stand in interfaces. The term facade is borrowed from MakerDAO's Dai contracts and predates the existence of abstract contracts in Solidity. All facades end with a Like suffix to indicate that they carry no logic but are just performing the role of interface. Facades are useful from a code generation point for view when using flattening tools.
+
+I've carried this facade pattern over into all my modern code for two reasons: consistency reduces bugs and I like saying the word facade.

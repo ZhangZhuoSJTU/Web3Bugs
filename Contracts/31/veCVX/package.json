@@ -1,0 +1,22 @@
+{
+  "name": "yearn-protocol",
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "ethlint": "^1.2.5",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2",
+    "prettier-plugin-solidity": "^1.0.0-alpha.57",
+    "pretty-quick": "^3.0.2"
+  },
+  "scripts": {
+    "lint": "pretty-quick --pattern '**/*.*(sol|json)' --verbose",
+    "lint:check": "prettier --check **/*.sol **/*.json",
+    "lint:fix": "pretty-quick --pattern '**/*.*(sol|json)' --staged --verbose"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+compiler:
+  evm_version: london
+  solc:
+    version: 0.8.9
+    optimizer:
+      enabled: true
+      runs: 200
+    remappings:
+      - "@openzeppelin/contracts=OpenZeppelin/openzeppelin-contracts@4.5.0/contracts"
+      - "@openzeppelin/contracts-upgradeable=OpenZeppelin/openzeppelin-contracts-upgradeable@4.5.0/contracts"
+  vyper:
+    evm_version: istanbul
+
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.5.0
+  - OpenZeppelin/openzeppelin-contracts-upgradeable@4.5.0
+
+networks:
+  development:
+    cmd_settings:
+      evm_version: london
+      default_balance: 10000
+      unlimited_contract_size: True
+  mainnet-fork:
+    cmd_settings:
+      evm_version: london
+      default_balance: 500000
+      unlimited_contract_size: True
+      unlock:
+        - 0xd24F0164aEdbe5676536deb4867CD3d58b4f5405
+        - 0x8Ca8f797506BBA85AD418dD2eb190Da561D37641 # Backd Gnosis Safe

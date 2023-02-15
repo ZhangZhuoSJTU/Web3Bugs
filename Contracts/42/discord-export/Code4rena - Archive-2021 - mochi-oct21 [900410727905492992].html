@@ -1,0 +1,1825 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Code4rena - mochi-oct21</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-300.woff);
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-400.woff);
+            font-weight: 400;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-500.woff);
+            font-weight: 500;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-600.woff);
+            font-weight: 600;
+        }
+
+        @font-face {
+            font-family: Whitney;
+            src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-700.woff);
+            font-weight: 700;
+        }
+
+        body {
+            background-color: #36393e;
+            color: #dcddde;
+            font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        a {
+            color: #00aff4;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        img {
+            object-fit: contain;
+        }
+
+        .markdown {
+            max-width: 100%;
+            line-height: 1.3;
+            overflow-wrap: break-word;
+        }
+
+        .preserve-whitespace {
+            white-space: pre-wrap;
+        }
+
+        .spoiler-text {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .spoiler-text--hidden {
+            cursor: pointer;
+            background-color: #202225;
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .spoiler-text--hidden:hover {
+            background-color: rgba(32, 34, 37, 0.8);
+        }
+
+        .spoiler-text--hidden::selection {
+            color: rgba(0, 0, 0, 0);
+        }
+
+        .quote {
+            display: flex;
+            margin: 0.05em 0;
+        }
+
+        .quote-border {
+            margin-right: 0.5em;
+            border: 2px solid #4f545c;
+            border-radius: 3px;
+        }
+
+        .pre {
+            background-color: #2f3136;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+        }
+
+        .pre--multiline {
+            margin-top: 0.25em;
+            padding: 0.5em;
+            border: 2px solid #282b30;
+            border-radius: 5px;
+            color: #b9bbbe;
+        }
+
+        .pre--multiline.hljs {
+            background-color: #2f3136;
+            color: #b9bbbe;
+        }
+
+        .pre--inline {
+            padding: 2px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        .mention {
+            border-radius: 3px;
+            padding: 0 2px;
+            color: #dee0fc;
+            background-color: rgba(88, 101, 242, .3);
+            font-weight: 500;
+        }
+
+        .mention:hover {
+            background-color: #5865f2;
+            color: #ffffff
+        }
+
+        .timestamp {
+            border-radius: 3px;
+            padding: 0 2px;
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .emoji {
+            width: 1.325em;
+            height: 1.325em;
+            margin: 0 0.06em;
+            vertical-align: -0.4em;
+        }
+
+        .emoji--small {
+            width: 1em;
+            height: 1em;
+        }
+
+        .emoji--large {
+            width: 2.8em;
+            height: 2.8em;
+        }
+
+        .preamble {
+            display: grid;
+            margin: 0 0.3em 0.6em 0.3em;
+            max-width: 100%;
+            grid-template-columns: auto 1fr;
+        }
+
+        .preamble__guild-icon-container {
+            grid-column: 1;
+        }
+
+        .preamble__guild-icon {
+            max-width: 88px;
+            max-height: 88px;
+        }
+
+        .preamble__entries-container {
+            grid-column: 2;
+            margin-left: 0.6em;
+        }
+
+        .preamble__entry {
+            font-size: 1.4em;
+            color: #ffffff;
+        }
+
+        .preamble__entry--small {
+            font-size: 1em;
+        }
+
+        .chatlog {
+            max-width: 100%;
+        }
+
+        .chatlog__message-group {
+            display: grid;
+            margin: 0 0.6em;
+            padding: 0.9em 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            grid-template-columns: auto 1fr;
+        }
+
+        .chatlog__reference-symbol {
+            grid-column: 1;
+            margin: 8px 4px 4px 18px;
+            border-left: 2px solid #4f545c;
+            border-top: 2px solid #4f545c;
+            border-radius: 8px 0 0 0;
+        }
+
+        .chatlog__reference {
+            display: flex;
+            grid-column: 2;
+            margin-bottom: 0.25em;
+            font-size: 0.875em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            align-items: center;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-avatar {
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            margin-right: 0.25em;
+        }
+
+        .chatlog__reference-name {
+            margin-right: 0.3em;
+            font-weight: 600;
+        }
+
+        .chatlog__reference-content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__reference-content a:hover {
+            text-decoration: none;
+        }
+
+        .chatlog__reference-link {
+            cursor: pointer;
+            color: #b5b6b8;
+        }
+
+        .chatlog__reference-link * {
+            display: inline;
+            pointer-events: none;
+        }
+
+        .chatlog__reference-link:hover {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-link:hover *:not(.spoiler-text) {
+            color: #ffffff;
+        }
+
+        .chatlog__reference-edited-timestamp {
+            margin-left: 0.25em;
+            font-size: 0.8em;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__author-avatar-container {
+            grid-column: 1;
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+        }
+
+        .chatlog__author-avatar {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        .chatlog__messages {
+            grid-column: 2;
+            min-width: 50%;
+            direction: ltr;
+        }
+
+        .chatlog__author-name {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .chatlog__timestamp {
+            margin-left: 0.3em;
+            font-size: 0.75em;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__message {
+            padding: 0.1em 0.3em;
+            margin: 0 -0.3em;
+            background-color: transparent;
+            transition: background-color 1s ease;
+        }
+
+        .chatlog__message--highlighted {
+            background-color: rgba(114, 137, 218, 0.2);
+        }
+
+        .chatlog__message--pinned {
+            background-color: rgba(249, 168, 37, 0.05);
+        }
+
+        .chatlog__content {
+            font-size: 0.95em;
+            word-wrap: break-word;
+        }
+
+        .chatlog__edited-timestamp {
+            margin-left: 0.15em;
+            font-size: 0.8em;
+        }
+
+        .chatlog__attachment {
+            display: inline-block;
+            position: relative;
+            margin-top: 0.3em;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden {
+            cursor: pointer;
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatlog__attachment--hidden * {
+            pointer-events: none;
+        }
+
+        .chatlog__attachment-spoiler-caption {
+            display: none;
+            z-index: 999;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 0.4em 0.8em;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: #dcddde;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-spoiler-caption {
+            display: block;
+        }
+
+        .chatlog__attachment--hidden:hover .chatlog__attachment-spoiler-caption {
+            color: #fff;
+        }
+
+        .chatlog__attachment-media {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-media {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic {
+            width: 100%;
+            max-width: 520px;
+            height: 40px;
+            padding: 10px;
+            background-color: #2f3136;
+            border: 1px solid #292b2f;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .chatlog__attachment--hidden .chatlog__attachment-generic {
+            filter: blur(44px);
+        }
+
+        .chatlog__attachment-generic-icon {
+            float: left;
+            width: 30px;
+            height: 100%;
+            margin-right: 10px;
+        }
+
+        .chatlog__attachment-generic-size {
+            color: #72767d;
+            font-size: 12px;
+        }
+
+        .chatlog__attachment-generic-name {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .chatlog__edited-timestamp {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chatlog__embed {
+            display: flex;
+            margin-top: 0.3em;
+            max-width: 520px;
+        }
+
+        .chatlog__embed-color-pill {
+            flex-shrink: 0;
+            width: 0.25em;
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+
+        .chatlog__embed-color-pill--default {
+            background-color: #202225;
+        }
+
+        .chatlog__embed-content-container {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5em 0.6em;
+            background-color: rgba(46, 48, 54, 0.3);
+            border: 1px solid rgba(46, 48, 54, 0.6);
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chatlog__embed-content {
+            display: flex;
+            width: 100%;
+        }
+
+        .chatlog__embed-text {
+            flex: 1;
+        }
+
+        .chatlog__embed-author {
+            display: flex;
+            margin-bottom: 0.3em;
+            align-items: center;
+        }
+
+        .chatlog__embed-author-icon {
+            margin-right: 0.5em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .chatlog__embed-author-name {
+            font-size: 0.875em;
+            font-weight: 600;
+            direction: ltr;
+            unicode-bidi: bidi-override;
+            color: #ffffff
+        }
+
+        .chatlog__embed-author-name-link {
+            color: #ffffff;
+        }
+
+        .chatlog__embed-title {
+            margin-bottom: 0.2em;
+            font-size: 0.875em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-description {
+            font-weight: 500;
+            font-size: 0.85em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0 0.5em;
+        }
+
+        .chatlog__embed-field {
+            flex: 0;
+            min-width: 100%;
+            max-width: 506px;
+            padding-top: 0.6em;
+            font-size: 0.875em;
+        }
+
+        .chatlog__embed-field--inline {
+            flex: 1;
+            flex-basis: auto;
+            min-width: 150px;
+        }
+
+        .chatlog__embed-field-name {
+            margin-bottom: 0.2em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chatlog__embed-field-value {
+            font-weight: 500;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-thumbnail {
+            flex: 0;
+            margin-left: 1.2em;
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-image-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-image {
+            max-width: 500px;
+            max-height: 400px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-footer {
+            margin-top: 0.6em;
+            color: #dcddde;
+        }
+
+        .chatlog__embed-footer-icon {
+            margin-right: 0.2em;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .chatlog__embed-footer-text {
+            vertical-align: middle;
+            font-size: 0.75em;
+            font-weight: 500;
+        }
+
+        .chatlog__embed-plainimage {
+            vertical-align: top;
+            max-width: 45vw;
+            max-height: 500px;
+            border-radius: 3px;
+        }
+
+        .chatlog__embed-spotify {
+            border: 0;
+        }
+
+        .chatlog__embed-youtube-container {
+            margin-top: 0.6em;
+        }
+
+        .chatlog__embed-youtube {
+            border: 0;
+            border-radius: 3px;
+        }
+
+        .chatlog__sticker {
+            width: 180px;
+            height: 180px;
+        }
+
+        .chatlog__sticker--media {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .chatlog__reactions {
+            display: flex;
+        }
+
+        .chatlog__reaction {
+            display: flex;
+            align-items: center;
+            margin: 0.35em 0.1em 0.1em 0;
+            padding: .125rem .375rem;
+            background-color: #2f3136;
+            border-radius: 8px;
+            border-color: transparent;
+            border-width: 1px;
+            border-style: solid;
+        }
+
+        .chatlog__reaction:hover {
+            border-color: hsla(0,0%,100%,.2);
+            border-width: 1px;
+            border-style: solid;
+            background-color: transparent;
+        }
+
+        .chatlog__reaction-count {
+            min-width: 9px;
+            margin-left: 0.35em;
+            font-size: 0.875em;
+            color: #b9bbbe;
+        }
+
+        .chatlog__reaction:hover .chatlog__reaction-count {
+            color: #dcddde;
+        }
+
+        .chatlog__bot-tag {
+            position: relative;
+            top: -.1em;
+            margin-left: 0.3em;
+            padding: 0.05em 0.3em;
+            border-radius: 3px;
+            line-height: 1.3;
+            background-color: #5865F2;
+            color: #ffffff;
+            font-size: 0.625em;
+            font-weight: 500;
+        }
+
+        .postamble {
+            margin: 1.4em 0.3em 0.6em 0.3em;
+            padding: 1em;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .postamble__entry {
+            color: #ffffff;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(e => hljs.highlightBlock(e));
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.8.1/lottie.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.chatlog__sticker--media[data-source]').forEach(e => {
+                const imageDataUrl = e.getAttribute('data-source');
+
+                const anim = lottie.loadAnimation({
+                  container: e,
+                  renderer: 'svg',
+                  loop: true,
+                  autoplay: true,
+                  path: imageDataUrl
+                });
+
+                anim.addEventListener('data_failed', () =>
+                    e.innerHTML = '<strong>[Sticker cannot be rendered]</strong>'
+                );
+            });
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+
+        function showSpoiler(event, element) {
+            if (element && element.classList.contains('spoiler-text--hidden')) {
+                event.preventDefault();
+                element.classList.remove('spoiler-text--hidden');
+            }
+            if (element && element.classList.contains('chatlog__attachment--hidden')) {
+                event.preventDefault();
+                element.classList.remove('chatlog__attachment--hidden');
+            }
+        }
+    </script>
+
+    <svg style="display: none">
+        <symbol id="icon-attachment" viewBox="0 0 720 960">
+            <path fill="#f4f5fb" d="M50,935a25,25,0,0,1-25-25V50A25,25,0,0,1,50,25H519.6L695,201.32V910a25,25,0,0,1-25,25Z" />
+            <path fill="#7789c4" d="M509.21,50,670,211.63V910H50V50H509.21M530,0H50A50,50,0,0,0,0,50V910a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50h0V191Z" />
+            <path fill="#f4f5fb" d="M530,215a25,25,0,0,1-25-25V50a25,25,0,0,1,16.23-23.41L693.41,198.77A25,25,0,0,1,670,215Z" />
+            <path fill="#7789c4" d="M530,70.71,649.29,190H530V70.71M530,0a50,50,0,0,0-50,50V190a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50Z" />
+        </symbol>
+    </svg>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/3026b81d5ab56c4d2a773cb9b5dbd3a5-8CB58.png" alt="Guild icon" loading="lazy">
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">Code4rena</div>
+        <div class="preamble__entry">Archive-2021 / mochi-oct21</div>
+
+
+    </div>
+</div>
+
+<div class="chatlog">
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">20-Oct-21 08:53 AM</span>
+
+            <div class="chatlog__message chatlog__message--pinned" data-message-id="900411306581065809" id="message-900411306581065809" title="Message sent: 20-Oct-21 08:53 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img loading="lazy" class="emoji " alt="👋" title="wave" src="https://twemoji.maxcdn.com/2/svg/1f44b.svg"> Hello and welcome to the contest channel for the $80K worth of ETH <strong>Mochi</strong> contest!
+
+<img loading="lazy" class="emoji " alt="📆" title="calendar" src="https://twemoji.maxcdn.com/2/svg/1f4c6.svg"> Contest opens Oct 21, 2021 at 0:00 UTC and runs through October 27, 2021 at 23:59 UTC (3 days).
+
+Please give a warm welcome to the Mochi team -- and specifically <span class="mention" title="terMAX#0690">@terMAX</span>,<span class="mention" title="leekt216#7585">@leekt216</span> and <span class="mention" title="svcrypto#4603">@svcrypto</span> -- who will be available during the contest to answer questions either here in channel or via DM. 
+
+We&#39;ll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, you might want to enable notifications. <img loading="lazy" class="emoji " alt="🐺" title="wolf" src="https://twemoji.maxcdn.com/2/svg/1f43a.svg"> ⏰</span>
+
+                                <span class="chatlog__edited-timestamp" title="25-Oct-21 06:15 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="tada">
+                                <img class="emoji emoji--small" alt="&#127881;" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1f389-28196.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/bcaadbaa00ea491ae7187d5fa5ded368-9DB07.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="terMAX#0690" data-user-id="227119851808751617" style="color: rgb(153,45,34)">terMAX</span>
+
+
+        <span class="chatlog__timestamp">20-Oct-21 09:27 AM</span>
+
+            <div class="chatlog__message " data-message-id="900419901188087908" id="message-900419901188087908" title="Message sent: 20-Oct-21 09:27 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hello Everyone !</span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="chatlog__sticker" title="Wave">
+                            <div class="chatlog__sticker--media" data-source="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/754108890559283200-34A76.json"></div>
+                    </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="wave">
+                                <img class="emoji emoji--small" alt="&#128075;" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1f44b-9E658.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">10</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tim Coulter (tjc.eth)#8850" data-user-id="743195694759673987" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 12:16 PM</span>
+
+            <div class="chatlog__message " data-message-id="900824986867093504" id="message-900824986867093504" title="Message sent: 21-Oct-21 12:16 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><img loading="lazy" class="emoji " alt="👋" title="wave" src="https://twemoji.maxcdn.com/2/svg/1f44b.svg"> Hello!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900825795176566814" id="message-900825795176566814" title="Message sent: 21-Oct-21 12:20 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="terMAX#0690">@terMAX</span> <span class="mention" title="leekt216#7585">@leekt216</span> I&#39;m in the middle of getting the project set up and am running the tests in <span class="pre pre--inline">mochi-core</span>. Looks like the MockCssrRouter is looking for the <span class="pre pre--inline">SushiswapV2TokenAdapter.sol</span> file from the @mochify/cssr package, but it doesn&#39;t exist. Closest thing is either <span class="pre pre--inline">SushiswapV2LPAdapter.sol</span> , or <span class="pre pre--inline">UniswapV2TokenAdapter.sol</span>. Do you know what it&#39;s supposed to be? Here&#39;s the error message:</span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment " onclick="">
+
+                            <a href="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-F74DC.png">
+                                <img class="chatlog__attachment-media" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-F74DC.png" alt="Image attachment" title="Image: unknown.png (56.63 KB)" loading="lazy">
+                            </a>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900825941356458004" id="message-900825941356458004" title="Message sent: 21-Oct-21 12:20 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Here&#39;s everything that came with the <span class="pre pre--inline">npm install</span>:</span>
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment " onclick="">
+
+                            <a href="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-0CD0C.png">
+                                <img class="chatlog__attachment-media" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-0CD0C.png" alt="Image attachment" title="Image: unknown.png (152.29 KB)" loading="lazy">
+                            </a>
+                    </div>
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Tim Coulter (tjc.eth)#8850" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900825795176566814&#39;)">
+<span class="mention" title="terMAX#0690">@terMAX</span> <span class="mention" title="leekt216#7585">@leekt216</span> I&#39;m in the middle of getting the project set up and am running the tests in <span class="pre pre--inline">mochi-core</span>. Looks like the MockCssrRouter is looking for the <span class="pre pre--inline">SushiswapV2TokenAdapter.sol</span> file from the @mochify/cssr package, but it doesn&#39;t exist. Closest thing is either <span class="pre pre--inline">SushiswapV2LPAdapter.sol</span> , or <span class="pre pre--inline">UniswapV2TokenAdapter.sol</span>. Do you know what it&#39;s supposed to be? Here&#39;s the error message:                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/bcaadbaa00ea491ae7187d5fa5ded368-9DB07.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="terMAX#0690" data-user-id="227119851808751617" style="color: rgb(153,45,34)">terMAX</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 12:22 PM</span>
+
+            <div class="chatlog__message " data-message-id="900826433952313425" id="message-900826433952313425" title="Message sent: 21-Oct-21 12:22 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">We will double check and get back to you asap.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="man_bowing">
+                                <img class="emoji emoji--small" alt="&#128583;‍♂️" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1f647-200d-2642-AC397.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/bcaadbaa00ea491ae7187d5fa5ded368-9DB07.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="terMAX#0690" style="color: rgb(153,45,34)">terMAX</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900826433952313425&#39;)">
+We will double check and get back to you asap.                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tim Coulter (tjc.eth)#8850" data-user-id="743195694759673987" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 12:27 PM</span>
+
+            <div class="chatlog__message " data-message-id="900827705719808000" id="message-900827705719808000" title="Message sent: 21-Oct-21 12:27 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">It looks like that file has a bunch of imports it doesn&#39;t need. I have the tests running now. If they all pass (so far so good) I&#39;ll submit a PR with the (few) changes I needed to make to make things pass.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tim Coulter (tjc.eth)#8850" data-user-id="743195694759673987" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 12:34 PM</span>
+
+            <div class="chatlog__message " data-message-id="900829519240384522" id="message-900829519240384522" title="Message sent: 21-Oct-21 12:34 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">As an update, these two tests failed. Looks like they only differ by 1 line (first <span class="pre pre--inline">vault.borrow(...)</span> in the second test). Would recommend renaming them, in general, to help explain the differentiation. The second one looks like it&#39;s perhaps expecting a different revert (or at least getting one it didn&#39;t expect).  I&#39;ll post the results too.</span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Oct-21 12:37 PM">(edited)</span>
+                        </div>
+                    </div>
+
+                    <div class="chatlog__attachment " onclick="">
+
+                            <a href="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-A7017.png">
+                                <img class="chatlog__attachment-media" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-A7017.png" alt="Image attachment" title="Image: unknown.png (162.11 KB)" loading="lazy">
+                            </a>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900829592196096060" id="message-900829592196096060" title="Message sent: 21-Oct-21 12:35 PM">
+
+                    <div class="chatlog__attachment " onclick="">
+
+                            <a href="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-16DAE.png">
+                                <img class="chatlog__attachment-media" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/unknown-16DAE.png" alt="Image attachment" title="Image: unknown.png (115.27 KB)" loading="lazy">
+                            </a>
+                    </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900829773180305439" id="message-900829773180305439" title="Message sent: 21-Oct-21 12:35 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I don&#39;t know what counts as a submission, since this is my first time using code4rena. Since this is within your tests, and is getting the project set up, let&#39;s consider it a freebie! <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tim Coulter (tjc.eth)#8850" data-user-id="743195694759673987" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 01:35 PM</span>
+
+            <div class="chatlog__message " data-message-id="900844807491051560" id="message-900844807491051560" title="Message sent: 21-Oct-21 01:35 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="terMAX#0690">@terMAX</span> It looks like the two tests above aren&#39;t correct (or at least, they don&#39;t match with the MochiVault contract within the repo). My observations I&#39;ve found so far: 
+
+- The only check that results in the <span class="pre pre--inline">&quot;&gt;cf&quot;</span> error message is within the <span class="pre pre--inline">withdraw()</span> function, and from what I can tell, <span class="pre pre--inline">withdraw()</span> is not called from within the <span class="pre pre--inline">borrow()</span> function, which is the function under test. (And conceptually, calling <span class="pre pre--inline">withdraw()</span> within <span class="pre pre--inline">borrow()</span> doesn&#39;t make much sense).
+- Based on what I can see in the <span class="pre pre--inline">withdraw()</span> function, if a collateral factor check were intended for the <span class="pre pre--inline">borrow()</span> function, I would assume the check would need to occur after calculating the new debt (<span class="pre pre--inline">details[_id].debt + _amount</span>). There is a check for minimum debt, but nothing for collateral factor.
+- Line 228 of MochiVault.sol appears to squash the ability to borrow more than your collateral factor (<a href="https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L228)">https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L228)</a>. Compare that line with the <span class="pre pre--inline">&gt;cf</span> check within the <span class="pre pre--inline">withdraw()</span> function (<a href="https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L204)">https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol#L204)</a>, and you&#39;ll see that the new debt (<span class="pre pre--inline">_amount</span>) can never be greater than the collateral factor, since line 228 readjusts <span class="pre pre--inline">_amount</span> such that it&#39;s always less than or equal to <span class="pre pre--inline">maxMinted</span>. 
+
+Given the above, perhaps this is why the tests fail? Looks like the <span class="pre pre--inline">borrow()</span> function is not supposed to revert with <span class="pre pre--inline">&gt;cf</span>, so there may be an issue with the tests.</span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Oct-21 01:49 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                        <div class="chatlog__embed">
+                                <div class="chatlog__embed-color-pill" style="background-color: rgba(30,35,39,255)"></div>
+
+                            <div class="chatlog__embed-content-container">
+                                <div class="chatlog__embed-content">
+                                    <div class="chatlog__embed-text">
+
+                                            <div class="chatlog__embed-title">
+                                                    <a class="chatlog__embed-title-link" href="https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/vault/MochiVault.sol">
+                                                        <div class="markdown preserve-whitespace">2021-10-mochi/MochiVault.sol at main &#183; code-423n4/2021-10-mochi</div>
+                                                    </a>
+                                            </div>
+
+                                            <div class="chatlog__embed-description">
+                                                <div class="markdown preserve-whitespace">Contribute to code-423n4/2021-10-mochi development by creating an account on GitHub.</div>
+                                            </div>
+
+                                    </div>
+
+                                        <div class="chatlog__embed-thumbnail-container">
+                                            <a class="chatlog__embed-thumbnail-link" href="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/ab8dc129-e8e0-43e0-b7c2-ea5538e4bd51-57EF7">
+                                                <img class="chatlog__embed-thumbnail" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/ab8dc129-e8e0-43e0-b7c2-ea5538e4bd51-57EF7" alt="Thumbnail" loading="lazy">
+                                            </a>
+                                        </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900844900101275668" id="message-900844900101275668" title="Message sent: 21-Oct-21 01:36 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="ninek | C4#1475">@&#129430; eric (ninek) | C4</span> (or whoever). I need help - is this the kind of stuff that counts as a submission?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Tim Coulter (tjc.eth)#8850" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900844900101275668&#39;)">
+<span class="mention" title="ninek | C4#1475">@&#129430; eric (ninek) | C4</span> (or whoever). I need help - is this the kind of stuff that counts as a submission?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 01:50 PM</span>
+
+            <div class="chatlog__message " data-message-id="900848656415096843" id="message-900848656415096843" title="Message sent: 21-Oct-21 01:50 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi Tim - IMO you might want to move this to a DM convo with <span class="mention" title="terMAX#0690">@terMAX</span> and figure out between the two of you if they warrant a formal submission</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900848731837067336" id="message-900848731837067336" title="Message sent: 21-Oct-21 01:51 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I&#39;m afraid I&#39;m not in a position to make that judgment call myself</span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Oct-21 02:02 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Tim Coulter (tjc.eth)#8850" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900844900101275668&#39;)">
+<span class="mention" title="ninek | C4#1475">@&#129430; eric (ninek) | C4</span> (or whoever). I need help - is this the kind of stuff that counts as a submission?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 01:52 PM</span>
+
+            <div class="chatlog__message " data-message-id="900849111723556925" id="message-900849111723556925" title="Message sent: 21-Oct-21 01:52 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">you are free to submit it, but the C4 team lets the contest judge make 100% of the calls.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tim Coulter (tjc.eth)#8850" data-user-id="743195694759673987" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 01:59 PM</span>
+
+            <div class="chatlog__message " data-message-id="900850923503517747" id="message-900850923503517747" title="Message sent: 21-Oct-21 01:59 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Ah, makes sense <span class="mention" title="⛅CloudEllie#4509">@⛅CloudEllie | C4</span> <span class="mention" title="sockdrawermoney#0001">@&#129510; sockdrawer | C4</span>, thanks!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thumbsup">
+                                <img class="emoji emoji--small" alt="&#128077;" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1f44d-B3F5F.svg" loading="lazy">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Tim Coulter (tjc.eth)#8850" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900850923503517747&#39;)">
+Ah, makes sense <span class="mention" title="⛅CloudEllie#4509">@⛅CloudEllie | C4</span> <span class="mention" title="sockdrawermoney#0001">@&#129510; sockdrawer | C4</span>, thanks!                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 02:01 PM</span>
+
+            <div class="chatlog__message " data-message-id="900851310440632320" id="message-900851310440632320" title="Message sent: 21-Oct-21 02:01 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">as <span class="mention" title="⛅CloudEllie#4509">@⛅CloudEllie | C4</span> said, it&#39;s generally a good idea to keep discussions like this to DMs in the spirit of competition though <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="900851356502478848" id="message-900851356502478848" title="Message sent: 21-Oct-21 02:01 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">(feel free to delete if you like)</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="sockdrawermoney#0001" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900851356502478848&#39;)">
+(feel free to delete if you like)                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tim Coulter (tjc.eth)#8850" data-user-id="743195694759673987" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 02:03 PM</span>
+
+            <div class="chatlog__message " data-message-id="900851804563206185" id="message-900851804563206185" title="Message sent: 21-Oct-21 02:03 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Nah, all good. A fresh set of green tests is pretty important as a jumping off point for exploration (it&#39;s where I start). Definitely want everyone to be on the same playing field (and make sure it&#39;s worth their time!)</span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Oct-21 02:04 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Tim Coulter (tjc.eth)#8850" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900851804563206185&#39;)">
+Nah, all good. A fresh set of green tests is pretty important as a jumping off point for exploration (it&#39;s where I start). Definitely want everyone to be on the same playing field (and make sure it&#39;s worth their time!)                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="21-Oct-21 02:04 PM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 02:05 PM</span>
+
+            <div class="chatlog__message " data-message-id="900852206549495838" id="message-900852206549495838" title="Message sent: 21-Oct-21 02:05 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">all good, I hadn&#39;t followed the whole conversation to catch what sort of issue was being discussed.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/9bde2c595891e3fcfab018f276aa047f-1A8BC.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Tim Coulter (tjc.eth)#8850" style="color: rgb(241,196,15)">Tim Coulter (tjc.eth)</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900825795176566814&#39;)">
+<span class="mention" title="terMAX#0690">@terMAX</span> <span class="mention" title="leekt216#7585">@leekt216</span> I&#39;m in the middle of getting the project set up and am running the tests in <span class="pre pre--inline">mochi-core</span>. Looks like the MockCssrRouter is looking for the <span class="pre pre--inline">SushiswapV2TokenAdapter.sol</span> file from the @mochify/cssr package, but it doesn&#39;t exist. Closest thing is either <span class="pre pre--inline">SushiswapV2LPAdapter.sol</span> , or <span class="pre pre--inline">UniswapV2TokenAdapter.sol</span>. Do you know what it&#39;s supposed to be? Here&#39;s the error message:                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/0-EB806.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="leekt216#7585" data-user-id="394120816461086720" style="color: rgb(153,45,34)">leekt216</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 07:42 PM</span>
+
+            <div class="chatlog__message " data-message-id="900937199476932628" id="message-900937199476932628" title="Message sent: 21-Oct-21 07:42 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">seems irrelavant file has been submitted to github will clean it up</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/0-EB806.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="leekt216#7585" style="color: rgb(153,45,34)">leekt216</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900937199476932628&#39;)">
+seems irrelavant file has been submitted to github will clean it up                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/bcaadbaa00ea491ae7187d5fa5ded368-9DB07.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="terMAX#0690" data-user-id="227119851808751617" style="color: rgb(153,45,34)">terMAX</span>
+
+
+        <span class="chatlog__timestamp">21-Oct-21 08:57 PM</span>
+
+            <div class="chatlog__message " data-message-id="900956110104719360" id="message-900956110104719360" title="Message sent: 21-Oct-21 08:57 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Thanks <span class="mention" title="leekt216#7585">@leekt216</span></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/7fcd80e4d3c60a600235b03c75f682a9-8FE6F.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Laezo#5406" data-user-id="607311799209164833" style="color: rgb(241,196,15)">Koustre</span>
+
+
+        <span class="chatlog__timestamp">23-Oct-21 08:15 AM</span>
+
+            <div class="chatlog__message " data-message-id="901489136828047460" id="message-901489136828047460" title="Message sent: 23-Oct-21 08:15 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" title="terMAX#0690">@terMAX</span> <span class="mention" title="leekt216#7585">@leekt216</span> can you accept?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/7fcd80e4d3c60a600235b03c75f682a9-8FE6F.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="Laezo#5406" style="color: rgb(241,196,15)">Koustre</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;901489136828047460&#39;)">
+<span class="mention" title="terMAX#0690">@terMAX</span> <span class="mention" title="leekt216#7585">@leekt216</span> can you accept?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/bcaadbaa00ea491ae7187d5fa5ded368-9DB07.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="terMAX#0690" data-user-id="227119851808751617" style="color: rgb(153,45,34)">terMAX</span>
+
+
+        <span class="chatlog__timestamp">23-Oct-21 09:11 AM</span>
+
+            <div class="chatlog__message " data-message-id="901503130523545720" id="message-901503130523545720" title="Message sent: 23-Oct-21 09:11 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">+</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/8ce43db99645d4c680e6afc4af909d3a-3AF28.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="elprofesor#7324" data-user-id="823819120734240839" style="color: rgb(241,196,15)">elprofesor</span>
+
+
+        <span class="chatlog__timestamp">25-Oct-21 01:00 AM</span>
+
+            <div class="chatlog__message " data-message-id="902104353614217237" id="message-902104353614217237" title="Message sent: 25-Oct-21 01:00 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi sorry just clarifying, is the mochi-library part of the scope for the latest mochi contest? Just making sure I didn&#39;t misunderstand anything.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/0-EB806.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="leekt216#7585" data-user-id="394120816461086720" style="color: rgb(153,45,34)">leekt216</span>
+
+
+        <span class="chatlog__timestamp">25-Oct-21 03:26 AM</span>
+
+            <div class="chatlog__message " data-message-id="902140958844518440" id="message-902140958844518440" title="Message sent: 25-Oct-21 03:26 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">no it is not in the scope, just need that for compiling the core/cssr</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <span class="chatlog__reference-unknown">
+                    Original message was deleted or could not be loaded.
+                </span>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">25-Oct-21 05:49 AM</span>
+
+            <div class="chatlog__message " data-message-id="902177152886272000" id="message-902177152886272000" title="Message sent: 25-Oct-21 05:49 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Pinned a message.</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="itsmetechjay | C4#5294" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;900411306581065809&#39;)">
+<img loading="lazy" class="emoji " alt="👋" title="wave" src="https://twemoji.maxcdn.com/2/svg/1f44b.svg"> Hello and welcome to the contest channel for the $80K worth of ETH <strong>Mochi</strong> contest!
+
+<img loading="lazy" class="emoji " alt="📆" title="calendar" src="https://twemoji.maxcdn.com/2/svg/1f4c6.svg"> Contest opens Oct 21, 2021 at 0:00 UTC and runs through October 27, 2021 at 23:59 UTC (3 days).
+
+Please give a warm welcome to the Mochi team -- and specifically <span class="mention" title="terMAX#0690">@terMAX</span>,<span class="mention" title="leekt216#7585">@leekt216</span> and <span class="mention" title="svcrypto#4603">@svcrypto</span> -- who will be available during the contest to answer questions either here in channel or via DM. 
+
+We&#39;ll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, you might want to enable notifications. <img loading="lazy" class="emoji " alt="🐺" title="wolf" src="https://twemoji.maxcdn.com/2/svg/1f43a.svg"> ⏰                    </span>
+
+                        <span class="chatlog__reference-edited-timestamp" title="25-Oct-21 06:15 AM">(edited)</span>
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/568d22b97293cdd2d9b7006198d6adbc-FF3A6.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="⛅CloudEllie#4509" data-user-id="842046376128806922" style="color: rgb(155,89,182)">⛅CloudEllie | C4</span>
+
+
+        <span class="chatlog__timestamp">25-Oct-21 05:50 AM</span>
+
+            <div class="chatlog__message " data-message-id="902177352166031390" id="message-902177352166031390" title="Message sent: 25-Oct-21 05:50 AM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi all - please welcome <span class="mention" title="svcrypto#4603">@svcrypto</span> from the Mochi team, who is also available to answer questions (either here or via DM)!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">3</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1-B2132.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="dmitriia#8141" data-user-id="875428923553493002" style="color: rgb(241,196,15)">hyh</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-21 01:33 PM</span>
+
+            <div class="chatlog__message " data-message-id="902656155468328960" id="message-902656155468328960" title="Message sent: 26-Oct-21 01:33 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Hi! Is there a list of live deployed contracts available?</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+        <div class="chatlog__reference-symbol"></div>
+        <div class="chatlog__reference">
+                <img class="chatlog__reference-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1-B2132.png" alt="Avatar" loading="lazy">
+                <span class="chatlog__reference-name" title="dmitriia#8141" style="color: rgb(241,196,15)">hyh</span>
+                <div class="chatlog__reference-content">
+                    <span class="chatlog__reference-link" onclick="scrollToMessage(event, &#39;902656155468328960&#39;)">
+Hi! Is there a list of live deployed contracts available?                    </span>
+
+                </div>
+        </div>
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-21 02:17 PM</span>
+
+            <div class="chatlog__message " data-message-id="902667191349022831" id="message-902667191349022831" title="Message sent: 26-Oct-21 02:17 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">I’m curious why you’re asking. (You might have missed the detail but the contest prohibits testing against live contracts)</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/1-B2132.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="dmitriia#8141" data-user-id="875428923553493002" style="color: rgb(241,196,15)">hyh</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-21 02:32 PM</span>
+
+            <div class="chatlog__message " data-message-id="902671112574500904" id="message-902671112574500904" title="Message sent: 26-Oct-21 02:32 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Checking live contract parameters is usually useful.
+Any public testing should be prohibited, of course</span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/b07292365785e0b7bd0dab7dd7d9e09f-596F7.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="sockdrawermoney#0001" data-user-id="547419335115800586" style="color: rgb(233,30,99)">&#129510; sockdrawer | C4</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-21 02:41 PM</span>
+
+            <div class="chatlog__message " data-message-id="902673305058807858" id="message-902673305058807858" title="Message sent: 26-Oct-21 02:41 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Cool cool. Just wanted to make sure you knew <img loading="lazy" class="emoji " alt="🙂" title="slight_smile" src="https://twemoji.maxcdn.com/2/svg/1f642.svg"></span>
+
+                        </div>
+                    </div>
+
+
+
+
+            </div>
+    </div>
+</div>
+
+
+
+<div class="chatlog__message-group">
+
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/cec17fe3825e83ddf170d7e8c98ece3e-B6D17.png" alt="Avatar" loading="lazy">
+    </div>
+
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="itsmetechjay | C4#5294" data-user-id="840352030321410058" style="color: rgb(155,89,182)">&#128105;&#127997;&#128187; Jay | C4</span>
+
+
+        <span class="chatlog__timestamp">27-Oct-21 05:08 PM</span>
+
+            <div class="chatlog__message " data-message-id="903072689177116772" id="message-903072689177116772" title="Message sent: 27-Oct-21 05:08 PM">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><span class="mention" style="color: rgb(241, 196, 15); background-color: rgba(241, 196, 15, 0.1);">@&#128058;wardens</span> The Mochi contest is now <strong>closed</strong>! Huge thanks to everyone who participated <img loading="lazy" class="emoji " alt="🔍" title="mag" src="https://twemoji.maxcdn.com/2/svg/1f50d.svg">, whether you submitted a finding or not.
+
+<strong>What&#39;s next:</strong> the Mochi team will review the findings over the next couple of days, and then we&#39;ll pass them off to the judge. We&#39;ll announce awards <img loading="lazy" class="emoji " alt="🤑" title="money_mouth" src="https://twemoji.maxcdn.com/2/svg/1f911.svg"><img loading="lazy" class="emoji " alt="🏆" title="trophy" src="https://twemoji.maxcdn.com/2/svg/1f3c6.svg"> in <span class="mention">#&#128058;wardens</span>, and keep an eye on <span class="mention">#&#128226;announcements</span> for regular updates on how the contest is progressing through judging <img loading="lazy" class="emoji " alt="🧑" title="adult" src="https://twemoji.maxcdn.com/2/svg/1f9d1.svg">‍<img loading="lazy" class="emoji " alt="⚖" title="⚖" src="https://twemoji.maxcdn.com/2/svg/2696.svg">️ and reporting <img loading="lazy" class="emoji " alt="📜" title="scroll" src="https://twemoji.maxcdn.com/2/svg/1f4dc.svg">. Feel free to ping an organizer if you have questions along the way!</span>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction" title="thankyou">
+                                <img class="emoji emoji--small" alt="thankyou" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/851893827315826708-F59C0.png" loading="lazy">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                            <div class="chatlog__reaction" title="hi5">
+                                <img class="emoji emoji--small" alt="hi5" src="Code4rena%20-%20Archive-2021%20-%20mochi-oct21%20%5B900410727905492992%5D.html_Files/851893827089727568-5FD38.png" loading="lazy">
+                                <span class="chatlog__reaction-count">5</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 33 message(s)</div>
+</div>
+
+</body>
+
+</html>

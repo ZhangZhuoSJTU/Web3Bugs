@@ -1,0 +1,1182 @@
+  AuraToken
+    ✓ initial configuration is correct
+    ✓ @method AuraToken.updateOperator sets new operator
+    ✓ @method AuraToken.mint does not mint if sender is not the operator
+    ✓ @method AuraToken.minterMint fails if minter is not the caller
+    ✓ @method AuraToken.mint mints per BAL yearly schedule 
+    ✓ @method AuraToken.minterMint mints additional AURA
+    ✓ @method AuraToken.mint does not mint additional AURA
+    @method AuraToken.init fails if 
+      ✓ caller is not the operator
+      ✓ called more than once
+      ✓ wrong amount of tokens
+      ✓ wrong minter address
+
+  AuraBalRewardPool
+    ✓ initial configuration is correct
+    basic flow
+      ✓ allows users to deposit before rewards are added (no rewards accrued)
+      ✓ allows anyone to trigger rewards distribution after startTime
+      ✓ accrues rewards to existing depositors following startTime
+      ✓ allows subsequent deposits
+      ✓ allows users to stake For someone else
+      ✓ penalises claimers who do not lock
+      ✓ gives all rewards to claimers who lock
+      ✓ allows anyone to forward penalty on to the PenaltyForwarder
+      ✓ only forwards penalties once
+      ✓ allows users to stakeAll
+      ✓ allows users to withdraw
+      ✓ allows users to withdraw and claim rewards
+      ✓ allows users to withdraw and stake rewards
+    funding rewards
+      ✓ blocks funding before startTime
+      ✓ allows rewardManager to start process early
+      ✓ only allows funding to be called once, ever
+      ✓ blocks funding if the pool has no balance
+    fails
+      ✓ if stake amount is zero
+      ✓ if stake for amount is zero
+      ✓ if users to stake for does not exist
+      ✓ constructor pass wrong arguments
+
+  AuraClaimZap
+    ✓ set approval for deposits
+    ✓ claim rewards from cvxCrvStaking
+    ✓ claim from lp staking pool
+
+  AuraLocker
+    ✓ checks all initial config
+    performing basic flow
+      ✓ can't process locks if nothing has been locked
+      ✓ lock CVX
+      ✓ supports delegation
+      ✓ distribute rewards from the booster
+      ✓ can't process locks that haven't expired
+      ✓ checkpoint CVX locker epoch
+      ✓ get rewards from CVX locker
+      ✓ process expired locks
+      ✓ notify rewards 
+    testing edge scenarios
+      ✓ gives a 0 balance one lock has expired
+      ✓ allows locks to be processed one week before they are expired ONLY if relocking
+      ✓ allows locks to be processed after they are expired
+      ✓ allows lock to be processed with other unexpired locks following
+      ✓ doesn't allow processing of the same lock twice
+      ✓ kicks user after sufficient time has elapsed
+      ✓ combines multiple delegation checkpoints in the same epoch
+      ✓ allows for delegate checkpointing and balance lookup after 16 weeks have elapsed
+      ✓ should allow re-delegating in the same period
+      ✓ allows delegation even with 0 balance
+      ✓ retrieves balance at a given epoch
+    queueing new rewards
+      ✓ fails if the sender is not rewardsDistributor
+      ✓ fails if the amount of rewards is 0
+      ✓ distribute rewards from the booster
+      ✓ queues rewards when cvxCrv period is finished
+      ✓ only starts distributing the rewards when the queued amount is over 83% of the remaining
+    checking delegation timelines
+      ✓ has no delegation at the start
+      ✓ fails to delegate to 0
+      ✓ fails when bob tries to delegate with no locks
+      ✓ delegates to 0
+      ✓ fails to delegate back to 0
+      ✓ fails to delegate back to the same delegate
+      ✓ changes delegation to delegate1
+      ✓ deposits more for alice
+      ✓ deposits for bob and delegates
+      ✓ delegates alice to 2 and omits upcoming release
+    fails if
+      ✓ @notifyRewardAmount adds cvxCrv
+      ✓ notifyRewardAmount sender is not a distributor
+      ✓ @notifyRewardAmount sends wrong amount
+      ✓ @lock wrong amount of CVX
+      ✓ get past supply before any lock.
+      ✓ approves reward wrong arguments
+      ✓ non admin - shutdowns
+      ✓ non admin - add Reward
+      ✓ non admin - set Kick Incentive
+      ✓ non admin - approves reward distributor
+      ✓ non admin - recover ERC20
+      ✓ set Kick Incentive with wrong rate
+      ✓ set Kick Incentive with wrong delay
+      ✓ recover ERC20 with wrong token address
+      ✓ recover ERC20 cannot withdraw reward
+      ✓ emergency withdraw is call and it is not shutdown
+    admin
+      ✓ approves reward distributor
+      ✓ set Kick Incentive
+      ✓ recover ERC20
+    is shutdown
+      ✓ fails if lock
+      ✓ process un-expired locks
+      ✓ emergencyWithdraw  when user has no locks
+      ✓ emergencyWithdraw  when user has locks
+
+  AuraLockerBalances
+    Run all the epochs
+      Epoch 0.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 0.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ locks up 200.0 for alice
+          ✓ allows alice to delegate to alice
+          ✓ locks up 100.0 for bob
+          ✓ locks up 100.0 for daniel
+          ✓ allows daniel to delegate to bob
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 0.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 1.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 1.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows bob to delegate to bob
+          ✓ allows bob to delegate to alice
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 1.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 2.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 2.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ locks up 100.0 for alice
+          ✓ locks up 100.0 for bob
+          ✓ locks up 100.0 for carol
+          ✓ allows carol to delegate to carol
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 2.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 3.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 3.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ locks up 100.0 for bob
+          ✓ allows bob to delegate to carol
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 3.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 4.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 4.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ locks up 100.0 for bob
+          ✓ locks up 100.0 for bob
+          ✓ locks up 100.0 for bob
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 4.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 5.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 5.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 6.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 6.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ checkpoints epoch
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 6.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 7.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 7.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows alice to delegate to carol
+          ✓ allows bob to delegate to alice
+          ✓ locks up 100.0 for carol
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 7.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 8.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 8.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ checkpoints epoch
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 8.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 9.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 9.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ locks up 100.0 for alice
+          ✓ locks up 100.0 for bob
+          ✓ allows bob to delegate to carol
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 9.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 10.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 10.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 11.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 11.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 12.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 12.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ checkpoints epoch
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 12.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 13.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 13.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ checkpoints epoch
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 13.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 14.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 14.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ checkpoints epoch
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 14.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 15.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 15.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ locks up 500.0 for bob
+          ✓ locks up 500.0 for carol
+          ✓ allows bob to delegate to alice
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 15.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 16.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 16.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows alice to process and relock outstanding locks
+          ✓ allows bob to delegate to carol
+          ✓ allows bob to delegate to alice
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 16.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 17.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 17.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows bob to process their locks and withdraw their capital
+          ✓ allows bob to delegate to carol
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 17.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 18.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 18.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows daniel to process their locks and withdraw their capital
+          ✓ allows bob to process and relock outstanding locks
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 18.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 19.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 19.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows alice to delegate to alice
+          ✓ allows alice to delegate to carol
+          ✓ allows alice to delegate to alice
+          ✓ allows alice to process their locks and withdraw their capital
+          ✓ allows bob to delegate to bob
+          ✓ locks up 500.0 for bob
+          ✓ allows carol to delegate to alice
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 19.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 20.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 20.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+        performing actions
+          ✓ allows bob to process and relock outstanding locks
+        checking balances after
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 20.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 21.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 21.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+      Epoch 22.5
+        ✓ has correct epoch id
+        ✓ has balances in correct order
+        checking balances before
+          ✓ looks up current balances & totalSupply
+          ✓ looks up ALL historical total supply between epoch 0 and 22.5
+          ✓ looks up ALL historical balances for alice
+          ✓ looks up ALL historical balances for bob
+          ✓ looks up ALL historical balances for carol
+          ✓ looks up ALL historical balances for daniel
+
+  library AuraMath
+    AuraMath256
+      ✓ returns the smaller of two numbers
+      ✓ adds two numbers
+      ✓ subtracts two numbers
+      ✓ multiplies two numbers
+      ✓ divides two numbers
+      ✓ averages two numbers
+      ✓ to 224 bytes
+      ✓ to 128 bytes
+      ✓ to 112 bytes
+      ✓ to 96 bytes
+      ✓ to 32 bytes
+    AuraMath224
+      ✓ adds two numbers
+    AuraMath112
+      ✓ adds two numbers
+      ✓ subtracts two numbers
+    AuraMath32
+      ✓ subtracts two numbers
+
+  AuraMerkleDrop
+    deployed MerkleDrops
+      ✓ it is the correct amount of drops
+      ✓ each distro has correct config
+    constructor fails
+      ✓ if the expire date is less than 2 weeks
+    basic MerkleDrop interactions
+      ✓ initial configuration is correct
+      ✓ allows claiming and locking 
+      ✓ allows claiming no lock with penalty 
+      ✓ allows anyone to forward penalty 
+    edge MerkleDrop interactions
+      ✓ fails claiming drop without a root
+      ✓ fails claiming a drop that has not started
+      ✓ fails claiming a drop when amount is zero
+      ✓ fails claiming with an invalid proof
+      ✓ allows claiming no lock without penalty 
+      ✓ fails claiming drop more than once
+      ✓ fails claiming a drop that is expired
+      ✓ forward penalty fails if penaltyForwarder is not set
+    admin
+      ✓ sets a new dao 
+      ✓ sets a new root if it was not previously set 
+      ✓ starts early the drop 
+      ✓ fails to withdraw expired if the expire time has not been reached
+      ✓ withdraw expired
+      ✓ set a new locker
+      ✓ fails if admin is not the sender
+      ✓ fails to set a new root if it was previously set 
+
+  AuraMinter
+    ✓ initial configuration is correct
+    @method AuraMinter.mint fails if
+      ✓ sender is not the dao
+      ✓ inflation protection time has not expired
+    @method AuraMinter.mint mints when
+      ✓ protects inflation up to 155
+      ✓ @method AuraMinter.mint mints tokens
+
+  AuraPenaltyForwarder
+    ✓ initial configuration is correct
+    ✓ forwarder cvx allowance is correct
+    forward
+      ✓ fails if the distribution delay is not completed
+      ✓ fails if the balance of the forwarder is 0
+      ✓ should forward all cvx balance to the distributor
+
+  AuraStakingProxy
+    ✓ has correct initial config
+    admin fns
+      when called by EOA
+        ✓ fails to set crvDepositorWrapper
+        ✓ fails to set the keeper
+        ✓ fails to set pending owner
+        ✓ fails to apply pending owner due to auth
+        ✓ fails to apply pending owner due to wrong owner
+        ✓ fails to set call incentive
+        ✓ fails to set call incentive too high
+        ✓ fails to set reward contract
+        ✓ fails to rescue token
+      when called by owner
+        ✓ fails to set crvDepositorWrapper if output bps out of range
+        ✓ sets crvDepositorWrapper
+        ✓ sets keeper
+        ✓ sets pending owner
+        ✓ applies pending owner
+        ✓ sets rewards contract
+        ✓ rescues token
+        ✓ fails to rescue crv
+        ✓ fails to rescue cvx
+        ✓ fails to rescue cvxCrv
+        ✓ set call incentive
+    distributing rewards
+      ✓ fails to distribute if caller is not the keeper
+      ✓ allows anyone to distribute
+      ✓ distribute rewards from the booster
+    distributing other rewards
+      ✓ fails to distribute cvxCrv or crv
+      ✓ allows anyone to distribute
+      ✓ distribute other rewards
+
+  AuraVestedEscrow
+    ✓ initial configuration is correct
+    ✓ funds an array of recipients
+    ✓ fails to fund again
+    ✓ vests over time
+    ✓ fails to claim if the locker address is zero
+    ✓ allows claimers to lock in AuraLocker
+    ✓ fails to cancel if not admin
+    ✓ allows admin to cancel stream
+    ✓ fails to cancel stream if recipient has no lock
+    ✓ fails to set admin if not admin
+    ✓ fails to set locker if not admin
+    ✓ allows admin to change admin
+    ✓ allows admin to change locker
+    constructor fails
+      ✓ if start date is not in the future
+      ✓ if end date is before the start date
+      ✓ if the vested period is less than 16 weeks
+
+  TestBalEth
+    join BAL:ETH 80/20 pool with BAL
+      ✓ approve BAL for contract
+      ✓ add BAL to pool
+
+  BalLiquidityProvider
+    constructor
+      ✓ should properly store valid arguments
+      ✓ initial liquidity
+    @method provideLiquidity
+      ✓ fails if sender is not authorized 
+      ✓ fails if the request is invalid
+      ✓ fails if the current balance is greater than the min pair amount
+      ✓ fails if it provides a different pair of assets
+      ✓ fails if current balance is not equal to the max amount in
+      ✓ fails if target pool is already initialized
+      ✓ provideLiquidity to a new pool
+    @method changeMinPairAmount
+      ✓ should update the min pair amount
+      ✓ fails if sender is not authorized 
+    @method rescueToken
+      ✓ should rescue tokens from the contract
+      ✓ fails if sender is not authorized 
+
+  BaseRewardPool4626
+    ✓ has 4626 config setup
+    depositing raw LP token
+      ✓ allows direct deposits
+      ✓ allows direct deposits via mint()
+      ✓ allows direct deposits on behalf of alternate reciever
+      ✓ allows direct withdraws
+      ✓ allows direct withdraws via redeem()
+      ✓ allows withdraws to receipient
+      ✓ fails if sender is not owner
+      ✓ allows direct withdraws for alternate reciever
+
+  Booster
+    managing system revenue fees
+      ✓ has the correct initial config
+      ✓ doesn't allow just anyone to change fees
+      ✓ allows feeManager to set the fees
+      ✓ enforces 25% upper bound
+      ✓ enforces bounds on each fee type
+      ✓ distributes the fees to the correct places
+    managing fee distributors to cvxCRV
+      ✓ has both native token and distro in the initial config
+      setting fee info fails if
+        ✓ not called by owner
+        ✓ either input is null
+        ✓ gauge token is added
+      setting fee info
+        ✓ sets directly to cvxCrv if the reward token is crv
+        ✓ creates a token rewards otherwise
+      updating fee info
+        ✓ fails if not owner
+        ✓ fails if distro does not exist
+        ✓ sets the active status on a distro
+      earmarking fees
+        ✓ allows for crv to be earmarked to cvxCrv rewards
+        ✓ sends 100% of the rewards to the reward contract
+        ✓ fails if the distro is inactive
+        ✓ fails if the distro does not exist
+    performing core functions
+      ✓ @method Booster.deposit
+      ✓ @method BaseRewardPool.stake
+      ✓ @method Booster.earmarkRewards
+      ✓ @method BaseRewardPool.getReward
+
+  ConvexMasterChef
+    deployed ConvexMasterChef
+      ✓ should properly store valid arguments
+      ✓ validates deployment values
+    @getMultiplier
+      ✓ when _from block and _to block smaller than endblock
+      ✓ when _from block is smaller than start block and _to block is smaller than end block 
+      ✓ when _to block is greater than end block
+      ✓ when _from and _to block are greater than end block
+    basic flow
+      ✓ adds a new pool
+      ✓ should not update pool if current block is lt last reward block
+      ✓ user deposits to pool
+      ✓ users must not get cvx before start block
+      ✓ users may receive rewards after chef start block
+      ✓ users claims cvx
+      ✓ users should not receive more rewards after endblock
+
+  CrvDepositor
+    basic flow of locking
+      ✓ locks up for a year initially
+      ✓ deposit
+      ✓ increases lock to a year again
+    depositing via wrapper
+      ✓ allows the sender to deposit crv, wrap to crvBpt and deposit
+      ✓ stakes on behalf of user
+    calling depositFor
+      ✓ allows deposits on behalf of another user
+    system cool down
+      ✓ setCooldown only callable by dao
+      ✓ setCooldown called
+      ✓ lock reverts
+      ✓ deposit skips lock
+    setting setters
+      ✓ allows daoOperator to set daoOperator
+      ✓ allows fails to set daoOperator if not daoOperator
+      ✓ allows feeManager to set feeManager
+      ✓ allows fails to set feeManager if not feeManager
+
+  ExtraRewardsDistributor
+    ✓ initial configuration is correct
+    ✓ add rewards
+    adds rewards
+      ✓ allows anyone to fund
+      ✓ adds multiple occurrences to same epoch
+      ✓ adds to the current vlAURA epoch
+      ✓ fails if adds reward to a future epoch
+      ✓ fails if cannot backdate a reward
+      ✓ does not allow claiming until the epoch has finished
+      ✓ adds reward backdate to a new token - epoch 1
+      ✓ adds reward backdate to existing token
+      ✓ adds reward to the latest epoch
+    claiming rewards
+      ✓ allows users to specify a start index
+      ✓ does not allow the same epoch to be claimed twice
+      - allows users to specify a start index multiple times - backlog
+      ✓ allows users to claim all rewards
+    forfeiting rewards
+      ✓ fails if the index is in the past or the future
+      ✓ allows users to forfeit rewards
+
+  PoolManagerV3
+    @method addPool
+      ✓ addPool called by operator
+      ✓ reverts if pool weight is 0
+      ✓ reverts if lptoken address is 0
+      ✓ reverts if gauge has already been added
+    @method shutdownPool
+      ✓ reverts if not called by operator
+      ✓ happy path
+    @method setProtectPool
+      ✓ protectPool defaults to true
+      ✓ reverts if addPool is protected and caller is not operator
+      ✓ reverts if setProtectPool caller is not operator
+      ✓ setProtectPool update protectAddPool
+      ✓ addPool can be called by anyone
+
+  VoterProxy
+    validates vote hash from Snapshot Hub
+      ✓ with a valid hash
+      ✓ with an invalid hash
+    generate message hash from vote
+      ✓ generates a valid hash
+    when not authorised
+      ✓ can not call release
+      ✓ can not call setRewardDeposit
+      ✓ can not call setSystemConfig
+      ✓ can not call withdraw
+    setting rewardDeposit
+      ✓ allows owner to set reward deposit and withdrawer
+    when withdrawing tokens
+      ✓ can not withdraw protected tokens
+      ✓ can withdraw unprotected tokens
+    setting setSystemConfig
+      ✓ allows owner to set external system config
+    when shutting down
+      ✓ call shutdown on the booster
+      ✓ update operator and depositor to EOA
+      ✓ release CRV from lock
+      ✓ migrate tokens
+
+·----------------------------------------------------------|---------------------------|-------------|-----------------------------·
+|                   Solc version: 0.6.12                   ·  Optimizer enabled: true  ·  Runs: 800  ·  Block limit: 30000000 gas  │
+···························································|···························|·············|······························
+|  Methods                                                                                                                         │
+······························|····························|·············|·············|·············|···············|··············
+|  Contract                   ·  Method                    ·  Min        ·  Max        ·  Avg        ·  # calls      ·  usd (avg)  │
+······························|····························|·············|·············|·············|···············|··············
+|  ArbitratorVault            ·  setOperator               ·      24067  ·      26867  ·      24565  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  forwardPenalty            ·      35874  ·      56574  ·      46224  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  getReward                 ·     109343  ·     298874  ·     179882  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  initialiseRewards         ·      94471  ·      94481  ·      94474  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  stake                     ·     112663  ·     117226  ·     114661  ·            4  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  stakeAll                  ·          -  ·          -  ·      94153  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  stakeFor                  ·          -  ·          -  ·     113149  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraBalRewardPool          ·  withdraw                  ·      96044  ·     215105  ·     143856  ·            6  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraClaimZap               ·  claimRewards              ·     162145  ·     398712  ·     280429  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraClaimZap               ·  setApprovals              ·      63846  ·     123546  ·     122827  ·           83  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  addReward                 ·      96419  ·     113543  ·     112812  ·           94  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  approveRewardDistributor  ·      27314  ·      49226  ·      33804  ·            4  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  checkpointEpoch           ·      26070  ·     430872  ·     249650  ·           21  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  delegate                  ·      90974  ·     264114  ·     137263  ·           60  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  emergencyWithdraw         ·          -  ·          -  ·      50072  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  getReward                 ·          -  ·          -  ·     168821  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  getReward                 ·      80419  ·     102517  ·      93678  ·            5  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  kickExpiredLocks          ·          -  ·          -  ·     113166  ·            4  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  lock                      ·      97275  ·     539465  ·     183083  ·           66  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  notifyRewardAmount        ·          -  ·          -  ·      77794  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  processExpiredLocks       ·      65210  ·     217386  ·     144631  ·           20  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  recoverERC20              ·          -  ·          -  ·      40125  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  setApprovals              ·          -  ·          -  ·      55243  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  setKickIncentive          ·          -  ·          -  ·      29649  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  shutdown                  ·          -  ·          -  ·      46372  ·            4  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraLocker                 ·  transferOwnership         ·      25820  ·      28620  ·      26318  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  claim                     ·      73511  ·     249603  ·     144596  ·            6  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  forwardPenalty            ·          -  ·          -  ·      51794  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  setDao                    ·          -  ·          -  ·      28028  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  setLocker                 ·          -  ·          -  ·      30029  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  setRoot                   ·          -  ·          -  ·      47203  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  startEarly                ·          -  ·          -  ·      29143  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMerkleDrop             ·  withdrawExpired           ·          -  ·          -  ·      36862  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraMinter                 ·  mint                      ·          -  ·          -  ·      80964  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraPenaltyForwarder       ·  forward                   ·          -  ·          -  ·     186642  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  applyPendingOwner         ·      24026  ·      26826  ·      24574  ·           92  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  distribute                ·      34259  ·     294611  ·     250549  ·           18  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  distributeOther           ·      27394  ·     149384  ·     108721  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  rescueToken               ·          -  ·          -  ·      54705  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  setApprovals              ·          -  ·          -  ·      93833  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  setCallIncentive          ·          -  ·          -  ·      29704  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  setCrvDepositorWrapper    ·      29197  ·      51337  ·      40267  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  setKeeper                 ·      23987  ·      46115  ·      33043  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  setPendingOwner           ·      25964  ·      46104  ·      45675  ·           94  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraStakingProxy           ·  setRewards                ·      23985  ·      46125  ·      35055  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraToken                  ·  approve                   ·      46268  ·      46304  ·      46293  ·          402  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraToken                  ·  init                      ·     104345  ·     104357  ·     104356  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraToken                  ·  mint                      ·      26250  ·      57024  ·      53433  ·           74  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraToken                  ·  minterMint                ·          -  ·          -  ·      58538  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraToken                  ·  transfer                  ·      46760  ·      51572  ·      50872  ·          658  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraToken                  ·  updateOperator            ·          -  ·          -  ·      30529  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraVestedEscrow           ·  cancel                    ·          -  ·          -  ·     114452  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraVestedEscrow           ·  claim                     ·      50685  ·     935456  ·     418273  ·            5  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraVestedEscrow           ·  fund                      ·      91619  ·     116576  ·      92465  ·          361  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraVestedEscrow           ·  setAdmin                  ·          -  ·          -  ·      26985  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  AuraVestedEscrow           ·  setLocker                 ·      28724  ·      28964  ·      28884  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BalLiquidityProvider       ·  changeMinPairAmount       ·          -  ·          -  ·      27865  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BalLiquidityProvider       ·  provideLiquidity          ·          -  ·          -  ·     171796  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BalLiquidityProvider       ·  rescueToken               ·          -  ·          -  ·      52018  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BaseRewardPool4626         ·  deposit                   ·     210454  ·     335025  ·     272740  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BaseRewardPool4626         ·  mint                      ·          -  ·          -  ·     196829  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BaseRewardPool4626         ·  redeem                    ·          -  ·          -  ·     151532  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BaseRewardPool4626         ·  withdraw                  ·          -  ·          -  ·     151474  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  deposit                   ·     248153  ·     338041  ·     278116  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  earmarkFees               ·     213635  ·     216726  ·     215181  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  earmarkRewards            ·     182825  ·     461342  ·     372740  ·           14  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setArbitrator             ·      47079  ·      47091  ·      47090  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setFactories              ·      92904  ·      92916  ·      92914  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setFeeManager             ·      25169  ·      27969  ·      25667  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setFees                   ·      43735  ·      55247  ·      46037  ·            5  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setOwner                  ·      28024  ·      28036  ·      28036  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setPoolManager            ·      28001  ·      28013  ·      28013  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setRewardContracts        ·      69997  ·      70021  ·      70019  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setTreasury               ·          -  ·          -  ·      46905  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setVote                   ·      31216  ·      53128  ·      45824  ·            6  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Booster                    ·  setVoteDelegate           ·      25191  ·      27991  ·      25689  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BoosterOwner               ·  setFeeInfo                ·      46335  ·    1083097  ·     519195  ·            9  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BoosterOwner               ·  shutdownSystem            ·          -  ·          -  ·      96830  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  BoosterOwner               ·  updateFeeInfo             ·      38055  ·      38067  ·      38060  ·            5  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ConvexMasterChef           ·  add                       ·     105617  ·     139817  ·     139440  ·           91  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ConvexMasterChef           ·  claim                     ·      65837  ·     128492  ·      93168  ·            5  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ConvexMasterChef           ·  deposit                   ·      83645  ·     100745  ·      91941  ·            6  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ConvexMasterChef           ·  transferOwnership         ·      25956  ·      28756  ·      26454  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ConvexMasterChef           ·  updatePool                ·          -  ·          -  ·      25790  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  deposit                   ·      85393  ·     145514  ·     125254  ·            8  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  deposit                   ·          -  ·          -  ·     159059  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  depositFor                ·          -  ·          -  ·     145801  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  initialLock               ·          -  ·          -  ·     209881  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  setCooldown               ·          -  ·          -  ·      45743  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  setDaoOperator            ·          -  ·          -  ·      26878  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositor               ·  setFeeManager             ·      24134  ·      26934  ·      24657  ·           91  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositorWrapper        ·  deposit                   ·     199360  ·     313095  ·     270630  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  CrvDepositorWrapper        ·  setApprovals              ·          -  ·          -  ·     108647  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  cvxCrvToken                ·  approve                   ·      26306  ·      46206  ·      44211  ·           10  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  cvxCrvToken                ·  mint                      ·          -  ·          -  ·      53501  ·            6  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  cvxCrvToken                ·  setOperator               ·      26909  ·      26933  ·      26931  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  cvxCrvToken                ·  transfer                  ·          -  ·          -  ·      51655  ·            3  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  DepositToken               ·  approve                   ·          -  ·          -  ·      46194  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ExtraRewardsDistributor    ·  addReward                 ·      75195  ·     168780  ·     120253  ·           27  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ExtraRewardsDistributor    ·  addRewardToEpoch          ·     117743  ·     157885  ·     140649  ·            6  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ExtraRewardsDistributor    ·  forfeitRewards            ·          -  ·          -  ·      31495  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ExtraRewardsDistributor    ·  getReward                 ·      32407  ·      86292  ·      59350  ·            4  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  ExtraRewardsDistributor    ·  getReward                 ·      73545  ·     132276  ·     102911  ·            4  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockBalancerPoolToken      ·  approve                   ·      46262  ·      46586  ·      46290  ·           96  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockBalancerPoolToken      ·  setPrice                  ·          -  ·          -  ·      43643  ·           93  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockBalancerPoolToken      ·  transfer                  ·      26875  ·      51575  ·      40195  ·          141  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockBalancerVault          ·  setTokens                 ·          -  ·          -  ·      66488  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockBalInvestor            ·  addBalToPool              ·          -  ·          -  ·     104064  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockBalInvestor            ·  approveToken              ·          -  ·          -  ·      80936  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockERC20                  ·  approve                   ·      29174  ·      46586  ·      45785  ·           34  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockERC20                  ·  transfer                  ·      26865  ·      51565  ·      51123  ·          541  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockVoteStorage            ·  setProposal               ·          -  ·          -  ·     138701  ·            2  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockVoting                 ·  vote_for_gauge_weights    ·      44183  ·      44207  ·      44206  ·          278  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  MockWalletChecker          ·  approveWallet             ·      43840  ·      43852  ·      43851  ·           45  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerProxy           ·  setOperator               ·      28877  ·      28889  ·      28888  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerProxy           ·  setOwner                  ·          -  ·          -  ·      21806  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerSecondaryProxy  ·  setOperator               ·      28855  ·      28867  ·      28867  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerSecondaryProxy  ·  setOwner                  ·      24069  ·      26869  ·      24567  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerSecondaryProxy  ·  shutdownSystem            ·          -  ·          -  ·      28452  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerV3              ·  addPool                   ·    3045179  ·    3082330  ·    3057673  ·          249  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerV3              ·  setProtectPool            ·          -  ·          -  ·      26590  ·           42  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  PoolManagerV3              ·  shutdownPool              ·     107575  ·     107587  ·     107580  ·            5  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  StashFactoryV2             ·  setImplementation         ·      53943  ·      53955  ·      53954  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  execute                   ·          -  ·          -  ·      53557  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  release                   ·          -  ·          -  ·      67372  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  setDepositor              ·      28911  ·      46011  ·      45821  ·           91  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  setOperator               ·      34538  ·      46212  ·      46083  ·           91  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  setOwner                  ·      24136  ·      26936  ·      24634  ·           90  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  setRewardDeposit          ·          -  ·          -  ·      68573  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  setSystemConfig           ·          -  ·          -  ·      34465  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  VoterProxy                 ·  withdraw                  ·          -  ·          -  ·     186441  ·            1  ·          -  │
+······························|····························|·············|·············|·············|···············|··············
+|  Deployments                                             ·                                         ·  % of limit   ·             │
+···························································|·············|·············|·············|···············|··············
+|  ArbitratorVault                                         ·     479267  ·     479279  ·     479278  ·        1.6 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraBalRewardPool                                       ·    1283020  ·    1283044  ·    1283037  ·        4.3 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraClaimZap                                            ·    1175783  ·    1175819  ·    1175812  ·        3.9 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraLocker                                              ·    4663855  ·    4663891  ·    4663888  ·       15.5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraMerkleDrop                                          ·    1174727  ·    1215391  ·    1194908  ·          4 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraMinter                                              ·     339755  ·     339767  ·     339766  ·        1.1 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraPenaltyForwarder                                    ·     571655  ·     571667  ·     571665  ·        1.9 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraStakingProxy                                        ·    1348401  ·    1348425  ·    1348419  ·        4.5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraToken                                               ·    1093839  ·    1093851  ·    1093850  ·        3.6 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  AuraVestedEscrow                                        ·    1095346  ·    1115498  ·    1110623  ·        3.7 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  BalLiquidityProvider                                    ·    1155394  ·    1175378  ·    1174992  ·        3.9 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  BaseRewardPool                                          ·    1584471  ·    1584495  ·    1584490  ·        5.3 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  Booster                                                 ·    4015490  ·    4015526  ·    4015522  ·       13.4 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  BoosterOwner                                            ·    1523017  ·    1523041  ·    1523039  ·        5.1 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  ClaimFeesHelper                                         ·     385488  ·     385512  ·     385509  ·        1.3 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  ConvexMasterChef                                        ·    1573369  ·    1573405  ·    1573382  ·        5.2 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  CrvDepositor                                            ·    1435482  ·    1435506  ·    1435501  ·        4.8 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  CrvDepositorWrapper                                     ·    1045285  ·    1045309  ·    1045303  ·        3.5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  cvxCrvToken                                             ·          -  ·          -  ·     944478  ·        3.1 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  ExtraRewardsDistributor                                 ·    1085392  ·    1085404  ·    1085403  ·        3.6 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  ExtraRewardStashV3                                      ·    1049455  ·    1049467  ·    1049466  ·        3.5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockAuraMath                                            ·          -  ·          -  ·     520108  ·        1.7 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockBalancerPoolToken                                   ·     838885  ·     878697  ·     878148  ·        2.9 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockBalancerVault                                       ·     734946  ·     734958  ·     734957  ·        2.4 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockBalInvestor                                         ·          -  ·          -  ·     903337  ·          3 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockCurveGauge                                          ·     929307  ·     949507  ·     949362  ·        3.2 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockCurveMinter                                         ·     178637  ·     178649  ·     178648  ·        0.6 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockCurveVoteEscrow                                     ·    1086420  ·    1086432  ·    1086430  ·        3.6 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockERC20                                               ·     756101  ·     801253  ·     762882  ·        2.5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockFeeDistributor                                      ·     305928  ·     329132  ·     328637  ·        1.1 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockVoteStorage                                         ·          -  ·          -  ·     824767  ·        2.7 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockVoting                                              ·          -  ·          -  ·     275763  ·        0.9 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  MockWalletChecker                                       ·          -  ·          -  ·     122593  ·        0.4 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  PoolManagerProxy                                        ·     488327  ·     488339  ·     488338  ·        1.6 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  PoolManagerSecondaryProxy                               ·     826049  ·     826061  ·     826059  ·        2.8 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  PoolManagerV3                                           ·     452587  ·     452599  ·     452598  ·        1.5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  ProxyFactory                                            ·          -  ·          -  ·     106127  ·        0.4 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  RewardFactory                                           ·    3734052  ·    3734064  ·    3734062  ·       12.4 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  StashFactoryV2                                          ·     586363  ·     586375  ·     586373  ·          2 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  TokenFactory                                            ·    1496902  ·    1496914  ·    1496913  ·          5 %  ·          -  │
+···························································|·············|·············|·············|···············|··············
+|  VoterProxy                                              ·    2154545  ·    2154569  ·    2154564  ·        7.2 %  ·          -  │
+·----------------------------------------------------------|-------------|-------------|-------------|---------------|-------------·
+
+  639 passing (12m)
+  1 pending

@@ -1,0 +1,219 @@
+[
+  {
+    "name": "NewRelease",
+    "inputs": [
+      { "type": "uint256", "name": "release_id", "indexed": true },
+      { "type": "address", "name": "template", "indexed": false },
+      { "type": "string", "name": "api_version", "indexed": false }
+    ],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "name": "NewVault",
+    "inputs": [
+      { "type": "address", "name": "token", "indexed": true },
+      { "type": "uint256", "name": "deployment_id", "indexed": true },
+      { "type": "address", "name": "vault", "indexed": false },
+      { "type": "string", "name": "api_version", "indexed": false }
+    ],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "name": "NewExperimentalVault",
+    "inputs": [
+      { "type": "address", "name": "token", "indexed": true },
+      { "type": "address", "name": "deployer", "indexed": true },
+      { "type": "address", "name": "vault", "indexed": false },
+      { "type": "string", "name": "api_version", "indexed": false }
+    ],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "name": "NewGovernance",
+    "inputs": [{ "type": "address", "name": "governance", "indexed": false }],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "name": "VaultTagged",
+    "inputs": [
+      { "type": "address", "name": "vault", "indexed": false },
+      { "type": "string", "name": "tag", "indexed": false }
+    ],
+    "anonymous": false,
+    "type": "event"
+  },
+  {
+    "outputs": [],
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "name": "setGovernance",
+    "outputs": [],
+    "inputs": [{ "type": "address", "name": "governance" }],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 36218
+  },
+  {
+    "name": "acceptGovernance",
+    "outputs": [],
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 37490
+  },
+  {
+    "name": "latestRelease",
+    "outputs": [{ "type": "string", "name": "" }],
+    "inputs": [],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 6804
+  },
+  {
+    "name": "latestVault",
+    "outputs": [{ "type": "address", "name": "" }],
+    "inputs": [{ "type": "address", "name": "token" }],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 2560
+  },
+  {
+    "name": "newRelease",
+    "outputs": [],
+    "inputs": [{ "type": "address", "name": "vault" }],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 166808
+  },
+  {
+    "name": "newVault",
+    "outputs": [{ "type": "address", "name": "" }],
+    "inputs": [
+      { "type": "address", "name": "token" },
+      { "type": "address", "name": "guardian" },
+      { "type": "address", "name": "rewards" },
+      { "type": "string", "name": "name" },
+      { "type": "string", "name": "symbol" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 136989
+  },
+  {
+    "name": "newExperimentalVault",
+    "outputs": [{ "type": "address", "name": "" }],
+    "inputs": [
+      { "type": "address", "name": "token" },
+      { "type": "address", "name": "governance" },
+      { "type": "address", "name": "guardian" },
+      { "type": "address", "name": "rewards" },
+      { "type": "string", "name": "name" },
+      { "type": "string", "name": "symbol" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 61714
+  },
+  {
+    "name": "endorseVault",
+    "outputs": [],
+    "inputs": [{ "type": "address", "name": "vault" }],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 88812
+  },
+  {
+    "name": "setBanksy",
+    "outputs": [],
+    "inputs": [{ "type": "address", "name": "tagger" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "name": "setBanksy",
+    "outputs": [],
+    "inputs": [
+      { "type": "address", "name": "tagger" },
+      { "type": "bool", "name": "allowed" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "name": "tagVault",
+    "outputs": [],
+    "inputs": [
+      { "type": "address", "name": "vault" },
+      { "type": "string", "name": "tag" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "gas": 186127
+  },
+  {
+    "name": "nextRelease",
+    "outputs": [{ "type": "uint256", "name": "" }],
+    "inputs": [],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 1451
+  },
+  {
+    "name": "releases",
+    "outputs": [{ "type": "address", "name": "" }],
+    "inputs": [{ "type": "uint256", "name": "arg0" }],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 1596
+  },
+  {
+    "name": "nextDeployment",
+    "outputs": [{ "type": "uint256", "name": "" }],
+    "inputs": [{ "type": "address", "name": "arg0" }],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 1726
+  },
+  {
+    "name": "vaults",
+    "outputs": [{ "type": "address", "name": "" }],
+    "inputs": [
+      { "type": "address", "name": "arg0" },
+      { "type": "uint256", "name": "arg1" }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 1871
+  },
+  {
+    "name": "governance",
+    "outputs": [{ "type": "address", "name": "" }],
+    "inputs": [],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 1571
+  },
+  {
+    "name": "tags",
+    "outputs": [{ "type": "string", "name": "" }],
+    "inputs": [{ "type": "address", "name": "arg0" }],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 10172
+  },
+  {
+    "name": "banksy",
+    "outputs": [{ "type": "bool", "name": "" }],
+    "inputs": [{ "type": "address", "name": "arg0" }],
+    "stateMutability": "view",
+    "type": "function",
+    "gas": 1846
+  }
+]

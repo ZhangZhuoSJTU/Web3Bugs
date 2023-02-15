@@ -1,0 +1,367 @@
+---
+sponsor: "Tally"
+slug: "2021-10-tally"
+date: "2021-11-19"
+title: "Tally contest"
+findings: "https://github.com/code-423n4/2021-10-tally-findings/issues"
+contest: 44
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the code contest outlined in this document, C4 conducted an analysis of the Tally smart contract system written in Solidity. The code contest took place between October 20—October 22 2021.
+
+## Wardens
+
+15 Wardens contributed reports to the Tally contest code contest:
+
+1. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+2. harleythedog
+3. pants
+4. [cmichel](https://twitter.com/cmichelio)
+5. [pauliax](https://twitter.com/SolidityDev)
+6. [leastwood](https://twitter.com/liam_eastwood13)
+7. elprofesor
+8. [JMukesh](https://twitter.com/MukeshJ_eth)
+9. [TomFrench](https://github.com/TomAFrench)
+10. [0xngndev](https://twitter.com/ngndev)
+11. Koustre
+12. [ye0lde](https://twitter.com/_ye0lde)
+13. [defsec](https://twitter.com/defsec_)
+14. [csanuragjain](https://twitter.com/csanuragjain)
+15. [gpersoon](https://twitter.com/gpersoon)
+
+This contest was judged by [0xean](https://github.com/0xean).
+
+Final report assembled by [moneylegobatman](https://twitter.com/money_lego) and [CloudEllie](https://twitter.com/CloudEllie1).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 14 unique vulnerabilities 40 total findings. All of the issues presented here are linked back to their original finding.
+
+Of these vulnerabilities, 2 received a risk rating in the category of HIGH severity, 3 received a risk rating in the category of MEDIUM severity, and 9 received a risk rating in the category of LOW severity.
+
+C4 analysis also identified 6 non-critical recommendations and 20 gas optimizations.
+
+# Scope
+
+The code under review can be found within the [C4 Tally contest repository](https://github.com/code-423n4/2021-10-tally), and is composed of 6 smart contracts written in the Solidity programming language and includes 407 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (2)
+
+## [[H-01] Arbitrary contract call allows attackers to steal ERC20 from users' wallets](https://github.com/code-423n4/2021-10-tally-findings/issues/37)
+_Submitted by WatchPug_
+
+[`Swap.sol L200-L212`](https://github.com/code-423n4/2021-10-tally/blob/c585c214edb58486e0564cb53d87e4831959c08b/contracts/swap/Swap.sol#L200-L212)
+
+```solidity
+function fillZrxQuote(
+    IERC20 zrxBuyTokenAddress,
+    address payable zrxTo,
+    bytes calldata zrxData,
+    uint256 ethAmount
+) internal returns (uint256, uint256) {
+    uint256 originalERC20Balance = 0;
+    if(!signifiesETHOrZero(address(zrxBuyTokenAddress))) {
+        originalERC20Balance = zrxBuyTokenAddress.balanceOf(address(this));
+    }
+    uint256 originalETHBalance = address(this).balance;
+
+    (bool success,) = zrxTo.call{value: ethAmount}(zrxData);
+```
+
+A call to an arbitrary contract with custom calldata is made in `fillZrxQuote()`, which means the contract can be an ERC20 token, and the calldata can be `transferFrom` a previously approved user.
+
+##### Impact
+The wallet balances (for the amount up to the allowance limit) of the tokens that users approved to the contract can be stolen.
+
+##### PoC
+Given:
+
+*   Alice has approved 1000 WETH to `Swap.sol`;
+
+The attacker can:
+```solidity
+TallySwap.swapByQuote(
+    address(WETH),
+    0,
+    address(WETH),
+    0,
+    address(0),
+    address(WETH),
+    abi.encodeWithSignature(
+        "transferFrom(address,address,uint256)",
+        address(Alice),
+        address(this),
+        1000 ether
+    )
+)
+```
+
+As a result, 1000 WETH will be stolen from Alice and sent to the attacker.
+
+This PoC has been tested on a forking network.
+
+##### Recommendation
+Consider adding a whitelist for `zrxTo` addresses.
+
+
+**[Shadowfiend (Tally) confirmed](https://github.com/code-423n4/2021-10-tally-findings/issues/37)**
+
+## [[H-02] Wrong calculation of `erc20Delta` and `ethDelta`](https://github.com/code-423n4/2021-10-tally-findings/issues/34)
+_Submitted by WatchPug, also found by harleythedog_
+
+[`Swap.sol` L200-L225](https://github.com/code-423n4/2021-10-tally/blob/c585c214edb58486e0564cb53d87e4831959c08b/contracts/swap/Swap.sol#L200-L225)
+
+```solidity
+function fillZrxQuote(
+    IERC20 zrxBuyTokenAddress,
+    address payable zrxTo,
+    bytes calldata zrxData,
+    uint256 ethAmount
+) internal returns (uint256, uint256) {
+    uint256 originalERC20Balance = 0;
+    if(!signifiesETHOrZero(address(zrxBuyTokenAddress))) {
+        originalERC20Balance = zrxBuyTokenAddress.balanceOf(address(this));
+    }
+    uint256 originalETHBalance = address(this).balance;
+
+    (bool success,) = zrxTo.call{value: ethAmount}(zrxData);
+    require(success, "Swap::fillZrxQuote: Failed to fill quote");
+
+    uint256 ethDelta = address(this).balance.subOrZero(originalETHBalance);
+    uint256 erc20Delta;
+    if(!signifiesETHOrZero(address(zrxBuyTokenAddress))) {
+        erc20Delta = zrxBuyTokenAddress.balanceOf(address(this)).subOrZero(originalERC20Balance);
+        require(erc20Delta > 0, "Swap::fillZrxQuote: Didn't receive bought token");
+    } else {
+        require(ethDelta > 0, "Swap::fillZrxQuote: Didn't receive bought ETH");
+    }
+
+    return (erc20Delta, ethDelta);
+}
+```
+
+When a user tries to swap unwrapped ETH to ERC20, even if there is a certain amount of ETH refunded, at L215, `ethDelta` will always be `0`.
+
+That's because `originalETHBalance` already includes the `msg.value` sent by the caller.
+
+Let's say the ETH balance of the contract is `1 ETH` before the swap.
+
+*   A user swaps `10 ETH` to USDC;
+*   `originalETHBalance` will be `11 ETH`;
+*   If there is `1 ETH` of refund;
+*   `ethDelta` will be `0` as the new balance is `2 ETH` and `subOrZero(2, 11)` is `0`.
+
+Similarly, `erc20Delta` is also computed wrong.
+
+Consider a special case of a user trying to arbitrage from `WBTC` to `WBTC`, the `originalERC20Balance` already includes the input amount, `erc20Delta` will always be much lower than the actual delta amount.
+
+For example, for an arb swap from `1 WBTC` to `1.1 WBTC`, the `ethDelta` will be `0.1 WBTC` while it should be `1.1 WBTC`.
+
+##### Impact
+*   User can not get ETH refund for swaps from ETH to ERC20 tokens;
+*   Arb swap with the same input and output token will suffer the loss of almost all of their input amount unexpectedly.
+
+##### Recommendation
+Consider subtracting the input amount from the originalBalance.
+
+**[Shadowfiend (Tally) confirmed](https://github.com/code-423n4/2021-10-tally-findings/issues/34#issuecomment-961228745):**
+ > This doesn't allow explicit stealing by an attacker, but does leak value. We would suggest a (2) severity on this.
+
+**[0xean (judge) commented](https://github.com/code-423n4/2021-10-tally-findings/issues/34#issuecomment-962285115):**
+ > This results in a user losing assets that they will never be able to recover. Per documentation
+>
+> `
+> 3 — High: Assets can be stolen/lost/compromised directly (or indirectly if there is a valid attack path that does not have hand-wavy hypotheticals).
+> `
+>
+> Lost assets are a high sev.
+
+# Medium Risk Findings (3)
+
+## [[M-01] Swap.sol implements potentially dangerous transfer ](https://github.com/code-423n4/2021-10-tally-findings/issues/20)
+_Submitted by elprofesor, also found by WatchPug, Koustre, cmichel, JMukesh, and pauliax_
+
+#### Impact
+The use of `transfer()`  in ` Swap.sol`   may have unintended outcomes on the eth being sent to the receiver. Eth may be irretrievable or undelivered if the `msg.sender`   or `feeRecipient`   is a smart contract. Funds can potentially be lost if;
+
+1.  The smart contract fails to implement the payable fallback function
+2.  The fallback function uses more than 2300 gas units
+
+The latter situation may occur in the instance of gas cost changes. The impact would mean that any contracts receiving funds would potentially be unable to retrieve funds from the swap.
+
+#### Proof of Concept
+This issue directly impacts the following lines of code:
+- [L257](https://github.com/code-423n4/2021-10-tally/blob/c585c214edb58486e0564cb53d87e4831959c08b/contracts/swap/Swap.sol#L257)
+- [L173](https://github.com/code-423n4/2021-10-tally/blob/c585c214edb58486e0564cb53d87e4831959c08b/contracts/swap/Swap.sol#L173)
+- [L158](https://github.com/code-423n4/2021-10-tally/blob/c585c214edb58486e0564cb53d87e4831959c08b/contracts/swap/Swap.sol#L158)
+
+Examples of similar issues ranked as medium can be found [here](https://github.com/code-423n4/2021-08-notional-findings/issues/15) and [here, just search for 'M04'](https://blog.openzeppelin.com/opyn-gamma-protocol-audit/). A detailed explanation of why relying on `payable().transfer()` may result in unexpected loss of eth can be found [here](https://consensys.net/diligence/blog/2019/09/stop-using-soliditys-transfer-now/)
+
+#### Tools Used
+Manual review
+
+#### Recommended Mitigation Steps
+Re-entrancy has been accounted for in all functions that reference ` Solidity's   `  transfer() `  . This has been done by using a re-entrancy guard, therefore, we can rely on `  msg.sender.call.value(amount)\`  or using the OpenZeppelin [Address.sendValue library](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v2.5.1/contracts/utils/Address.sol#L63)
+
+**[Shadowfiend (Tally) acknowledged](https://github.com/code-423n4/2021-10-tally-findings/issues/20)**
+
+## [[M-02] Unused ERC20 tokens are not refunded](https://github.com/code-423n4/2021-10-tally-findings/issues/36)
+_Submitted by WatchPug_
+
+Based on the context and comments in the code, we assume that it's possible that there will be some leftover sell tokens, not only when users are selling unwrapped ETH but also for ERC20 tokens.
+
+However, in the current implementation, only refunded ETH is returned (L158).
+
+Because of this, the leftover tkoens may be left in the contract unintentionally.
+
+[`Swap.sol` L153-L181](https://github.com/code-423n4/2021-10-tally/blob/c585c214edb58486e0564cb53d87e4831959c08b/contracts/swap/Swap.sol#L153-L181)
+
+```solidity
+if (boughtERC20Amount > 0) {
+    // take the swap fee from the ERC20 proceeds and return the rest
+    uint256 toTransfer = SWAP_FEE_DIVISOR.sub(swapFee).mul(boughtERC20Amount).div(SWAP_FEE_DIVISOR);
+    IERC20(zrxBuyTokenAddress).safeTransfer(msg.sender, toTransfer);
+    // return any refunded ETH
+    payable(msg.sender).transfer(boughtETHAmount);
+
+    emit SwappedTokens(
+        zrxSellTokenAddress,
+        zrxBuyTokenAddress,
+        amountToSell,
+        boughtERC20Amount,
+        boughtERC20Amount.sub(toTransfer)
+    );
+} else {
+
+    // take the swap fee from the ETH proceeds and return the rest. Note
+    // that if any 0x protocol fee is refunded in ETH, it also suffers
+    // the swap fee tax
+    uint256 toTransfer = SWAP_FEE_DIVISOR.sub(swapFee).mul(boughtETHAmount).div(SWAP_FEE_DIVISOR);
+    payable(msg.sender).transfer(toTransfer);
+    emit SwappedTokens(
+        zrxSellTokenAddress,
+        zrxBuyTokenAddress,
+        amountToSell,
+        boughtETHAmount,
+        boughtETHAmount.sub(toTransfer)
+    );
+}
+```
+
+**[Shadowfiend (Tally) acknowledged](https://github.com/code-423n4/2021-10-tally-findings/issues/36#issuecomment-960119681):**
+ > I believe the 0x API does in fact guarantee that we won't have any sell tokens left over, particularly since we intend to use RFQ-T for these quotes, but if not we will fix this... And we may make the change regardless to future-proof.
+
+**[0xean (judge) commented](https://github.com/code-423n4/2021-10-tally-findings/issues/36#issuecomment-962450934):**
+ > Downgrading to sev 2
+>
+> `
+> 2 — Med: Assets not at direct risk, but the function of the protocol or its availability could be impacted, or leak value with a hypothetical attack path with stated assumptions, but external requirements.
+> `
+>
+> As I believe this to be a "leak value" scenario.
+
+## [[M-03] Users can avoid paying fees for ETH swaps](https://github.com/code-423n4/2021-10-tally-findings/issues/68)
+_Submitted by pants_
+
+Users can call `Swap.swapByQuote()` to execute an ETH swap (where they receive ETH) without paying swap fee for the gained ETH. They can trick the system by setting `zrxBuyTokenAddress` to an address of a malicious contract and making it think they have executed an ERC20 swap when they have actually executed an ETH swap. In this case, the system will give them the ETH they got from the swap (`boughtETHAmount`) without charging any swap fees for it, because the systems consideres this ETH as "refunded ETH" that wasn't part of the "ERC20" swap.
+
+#### Impact
+Users can execute ETH swap without paying swap fees for the ETH the got from the swap.
+
+#### Proof of Concept
+The steps of the attack are:
+
+1.  Deploy a malicious contract (denoted by `M`), that will be used for `zrxBuyTokenAddress`.
+2.  Call `Swap.swapByQuote()` with `zrxBuyTokenAddress=M` and `minimumAmountReceived=0`. The rest of the arguments should specify our ETH swap, nothing special here.
+3.  Define `M` to return `0` and `1` at the first and second times when `fillZrxQuote` calls `zrxBuyTokenAddress.balanceOf(address(this))`, respectively.
+4.  As a result, `boughtERC20Amount` now equals `1` and the function will "return any refunded ETH" to the caller, without charging any swap fees on it. This ETH is actually the output of that ETH swap.
+
+#### Tool Used
+Manual code review.
+
+#### Recommended Mitigation Steps
+Charge swap fees for the "refunded ETH" on ERC20 swaps (when `boughtERC20Amount > 0`), or require `boughtETHAmount == 0`.
+
+**[Shadowfiend (Tally) acknowledged](https://github.com/code-423n4/2021-10-tally-findings/issues/68#issuecomment-961245894):**
+ > Still working through whether this is an issue we're truly worried about; in particular, if you want to do this, you probably might as well use the 0x API to swap directly.
+>
+> Nonetheless, it's overshadowed by #37, which will likely lead to changes that will make this impractical as well.
+
+**[0xean (judge) commented](https://github.com/code-423n4/2021-10-tally-findings/issues/68#issuecomment-962451293):**
+ > Downgrading to severity 2 as this would lead to "leaked value" as only the fees are lost by the protocol in this attack vector and customer assets aren't being stolen.
+
+# Low Risk Findings (9)
+
+- [[L-01] `Ownable` Contract Does Not Implement Two-Step Transfer Ownership Pattern](https://github.com/code-423n4/2021-10-tally-findings/issues/78) _Submitted by leastwood, also found by elprofesor and WatchPug_
+- [[L-02] Wrong value for `SwappedTokens` event parameter](https://github.com/code-423n4/2021-10-tally-findings/issues/28) _Submitted by WatchPug_
+- [[L-03] Insufficient input validation](https://github.com/code-423n4/2021-10-tally-findings/issues/25) _Submitted by WatchPug, also found by cmichel, leastwood, and pants_
+- [[L-04] Incorrect `FeesSwept` amount being emitted in `sweepFees` function](https://github.com/code-423n4/2021-10-tally-findings/issues/21) _Submitted by harleythedog, also found by pauliax_
+- [[L-05] Token Can Deny Execution of `sweepFees()` Function](https://github.com/code-423n4/2021-10-tally-findings/issues/81) _Submitted by leastwood, also found by JMukesh and 0xngndev_
+- [[L-06] Swap fee can be set to 100%](https://github.com/code-423n4/2021-10-tally-findings/issues/10) _Submitted by TomFrench, also found by pauliax_
+- [[L-07] Contract does not work well with fee-on transfer tokens](https://github.com/code-423n4/2021-10-tally-findings/issues/40) _Submitted by cmichel_
+- [[L-08] Events not indexed](https://github.com/code-423n4/2021-10-tally-findings/issues/22) _Submitted by harleythedog_
+- [[L-09] Open TODOs](https://github.com/code-423n4/2021-10-tally-findings/issues/75) _Submitted by pants_
+
+# Non-Critical Findings (6)
+
+- [[N-01] use of floating pragma](https://github.com/code-423n4/2021-10-tally-findings/issues/46) _Submitted by JMukesh_
+- [[N-02] Consider removing `Math.sol`](https://github.com/code-423n4/2021-10-tally-findings/issues/35) _Submitted by WatchPug_
+- [[N-03] Inclusive check](https://github.com/code-423n4/2021-10-tally-findings/issues/49) _Submitted by pauliax_
+- [[N-04] `Swap.setSwapFee()` emits a `NewSwapFee` when the swap fee hasn't changed](https://github.com/code-423n4/2021-10-tally-findings/issues/66) _Submitted by pants_
+- [[N-05] `Swap.setFeeRecipient()` emits a `NewFeeRecipient` when the fee recipient hasn't changed](https://github.com/code-423n4/2021-10-tally-findings/issues/67) _Submitted by pants_
+- [[N-06] frontrun swapByQuote or abuse high allowance - replacement](https://github.com/code-423n4/2021-10-tally-findings/issues/17) _Submitted by gpersoon_
+
+# Gas Optimizations (20)
+
+- [[G-01] Unnecessary `SLOAD` in `Swap.setSwapFee()`](https://github.com/code-423n4/2021-10-tally-findings/issues/63) _Submitted by pants_
+- [[G-02 ] Unnecessary conditions causing Over Gas consumption](https://github.com/code-423n4/2021-10-tally-findings/issues/3) _Submitted by csanuragjain_
+- [[G-03] Gas: Math library could be "unchecked"](https://github.com/code-423n4/2021-10-tally-findings/issues/43) _Submitted by cmichel, also found by WatchPug_
+- [[G-04] Gas: `SafeMath` is not needed when using Solidity version 0.8](https://github.com/code-423n4/2021-10-tally-findings/issues/42) _Submitted by cmichel, also found by WatchPug, 0xngndev, defsec, and pants_
+- [[G-05] Gas: `minReceived` check can be simplified](https://github.com/code-423n4/2021-10-tally-findings/issues/41) _Submitted by cmichel, also found by TomFrench_
+- [[G-06] Unnecessary array boundaries check when loading an array element twice](https://github.com/code-423n4/2021-10-tally-findings/issues/72) _Submitted by pants, also found by ye0lde_
+- [[G-07] Cache or use existing memory versions of state variables (`feeRecipient`, `swapFee`)](https://github.com/code-423n4/2021-10-tally-findings/issues/64) _Submitted by ye0lde_
+- [[G-08] Gas Optimization: Reduce the size of error messages.](https://github.com/code-423n4/2021-10-tally-findings/issues/5) _Submitted by 0xngndev, also found by ye0lde_
+- [[G-09] Check if `boughtETHAmount > 0` can save gas](https://github.com/code-423n4/2021-10-tally-findings/issues/31) _Submitted by WatchPug, also found by pauliax_
+- [[G-10] Use of uint8 for counter in for loop increases gas costs](https://github.com/code-423n4/2021-10-tally-findings/issues/7) _Submitted by TomFrench, also found by pauliax_
+- [[G-11] Remove duplicate reads of storage variables](https://github.com/code-423n4/2021-10-tally-findings/issues/18) _Submitted by harleythedog, also found by pants_
+- [[G-12] Unnecessary `CALLDATALOAD`s in for-each loops](https://github.com/code-423n4/2021-10-tally-findings/issues/74) _Submitted by pants, also found by WatchPug_
+- [[G-13] Unnecessary checked arithmetic in for loops](https://github.com/code-423n4/2021-10-tally-findings/issues/73) _Submitted by pants_
+- [[G-14] Prefix increaments are cheaper than postfix increaments](https://github.com/code-423n4/2021-10-tally-findings/issues/71) _Submitted by pants_
+- [[G-15] `internal` functions can be `private`](https://github.com/code-423n4/2021-10-tally-findings/issues/70) _Submitted by pants_
+- [[G-16] Unnecessary require statement in `Swap`'s constructor](https://github.com/code-423n4/2021-10-tally-findings/issues/62) _Submitted by pants_
+- [[G-17] Unnecessary `SLOAD`s in `EmergencyGovernable.onlyTimelockOrEmergencyGovernance()`](https://github.com/code-423n4/2021-10-tally-findings/issues/61) _Submitted by pants_
+- [[G-18] Emit `feeRecipient_ (memory)` instead of `feeRecipient` (storage)](https://github.com/code-423n4/2021-10-tally-findings/issues/19) _Submitted by harleythedog, also found by pants_
+- [[G-19] double reading calldata variable inside a loop ](https://github.com/code-423n4/2021-10-tally-findings/issues/13) _Submitted by pants_
+- [[G-20] Upgrade pragma to at least 0.8.4](https://github.com/code-423n4/2021-10-tally-findings/issues/23) _Submitted by defsec_
+
+# Disclosures
+
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

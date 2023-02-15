@@ -1,0 +1,73 @@
+{
+  "name": "perennial",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "yarn compile",
+    "compile": "hardhat compile",
+    "gasReport": "REPORT_GAS=true yarn test",
+    "test": "hardhat test ./test/unit/**/*",
+    "coverage": "hardhat coverage --testfiles './test/unit/**/*'",
+    "test-integration": "FORK_ENABLED=true hardhat test ./test/integration/*",
+    "lint": "eslint --fix --ext '.ts,.js' ./ && solhint 'contracts/**/*.sol' --fix",
+    "format": "prettier -w .",
+    "postinstall": "yarn build",
+    "prepare": "husky install",
+    "clean": "rm -rf cache artifacts types/generated"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@codechecks/client": "^0.1.10",
+    "@ethersproject/abi": "^5.3.1",
+    "@ethersproject/abstract-provider": "^5",
+    "@ethersproject/abstract-signer": "^5",
+    "@ethersproject/bytes": "^5.0.0",
+    "@ethersproject/providers": "^5.3.1",
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-etherscan": "^2.1.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.0",
+    "@openzeppelin/contracts": "^4.1.0",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/hardhat": "^2.0.2",
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "^14.14.10",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "chai": "^4.2.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "ethereum-waffle": "^3.2.1",
+    "ethers": "^5.5.1",
+    "hardhat": "^2.0.10",
+    "hardhat-contract-sizer": "^2.1.1",
+    "hardhat-gas-reporter": "^1.0.4",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "lodash": "^4.17.15",
+    "prettier": "^2.2.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.6",
+    "solhint": "^3.3.6",
+    "solhint-plugin-prettier": "^0.0.5",
+    "solidity-coverage": "^0.7.17",
+    "ts-generator": "^0.1.1",
+    "ts-node": "^9.0.0",
+    "typechain": "^5.0.0",
+    "typescript": "^4.3.2"
+  },
+  "resolutions": {
+    "@solidity-parser/parser": "0.14.0"
+  },
+  "lint-staged": {
+    "*.{ts,.js}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.sol": "solhint 'contracts/**/*.sol' --fix",
+    "*.json": "prettier --write"
+  }
+}

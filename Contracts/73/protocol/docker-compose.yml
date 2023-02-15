@@ -1,0 +1,22 @@
+version: "3"
+services:
+  parity-dev:
+    image: livepeer/parity-dev:latest
+    ports:
+      - "47623:8545"
+  geth-dev:
+    image: livepeer/geth-dev:latest
+    ports:
+      - "47624:8545"
+  parity-integration-tests:
+    container_name: parity-integration-tests
+    image: livepeer/protocol:latest
+    command: yarn test:integration -- --network=parityDev
+    links:
+      - parity-dev
+  geth-integration-tests:
+    container_name: geth-integration-tests
+    image: livepeer/protocol:latest
+    command: yarn test:integration -- --network=gethDev
+    links:
+      - geth-dev

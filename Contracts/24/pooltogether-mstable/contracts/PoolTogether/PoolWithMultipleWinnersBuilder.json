@@ -1,0 +1,464 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "contract RegistryInterface",
+                "name": "_reserveRegistry",
+                "type": "address"
+            },
+            {
+                "internalType": "contract CompoundPrizePoolProxyFactory",
+                "name": "_compoundPrizePoolProxyFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "contract YieldSourcePrizePoolProxyFactory",
+                "name": "_yieldSourcePrizePoolProxyFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "contract StakePrizePoolProxyFactory",
+                "name": "_stakePrizePoolProxyFactory",
+                "type": "address"
+            },
+            {
+                "internalType": "contract MultipleWinnersBuilder",
+                "name": "_multipleWinnersBuilder",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "contract CompoundPrizePool",
+                "name": "prizePool",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "contract MultipleWinners",
+                "name": "prizeStrategy",
+                "type": "address"
+            }
+        ],
+        "name": "CompoundPrizePoolWithMultipleWinnersCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "contract StakePrizePool",
+                "name": "prizePool",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "contract MultipleWinners",
+                "name": "prizeStrategy",
+                "type": "address"
+            }
+        ],
+        "name": "StakePrizePoolWithMultipleWinnersCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "contract YieldSourcePrizePool",
+                "name": "prizePool",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "contract MultipleWinners",
+                "name": "prizeStrategy",
+                "type": "address"
+            }
+        ],
+        "name": "YieldSourcePrizePoolWithMultipleWinnersCreated",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "compoundPrizePoolProxyFactory",
+        "outputs": [
+            {
+                "internalType": "contract CompoundPrizePoolProxyFactory",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "contract CTokenInterface",
+                        "name": "cToken",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "maxExitFeeMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "maxTimelockDuration",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct PoolWithMultipleWinnersBuilder.CompoundPrizePoolConfig",
+                "name": "prizePoolConfig",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "contract RNGInterface",
+                        "name": "rngService",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "prizePeriodStart",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "prizePeriodSeconds",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ticketName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ticketSymbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "sponsorshipName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "sponsorshipSymbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ticketCreditLimitMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ticketCreditRateMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "numberOfWinners",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "splitExternalErc20Awards",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct MultipleWinnersBuilder.MultipleWinnersConfig",
+                "name": "prizeStrategyConfig",
+                "type": "tuple"
+            },
+            {
+                "internalType": "uint8",
+                "name": "decimals",
+                "type": "uint8"
+            }
+        ],
+        "name": "createCompoundMultipleWinners",
+        "outputs": [
+            {
+                "internalType": "contract CompoundPrizePool",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "contract IERC20Upgradeable",
+                        "name": "token",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "maxExitFeeMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "maxTimelockDuration",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct PoolWithMultipleWinnersBuilder.StakePrizePoolConfig",
+                "name": "prizePoolConfig",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "contract RNGInterface",
+                        "name": "rngService",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "prizePeriodStart",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "prizePeriodSeconds",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ticketName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ticketSymbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "sponsorshipName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "sponsorshipSymbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ticketCreditLimitMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ticketCreditRateMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "numberOfWinners",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "splitExternalErc20Awards",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct MultipleWinnersBuilder.MultipleWinnersConfig",
+                "name": "prizeStrategyConfig",
+                "type": "tuple"
+            },
+            {
+                "internalType": "uint8",
+                "name": "decimals",
+                "type": "uint8"
+            }
+        ],
+        "name": "createStakeMultipleWinners",
+        "outputs": [
+            {
+                "internalType": "contract StakePrizePool",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "contract IYieldSource",
+                        "name": "yieldSource",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "maxExitFeeMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "maxTimelockDuration",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct PoolWithMultipleWinnersBuilder.YieldSourcePrizePoolConfig",
+                "name": "prizePoolConfig",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "contract RNGInterface",
+                        "name": "rngService",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "prizePeriodStart",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "prizePeriodSeconds",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ticketName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "ticketSymbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "sponsorshipName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "sponsorshipSymbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ticketCreditLimitMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "ticketCreditRateMantissa",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "numberOfWinners",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "splitExternalErc20Awards",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct MultipleWinnersBuilder.MultipleWinnersConfig",
+                "name": "prizeStrategyConfig",
+                "type": "tuple"
+            },
+            {
+                "internalType": "uint8",
+                "name": "decimals",
+                "type": "uint8"
+            }
+        ],
+        "name": "createYieldSourceMultipleWinners",
+        "outputs": [
+            {
+                "internalType": "contract YieldSourcePrizePool",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "multipleWinnersBuilder",
+        "outputs": [
+            {
+                "internalType": "contract MultipleWinnersBuilder",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "reserveRegistry",
+        "outputs": [
+            {
+                "internalType": "contract RegistryInterface",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "stakePrizePoolProxyFactory",
+        "outputs": [
+            {
+                "internalType": "contract StakePrizePoolProxyFactory",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "yieldSourcePrizePoolProxyFactory",
+        "outputs": [
+            {
+                "internalType": "contract YieldSourcePrizePoolProxyFactory",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

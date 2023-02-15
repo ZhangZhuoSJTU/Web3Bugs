@@ -1,0 +1,42 @@
+{
+  "name": "liquity",
+  "private": true,
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": [
+      "**/web3-eth-abi/@ethersproject/abi",
+      "**/@graphprotocol/*",
+      "**/jest*",
+      "**/@babel/*",
+      "**/babel*",
+      "**/react-scripts"
+    ]
+  },
+  "scripts": {
+    "build": "run-s build:*",
+    "build:dev-frontend": "yarn workspace @liquity/dev-frontend build",
+    "build:subgraph": "yarn workspace @liquity/subgraph build",
+    "docs": "run-s docs:*",
+    "docs:collect-sdk-apis": "node scripts/collect-sdk-apis.js",
+    "docs:api-documenter": "api-documenter generate -i temp/sdk-apis -o docs/sdk",
+    "prepare": "run-s prepare:*",
+    "prepare:lib-base": "yarn workspace @liquity/lib-base prepare",
+    "prepare:lib-ethers": "run-s prepare:lib-ethers:*",
+    "prepare:lib-ethers:deployments": "yarn workspace @liquity/lib-ethers prepare:deployments",
+    "prepare:lib-ethers:tsc": "yarn workspace @liquity/lib-ethers prepare:tsc",
+    "prepare:lib-ethers:api": "yarn workspace @liquity/lib-ethers prepare:api",
+    "prepare:lib-react": "yarn workspace @liquity/lib-react prepare",
+    "prepare:lib-subgraph": "yarn workspace @liquity/lib-subgraph prepare",
+    "prepare:providers": "yarn workspace @liquity/providers prepare",
+    "prepare:subgraph": "yarn workspace @liquity/subgraph prepare",
+    "prepare:docs": "run-s docs",
+    "rebuild": "run-s prepare build",
+    "start-dev-frontend": "yarn workspace @liquity/dev-frontend start"
+  },
+  "devDependencies": {
+    "@microsoft/api-documenter": "^7.12.6",
+    "fs-extra": "^9.1.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2"
+  }
+}

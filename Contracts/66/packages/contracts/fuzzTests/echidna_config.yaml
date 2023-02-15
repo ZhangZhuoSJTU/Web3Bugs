@@ -1,0 +1,45 @@
+#checkAsserts checks assertions
+checkAsserts: true
+
+#codeSize max code size for deployed contratcs (default 24576, per EIP-170)
+codeSize: 124576
+
+#whether ot not to use the multi-abi mode of testing
+#it’s not working for us, see: https://github.com/crytic/echidna/issues/547
+#multi-abi: true
+
+#balanceAddr is default balance for addresses
+balanceAddr: 0xffffffffffffffffffffffff
+#balanceContract overrides balanceAddr for the contract address (2^128 = ~3e38)
+balanceContract: 0xffffffffffffffffffffffffffffffffffffffffffffffff
+
+#testLimit is the number of test sequences to run
+testLimit: 50000
+
+#seqLen defines how many transactions are in a test sequence
+seqLen: 200
+
+#shrinkLimit determines how much effort is spent shrinking failing sequences
+shrinkLimit: 5000
+
+#propMaxGas defines gas cost at which a property fails
+propMaxGas: 1000000000
+
+#testMaxGas is a gas limit; does not cause failure, but terminates sequence
+testMaxGas: 1000000000
+
+# list of methods to filter
+#filterFunctions: ["openTroveExt"]
+# by default, blacklist methods in filterFunctions
+#filterBlacklist: false
+
+#coverage controls coverage guided testing
+coverage: true
+
+#directory to save the corpus; by default is disabled
+corpusDir: "fuzzTests/corpus"
+# constants for corpus mutations (for experimentation only)
+#mutConsts: [100, 1, 1]
+
+# maximum value to send to payable functions
+#maxValue: 100000000000000000000 # 100 eth

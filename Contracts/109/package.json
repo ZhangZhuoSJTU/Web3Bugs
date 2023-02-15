@@ -1,0 +1,44 @@
+{
+  "name": "@axelar-network/axelar-cgp-solidity",
+  "version": "3.1.0",
+  "description": "Ethereum Smart Contracts for Axelar Network",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "test-evm-versions": "bash test/test-evm-versions.bash",
+    "build": "rm -rf build && waffle waffle.json",
+    "lint": "solhint 'src/**/*.sol' && eslint 'test/**/*.js'",
+    "prettier": "prettier --write 'test/**/*.js' && prettier --write 'src/**/*.sol'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axelarnetwork/ethereum-bridge.git"
+  },
+  "keywords": [
+    "ethereum",
+    "axelar"
+  ],
+  "author": "axelar-network",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axelarnetwork/ethereum-bridge/issues"
+  },
+  "homepage": "https://github.com/axelarnetwork/ethereum-bridge#readme",
+  "dependencies": {
+    "ethereum-waffle": "^3.4.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^8.4.1",
+    "eslint-config-richardpringle": "^2.0.0",
+    "ethers": "^5.5.2",
+    "mocha": "^9.1.3",
+    "prettier": "^2.5.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "solhint": "^3.3.6"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

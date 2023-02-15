@@ -1,0 +1,59 @@
+{
+  "name": "@yield-protocol/code-arena",
+  "version": "0.0.1",
+  "description": "Yield Protocol v2 contracts for Code Arena",
+  "author": "Yield Inc.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "test:parallel": "mocha --require hardhat/register --recursive --parallel --exit --extension ts",
+    "test:deploy": "hardhat deploy --tags DeployTest",
+    "coverage": "hardhat coverage",
+    "lint:sol": "solhint -f table contracts/*.sol",
+    "lint:ts": "prettier ./test/*.ts --check",
+    "lint:ts:fix": "prettier ./test/*.ts --write",
+    "prepublishOnly": "npx tsdx build --tsconfig ./tsconfig-publish.json"
+  },
+  "devDependencies": {
+    "@ethersproject/providers": "^5.0.15",
+    "@nomiclabs/hardhat-ethers": "^2.0.1",
+    "@nomiclabs/hardhat-etherscan": "^2.1.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@truffle/hdwallet-provider": "^1.0.40",
+    "@types/mocha": "^8.0.0",
+    "chai": "4.2.0",
+    "chai-bignumber": "3.0.0",
+    "dss-interfaces": "0.1.1",
+    "erc3156": "^0.4.8",
+    "ethereumjs-util": "^7.0.9",
+    "ethereum-waffle": "^3.2.2",
+    "ethers": "^5.0.31",
+    "hardhat": "^2.2.0",
+    "hardhat-abi-exporter": "^2.0.3",
+    "hardhat-contract-sizer": "^2.0.3",
+    "hardhat-deploy": "^0.7.0-beta.44",
+    "hardhat-gas-reporter": "^1.0.3",
+    "hardhat-typechain": "^0.3.4",
+    "mathjs": "^7.3.0",
+    "mocha": "^8.3.2",
+    "prettier": "^2.0.5",
+    "solhint": "^3.3.3",
+    "solidity-coverage": "^0.7.14",
+    "ts-node": "^8.10.2",
+    "tsdx": "^0.14.1",
+    "typechain": "^4.0.3",
+    "typechain-target-ethers-v5": "^5.0.1",
+    "typescript": "^3.9.7"
+  },
+  "repository": {
+    "url": "git+https://github.com/yieldprotocol/yieldspace-v2.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/yieldprotocol/yieldspace-v2/issues"
+  },
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/yieldprotocol/yieldspace-v2#readme"
+}

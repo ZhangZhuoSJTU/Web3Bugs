@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "strictPropertyInitialization": false,
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "paths": {
+        "@utils/*": ["utils/*"],
+        "@typechain/*": ["typechain/*"]
+    }
+  },
+  "include": [
+    "./utils/**/*.ts",
+    "./deploy/**/*.ts",
+    "./typechain/**/*.ts",
+    "./tasks/**/*.ts"
+  ],
+  "files": [
+    "hardhat.config.ts",
+  ]
+}

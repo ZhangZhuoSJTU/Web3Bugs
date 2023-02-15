@@ -1,0 +1,16 @@
+syntax = "proto3";
+package gravity.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/althea-net/cosmos-gravity-bridge/module/x/gravity/types";
+
+// IDSet represents a set of IDs
+message IDSet {
+  repeated uint64 ids = 1;
+}
+
+message BatchFees {
+  string token      = 1;
+  string total_fees = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int", (gogoproto.nullable) = false];
+}

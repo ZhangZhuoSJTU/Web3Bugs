@@ -1,0 +1,69 @@
+{
+  "version": "1.0.49",
+  "name": "@timeswap-labs/timeswap-v1-convenience",
+  "files": [
+    "contracts/interfaces",
+    "contracts/libraries",
+    "contracts/Bond.sol",
+    "contracts/CollateralizedDebt.sol",
+    "contracts/Insurance.sol",
+    "contracts/Liquidity.sol",
+    "contracts/TimeswapConvenience.sol",
+    "artifacts/contracts/Bond.sol/Bond.json",
+    "artifacts/contracts/CollateralizedDebt.sol/CollateralizedDebt.json",
+    "artifacts/contracts/Insurance.sol/Insurance.json",
+    "artifacts/contracts/Liquidity.sol/Liquidity.json",
+    "artifacts/contracts/TimeswapConvenience.sol/TimeswapConvenience.json",
+    "artifacts/contracts/interfaces/**/*.json",
+    "artifacts/contracts/libraries/**/*.json",
+    "!artifacts/contracts/interfaces/**/*.dbg.json",
+    "!artifacts/contracts/libraries/**/*.dbg.json"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:hardhat": "hardhat test --network hardhat",
+    "test:parallel": "TS_NODE_PROJECT=./tsconfig.json mocha --require hardhat/register --recursive --parallel --exit --extension ts",
+    "coverage": "hardhat coverage",
+    "prepare": "hardhat compile"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@timeswap-labs/timeswap-v1-core": "1.0.22",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/hardhat": "^2.1.2",
+    "@types/chai": "^4.2.19",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^16.0.0",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.7",
+    "hardhat": "^2.6.5",
+    "hardhat-contract-sizer": "^2.0.3",
+    "mocha": "^9.1.3",
+    "ts-node": "^10.0.0",
+    "typechain": "^5.0.0",
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.1.0",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.29.0",
+    "fast-check": "^2.17.0",
+    "hardhat-deploy": "^0.8.11",
+    "hardhat-gas-reporter": "^1.0.4",
+    "prettier": "^2.0.5",
+    "prettier-plugin-solidity": "^1.0.0-alpha.59",
+    "solhint": "^3.2.1",
+    "solhint-plugin-prettier": "^0.0.5",
+    "solidity-coverage": "^0.7.17"
+  },
+  "repository": "git://github.com/Timeswap-Labs/Timeswap-V1-Convenience.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

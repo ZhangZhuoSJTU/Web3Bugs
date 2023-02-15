@@ -1,0 +1,70 @@
+{
+    "name": "@unioncredit/union-v1-contracts",
+    "version": "1.0.0",
+    "description": "Smart contracts for UnionDAO",
+    "scripts": {
+        "compile": "yarn hardhat compile",
+        "test": "yarn hardhat test",
+        "deploy": "hardhat deploy --network",
+        "coverage": "yarn hardhat coverage",
+        "lint": "yarn solhint contracts/**/*.sol",
+        "prettier:solidity": "npx prettier --write contracts/**/*.sol",
+        "slither": "slither ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/unioncredit/union-v1-contracts.git"
+    },
+    "keywords": [
+        "defi",
+        "ethereum",
+        "credit",
+        "finance",
+        "blockchain",
+        "uniondao"
+    ],
+    "author": "Max Weng <max.m.weng@gmail.com>",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/unioncredit/union-v1-contracts/issues"
+    },
+    "homepage": "https://github.com/unioncredit/union-v1-contracts#readme",
+    "dependencies": {
+        "@openzeppelin/cli": "2.8.2",
+        "@openzeppelin/contracts": "^4.3.2",
+        "@openzeppelin/contracts-upgradeable": "^4.3.2",
+        "@openzeppelin/test-helpers": "0.5.4",
+        "@openzeppelin/upgrades": "2.8.0",
+        "commander": "^6.0.0",
+        "dotenv": "^6.2.0",
+        "husky": "^4.2.5"
+    },
+    "devDependencies": {
+        "@gnosis.pm/mock-contract": "^3.0.8",
+        "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.10",
+        "@nomiclabs/hardhat-waffle": "^2.0.1",
+        "@openzeppelin/hardhat-upgrades": "^1.8.0",
+        "@openzeppelin/test-environment": "^0.1.8",
+        "chai": "^4.2.0",
+        "codecov": "^3.7.1",
+        "eth-permit": "^0.1.9",
+        "ethereum-waffle": "^3.3.0",
+        "ethers": "^5.4.6",
+        "hardhat": "^2.4.3",
+        "hardhat-deploy": "^0.9.0",
+        "hardhat-gas-reporter": "^1.0.4",
+        "inquirer": "^7.3.3",
+        "mocha": "^8.2.1",
+        "ora": "^4.0.4",
+        "prettier": "^2.0.5",
+        "prettier-plugin-solidity": "^1.0.0-alpha.54",
+        "solhint": "^3.3.6",
+        "solhint-plugin-prettier": "^0.0.4",
+        "solidity-coverage": "^0.7.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn prettier:solidity"
+        }
+    }
+}

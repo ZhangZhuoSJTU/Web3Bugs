@@ -1,0 +1,160 @@
+version: 2.1
+
+default_env: &default_env
+  working_directory: ~/set-protocol-v2
+  docker:
+    - image: circleci/node:14.18
+      environment:
+          NODE_OPTIONS: --max_old_space_size=8192
+
+commands:
+  setup_job:
+    steps:
+      - restore_cache:
+          key: compiled-env-{{ .Environment.CIRCLE_SHA1 }}
+
+jobs:
+  checkout_and_compile:
+    <<: *default_env
+    resource_class: large
+    steps:
+      - checkout
+      - restore_cache:
+          key: module-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: Set Up Environment Variables
+          command: cp .env.default .env
+      - run:
+          name: Fetch Dependencies
+          command: yarn install
+      - save_cache:
+          key: module-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run:
+          name: Transpile Contracts
+          command: yarn build
+      - save_cache:
+          key: compiled-env-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/set-protocol-v2
+  test:
+    <<: *default_env
+    parallelism: 3
+    steps:
+      - setup_job
+      - run:
+          name: Test RPC
+          command: yarn chain
+          background: true
+      - run:
+          name: Hardhat Test
+          command: |
+            TEST_FILES="$(circleci tests glob "./test/**/*.spec.ts" | circleci tests split)"
+            yarn test ${TEST_FILES}
+
+  test_forked_network:
+    <<: *default_env
+    steps:
+      - setup_job
+      - run:
+          name: Hardhat Test
+          command: yarn test:fork
+
+  coverage:
+    <<: *default_env
+    # When changing the parallelism value, you also
+    # need to update the `persist_to_workspace` paths
+    # in this job (below) as well as the list of files passed
+    # to istanbul-combine in the `report_coverage` job
+    parallelism: 5
+    resource_class: medium+
+    steps:
+      - setup_job
+      - run:
+          name: Create shared coverage outputs folder
+          command: mkdir -p /tmp/coverage
+      - run:
+          name: Coverage
+          command: |
+            TEST_FILES="{$(circleci tests glob "./test/**/*.spec.ts" | \
+              circleci tests split | xargs | sed -e 's/ /,/g')}"
+            yarn coverage -- --testfiles "$TEST_FILES"
+      - run:
+          name: Save coverage
+          command: |
+            cp coverage.json /tmp/coverage/cov_$CIRCLE_NODE_INDEX.json
+            chmod -R 777 /tmp/coverage/cov_$CIRCLE_NODE_INDEX.json
+      - persist_to_workspace:
+          root: /tmp/coverage
+          paths:
+            - cov_0.json
+            - cov_1.json
+            - cov_2.json
+            - cov_3.json
+            - cov_4.json
+
+  report_coverage:
+    <<: *default_env
+    steps:
+      - setup_job
+      - attach_workspace:
+          at: /tmp/coverage
+      - run:
+          name: Combine coverage reports
+          command: |
+            cp -R /tmp/coverage/* .
+            npx istanbul-combine-updated -r lcov \
+              cov_0.json \
+              cov_1.json \
+              cov_2.json \
+              cov_3.json \
+              cov_4.json
+      - run:
+          name: Upload coverage
+          command: |
+            cat coverage/lcov.info | node_modules/.bin/coveralls
+
+  release_latest:
+    <<: *default_env
+    steps:
+      - setup_job
+      - run:
+          name: Publish "latest" release
+          command: yarn publish:ci:latest
+
+  release_hardhat:
+    <<: *default_env
+    steps:
+      - setup_job
+      - run:
+          name: Publish "hardhat" release
+          command: yarn publish:ci:hardhat
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - checkout_and_compile
+      - test:
+          requires:
+            - checkout_and_compile
+      - test_forked_network:
+          requires:
+            - checkout_and_compile
+      - coverage:
+          requires:
+            - checkout_and_compile
+      - report_coverage:
+          requires:
+            - coverage
+
+      # Publish `hardhat` before `latest` second so that repo's package version is set correctly on exit
+      - release_hardhat:
+          requires:
+            - checkout_and_compile
+      - release_latest:
+          requires:
+            - release_hardhat
+
+

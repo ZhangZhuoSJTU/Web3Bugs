@@ -1,0 +1,74 @@
+{{{natspec.userdoc}}}
+{{{natspec.devdoc}}}
+
+{{#if structs}}
+## Structs
+{{/if}}
+{{#each structs}}
+### `{{name}}`
+{{#each members}}
+  - {{type}} {{name}}
+{{/each}}
+{{/each}}
+
+{{#if enums}}
+## Enums
+{{/if}}
+{{#each enums}}
+### `{{name}}`
+All members: {{members}}
+{{#each members}}
+  - {{.}}
+{{/each}}
+{{/each}}
+
+{{#if functions}}
+## Functions
+{{/if}}
+{{#functions}}
+{{#unless (eq visibility "internal")}}
+### {{name}}
+```solidity
+  function {{name}}(
+    {{#natspec.params}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{/natspec.params}}
+  ) {{visibility}}{{#if outputs}} returns ({{outputs}}){{/if}}
+```
+{{#if natspec.userdoc}}{{natspec.userdoc}}{{/if}}
+{{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
+{{#if natspec.params}}
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+{{#natspec.params}}
+|`{{param}}` | {{#lookup ../args.types @index}}{{/lookup}} | {{ description }}{{/natspec.params}}{{/if}}
+{{#if natspec.returns}}
+#### Return Values:
+| Type          | Description                                                                  |
+| :------------ | :--------------------------------------------------------------------------- |
+{{#natspec.returns}}
+| {{#lookup ../outputs.types @index}}{{/lookup}} | {{param}} {{{description}}}{{/natspec.returns}}{{/if}}
+{{/unless}}
+{{/functions}}
+{{#if events}}
+## Events
+{{/if}}
+{{#events}}
+### {{name}}
+```solidity
+  event {{name}}(
+    {{#natspec.params}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{/natspec.params}}
+  )
+```
+{{#if natspec.userdoc}}{{natspec.userdoc}}{{/if}}
+{{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
+{{#if natspec.params}}
+#### Parameters:
+| Name                           | Type          | Description                                    |
+| :----------------------------- | :------------ | :--------------------------------------------- |
+{{#natspec.params}}
+|`{{param}}`| {{#lookup ../args.types @index}}{{/lookup}} | {{{description}}}{{/natspec.params}}{{/if}}
+{{/events}}

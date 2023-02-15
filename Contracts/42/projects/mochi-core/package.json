@@ -1,0 +1,65 @@
+{
+  "name": "@mochifi/core",
+  "version": "0.0.1",
+  "description": "Mochi.fi contract repository",
+  "main": "dist/index.js",
+  "scripts": {
+    "cleanInstall": "rimraf package-lock.json && rimraf node_modules && npm install",
+    "compile": "npx hardhat compile",
+    "lint": "npx prettier --write .",
+    "coverage": "NODE_OPTIONS='--max-old-space-size=4096' npx hardhat coverage",
+    "test": "npx hardhat test",
+    "build": "npx tsc --build .",
+    "clean": "rimraf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mochifi/mochi-core.git"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "hardhat"
+  ],
+  "author": "leekt<leekt216@gmail.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mochifi/mochi-core/issues"
+  },
+  "homepage": "https://github.com/mochifi/mochi-core#readme",
+  "dependencies": {
+    "@mochifi/library": "file:../mochi-library",
+    "@mochifi/vmochi": "0.0.2",
+    "@openzeppelin/contracts": "^4.0.0",
+    "@openzeppelin/contracts-upgradeable": "^4.2.0",
+    "@uniswap/v2-periphery": "^1.1.0-beta.0",
+    "ethers": "^5.0.31"
+  },
+  "devDependencies": {
+    "@chainlink/contracts": "^0.2.1",
+    "@mochifi/cssr": "file:../mochi-cssr",
+    "@nomiclabs/hardhat-ethers": "^2.0.1",
+    "@nomiclabs/hardhat-etherscan": "^2.1.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@typechain/ethers-v5": "^7.0.1",
+    "@typechain/hardhat": "^2.1.2",
+    "@types/chai": "4.2.15",
+    "@types/mocha": "8.2.1",
+    "chai": "4.3.3",
+    "dotenv": "^10.0.0",
+    "ethereum-waffle": "^3.4.0",
+    "hardhat": "^2.4.3",
+    "hardhat-abi-exporter": "^2.1.2",
+    "hardhat-contract-sizer": "^2.0.3",
+    "hardhat-gas-reporter": "^1.0.4",
+    "hardhat-log-remover": "^2.0.2",
+    "hardhat-spdx-license-identifier": "^2.0.3",
+    "prettier": "2.3.2",
+    "prettier-plugin-solidity": "^1.0.0-beta.17",
+    "solhint": "^3.3.6",
+    "solidity-coverage": "0.7.15",
+    "ts-node": "^9.1.1",
+    "typechain": "^5.1.1",
+    "typescript": "4.2.2"
+  }
+}

@@ -1,0 +1,1177 @@
+---
+sponsor: "Backed Protocol"
+slug: "2022-04-backed"
+date: "2022-04-21"
+title: "Backed Protocol contest"
+findings: "https://github.com/code-423n4/2022-04-backed-findings/issues"
+contest: 106
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 audit contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the audit contest outlined in this document, C4 conducted an analysis of the Backed Protocol smart contract system written in Solidity. The audit contest took place between April 5—April 7 2022.
+
+## Wardens
+
+54 Wardens contributed reports to the Backed Protocol contest:
+
+  1. [rayn](https://twitter.com/rayn731)
+  1. 0xDjango
+  1. [cmichel](https://twitter.com/cmichelio)
+  1. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+  1. hake
+  1. IllIllI
+  1. [teryanarmen](https://twitter.com/teryanarmenn)
+  1. [Dravee](https://twitter.com/JustDravee)
+  1. CertoraInc ([danb](https://twitter.com/danbinnun), egjlmn1, [OriDabush](https://twitter.com/ori_dabush), ItayG, and shakedwinder)
+  1. [csanuragjain](https://twitter.com/csanuragjain)
+  1. [hickuphh3](https://twitter.com/HickupH)
+  1. [Ruhum](https://twitter.com/0xruhum)
+  1. [t11s](https://twitter.com/transmissions11)
+  1. tintin
+  1. joshie
+  1. robee
+  1. AuditsAreUS
+  1. [danb](https://twitter.com/danbinnun)
+  1. [berndartmueller](https://twitter.com/berndartmueller)
+  1. [shenwilly](https://twitter.com/shenwilly_)
+  1. [jah](https://twitter.com/jah_s3)
+  1. minhquanym
+  1. TerrierLover
+  1. cccz
+  1. saian
+  1. 0xkatana
+  1. reassor
+  1. [securerodd](https://twitter.com/securerodd)
+  1. [0v3rf10w](https://twitter.com/_0v3rf10w)
+  1. sorrynotsorry
+  1. FSchmoede
+  1. 0x1f8b
+  1. [Kenshin](https://twitter.com/nonfungiblenero)
+  1. [Meta0xNull](https://twitter.com/Meta0xNull)
+  1. [z3s](https://github.com/z3s/)
+  1. m9800
+  1. [rfa](https://www.instagram.com/riyan_rfa/)
+  1. [BouSalman](https://twitter.com/BouSalman)
+  1. VAD37
+  1. PPrieditis
+  1. Hawkeye (0xwags and 0xmint)
+  1. horsefacts
+  1. hubble (ksk2345 and shri4net)
+  1. samruna
+  1. [Tomio](https://twitter.com/meidhiwirara)
+  1. [Funen](https://instagram.com/vanensurya)
+  1. [obront](https://twitter.com/zachobront)
+
+This contest was judged by [gzeon](https://twitter.com/gzeon).
+
+Final report assembled by [liveactionllama](https://twitter.com/liveactionllama).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 10 unique vulnerabilities. Of these vulnerabilities, 3 received a risk rating in the category of HIGH severity and 7 received a risk rating in the category of MEDIUM severity.
+
+Additionally, C4 analysis included 34 reports detailing issues with a risk rating of LOW severity or non-critical. There were also 23 reports recommending gas optimizations.
+
+All of the issues presented here are linked back to their original finding.
+
+# Scope
+
+The code under review can be found within the [C4 Backed Protocol contest repository](https://github.com/code-423n4/2022-04-backed), and is composed of 7 smart contracts written in the Solidity programming language and includes 434 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low/non-critical.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (3)
+## [[H-01] Can force borrower to pay huge interest](https://github.com/code-423n4/2022-04-backed-findings/issues/24)
+_Submitted by cmichel, also found by AuditsAreUS, csanuragjain, danb, IllIllI, joshie, Ruhum, t11s, and tintin_
+
+[NFTLoanFacilitator.sol#L148](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L148)<br>
+
+The loan amount is used as a min loan amount. It can be matched as high as possible (realistically up to the collateral NFT's worth to remain in profit) and the borrower has to pay interest on the entire amount instead of just on the desired loan amount when the loan was created.
+
+### Proof of Concept
+
+*   User needs a 10k USDC loan, NFTs are illiquid and they only have a BAYC worth 350k\$. So buying another NFT worth roughly the desired 10k\$ is not feasible. They will put the entire 350k\$ BAYC as collateral for the 10k USDC loan.
+*   A lender matches the loan calling `lend` with 350k USDC.
+*   The borrower now has to pay interest on the entire 350k USDC even though they only wanted a 10k loan. Otherwise, they risk losing their collateral. Their effective rate on their 10k loan is 35x higher.
+
+### Recommended Mitigation Steps
+
+The loan amount should not have min amount semantics.
+When someone wants to get a loan, they specify a certain amount they need, they don't want to receive and pay interest on more than that.
+
+**[wilsoncusack (Backed Protocol) disputed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1090194769):**
+ > The ability to increase the loan amount is seen as a feature of the protocol, not a bug.
+
+**[gzeon (judge) decreased severity to Medium and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100042414):**
+ > While a larger loan size is strictly beneficial to the borrower, the higher interest payment it entitled is not. The warden suggested a valid situation that may cost the user more than intended. Considering the amount lost is bounded because the lender carry more risk for a larger loan, downgrading this to Medium risk for the sponsor to consider a maxLoanAmount parameter.
+
+**[gzeon (judge) increased severity to High and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100054828):**
+ > After considering [#9](https://github.com/code-423n4/2022-04-backed-findings/issues/9) bringing up the loan origination fee, I believe this is a High risk issue for the protocol to not have a `maxLoanAmount` parameter.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100502129):**
+> IMO it does not make sense to label this as High severity. This is not an exploit but is just the protocol working exactly as described in the README. 
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100536164):**
+ > From README
+> > Perpetual lender buyout: a lender can be boughtout at any time by a new lender who meets the existing terms and beats at least one term by at least 10%, e.g. 10% longer duration, 10% higher loan amount, 10% lower interest. The new lender pays the previous lender their principal + any interest owed. The loan duration restarts on buyout.
+> 
+> I don't agree that allowing higher loan amount necessarily means the loan amount needs to be unbounded. Given the increased interest and origination fee, a higher loan amount is not necessarily "beating existing terms" as described in the README.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100639005):**
+ > It certainly doesn't necessarily mean that but it is how we chose to implement it and I think the description is clear that there is no cap. We define "beating" as having one of those values changed by at least 10% and so I think it is beating as described by the readme. 
+
+> Nonetheless, I appreciate your drawing focus again to this point ([we discussed on twitter](https://twitter.com/WilsonCusack/status/1511683701800853506?s=20&t=SGd-Grp3L5yrL48Y3r_tEw) with our community during audit as this became a point of interest, and have of course considered this idea when designing the protocol at the outset). We will again consider adding a Boolean flag to each loan as to whether the borrower allows loan amount increases 
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100866532):**
+ > Respect judge to have final say, but since this is going public want to make sure our take on this is clear. 
+> 
+> We believe the protocol design was clearly communicated in the README, including origination fee and the possibility for perpetually increasing loan amount. We think there is no "exploit" here, just people pointing out potential downsides to how the protocol is designed (as one might point out problems of impermanent loss with an AMM.) We view these as QA reports. We are interested in this feedback and listening to it in that we want to listen to potential users and make sure our protocol appeals to as many people as possible. 
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1100871827):**
+ > I consider this as an exploit because asset can be lost. Combining unbounded loan amount, interest rate and origination fee (max 5%), a malicious lender can grief borrower with limited risk and get a chance to seize the collateral as demonstrated in the POC. 
+> 
+> The fact that the code is working as described in README is irrelevant if it is going to make user lose their asset. If this is going to stay as a protocol design, I recommend to clearly communicate the risk of unbounded loan amount which is lacking in the contest repo.
+
+**[wilsoncusack (Backed Protocol) resolved](https://github.com/code-423n4/2022-04-backed-findings/issues/24#issuecomment-1105499280)**
+
+
+***
+
+## [[H-02] currentLoanOwner can manipulate loanInfo when any lenders try to buyout](https://github.com/code-423n4/2022-04-backed-findings/issues/88)
+_Submitted by rayn_
+
+[NFTLoanFacilitator.sol#L205-L208](https://github.com/code-423n4/2022-04-backed/blob/main/contracts/NFTLoanFacilitator.sol#L205-L208)<br>
+[NFTLoanFacilitator.sol#L215-L218](https://github.com/code-423n4/2022-04-backed/blob/main/contracts/NFTLoanFacilitator.sol#L215-L218)
+
+If an attacker already calls `lend()` to lend to a loan, the attacker can manipulate `loanInfo` by reentrancy attack when any lenders try to buyout. The attacker can set bad values of `lendInfo` (e.g. very long duration, and 0 interest rate) that the lender who wants to buyout don't expect.
+
+### Proof of Concept
+
+An attacker lends a loan, and `loanAssetContractAddress` in `loanInfo` is ERC777 which is suffering from reentrancy attack. When a lender (victim) try to buyout the loan of the attacker:
+
+1.  The victim called `lend()`.
+2.  In `lend()`, it always call `ERC20(loanAssetContractAddress).safeTransfer` to send `accumulatedInterest + previousLoanAmount` to `currentLoanOwner` (attacker).
+3.  The `transfer` of `loanAssetContractAddress` ERC777 will call `_callTokensReceived` so that the attacker can call `lend()` again in reentrancy with parameters:
+    *   loanId: same loan Id
+    *   interestRate: set to bad value (e.g. 0)
+    *   amount: same amount
+    *   durationSeconds: set to bad value (e.g. a long durationSeconds)
+    *   sendLendTicketTo: same address of the attacker (`currentLoanOwner`)
+4.  Now the variables in `loanInfo` are changed to bad value, and the victim will get the lend ticket but the loan term is manipulated, and can not set it back (because it requires a better term).
+
+### Tools Used
+
+vim
+
+### Recommended Mitigation Steps
+
+Use `nonReentrant` modifier on `lend()` to prevent reentrancy attack: [OpenZeppelin/ReentrancyGuard.sol](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/ReentrancyGuard.sol)<br>
+
+**[wilsoncusack (Backed Protocol) acknowledged, but disagreed with High severity and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/88#issuecomment-1091992426):**
+ > We should mitigate, but will think on this.
+
+**[wilsoncusack (Backed Protocol) confirmed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/88#issuecomment-1092333890):**
+ > Not sure whether this should be Medium or High risk.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/88#issuecomment-1092723962):**
+ > Thinking more, again we should definitely mitigate, but I think this is less severe because I do not think ERC777 tokens will work with our contract? The on received call will revert? So this would need to be a malicious ERC20 designed just for this.
+
+**[wilsoncusack (Backed Protocol) resolved and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/88#issuecomment-1092733796):**
+ > er erc777 does work because reception ack is not needed in the normal case.
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/88#issuecomment-1100056759):**
+ > Sponsor confirmed with fix.
+
+
+
+***
+
+## [[H-03] Borrower can be their own lender and steal funds from buyout due to reentrancy](https://github.com/code-423n4/2022-04-backed-findings/issues/85)
+_Submitted by 0xDjango_
+
+[NFTLoanFacilitator.sol#L214-L221](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L214-L221)<br>
+[NFTLoanFacilitator.sol#L230-L250](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L230-L250)
+
+If borrower lends their own loan, they can repay and close the loan before ownership of the lend ticket is transferred to the new lender. The borrower will keep the NFT + loan amount + accrued interest.
+
+### Proof of Concept
+
+This exploit requires that the `loanAssetContractAddress` token transfers control to the receiver.
+
+#### Steps of exploit:
+
+*   Borrower creates loan with `createLoan()`.
+*   The same Borrower calls `lend()`, funding their own loan. The Borrower receives the lend ticket, and funds are transferred to themself.
+*   A new lender attempts to buy out the loan. The original loan amount + accruedInterest are sent to the original lender (same person as borrower).
+*   Due to lack of checks-effects-interactions pattern, the borrower is able to immediately call `repayAndCloseLoan()` before the lend ticket is transferred to the new lender.
+
+The following code illustrates that the new lender sends funds to the original lender prior to receiving the lend ticket in return.
+```solidity
+} else {
+    ERC20(loan.loanAssetContractAddress).safeTransferFrom(
+        msg.sender,
+        currentLoanOwner,
+        accumulatedInterest + previousLoanAmount
+    );
+}
+ILendTicket(lendTicketContract).loanFacilitatorTransfer(currentLoanOwner, sendLendTicketTo, loanId);
+```
+
+```solidity
+The original lender/borrower calls the following `repayAndCloseLoan()` function so that they receive their collateral NFT from the protocol.
+
+function repayAndCloseLoan(uint256 loanId) external override notClosed(loanId) {
+    Loan storage loan = loanInfo[loanId];
+
+
+    uint256 interest = _interestOwed(
+        loan.loanAmount,
+        loan.lastAccumulatedTimestamp,
+        loan.perAnumInterestRate,
+        loan.accumulatedInterest
+    );
+    address lender = IERC721(lendTicketContract).ownerOf(loanId);
+    loan.closed = true;
+    ERC20(loan.loanAssetContractAddress).safeTransferFrom(msg.sender, lender, interest + loan.loanAmount);
+    IERC721(loan.collateralContractAddress).safeTransferFrom(
+        address(this),
+        IERC721(borrowTicketContract).ownerOf(loanId),
+        loan.collateralTokenId
+    );
+
+
+    emit Repay(loanId, msg.sender, lender, interest, loan.loanAmount);
+    emit Close(loanId);
+}
+```
+
+Finally, the new lender receives the lend ticket that has no utility at this point. The borrower now possesses the NFT, original loan amount, and accrued interest.
+
+### Recommended Mitigation Steps
+
+Move the line to transfer the lend ticket to the new lender above the line to transfer to funds to the original lender. Or, use reentrancyGuard from OpenZeppelin to remove the risk of reentrant calls completely.
+
+If desired, also require that the lender cannot be the same account as the borrower of a loan.
+
+**[wilsoncusack (Backed Protocol) confirmed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/85#issuecomment-1091968833):**
+ > Borrower would need to convince lender to use an ERC20 with this malicious callback, but yes is legit.
+>
+ > malicious ERC20<br>
+> -> transfers value to borrow ticket holder<br>
+> -> calls repay and close loan (would need funds available to do so, but still nets up)
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/85#issuecomment-1092334816):**
+ > Possibility of an ERC777 loan asset warrants this as high, I think. Even though the warden didn't suggest that vector.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/85#issuecomment-1092724315):**
+ > Scratch that, I think ERC777 not possible because our contract isn't setup to receive them.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/85#issuecomment-1092733859):**
+ > er erc777 does work because reception ack is not needed in the normal case.
+
+**[wilsoncusack (Backed Protocol) resolved](https://github.com/code-423n4/2022-04-backed-findings/issues/85#event-6430345280)**
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/85#issuecomment-1100148955):**
+ > Sponsor confirmed.
+
+
+
+***
+
+ 
+# Medium Risk Findings (7)
+## [[M-01] When an attacker lends to a loan, the attacker can trigger DoS that any lenders can not buyout it](https://github.com/code-423n4/2022-04-backed-findings/issues/89)
+_Submitted by rayn, also found by hake_
+
+[NFTLoanFacilitator.sol#L205-L208](https://github.com/code-423n4/2022-04-backed/blob/main/contracts/NFTLoanFacilitator.sol#L205-L208)<br>
+[NFTLoanFacilitator.sol#L215-L218](https://github.com/code-423n4/2022-04-backed/blob/main/contracts/NFTLoanFacilitator.sol#L215-L218)
+
+If an attacker (lender) lends to a loan, the attacker can always revert transactions when any lenders try to buyout, making anyone can not buyout the loan of the attacker.
+
+### Proof of Concept
+
+1.  A victim calls `lend()`, trying to buyout the loan of the attacker.
+2.  In `lend()`, it always call `ERC20(loanAssetContractAddress).safeTransfer` to send `accumulatedInterest + previousLoanAmount` to `currentLoanOwner` (attacker).
+3.  If the `transfer` of `loanAssetContractAddress` is ERC777, it will call `_callTokensReceived` that the attacker can manipulate and always revert it.
+4.  Because `NFTLoanFacilitator` uses `safeTransfer` and `safeTransferFrom` to check return value, the transaction of the victim will also be reverted. It makes anyone can not buyout the loan of the attacker.
+
+In `_callTokensReceived`, the attacker just wants to revert the buyout transaction, but keep `repayAndCloseLoan` successful. The attacker can call `loanInfoStruct(uint256 loanId)` in `_callTokensReceived` to check if the value of `loanInfo` is changed or not to decide to revert it.
+
+### Tools Used
+
+vim
+
+### Recommended Mitigation Steps
+
+Don't transfer `ERC20(loanAssetContractAddress)` to `currentLoanOwner` in `lend()`, use a global mapping to record redemption of lenders and add an external function `redeem` for lenders to transfer `ERC20(loanAssetContractAddress)`.
+
+**[wilsoncusack (Backed Protocol) acknowledged, but disagreed with High severity and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/89#issuecomment-1091989314):**
+ > I think this is just part of perils of working with certain assets and I am not sure we will mitigate.
+
+**[wilsoncusack (Backed Protocol) confirmed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/89#issuecomment-1098487430):**
+ > Sorry, I lost track of this one/labeled incorrectly. This is indeed an issue we intend to address: we will block erc777 tokens. 
+> 
+> The worse implication here is that a lender could prevent a borrower from repaying and could seize the NFT. 
+>
+> Still not sure if this should be High or Medium. But there are legit ERC777 tokens that a borrower might selecting unknowingly, so probably is High?
+
+**[gzeon (judge) decreased severity to Medium and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/89#issuecomment-1100058092):**
+ > I suggest this as Med Risk as no fund is loss by preventing buyout.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/89#issuecomment-1100498588):**
+> But as I said above the bigger issue is they could block repayment, guaranteeing default and seizure of collateral? 
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/89#issuecomment-1100562648):**
+> I think you are correct as there is a similar call in [L241](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L241). However, both wardens failed to describe such attack path and I am inclined to keep this as Med Risk.
+
+**[wilsoncusack (Backed Protocol) resolved](https://github.com/code-423n4/2022-04-backed-findings/issues/89#issuecomment-1105714709)**
+
+
+
+***
+
+## [[M-02] Protocol doesn't handle fee on transfer tokens](https://github.com/code-423n4/2022-04-backed-findings/issues/75)
+_Submitted by 0xDjango, also found by cccz, csanuragjain, Dravee, IllIllI, robee, and Ruhum_
+
+[NFTLoanFacilitator.sol#L155-L160](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L155-L160)<br>
+
+Since the borrower is able to specify any asset token, it is possible that loans will be created with tokens that support fee on transfer. If a fee on transfer asset token is chosen, the protocol will contain a point of failure on the original `lend()` call.
+
+It is my belief that this is a medium severity vulnerability due to its ability to impact core protocol functionality.
+
+### Proof of Concept
+
+For the first lender to call `lend()`, if the transfer fee % of the asset token is larger than the origination fee %, the second transfer will fail in the following code:
+
+```solidity
+ERC20(loanAssetContractAddress).safeTransferFrom(msg.sender, address(this), amount);
+uint256 facilitatorTake = amount * originationFeeRate / SCALAR;
+ERC20(loanAssetContractAddress).safeTransfer(
+    IERC721(borrowTicketContract).ownerOf(loanId),
+    amount - facilitatorTake
+);
+```
+
+Example:
+
+*   `originationFee = 2%` Max fee is 5% per comments
+
+*   `feeOnTransfer = 3%`
+
+*   `amount = 100 tokens`
+
+*   Lender transfers `amount`
+
+*   `NFTLoanFacilitator` receives `97`.
+
+*   `facilitatorTake = 2`
+
+*   `NFTLoanFacilitator` attempts to send `100 - 2` to borrower, but only has `97`.
+
+*   Execution reverts.
+
+#### Other considerations:
+
+If the originationFee is less than or equal to the transferFee, the transfers will succeed but will be received at a loss for the borrower and lender. Specifically for the lender, it might be unwanted functionality for a lender to lend 100 and receive 97 following a successful repayment (excluding interest for this example).
+
+### Recommended Mitigation Steps
+
+Since the `originationFee` is calculated based on the `amount` sent by the lender, this calculation will always underflow given the example above. Instead, a potential solution would be to calculate the `originationFee` based on the requested loan amount, allowing the lender to send a greater value so that `feeOnTransfer <= originationFee`.
+
+Oppositely, the protocol can instead calculate the amount received from the initial transfer and use this amount to calculate the `originationFee`. The issue with this option is that the borrower will receive less than the desired loan amount.
+
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/75#issuecomment-1091897047):**
+ > If `amount - origination_fee - token_fee < 0`, then yeah you will not be able to underwrite to loan. But that would be a huge fee.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/75#issuecomment-1091903599):**
+ > Discussed more with warden 0xDjango, if the token even has a 1% fee then the second transfer will fail OR we will leak facilitator funds, although this is sort of impossible because currently none of the transactions with these fee on transfer tokens will work.
+
+**[wilsoncusack (Backed Protocol) acknowledged and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/75#issuecomment-1092316654):**
+> This issue is slightly different from others that just point out that borrowers will get `amount - token_fee`. The only one I have seen, I think, to point out that fulfilling loans with fee on transfer tokens is impossible.<br>
+>
+> Imagine a token that takes 1% on transfer.<br>
+> Amount = 100<br>
+> 99 reaches facilitator<br>
+> facilitator transfers 100 - facilitator take = 99 to the borrower.<br>
+> Facilitator gets nothing<br>
+> Borrower gets 98.<br>
+> 
+> If the facilitator take is greater or the fee on transfer take is greater, it won't work at all.<br>
+> 
+> Med severity is maybe right given we can miss out on origination fees?
+
+**[wilsoncusack (Backed Protocol) confirmed and resolved](https://github.com/code-423n4/2022-04-backed-findings/issues/75#issuecomment-1097469936)**
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/75#issuecomment-1100083163):**
+ > Sponsor confirmed with fix.
+
+
+
+***
+
+## [[M-03] `sendCollateralTo` is unchecked in `closeLoan()`, which can cause user's collateral NFT to be frozen](https://github.com/code-423n4/2022-04-backed-findings/issues/83)
+_Submitted by WatchPug, also found by berndartmueller, Dravee, hake, jah, and minhquanym_
+
+[NFTLoanFacilitator.sol#L116-L126](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L116-L126)<br>
+
+```solidity
+function closeLoan(uint256 loanId, address sendCollateralTo) external override notClosed(loanId) {
+    require(IERC721(borrowTicketContract).ownerOf(loanId) == msg.sender,
+    "NFTLoanFacilitator: borrow ticket holder only");
+
+    Loan storage loan = loanInfo[loanId];
+    require(loan.lastAccumulatedTimestamp == 0, "NFTLoanFacilitator: has lender, use repayAndCloseLoan");
+    
+    loan.closed = true;
+    IERC721(loan.collateralContractAddress).transferFrom(address(this), sendCollateralTo, loan.collateralTokenId);
+    emit Close(loanId);
+}
+```
+
+The `sendCollateralTo` will receive the collateral NFT when `closeLoan()` is called. However, if `sendCollateralTo` is a contract address that does not support ERC721, the collateral NFT can be frozen in the contract.
+
+As per the documentation of EIP-721:
+
+> A wallet/broker/auction application MUST implement the wallet interface if it will accept safe transfers.
+
+Ref: [EIP-721](https://eips.ethereum.org/EIPS/eip-721)
+
+### Recommended Mitigation Steps
+
+Change to:
+
+```solidity
+function closeLoan(uint256 loanId, address sendCollateralTo) external override notClosed(loanId) {
+    require(IERC721(borrowTicketContract).ownerOf(loanId) == msg.sender,
+    "NFTLoanFacilitator: borrow ticket holder only");
+
+    Loan storage loan = loanInfo[loanId];
+    require(loan.lastAccumulatedTimestamp == 0, "NFTLoanFacilitator: has lender, use repayAndCloseLoan");
+    
+    loan.closed = true;
+    IERC721(loan.collateralContractAddress).safeTransferFrom(address(this), sendCollateralTo, loan.collateralTokenId);
+    emit Close(loanId);
+}
+```
+
+**[wilsoncusack (Backed Protocol) acknowledged, but disagreed with Medium severity and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/83#issuecomment-1092314347):**
+> We use transferFrom and _mint instead of the safe versions to save gas. We think it is a reasonable expectation that users calling this should know what they are doing. We feel this is OK especially because other major protocols like Uniswap do this ([Uniswap/NonfungiblePositionManager.sol#L156](https://github.com/Uniswap/v3-periphery/blob/main/contracts/NonfungiblePositionManager.sol#L156)).
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/83#issuecomment-1100090670):**
+ > I believe Med Risk is a fair assessment given the mixed/inconsistent usage of `safeTransferFrom` and `transferFrom` in the contract.
+
+
+
+***
+
+## [[M-04] `requiredImprovementRate` can not work as expected when `previousInterestRate` less than 10 due to precision loss](https://github.com/code-423n4/2022-04-backed-findings/issues/80)
+_Submitted by WatchPug, also found by CertoraInc and hickuphh3_
+
+[NFTLoanFacilitator.sol#L167-L179](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L167-L179)
+
+```solidity
+{
+    uint256 previousInterestRate = loan.perAnumInterestRate;
+    uint256 previousDurationSeconds = loan.durationSeconds;
+
+    require(interestRate <= previousInterestRate, 'NFTLoanFacilitator: rate too high');
+    require(durationSeconds >= previousDurationSeconds, 'NFTLoanFacilitator: duration too low');
+
+    require((previousLoanAmount * requiredImprovementRate / SCALAR) <= amountIncrease
+    || previousDurationSeconds + (previousDurationSeconds * requiredImprovementRate / SCALAR) <= durationSeconds 
+    || (previousInterestRate != 0 // do not allow rate improvement if rate already 0
+        && previousInterestRate - (previousInterestRate * requiredImprovementRate / SCALAR) >= interestRate), 
+    "NFTLoanFacilitator: proposed terms must be better than existing terms");
+}
+```
+
+The `requiredImprovementRate` represents the percentage of improvement required of at least one of the terms when buying out from a previous lender.
+
+However, when `previousInterestRate` is less than `10` and `requiredImprovementRate` is `100`, due to precision loss, the new `interestRate` is allowed to be the same as the previous one.
+
+Making such an expected constraint absent.
+
+### Proof of Concept
+
+1.  Alice `createLoan()` with `maxPerAnumInterest` = 10, received `loanId` = 1
+2.  Bob `lend()` with `interestRate` = 9  for `loanId` = 1
+3.  Charlie `lend()` with `interestRate` = 9 (and all the same other terms with Bob) and buys out `loanId` = 1
+
+Charlie is expected to provide at least 10% better terms, but actually bought out Bob with the same terms.
+
+### Recommended Mitigation Steps
+
+Consider using: [OpenZeppelin/Math.sol#L39-L42](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.5.0/contracts/utils/math/Math.sol#L39-L42)<br>
+
+And change the check to:
+
+```solidity
+(previousInterestRate != 0 // do not allow rate improvement if rate already 0
+        && previousInterestRate - Math.ceilDiv(previousInterestRate * requiredImprovementRate, SCALAR) >= interestRate)
+```
+
+**[wilsoncusack (Backed Protocol) confirmed and resolved](https://github.com/code-423n4/2022-04-backed-findings/issues/80#issuecomment-1094305756)**
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/80#issuecomment-1100093154):**
+ > Sponsor confirmed with fix.
+
+
+
+***
+
+## [[M-05] Borrowers lose funds if they call `repayAndCloseLoan` instead of `closeLoan`](https://github.com/code-423n4/2022-04-backed-findings/issues/27)
+_Submitted by cmichel_
+
+[NFTLoanFacilitator.sol#L241](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L241)<br>
+
+The `repayAndCloseLoan` function does not revert if there has not been a lender for a loan (matched with `lend`).
+Users should use `closeLoan` in this case but the contract should disallow calling `repayAndCloseLoan` because users can lose funds.
+
+It performs a `ERC20(loan.loanAssetContractAddress).safeTransferFrom(msg.sender, lender, interest + loan.loanAmount)` call where `interest` will be a high value accumulated from timestamp 0 and the `loan.loanAmount` is the initially desired min loan amount `minLoanAmount` set in `createLoan`.
+The user will lose these funds if they ever approved the contract (for example, for another loan).
+
+### Recommended Mitigation Steps
+
+Add a check that there actually is something to repay.
+
+```solidity
+require(loan.lastAccumulatedTimestamp > 0, "loan was never matched by a lender. use closeLoan instead");
+```
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/27#issuecomment-1090191862):**
+ > ownerOf query here will fail if there is no lender, [NFTLoanFacilitator.sol#L239](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L239).
+
+**[wilsoncusack (Backed Protocol) confirmed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/27#issuecomment-1090376185):**
+> Actually this is wrong, we switched to solmate and this ownerOf will not fail. Is a legit issue.
+>
+> Not an attack, but funds can be lost some. Medium probably makes sense? 
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/27#issuecomment-1091694388):**
+ > Requires borrow to have approved the facilitator to move this erc20 and to call the wrong method.
+
+**[wilsoncusack (Backed Protocol) resolved and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/27#issuecomment-1099377787):**
+ > Yooo just discovered solmate had not followed the ERC721 standard on [this ownerOf](https://github.com/code-423n4/2022-04-backed/blob/main/contracts/NFTLoanFacilitator.sol#L239) and it should have reverted, updated here 
+> 
+> [Rari-Capital/solmate@921a9ad](https://github.com/Rari-Capital/solmate/commit/921a9ad4e22b995bd3d7b5464bcda294dd977209)
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/27#issuecomment-1100098358):**
+ > Sponsor confirmed with fix.
+
+
+
+***
+
+## [[M-06] Might not get desired min loan amount if `_originationFeeRate` changes](https://github.com/code-423n4/2022-04-backed-findings/issues/28)
+_Submitted by cmichel, also found by teryanarmen_
+
+[NFTLoanFacilitator.sol#L309](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L309)<br>
+
+Admins can update the origination fee by calling `updateOriginationFeeRate`.
+Note that a borrower does not receive their `minLoanAmount` set in `createLoan`, they only receive `(1 - originationFee) * minLoanAmount`, see [`lend`](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L159).
+Therefore, they need to precalculate the `minLoanAmount` using the **current** origination fee to arrive at the post-fee amount that they actually receive.
+If admins then increase the fee, the borrower receives fewer funds than required to cover their rent and might become homeless.
+
+### Recommended Mitigation Steps
+
+Reconsider how the min loan amount works. Imo, this `minLoanAmount` should be the post-fee amount, not the pre-fee amount. It's also more intuitive for the borrower when creating the loan.
+
+**[wilsoncusack (Backed Protocol) disputed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/28#issuecomment-1090190851):**
+ > Won't change, is just how it works.
+
+**[wilsoncusack (Backed Protocol) acknowledged, but disagreed with Medium severity and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/28#issuecomment-1092324481):**
+> The only true mitigation here would be to store originationFeeRate in the Loan struct at the time of origination to guarantee a borrower gets the fee rate that was present when they created the loan. But we do not plan to make this change.
+
+**[wilsoncusack (Backed Protocol) resolved and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/28#issuecomment-1097468240):**
+ > Decided to fix because we could do so without too much gas.
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/28#issuecomment-1100102896):**
+ > Sponsor confirmed with fix.
+
+
+
+***
+
+## [[M-07] `mintBorrowTicketTo` can be a contract with no `onERC721Received` method, which may cause the BorrowTicket NFT to be frozen and put users' funds at risk](https://github.com/code-423n4/2022-04-backed-findings/issues/81)
+_Submitted by WatchPug_
+
+[NFTLoanFacilitator.sol#L102-L102](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L102-L102)<br>
+
+```solidity
+IERC721Mintable(borrowTicketContract).mint(mintBorrowTicketTo, id);
+```
+
+[NFTLoanTicket.sol#L33-L35](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanTicket.sol#L33-L35)
+
+```solidity
+function mint(address to, uint256 tokenId) external override loanFacilitatorOnly {
+    _mint(to, tokenId);
+}
+```
+
+If `mintBorrowTicketTo` is a contract that does not implement the `onERC721Received` method, in the current implementation of `createLoan()`, the tx will still be successfully, and the loan will be created.
+
+This can be a problem if `mintBorrowTicketTo` can not handle ERC721 properly, as the `BorrowTicket` NFT will be used later to get back the user's funds.
+
+### Recommended Mitigation Steps
+
+Consider using `safeMint` in `NFTLoanTicket.sol#mint()`:
+
+```solidity
+function mint(address to, uint256 tokenId) external override loanFacilitatorOnly {
+    _safeMint(to, tokenId);
+}
+```
+
+**[wilsoncusack (Backed Protocol) acknowledged, but disagreed with Medium severity and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/81#issuecomment-1092340998):**
+ > Similar to [#83](https://github.com/code-423n4/2022-04-backed-findings/issues/83) 
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/81#issuecomment-1100146976):**
+ > Not really a duplicate because it is the mint function. Fund can be lost by losing the borrow ticket.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/81#issuecomment-1100499540):**
+> Agree not really duplicate. I think my response is the same, which is comparing to Uniswap v3 nft which also would mean loss of funds if lost. 
+> 
+> From [#83](https://github.com/code-423n4/2022-04-backed-findings/issues/83#issuecomment-1092314347):
+> > We use transferFrom and _mint instead of the safe versions to save gas. We think it is a reasonable expectation that users calling this should know what they are doing, we feel this is OK especially because other major protocols like Uniswap do this [NonfungiblePositionManager.sol#L156](https://github.com/Uniswap/v3-periphery/blob/main/contracts/NonfungiblePositionManager.sol#L156).
+
+**[gzeon (judge) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/81#issuecomment-1100560835):**
+ > Given the safe variant is used in [L242](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L242) and [L262](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L262), looks like ERC721 safety was a concern at the time the code is written. Therefore I believe Med Risk is a fair assessment.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/81#issuecomment-1100640970):**
+ > Fair. This was an intentional change to save gas but I should have been consistent.<br> 
+>
+ > <img width="303" alt="Screen Shot 2022-04-16 at 7 21 08 AM" src="https://user-images.githubusercontent.com/6678357/163673078-bc8d84f5-8371-4b39-bce6-f997ce820d9d.png">
+
+
+
+***
+
+# Low Risk and Non-Critical Issues
+
+For this contest, 34 reports were submitted by wardens detailing low risk and non-critical issues. The [report highlighted below](https://github.com/code-423n4/2022-04-backed-findings/issues/134) by warden **IllIllI** received the top score from the judge.
+
+_The following wardens also submitted reports: [Dravee](https://github.com/code-423n4/2022-04-backed-findings/issues/130), [shenwilly](https://github.com/code-423n4/2022-04-backed-findings/issues/52), [teryanarmen](https://github.com/code-423n4/2022-04-backed-findings/issues/107), [hake](https://github.com/code-423n4/2022-04-backed-findings/issues/126), [reassor](https://github.com/code-423n4/2022-04-backed-findings/issues/121), [TerrierLover](https://github.com/code-423n4/2022-04-backed-findings/issues/55), [0xDjango](https://github.com/code-423n4/2022-04-backed-findings/issues/87), [m9800](https://github.com/code-423n4/2022-04-backed-findings/issues/95), [robee](https://github.com/code-423n4/2022-04-backed-findings/issues/31), [securerodd](https://github.com/code-423n4/2022-04-backed-findings/issues/18), [t11s](https://github.com/code-423n4/2022-04-backed-findings/issues/46), [tintin](https://github.com/code-423n4/2022-04-backed-findings/issues/44), [0v3rf10w](https://github.com/code-423n4/2022-04-backed-findings/issues/77), [0xkatana](https://github.com/code-423n4/2022-04-backed-findings/issues/118), [berndartmueller](https://github.com/code-423n4/2022-04-backed-findings/issues/108), [BouSalman](https://github.com/code-423n4/2022-04-backed-findings/issues/2), [CertoraInc](https://github.com/code-423n4/2022-04-backed-findings/issues/53), [FSchmoede](https://github.com/code-423n4/2022-04-backed-findings/issues/104), [rayn](https://github.com/code-423n4/2022-04-backed-findings/issues/91), [Ruhum](https://github.com/code-423n4/2022-04-backed-findings/issues/43), [sorrynotsorry](https://github.com/code-423n4/2022-04-backed-findings/issues/63), [VAD37](https://github.com/code-423n4/2022-04-backed-findings/issues/57), [PPrieditis](https://github.com/code-423n4/2022-04-backed-findings/issues/35), [0x1f8b](https://github.com/code-423n4/2022-04-backed-findings/issues/5), [csanuragjain](https://github.com/code-423n4/2022-04-backed-findings/issues/7), [Hawkeye](https://github.com/code-423n4/2022-04-backed-findings/issues/109), [horsefacts](https://github.com/code-423n4/2022-04-backed-findings/issues/120), [hubble](https://github.com/code-423n4/2022-04-backed-findings/issues/110), [Kenshin](https://github.com/code-423n4/2022-04-backed-findings/issues/67), [Meta0xNull](https://github.com/code-423n4/2022-04-backed-findings/issues/60), [samruna](https://github.com/code-423n4/2022-04-backed-findings/issues/49), [WatchPug](https://github.com/code-423n4/2022-04-backed-findings/issues/84), and [z3s](https://github.com/code-423n4/2022-04-backed-findings/issues/93)._
+
+## [L-01] Loans can be created and paid with non-existent/destructed tokens
+
+`@rari-capital/solmate/src/utils/SafeTransferLib.sol` has functions named similarly to functions that OpenZeppelin has, but they act differently. At the top of the file is the following comment:
+
+```solidity
+/// @dev Note that none of the functions in this library check that a token has code at all! That responsibility is delegated to the caller.
+```
+
+[Rari-Capital/SafeTransferLib.sol#L9](https://github.com/Rari-Capital/solmate/blob/4eaf6b68202e36f67cab379768ac6be304c8ebde/src/utils/SafeTransferLib.sol#L9)<br>
+
+If the caller of these functions does not check that the token has code, calls to these functions will be no-ops, since low level calls to non-contracts always return success. There are many instances of these calls throughout the file with no code existence checks:
+```
+contracts/NFTLoanFacilitator.sol:155:            ERC20(loanAssetContractAddress).safeTransferFrom(msg.sender, address(this), amount);
+contracts/NFTLoanFacilitator.sol:157:            ERC20(loanAssetContractAddress).safeTransfer(
+contracts/NFTLoanFacilitator.sol:200:                ERC20(loanAssetContractAddress).safeTransferFrom(
+contracts/NFTLoanFacilitator.sol:205:                ERC20(loanAssetContractAddress).safeTransfer(
+contracts/NFTLoanFacilitator.sol:210:                ERC20(loanAssetContractAddress).safeTransfer(
+contracts/NFTLoanFacilitator.sol:215:                ERC20(loan.loanAssetContractAddress).safeTransferFrom(
+contracts/NFTLoanFacilitator.sol:241:        ERC20(loan.loanAssetContractAddress).safeTransferFrom(msg.sender, lender, interest + loan.loanAmount);
+contracts/NFTLoanFacilitator.sol:242:        IERC721(loan.collateralContractAddress).safeTransferFrom(
+contracts/NFTLoanFacilitator.sol:262:        IERC721(loan.collateralContractAddress).safeTransferFrom(
+contracts/NFTLoanFacilitator.sol:297:        ERC20(asset).safeTransfer(to, amount);
+```
+## [L-02] `originationFeeRate`s of less than 1000 may charge no fees if amounts are small
+
+File: contracts/NFTLoanFacilitator.sol (line [156](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L156))
+
+```solidity
+uint256 facilitatorTake = amount * originationFeeRate / SCALAR;
+```
+
+Add a `require()` for `facilitatorTake` to be non-zero if `originationFeeRate` is non-zero, or state the fee logic for small amounts
+
+## [L-03] A malicious owner can keep the fee rate at zero, but if a large value transfer enters the mempool, the owner can jack the rate up to the maximum
+
+File: contracts/NFTLoanFacilitator.sol (lines [306-312](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L306-L312))
+
+```solidity
+function updateOriginationFeeRate(uint32 _originationFeeRate) external onlyOwner {
+    require(_originationFeeRate <= 5 * (10 ** (INTEREST_RATE_DECIMALS - 2)), "NFTLoanFacilitator: max fee 5%");
+    
+    originationFeeRate = _originationFeeRate;
+
+    emit UpdateOriginationFeeRate(_originationFeeRate);
+}
+```
+
+Store the fee rate during loan creation, along with the maximum fee rate the user will allow, and update to the new rate for that particular loan only when loans are bought out
+
+## [L-04] A malicious owner can set an effectively infinite improvement rate with `type(uint256).max` after he/she has entered into a loan to prevent others from buying them out
+
+File: contracts/NFTLoanFacilitator.sol (lines [320-326](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L320-L326))
+
+```solidity
+function updateRequiredImprovementRate(uint256 _improvementRate) external onlyOwner {
+    require(_improvementRate > 0, 'NFTLoanFacilitator: 0 improvement rate');
+
+    requiredImprovementRate = _improvementRate;
+
+    emit UpdateRequiredImprovementRate(_improvementRate);
+}
+```
+
+Have a sane upper limit to the improvement rate, and don't allow it to change as above
+
+## [L-05] `tokenURI()` reverts for tokens that don't implement `IERC20Metadata`
+
+While the ticket descriptors are not in scope, the code calling them is. `NFTLoanTicket.tokenURI()`, which is in scope, ends up calling descriptor code which casts the asset to `IERC20Metadata`. This interface is separate from `IERC20` because EIP-20 does not require those functions to exist. If a valid ERC20 token does not implement this interface, casting it and attempting to call non-existant functions will cause the code to revert, which will cause `tokenURI()` to revert.
+
+[PopulateSVGParams.sol#L65](https://github.com/code-423n4/2022-04-backed/blob/d34ddbdaf8d1bc1bf17446df830db629ee551308/contracts/descriptors/libraries/PopulateSVGParams.sol#L65)<br>
+[PopulateSVGParams.sol#L69](https://github.com/code-423n4/2022-04-backed/blob/d34ddbdaf8d1bc1bf17446df830db629ee551308/contracts/descriptors/libraries/PopulateSVGParams.sol#L69)<br>
+[PopulateSVGParams.sol#L83](https://github.com/code-423n4/2022-04-backed/blob/d34ddbdaf8d1bc1bf17446df830db629ee551308/contracts/descriptors/libraries/PopulateSVGParams.sol#L83)<br>
+
+Use [`safeDecimals()`](https://github.com/boringcrypto/BoringSolidity/blob/ccb743d4c3363ca37491b87c6c9b24b1f5fa25dc/contracts/libraries/BoringERC20.sol#L33-L55) etc
+
+## [L-06] `_safeMint()` should be used rather than `_mint()` wherever possible
+
+`_mint()` is [discouraged](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/d4d8d2ed9798cc3383912a23b5e8d5cb602f7d4b/contracts/token/ERC721/ERC721.sol#L271) in favor of `_safeMint()` which ensures that the recipient is either an EOA or implements `IERC721Receiver`. Both open [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/d4d8d2ed9798cc3383912a23b5e8d5cb602f7d4b/contracts/token/ERC721/ERC721.sol#L238-L250) and [solmate](https://github.com/Rari-Capital/solmate/blob/4eaf6b68202e36f67cab379768ac6be304c8ebde/src/tokens/ERC721.sol#L180) have versions of this function so that NFTs aren't lost if they're minted to contracts that cannot transfer them back out.
+
+File: contracts/NFTLoanTicket.sol (line [34](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanTicket.sol#L34))
+
+```solidity
+_mint(to, tokenId);
+```
+
+## [L-07] `loanFacilitatorTransfer()` does not verify that the receiver is capable of handling an NFT
+
+EIP-721 states:
+
+```solidity
+/// @notice Transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE
+///  TO CONFIRM THAT `_to` IS CAPABLE OF RECEIVING NFTS OR ELSE
+///  THEY MAY BE PERMANENTLY LOST
+```
+
+[EIP-721.md#L103-L105](https://github.com/ethereum/EIPs/blob/904be2534386631358766607f4a098e11a401e95/EIPS/eip-721.md?plain=1#L103-L105)
+
+The code below was copied from `transferFrom()`, so any function calling `_transfer()` needs to confirm that `to` is capable of receiving NFTs. `loanFacilitatorTransfer()` calls `_transfer()` without completing this check, which can lead to the loss of NFTs. Checking if the address is zero or not is not sufficient; it needs the other checks in [`safeTransferFrom()`](https://github.com/Rari-Capital/solmate/blob/4eaf6b68202e36f67cab379768ac6be304c8ebde/src/tokens/ERC721.sol#L105-L110).
+
+File: contracts/LendTicket.sol (lines [24-34](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/LendTicket.sol#L24-L34))
+
+```solidity
+/// @dev exact copy of 
+/// https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC721.sol#L69-L96
+/// with L78 - L81 removed to enable loanFacilitatorTransfer
+function _transfer(
+    address from,
+    address to,
+    uint256 id
+) internal {
+    require(from == ownerOf[id], "WRONG_FROM");
+
+    require(to != address(0), "INVALID_RECIPIENT");
+```
+
+## [L-08] Missing checks for `address(0x0)` when assigning values to `address` state variables
+
+1.  File: contracts/NFTLoanFacilitator.sol (line [282](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L282))
+
+```solidity
+lendTicketContract = _contract;
+```
+
+2.  File: contracts/NFTLoanFacilitator.sol (line [292](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L292))
+
+```solidity
+borrowTicketContract = _contract;
+```
+
+## [N-01] `constant`s should be defined rather than using magic numbers
+
+1.  File: contracts/NFTLoanFacilitator.sol (line [307](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L307))
+
+```solidity
+require(_originationFeeRate <= 5 * (10 ** (INTEREST_RATE_DECIMALS - 2)), "NFTLoanFacilitator: max fee 5%");
+```
+
+2.  File: contracts/NFTLoanFacilitator.sol (line [384](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L384))
+
+```solidity
+* (perAnumInterestRate * 1e18 / 365 days)
+```
+
+3.  File: contracts/NFTLoanFacilitator.sol (line [384](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L384))
+
+```solidity
+* (perAnumInterestRate * 1e18 / 365 days)
+```
+
+4.  File: contracts/NFTLoanFacilitator.sol (line [385](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L385))
+
+```solidity
+/ 1e21 // SCALAR * 1e18
+```
+
+## [N-02] Typos
+
+1.  File: contracts/NFTLoanFacilitator.sol (line [303](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/NFTLoanFacilitator.sol#L303))
+
+```solidity
+* @notice Updates originationFeeRate the faciliator keeps of each loan amount
+```
+
+faciliator
+
+2.  File: contracts/interfaces/INFTLoanFacilitator.sol (line [65](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L65))
+
+```solidity
+* @param minLoanAmount mimimum loan amount
+```
+
+mimimum
+
+## [N-03] NatSpec is incomplete
+
+1.  File: contracts/interfaces/INFTLoanFacilitator.sol (lines [286-288](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L286-L288))
+
+```solidity
+* @param loanId The loan id
+*/
+function totalOwed(uint256 loanId) view external returns (uint256);
+```
+
+Missing: `@return`
+
+2.  File: contracts/interfaces/INFTLoanFacilitator.sol (lines [292-294](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L292-L294))
+
+```solidity
+* @param loanId The loan id
+*/
+function interestOwed(uint256 loanId) view external returns (uint256);
+```
+
+Missing: `@return`
+
+3.  File: contracts/interfaces/INFTLoanFacilitator.sol (lines [298-300](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L298-L300))
+
+```solidity
+* @param loanId The loan id
+*/
+function loanEndSeconds(uint256 loanId) view external returns (uint256);
+```
+
+Missing: `@return`
+
+## [N-04] Event is missing `indexed` fields
+
+Each `event` should use three `indexed` fields if there are three or more fields
+
+1.  File: contracts/interfaces/INFTLoanFacilitator.sol (lines [68-77](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L68-L77))
+
+```solidity
+event CreateLoan(
+    uint256 indexed id,
+    address indexed minter,
+    uint256 collateralTokenId,
+    address collateralContract,
+    uint256 maxInterestRate,
+    address loanAssetContract,
+    uint256 minLoanAmount,
+    uint256 minDurationSeconds
+);
+```
+
+2.  File: contracts/interfaces/INFTLoanFacilitator.sol (lines [93-99](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L93-L99))
+
+```solidity
+event Lend(
+    uint256 indexed id,
+    address indexed lender,
+    uint256 interestRate,
+    uint256 loanAmount,
+    uint256 durationSeconds
+);
+```
+
+3.  File: contracts/interfaces/INFTLoanFacilitator.sol (line [145](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L145))
+
+```solidity
+event WithdrawOriginationFees(address asset, uint256 amount, address to);
+```
+
+4.  File: contracts/interfaces/INFTLoanFacilitator.sol (line [152](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L152))
+
+```solidity
+event UpdateOriginationFeeRate(uint32 feeRate);
+```
+
+5.  File: contracts/interfaces/INFTLoanFacilitator.sol (line [159](https://github.com/code-423n4/2022-04-backed/blob/e8015d7c4b295af131f017e646ba1b99c8f608f0/contracts/interfaces/INFTLoanFacilitator.sol#L159))
+
+```solidity
+event UpdateRequiredImprovementRate(uint256 improvementRate);
+```
+
+**[wilsoncusack (Backed Protocol) confirmed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/134#issuecomment-1092325381):**
+ > High quality! Will work through all.
+
+**[wilsoncusack (Backed Protocol) resolved and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/134#issuecomment-1105641586):**
+> [L-01] Fixed, we now check code.length<br>
+> [L-02] Won't fix<br>
+> [L-03] Fixed, origination fee is frozen with loan terms<br>
+> [L-04] Won't fix<br>
+> [L-05] Won't fix<br>
+> [L-06] Won't fix<br>
+> [L-07] Won't fix<br>
+> [L-08] Won't fix<br>
+> [N-01] Won't fix, too much gas<br>
+> [N-02] Fixed<br>
+> [N-03] Fixed<br>
+> [N-04] Won't fix
+
+
+
+***
+
+# Gas Optimizations (23)
+
+For this contest, 23 reports were submitted by wardens detailing gas optimizations. The [report highlighted below](https://github.com/code-423n4/2022-04-backed-findings/issues/20) by warden **Dravee** received the top score from the judge.
+
+_The following wardens also submitted reports: [IllIllI](https://github.com/code-423n4/2022-04-backed-findings/issues/135), [saian](https://github.com/code-423n4/2022-04-backed-findings/issues/79), [robee](https://github.com/code-423n4/2022-04-backed-findings/issues/32), [TerrierLover](https://github.com/code-423n4/2022-04-backed-findings/issues/58), [joshie](https://github.com/code-423n4/2022-04-backed-findings/issues/6), [rfa](https://github.com/code-423n4/2022-04-backed-findings/issues/123), [0xkatana](https://github.com/code-423n4/2022-04-backed-findings/issues/119), [0v3rf10w](https://github.com/code-423n4/2022-04-backed-findings/issues/76), [sorrynotsorry](https://github.com/code-423n4/2022-04-backed-findings/issues/62), [Tomio](https://github.com/code-423n4/2022-04-backed-findings/issues/128), [t11s](https://github.com/code-423n4/2022-04-backed-findings/issues/22), [FSchmoede](https://github.com/code-423n4/2022-04-backed-findings/issues/103), [CertoraInc](https://github.com/code-423n4/2022-04-backed-findings/issues/54), [Funen](https://github.com/code-423n4/2022-04-backed-findings/issues/101), [rayn](https://github.com/code-423n4/2022-04-backed-findings/issues/92), [0x1f8b](https://github.com/code-423n4/2022-04-backed-findings/issues/4), [csanuragjain](https://github.com/code-423n4/2022-04-backed-findings/issues/10), [Kenshin](https://github.com/code-423n4/2022-04-backed-findings/issues/65), [Meta0xNull](https://github.com/code-423n4/2022-04-backed-findings/issues/61), [obront](https://github.com/code-423n4/2022-04-backed-findings/issues/13), [securerodd](https://github.com/code-423n4/2022-04-backed-findings/issues/47), and [z3s](https://github.com/code-423n4/2022-04-backed-findings/issues/94)._
+
+## Foreword
+
+*   **`@audit` tags**
+
+> The code is annotated at multiple places with `//@audit` comments to pinpoint the issues. Please, pay attention to them for more details.
+
+## [G-01] Storage
+
+### Caching storage values in memory
+
+The code can be optimized by minimising the number of SLOADs. SLOADs are expensive (100 gas) compared to MLOADs/MSTOREs (3 gas). Here, storage values should get cached in memory (see the `@audit` tags for further details):
+
+```solidity
+contracts/NFTLoanFacilitator.sol:
+  174:                 require((previousLoanAmount * requiredImprovementRate / SCALAR) <= amountIncrease //@audit gas: should cache requiredImprovementRate
+  175:                 || previousDurationSeconds + (previousDurationSeconds * requiredImprovementRate / SCALAR) <= durationSeconds   //@audit gas: should use cached requiredImprovementRate
+  176                  || (previousInterestRate != 0 // do not allow rate improvement if rate already 0
+  177:                     && previousInterestRate - (previousInterestRate * requiredImprovementRate / SCALAR) >= interestRate), //@audit gas: should use cached requiredImprovementRate
+  
+  231          Loan storage loan = loanInfo[loanId];
+  232  
+  233          uint256 interest = _interestOwed(
+  234:             loan.loanAmount, //@audit gas: should cache loan.loanAmount
+  235              loan.lastAccumulatedTimestamp,
+  236              loan.perAnumInterestRate,
+  237              loan.accumulatedInterest
+  238          );
+  239          address lender = IERC721(lendTicketContract).ownerOf(loanId);
+  240          loan.closed = true;
+  241:         ERC20(loan.loanAssetContractAddress).safeTransferFrom(msg.sender, lender, interest + loan.loanAmount); //@audit gas: should use cached loan.loanAmount
+  242          IERC721(loan.collateralContractAddress).safeTransferFrom(
+  243              address(this),
+  244              IERC721(borrowTicketContract).ownerOf(loanId),
+  245              loan.collateralTokenId
+  246          );
+  247  
+  248:         emit Repay(loanId, msg.sender, lender, interest, loan.loanAmount); //@audit gas: should use cached loan.loanAmount
+  249          emit Close(loanId);
+  250      }
+
+  338          Loan storage loan = loanInfo[loanId];
+  339          if (loan.closed || loan.lastAccumulatedTimestamp == 0) return 0;
+  340  
+  341:         return loanInfo[loanId].loanAmount + _interestOwed( //@audit gas: should use loan.loanAmount instead of loanInfo[loanId].loanAmount
+  342              loan.loanAmount,
+  343              loan.lastAccumulatedTimestamp,
+  344              loan.perAnumInterestRate,
+  345              loan.accumulatedInterest
+  346          );
+```
+
+## [G-02] Comparisons
+
+### `> 0` is less efficient than `!= 0` for unsigned integers (with proof)
+
+`!= 0` costs less gas compared to `> 0` for unsigned integers in `require` statements with the optimizer enabled (6 gas)
+
+Proof: While it may seem that `> 0` is cheaper than `!=`, this is only true without the optimizer enabled and outside a require statement. If you enable the optimizer at 10k AND you're in a `require` statement, this will save gas. You can see [this tweet](https://twitter.com/gzeon/status/1485428085885640706) for more proofs.
+
+I suggest changing `> 0` with `!= 0` here:
+
+```solidity
+NFTLoanFacilitator.sol:321:        require(_improvementRate > 0, 'NFTLoanFacilitator: 0 improvement rate');
+```
+
+Also, please enable the Optimizer.
+
+## [G-03] Arithmetics
+
+### `++i` costs less gas compared to `i++` or `i += 1`
+
+`++i` costs less gas compared to `i++` or `i += 1` for unsigned integer, as pre-increment is cheaper (about 5 gas per iteration). This statement is true even with the optimizer enabled.
+
+`i++` increments `i` and returns the initial value of `i`. Which means:
+
+```solidity
+uint i = 1;  
+i++; // == 1 but i == 2  
+```
+
+But `++i` returns the actual incremented value:
+
+```solidity
+uint i = 1;  
+++i; // == 2 and i == 2 too, so no need for a temporary variable  
+```
+
+In the first case, the compiler has to create a temporary variable (when used) for returning `1` instead of `2`
+
+Instances include:
+
+```solidity
+LendTicket.sol:39:            balanceOf[from]--;
+LendTicket.sol:41:            balanceOf[to]++;
+```
+
+I suggest using `++i` instead of `i++` to increment the value of an uint variable.<br>
+Same thing for `--i` and `i--`
+
+### Unchecking arithmetics operations that can't underflow/overflow
+
+Solidity version 0.8+ comes with implicit overflow and underflow checks on unsigned integers. When an overflow or an underflow isn't possible (as an example, when a comparison is made before the arithmetic operation), some gas can be saved by using an `unchecked` block: [Checked or Unchecked Arithmetic](https://docs.soliditylang.org/en/v0.8.10/control-structures.html#checked-or-unchecked-arithmetic).
+
+I suggest wrapping with an `unchecked` block here (see `@audit` tags for more details):
+
+```solidity
+contracts/NFTLoanFacilitator.sol:
+156              uint256 facilitatorTake = amount * originationFeeRate / SCALAR;
+157              ERC20(loanAssetContractAddress).safeTransfer(
+158                  IERC721(borrowTicketContract).ownerOf(loanId),
+159:                 amount - facilitatorTake //@audit gas: should be unchecked as facilitatorTake is < amount and can't underflow L156 (originationFeeRate is upper bounded and always < SCALAR)
+
+209                  uint256 facilitatorTake = (amountIncrease * originationFeeRate / SCALAR);
+210                  ERC20(loanAssetContractAddress).safeTransfer(
+211                      IERC721(borrowTicketContract).ownerOf(loanId),
+212:                     amountIncrease - facilitatorTake //@audit gas: should be unchecked as facilitatorTake is < amount and can't underflow L209 (originationFeeRate is upper bounded and always < SCALAR)
+```
+
+## [G-04] Visibility
+
+### Consider making some constants as non-public to save gas
+
+Reducing from `public` to `private` or `internal` can save gas when a constant isn't used outside of its contract.
+I suggest changing the visibility from `public` to `internal` or `private` here:
+
+```solidity
+NFTLoanFacilitator.sol:21:    uint8 public constant override INTEREST_RATE_DECIMALS = 3;
+NFTLoanFacilitator.sol:24:    uint256 public constant override SCALAR = 10 ** INTEREST_RATE_DECIMALS;
+```
+
+## [G-05] Errors
+
+### Reduce the size of error messages (Long revert Strings)
+
+Shortening revert strings to fit in 32 bytes will decrease deployment time gas and will decrease runtime gas when the revert condition is met.
+
+Revert strings that are longer than 32 bytes require at least one additional mstore, along with additional overhead for computing memory offset, etc.
+
+Revert strings > 32 bytes:
+
+```solidity
+NFTLoanFacilitator.sol:118:        "NFTLoanFacilitator: borrow ticket holder only");
+NFTLoanFacilitator.sol:121:        require(loan.lastAccumulatedTimestamp == 0, "NFTLoanFacilitator: has lender, use repayAndCloseLoan");
+NFTLoanFacilitator.sol:178:                "NFTLoanFacilitator: proposed terms must be better than existing terms");
+NFTLoanFacilitator.sol:189:            "NFTLoanFacilitator: accumulated interest exceeds uint128");
+NFTLoanFacilitator.sol:255:        "NFTLoanFacilitator: lend ticket holder only");
+NFTLoanFacilitator.sol:259:        "NFTLoanFacilitator: payment is not late");
+NFTLoanTicket.sol:15:        require(msg.sender == address(nftLoanFacilitator), "NFTLoanTicket: only loan facilitator"); 
+```
+
+I suggest shortening the revert strings to fit in 32 bytes, or that using custom errors as described next.
+
+### Use Custom Errors instead of Revert Strings to save Gas
+
+Custom errors from Solidity 0.8.4 are cheaper than revert strings (cheaper deployment cost and runtime cost when the revert condition is met)
+
+Source [Custom Errors in Solidity](https://blog.soliditylang.org/2021/04/21/custom-errors/):
+
+> Starting from [Solidity v0.8.4](https://github.com/ethereum/solidity/releases/tag/v0.8.4), there is a convenient and gas-efficient way to explain to users why an operation failed through the use of custom errors. Until now, you could already use strings to give more information about failures (e.g., `revert("Insufficient funds.");`), but they are rather expensive, especially when it comes to deploy cost, and it is difficult to use dynamic information in them.
+
+Custom errors are defined using the `error` statement, which can be used inside and outside of contracts (including interfaces and libraries).
+
+Instances include:
+
+```solidity
+LendTicket.sol:32:        require(from == ownerOf[id], "WRONG_FROM");
+LendTicket.sol:34:        require(to != address(0), "INVALID_RECIPIENT");
+NFTLoanFacilitator.sol:53:        require(!loanInfo[loanId].closed, "NFTLoanFacilitator: loan closed");
+NFTLoanFacilitator.sol:81:        require(minDurationSeconds != 0, 'NFTLoanFacilitator: 0 duration');
+NFTLoanFacilitator.sol:82:        require(minLoanAmount != 0, 'NFTLoanFacilitator: 0 loan amount');
+NFTLoanFacilitator.sol:83:        require(collateralContractAddress != lendTicketContract,
+NFTLoanFacilitator.sol:85:        require(collateralContractAddress != borrowTicketContract, 
+NFTLoanFacilitator.sol:117:        require(IERC721(borrowTicketContract).ownerOf(loanId) == msg.sender,
+NFTLoanFacilitator.sol:121:        require(loan.lastAccumulatedTimestamp == 0, "NFTLoanFacilitator: has lender, use repayAndCloseLoan");
+NFTLoanFacilitator.sol:144:            require(loanAssetContractAddress != address(0), "NFTLoanFacilitator: invalid loan");
+NFTLoanFacilitator.sol:146:            require(interestRate <= loan.perAnumInterestRate, 'NFTLoanFacilitator: rate too high');
+NFTLoanFacilitator.sol:147:            require(durationSeconds >= loan.durationSeconds, 'NFTLoanFacilitator: duration too low');
+NFTLoanFacilitator.sol:148:            require(amount >= loan.loanAmount, 'NFTLoanFacilitator: amount too low');
+NFTLoanFacilitator.sol:171:                require(interestRate <= previousInterestRate, 'NFTLoanFacilitator: rate too high');
+NFTLoanFacilitator.sol:172:                require(durationSeconds >= previousDurationSeconds, 'NFTLoanFacilitator: duration too low');
+NFTLoanFacilitator.sol:174:                require((previousLoanAmount * requiredImprovementRate / SCALAR) <= amountIncrease
+NFTLoanFacilitator.sol:188:            require(accumulatedInterest <= type(uint128).max,
+NFTLoanFacilitator.sol:254:        require(IERC721(lendTicketContract).ownerOf(loanId) == msg.sender, 
+NFTLoanFacilitator.sol:258:        require(block.timestamp > loan.durationSeconds + loan.lastAccumulatedTimestamp,
+NFTLoanFacilitator.sol:280:        require(lendTicketContract == address(0), 'NFTLoanFacilitator: already set');
+NFTLoanFacilitator.sol:290:        require(borrowTicketContract == address(0), 'NFTLoanFacilitator: already set');
+NFTLoanFacilitator.sol:307:        require(_originationFeeRate <= 5 * (10 ** (INTEREST_RATE_DECIMALS - 2)), "NFTLoanFacilitator: max fee 5%");
+NFTLoanFacilitator.sol:321:        require(_improvementRate > 0, 'NFTLoanFacilitator: 0 improvement rate');
+NFTLoanTicket.sol:15:        require(msg.sender == address(nftLoanFacilitator), "NFTLoanTicket: only loan facilitator");
+```
+
+I suggest replacing revert strings with custom errors.
+
+**[wilsoncusack (Backed Protocol) confirmed and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/20#issuecomment-1090199607):**
+ > Good stuff.
+
+**[wilsoncusack (Backed Protocol) resolved and commented](https://github.com/code-423n4/2022-04-backed-findings/issues/20#issuecomment-1100240254):**
+> Fixed `loan.loanAmount`.
+>
+> Fixed the error message size.
+>
+> I don't think will change any others of these.
+
+**[wilsoncusack (Backed Protocol) commented](https://github.com/code-423n4/2022-04-backed-findings/issues/20#issuecomment-1105643720):**
+> [G-01] Resolved<br>
+> [G-02] Resolved<br>
+> [G-03] Won't fix<br>
+> [G-04] Won't fix<br>
+> [G-05] Resolved
+
+
+
+***
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.

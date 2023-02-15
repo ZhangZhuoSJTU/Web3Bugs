@@ -1,0 +1,34 @@
+[package]
+name = "relayer"
+version = "0.4.3"
+authors = ["Justin Kilpatrick <justin@althea.net>"]
+edition = "2018"
+
+[lib]
+name = "relayer"
+path = "src/lib.rs"
+
+[dependencies]
+ethereum_gravity = {path = "../ethereum_gravity"}
+cosmos_gravity = {path = "../cosmos_gravity"}
+gravity_utils = {path = "../gravity_utils"}
+gravity_proto = {path = "../gravity_proto/"}
+
+deep_space = "2.4"
+serde_derive = "1.0"
+clarity = "0.4"
+docopt = "1"
+serde = "1.0"
+actix-rt = "2"
+lazy_static = "1"
+web30 = "0.14"
+num256 = "0.3"
+log = "0.4"
+env_logger = "0.8"
+tokio = "1.4"
+tonic = "0.4"
+openssl-probe = "0.1"
+
+
+[dev-dependencies]
+actix = "0.11"

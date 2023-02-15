@@ -1,0 +1,37 @@
+[package]
+name = "test_runner"
+version = "0.1.0"
+authors = ["Justin Kilpatrick <justin@althea.net>"]
+edition = "2018"
+
+# only becuase I like - more in names
+[[bin]]
+name = "test-runner"
+path = "src/main.rs"
+
+[dependencies]
+ethereum_gravity = {path = "../ethereum_gravity"}
+cosmos_gravity = {path = "../cosmos_gravity"}
+gravity_utils = {path = "../gravity_utils"}
+gravity_proto = {path = "../gravity_proto/"}
+orchestrator = {path = "../orchestrator/"}
+
+deep_space = "2.4"
+serde_derive = "1.0"
+clarity = "0.4"
+docopt = "1"
+serde = "1.0"
+actix = "0.11"
+actix-web = {version = "3", features=["openssl"]}
+actix-rt = "2.2"
+lazy_static = "1"
+url = "2"
+web30 = "0.14"
+num256 = "0.3"
+log = "0.4"
+env_logger = "0.8"
+tokio = "1.4.0"
+rand = "0.8"
+tonic = "0.4"
+futures = "0.3"
+serde_json = "1.0"

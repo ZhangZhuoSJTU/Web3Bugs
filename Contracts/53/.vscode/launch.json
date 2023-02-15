@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Debug Mocha Tests",
+            "type": "node",
+            "request": "attach",
+            "port": 9287,
+            "protocol": "inspector",
+            "timeout": 30000,
+            "smartStep": false,
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+              "webpack-internal:///./*": "${workspaceRoot}/*",
+              "webpack-internal:///*": "*",
+              "webpack:///./~/*": "${workspaceRoot}/node_modules/*",
+              "webpack:///./*": "${workspaceRoot}/*",
+              "webpack:///*": "*"
+            },
+            "skipFiles": [
+              "<node_internals>/*",
+              "<node_internals>/*.js",
+              "node_modules/**",
+              "**hbenl.vscode-mocha-test-adapter-**",
+              "**hbenl.vscode-mocha-test-adapter-**/node_modules",
+            ]
+          }
+    ]
+
+}

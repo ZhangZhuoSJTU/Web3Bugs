@@ -1,0 +1,238 @@
+syntax = "proto3";
+package gravity.v1;
+
+import "gravity/v1/genesis.proto";
+import "gravity/v1/types.proto";
+import "gravity/v1/msgs.proto";
+import "gravity/v1/pool.proto";
+import "gravity/v1/batch.proto";
+import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/althea-net/cosmos-gravity-bridge/module/x/gravity/types";
+
+// Query defines the gRPC querier service
+service Query {
+  // Deployments queries deployments
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/gravity/v1beta/params";
+  }
+  rpc CurrentValset(QueryCurrentValsetRequest) returns (QueryCurrentValsetResponse) {
+    option (google.api.http).get = "/gravity/v1beta/valset/current";
+  }
+  rpc ValsetRequest(QueryValsetRequestRequest) returns (QueryValsetRequestResponse) {
+    option (google.api.http).get = "/gravity/v1beta/valset";
+  }
+  rpc ValsetConfirm(QueryValsetConfirmRequest) returns (QueryValsetConfirmResponse) {
+    option (google.api.http).get = "/gravity/v1beta/valset/confirm";
+  }
+  rpc ValsetConfirmsByNonce(QueryValsetConfirmsByNonceRequest) returns (QueryValsetConfirmsByNonceResponse) {
+    option (google.api.http).get = "/gravity/v1beta/confirms/{nonce}";
+  }
+  rpc LastValsetRequests(QueryLastValsetRequestsRequest) returns (QueryLastValsetRequestsResponse) {
+    option (google.api.http).get = "/gravity/v1beta/valset/requests";
+  }
+  rpc LastPendingValsetRequestByAddr(QueryLastPendingValsetRequestByAddrRequest) returns (QueryLastPendingValsetRequestByAddrResponse) {
+    option (google.api.http).get = "/gravity/v1beta/valset/last";
+  }
+  rpc LastPendingBatchRequestByAddr(QueryLastPendingBatchRequestByAddrRequest) returns (QueryLastPendingBatchRequestByAddrResponse) {
+    option (google.api.http).get = "/gravity/v1beta/batch/{address}";
+  }
+  rpc LastPendingLogicCallByAddr(QueryLastPendingLogicCallByAddrRequest) returns (QueryLastPendingLogicCallByAddrResponse) {
+    option (google.api.http).get = "/gravity/v1beta/logic/{address}";
+  }
+  rpc LastEventNonceByAddr(QueryLastEventNonceByAddrRequest) returns (QueryLastEventNonceByAddrResponse) {
+    option (google.api.http).get = "/gravity/v1beta/oracle/eventnonce/{address}";
+  }
+  rpc BatchFees(QueryBatchFeeRequest) returns (QueryBatchFeeResponse) {
+    option (google.api.http).get = "/gravity/v1beta/batchfees";
+  }
+
+  rpc OutgoingTxBatches(QueryOutgoingTxBatchesRequest) returns (QueryOutgoingTxBatchesResponse) {
+    option (google.api.http).get = "/gravity/v1beta/batch/outgoingtx";
+  }
+  rpc OutgoingLogicCalls(QueryOutgoingLogicCallsRequest) returns (QueryOutgoingLogicCallsResponse) {
+    option (google.api.http).get = "/gravity/v1beta/batch/outgoinglogic";
+  }
+  rpc BatchRequestByNonce(QueryBatchRequestByNonceRequest) returns (QueryBatchRequestByNonceResponse) {
+    option (google.api.http).get = "/gravity/v1beta/batch/{nonce}";
+  }
+  rpc BatchConfirms(QueryBatchConfirmsRequest) returns (QueryBatchConfirmsResponse) {
+    option (google.api.http).get = "/gravity/v1beta/batch/confirms";
+  }
+  rpc LogicConfirms(QueryLogicConfirmsRequest) returns (QueryLogicConfirmsResponse) {
+    option (google.api.http).get = "/gravity/v1beta/logic/confirms";
+  }
+  rpc ERC20ToDenom(QueryERC20ToDenomRequest) returns (QueryERC20ToDenomResponse) {
+    option (google.api.http).get = "/gravity/v1beta/cosmos_originated/erc20_to_denom";
+  }
+  rpc DenomToERC20(QueryDenomToERC20Request) returns (QueryDenomToERC20Response) {
+    option (google.api.http).get = "/gravity/v1beta/cosmos_originated/denom_to_erc20";
+  }
+
+  rpc GetDelegateKeyByValidator(QueryDelegateKeysByValidatorAddress) returns (QueryDelegateKeysByValidatorAddressResponse) {
+    option (google.api.http).get = "/gravity/v1beta/query_delegate_keys_by_validator";
+  }
+  rpc GetDelegateKeyByEth(QueryDelegateKeysByEthAddress) returns (QueryDelegateKeysByEthAddressResponse) {
+    option (google.api.http).get = "/gravity/v1beta/query_delegate_keys_by_eth";
+  }
+  rpc GetDelegateKeyByOrchestrator(QueryDelegateKeysByOrchestratorAddress) returns (QueryDelegateKeysByOrchestratorAddressResponse) {
+    option (google.api.http).get = "/gravity/v1beta/query_delegate_keys_by_orchestrator";
+  }
+
+  rpc GetPendingSendToEth(QueryPendingSendToEth) returns (QueryPendingSendToEthResponse) {
+    option (google.api.http).get = "/gravity/v1beta/query_pending_send_to_eth";
+  }
+}
+
+message QueryParamsRequest {}
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryCurrentValsetRequest {}
+message QueryCurrentValsetResponse {
+  Valset valset = 1;
+}
+
+message QueryValsetRequestRequest {
+  uint64 nonce = 1;
+}
+message QueryValsetRequestResponse {
+  Valset valset = 1;
+}
+
+message QueryValsetConfirmRequest {
+  uint64 nonce   = 1;
+  string address = 2;
+}
+message QueryValsetConfirmResponse {
+  MsgValsetConfirm confirm = 1;
+}
+
+message QueryValsetConfirmsByNonceRequest {
+  uint64 nonce = 1;
+}
+message QueryValsetConfirmsByNonceResponse {
+  repeated MsgValsetConfirm confirms = 1;
+}
+
+message QueryLastValsetRequestsRequest {}
+message QueryLastValsetRequestsResponse {
+  repeated Valset valsets = 1;
+}
+
+message QueryLastPendingValsetRequestByAddrRequest {
+  string address = 1;
+}
+message QueryLastPendingValsetRequestByAddrResponse {
+  repeated Valset valsets = 1;
+}
+
+message QueryBatchFeeRequest {}
+message QueryBatchFeeResponse {
+  repeated BatchFees batch_fees = 1;
+}
+
+message QueryLastPendingBatchRequestByAddrRequest {
+  string address = 1;
+}
+message QueryLastPendingBatchRequestByAddrResponse {
+  OutgoingTxBatch batch = 1;
+}
+
+message QueryLastPendingLogicCallByAddrRequest {
+  string address = 1;
+}
+message QueryLastPendingLogicCallByAddrResponse {
+  OutgoingLogicCall call = 1;
+}
+
+message QueryOutgoingTxBatchesRequest {}
+message QueryOutgoingTxBatchesResponse {
+  repeated OutgoingTxBatch batches = 1;
+}
+
+message QueryOutgoingLogicCallsRequest {}
+message QueryOutgoingLogicCallsResponse {
+  repeated OutgoingLogicCall calls = 1;
+}
+
+message QueryBatchRequestByNonceRequest {
+  uint64 nonce            = 1;
+  string contract_address = 2;
+}
+message QueryBatchRequestByNonceResponse {
+  OutgoingTxBatch batch = 1;
+}
+
+message QueryBatchConfirmsRequest {
+  uint64 nonce            = 1;
+  string contract_address = 2;
+}
+message QueryBatchConfirmsResponse {
+  repeated MsgConfirmBatch confirms = 1;
+}
+
+message QueryLogicConfirmsRequest {
+  bytes  invalidation_id    = 1;
+  uint64 invalidation_nonce = 2;
+}
+message QueryLogicConfirmsResponse {
+  repeated MsgConfirmLogicCall confirms = 1;
+}
+
+message QueryLastEventNonceByAddrRequest {
+  string address = 1;
+}
+message QueryLastEventNonceByAddrResponse {
+  uint64 event_nonce = 1;
+}
+
+message QueryERC20ToDenomRequest {
+  string erc20 = 1;
+}
+message QueryERC20ToDenomResponse {
+  string denom             = 1;
+  bool   cosmos_originated = 2;
+}
+
+message QueryDenomToERC20Request {
+  string denom = 1;
+}
+message QueryDenomToERC20Response {
+  string erc20             = 1;
+  bool   cosmos_originated = 2;
+}
+
+message QueryDelegateKeysByValidatorAddress {
+  string validator_address = 1;
+}
+message QueryDelegateKeysByValidatorAddressResponse {
+  string eth_address          = 1;
+  string orchestrator_address = 2;
+}
+
+message QueryDelegateKeysByEthAddress {
+  string eth_address = 1;
+}
+message QueryDelegateKeysByEthAddressResponse {
+  string validator_address    = 1;
+  string orchestrator_address = 2;
+}
+
+message QueryDelegateKeysByOrchestratorAddress {
+  string orchestrator_address = 1;
+}
+message QueryDelegateKeysByOrchestratorAddressResponse {
+  string validator_address = 1;
+  string eth_address       = 2;
+}
+
+message QueryPendingSendToEth {
+  string sender_address = 1;
+}
+message QueryPendingSendToEthResponse {
+  repeated OutgoingTransferTx transfers_in_batches = 1;
+  repeated OutgoingTransferTx unbatched_transfers  = 2;
+}

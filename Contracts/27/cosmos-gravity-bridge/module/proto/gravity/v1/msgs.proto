@@ -1,0 +1,273 @@
+syntax = "proto3";
+package gravity.v1;
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "gravity/v1/types.proto";
+import "google/protobuf/any.proto";
+option go_package = "github.com/althea-net/cosmos-gravity-bridge/module/x/gravity/types";
+
+// Msg defines the state transitions possible within gravity
+service Msg {
+  rpc ValsetConfirm(MsgValsetConfirm) returns (MsgValsetConfirmResponse) {
+    option (google.api.http).post = "/gravity/v1/valset_confirm";
+  }
+  rpc SendToEth(MsgSendToEth) returns (MsgSendToEthResponse) {
+    option (google.api.http).post = "/gravity/v1/send_to_eth";
+  }
+  rpc RequestBatch(MsgRequestBatch) returns (MsgRequestBatchResponse) {
+    option (google.api.http).post = "/gravity/v1/request_batch";
+  }
+  rpc ConfirmBatch(MsgConfirmBatch) returns (MsgConfirmBatchResponse) {
+    option (google.api.http).post = "/gravity/v1/confirm_batch";
+  }
+  rpc ConfirmLogicCall(MsgConfirmLogicCall) returns (MsgConfirmLogicCallResponse) {
+    option (google.api.http).post = "/gravity/v1/confim_logic";
+  }
+  rpc SendToCosmosClaim(MsgSendToCosmosClaim) returns (MsgSendToCosmosClaimResponse) {
+    option (google.api.http).post = "/gravity/v1/send_to_cosmos_claim";
+  }
+  rpc BatchSendToEthClaim(MsgBatchSendToEthClaim) returns (MsgBatchSendToEthClaimResponse) {
+    option (google.api.http).post = "/gravity/v1/batch_send_to_eth_claim";
+  }
+  rpc ValsetUpdateClaim(MsgValsetUpdatedClaim) returns (MsgValsetUpdatedClaimResponse) {
+    option (google.api.http).post = "/gravity/v1/valset_updated_claim";
+  }
+  rpc ERC20DeployedClaim(MsgERC20DeployedClaim)
+      returns (MsgERC20DeployedClaimResponse) {
+    option (google.api.http).post = "/gravity/v1/erc20_deployed_claim";
+  }
+  rpc LogicCallExecutedClaim(MsgLogicCallExecutedClaim)
+      returns (MsgLogicCallExecutedClaimResponse) {
+    option (google.api.http).post = "/gravity/v1/logic_call_executed_claim";
+  }
+  rpc SetOrchestratorAddress(MsgSetOrchestratorAddress) returns (MsgSetOrchestratorAddressResponse) {
+    option (google.api.http).post = "/gravity/v1/set_orchestrator_address";
+  }
+  rpc CancelSendToEth(MsgCancelSendToEth) returns (MsgCancelSendToEthResponse) {
+    option (google.api.http).post = "/gravity/v1/cancel_send_to_eth";
+  }
+  rpc SubmitBadSignatureEvidence(MsgSubmitBadSignatureEvidence) returns (MsgSubmitBadSignatureEvidenceResponse) {
+    option (google.api.http).post = "/gravity/v1/submit_bad_signature_evidence";
+  }
+}
+
+// MsgSetOrchestratorAddress
+// this message allows validators to delegate their voting responsibilities
+// to a given key. This key is then used as an optional authentication method
+// for sigining oracle claims
+// VALIDATOR
+// The validator field is a cosmosvaloper1... string (i.e. sdk.ValAddress)
+// that references a validator in the active set
+// ORCHESTRATOR
+// The orchestrator field is a cosmos1... string  (i.e. sdk.AccAddress) that
+// references the key that is being delegated to
+// ETH_ADDRESS
+// This is a hex encoded 0x Ethereum public key that will be used by this validator
+// on Ethereum
+message MsgSetOrchestratorAddress {
+  string validator    = 1;
+  string orchestrator = 2;
+  string eth_address  = 3;
+}
+
+message MsgSetOrchestratorAddressResponse {}
+
+// MsgValsetConfirm
+// this is the message sent by the validators when they wish to submit their
+// signatures over the validator set at a given block height. A validator must
+// first call MsgSetEthAddress to set their Ethereum address to be used for
+// signing. Then someone (anyone) must make a ValsetRequest, the request is
+// essentially a messaging mechanism to determine which block all validators
+// should submit signatures over. Finally validators sign the validator set,
+// powers, and Ethereum addresses of the entire validator set at the height of a
+// ValsetRequest and submit that signature with this message.
+//
+// If a sufficient number of validators (66% of voting power) (A) have set
+// Ethereum addresses and (B) submit ValsetConfirm messages with their
+// signatures it is then possible for anyone to view these signatures in the
+// chain store and submit them to Ethereum to update the validator set
+// -------------
+message MsgValsetConfirm {
+  uint64 nonce        = 1;
+  string orchestrator = 2;
+  string eth_address  = 3;
+  string signature    = 4;
+}
+
+message MsgValsetConfirmResponse {}
+
+// MsgSendToEth
+// This is the message that a user calls when they want to bridge an asset
+// it will later be removed when it is included in a batch and successfully
+// submitted tokens are removed from the users balance immediately
+// -------------
+// AMOUNT:
+// the coin to send across the bridge, note the restriction that this is a
+// single coin not a set of coins that is normal in other Cosmos messages
+// FEE:
+// the fee paid for the bridge, distinct from the fee paid to the chain to
+// actually send this message in the first place. So a successful send has
+// two layers of fees for the user
+message MsgSendToEth {
+  string                   sender   = 1;
+  string                   eth_dest = 2;
+  cosmos.base.v1beta1.Coin amount   = 3 [
+    (gogoproto.nullable) = false
+  ];
+  cosmos.base.v1beta1.Coin bridge_fee = 4 [
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MsgSendToEthResponse {}
+
+// MsgRequestBatch
+// this is a message anyone can send that requests a batch of transactions to
+// send across the bridge be created for whatever block height this message is
+// included in. This acts as a coordination point, the handler for this message
+// looks at the AddToOutgoingPool tx's in the store and generates a batch, also
+// available in the store tied to this message. The validators then grab this
+// batch, sign it, submit the signatures with a MsgConfirmBatch before a relayer
+// can finally submit the batch
+// -------------
+message MsgRequestBatch {
+  string sender = 1;
+  string denom        = 2;
+}
+
+message MsgRequestBatchResponse {}
+
+// MsgConfirmBatch
+// When validators observe a MsgRequestBatch they form a batch by ordering
+// transactions currently in the txqueue in order of highest to lowest fee,
+// cutting off when the batch either reaches a hardcoded maximum size (to be
+// decided, probably around 100) or when transactions stop being profitable
+// (TODO determine this without nondeterminism) This message includes the batch
+// as well as an Ethereum signature over this batch by the validator
+// -------------
+message MsgConfirmBatch {
+  uint64 nonce          = 1;
+  string token_contract = 2;
+  string eth_signer     = 3;
+  string orchestrator   = 4;
+  string signature      = 5;
+}
+
+message MsgConfirmBatchResponse {}
+
+// MsgConfirmLogicCall
+// When validators observe a MsgRequestBatch they form a batch by ordering
+// transactions currently in the txqueue in order of highest to lowest fee,
+// cutting off when the batch either reaches a hardcoded maximum size (to be
+// decided, probably around 100) or when transactions stop being profitable
+// (TODO determine this without nondeterminism) This message includes the batch
+// as well as an Ethereum signature over this batch by the validator
+// -------------
+message MsgConfirmLogicCall {
+  string invalidation_id    = 1;
+  uint64 invalidation_nonce = 2;
+  string eth_signer         = 3;
+  string orchestrator       = 4;
+  string signature          = 5;
+}
+
+message MsgConfirmLogicCallResponse {}
+
+// MsgSendToCosmosClaim
+// When more than 66% of the active validator set has
+// claimed to have seen the deposit enter the ethereum blockchain coins are
+// issued to the Cosmos address in question
+// -------------
+message MsgSendToCosmosClaim {
+  uint64 event_nonce    = 1;
+  uint64 block_height   = 2;
+  string token_contract = 3;
+  string amount         = 4 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable)   = false
+  ];
+  string ethereum_sender = 5;
+  string cosmos_receiver = 6;
+  string orchestrator    = 7;
+}
+
+message MsgSendToCosmosClaimResponse {}
+
+// BatchSendToEthClaim claims that a batch of send to eth
+// operations on the bridge contract was executed.
+message MsgBatchSendToEthClaim {
+  uint64 event_nonce    = 1;
+  uint64 block_height   = 2;
+  uint64 batch_nonce    = 3;
+  string token_contract = 4;
+  string orchestrator   = 5;
+}
+
+message MsgBatchSendToEthClaimResponse {}
+
+// ERC20DeployedClaim allows the Cosmos module
+// to learn about an ERC20 that someone deployed
+// to represent a Cosmos asset
+message MsgERC20DeployedClaim {
+  uint64 event_nonce    = 1;
+  uint64 block_height   = 2;
+  string cosmos_denom   = 3;
+  string token_contract = 4;
+  string name           = 5;
+  string symbol         = 6;
+  uint64 decimals       = 7;
+  string orchestrator   = 8;
+}
+
+message MsgERC20DeployedClaimResponse {}
+
+// This informs the Cosmos module that a logic
+// call has been executed
+message MsgLogicCallExecutedClaim {
+  uint64 event_nonce        = 1;
+  uint64 block_height       = 2;
+  bytes  invalidation_id    = 3;
+  uint64 invalidation_nonce = 4;
+  string orchestrator       = 5;
+}
+
+message MsgLogicCallExecutedClaimResponse {}
+
+// This informs the Cosmos module that a validator
+// set has been updated.
+message MsgValsetUpdatedClaim {
+  uint64 event_nonce               = 1;
+  uint64 valset_nonce              = 2;
+  uint64 block_height              = 3;
+  repeated BridgeValidator members = 4;
+  string reward_amount             = 5 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.nullable)   = false
+  ];
+  string reward_token              = 6;
+  string orchestrator              = 7;
+}
+
+message MsgValsetUpdatedClaimResponse {}
+
+// This call allows the sender (and only the sender)
+// to cancel a given MsgSendToEth and recieve a refund
+// of the tokens
+message MsgCancelSendToEth {
+  uint64 transaction_id = 1;
+  string sender         = 2;
+}
+
+message MsgCancelSendToEthResponse {}
+
+// This call allows anyone to submit evidence that a
+// validator has signed a valset, batch, or logic call that never
+// existed. Subject contains the batch, valset, or logic call.
+message MsgSubmitBadSignatureEvidence {
+  google.protobuf.Any subject   = 1;
+  string              signature = 2;
+  string              sender    = 3;
+}
+
+message MsgSubmitBadSignatureEvidenceResponse {}

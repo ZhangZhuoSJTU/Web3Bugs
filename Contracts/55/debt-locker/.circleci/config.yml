@@ -1,0 +1,24 @@
+version: 2.1
+
+jobs:
+  dapp_test:
+    docker:
+      - image: bakii0499/dapptools:0.48.0-solc-0.8.7
+    steps:
+      - run:
+          name: Checkout debt-locker
+          command: |
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone git@github.com:maple-labs/debt-locker.git .
+            git checkout $CIRCLE_BRANCH
+      - run:
+          name: Build and test contracts
+          command: |
+            GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git submodule update --init --recursive
+            ./test.sh -c ./config/ci.json
+
+workflows:
+  version: 2
+  test_all:
+    jobs:
+      - dapp_test:
+          context: seth

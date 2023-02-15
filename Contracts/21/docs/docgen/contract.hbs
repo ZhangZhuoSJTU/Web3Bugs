@@ -1,0 +1,41 @@
+## {{{name}}}
+
+{{{title}}}
+{{{natspec.userdoc}}}
+{{{natspec.devdoc}}}
+
+{{#ownFunctions}}
+### `{{name}}({{args}}){{#if outputs}} → {{outputs}}{{/if}}`
+{{#if natspec.userdoc}}{{natspec.userdoc}}{{else}}No description{{/if}}
+
+{{#if natspec.params}}
+#### Parameters:
+{{#natspec.params}}
+- `{{param}}`: {{description}}
+{{/natspec.params}}
+{{/if}}
+{{#if natspec.returns}}
+#### Return Values:
+{{#natspec.returns}}
+- {{param}} {{description}}
+{{/natspec.returns}}
+{{/if}}
+
+{{/ownFunctions}}
+
+
+{{#if ownEvents}}
+## Events
+{{/if}}
+
+{{#ownEvents}}
+### `{{name}}({{args}})`
+{{#if natspec.devdoc}}{{natspec.devdoc}}{{else}}No description{{/if}}
+
+{{#if natspec.params}}
+#### Parameters:
+{{#natspec.params}}
+- `{{param}}`: {{description}}
+{{/natspec.params}}
+{{/if}}
+{{/ownEvents}}

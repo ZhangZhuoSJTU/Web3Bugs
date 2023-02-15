@@ -1,0 +1,31 @@
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+  - prettier
+parser: "@typescript-eslint/parser"
+parserOptions:
+  project: tsconfig.json
+plugins:
+  - "@typescript-eslint"
+  - "no-only-tests"
+root: true
+rules:
+  "@typescript-eslint/no-floating-promises":
+    - error
+    - ignoreIIFE: true
+      ignoreVoid: true
+  "@typescript-eslint/no-inferrable-types": "off"
+  "@typescript-eslint/no-unused-vars":
+    - error
+    - argsIgnorePattern: _
+      varsIgnorePattern: _
+  "sort-imports":
+    - error
+    - ignoreCase: true
+      ignoreDeclarationSort: true
+  "no-only-tests/no-only-tests": "error"
+overrides:
+  - files: subgraph/**/*.ts
+    rules:
+      prefer-const: 0

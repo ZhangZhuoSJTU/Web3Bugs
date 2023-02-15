@@ -1,0 +1,47 @@
+# Brownie configuration file
+# https://eth-brownie.readthedocs.io/en/stable/config.html
+
+project_structure:
+    build: brownie/build
+    contracts: contracts
+    interfaces: interfaces
+    reports: brownie/reports
+    scripts: brownie/scripts
+    tests: brownie/tests
+
+network:
+    default: development # the default network that brownie connects to
+    settings:
+        gas_limit: "auto"
+        gas_price: "auto"
+        persist: true
+        reverting_tx_gas_limit: false  # if false, reverting tx's will raise without broadcasting
+pytest:
+    # these settings replace the defaults when running pytest
+    gas_limit: 16721975
+    default_contract_owner: true
+    reverting_tx_gas_limit: 16721975
+    revert_traceback: true
+compiler:
+    evm_version: null
+    minify_source: false
+    solc:
+        version: 0.6.12
+        optimize: true
+        runs: 200
+        remappings:
+          - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@3.2.0"
+dependencies:
+    - OpenZeppelin/openzeppelin-contracts@3.2.0
+colors:
+    key:
+    value: bright blue
+    callable: bright cyan
+    module: bright blue
+    contract: bright magenta
+    contract_method: bright magenta
+    string: bright magenta
+    dull: dark white
+    error: bright red
+    success: bright green
+    pending: bright yellow

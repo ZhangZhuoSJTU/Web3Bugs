@@ -1,0 +1,43 @@
+[package]
+name = "orchestrator"
+version = "0.4.3"
+authors = ["Justin Kilpatrick <justin@althea.net>"]
+edition = "2018"
+
+[lib]
+name = "orchestrator"
+path = "src/lib.rs"
+
+
+[dependencies]
+relayer = {path = "../relayer/"}
+ethereum_gravity = {path = "../ethereum_gravity"}
+cosmos_gravity = {path = "../cosmos_gravity"}
+gravity_utils = {path = "../gravity_utils"}
+gravity_proto = {path = "../gravity_proto/"}
+
+deep_space = "2.4"
+serde_derive = "1.0"
+clarity = "0.4"
+docopt = "1"
+serde = "1.0"
+actix-rt = "2.2"
+lazy_static = "1"
+web30 = "0.14"
+num256 = "0.3"
+log = "0.4"
+env_logger = "0.8"
+serde_json = "1.0"
+tokio = "1.4.0"
+rand = "0.8"
+tonic = "0.4"
+futures = "0.3"
+openssl-probe = "0.1"
+
+# this is a dirty trick, we depent transitively on OpenSSL it's never
+# called directly in this crate, but if we specify this dep we can enable
+# this feature for all the crates in our dependency tree which depend on
+# this crate. This allows for easy cross compiled builds because the 'vendored'
+# feature includes it's own OpenSSL version that's compiled on the fly
+# If ANY crate in this workspace has this it will work for all of them.
+openssl = {version = "0.10", features = ["vendored"]}

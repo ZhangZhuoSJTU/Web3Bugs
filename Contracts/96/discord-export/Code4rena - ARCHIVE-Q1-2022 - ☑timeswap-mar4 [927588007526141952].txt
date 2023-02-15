@@ -1,0 +1,568 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-Q1-2022 / ☑timeswap-mar4
+==============================================================
+
+[03-Jan-22 07:46 AM] itsmetechjay | C4#5294 (pinned)
+👋 Hello and welcome to the contest channel for the $75K USDC **Timeswap **contest!
+
+📆 Contest opens January 4, 2022, at 0:00 UTC (in about ~8 hours) and runs through January 10, 2022 at 23:59 UTC (7 days).
+
+Please give a warm welcome to the Timeswap team, particularly @amateur-dev, who will be available for questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+{Reactions}
+🎉 (9) ⏳ (5) 
+
+[03-Jan-22 12:48 PM] Timelord.eth ⌛ || Timeswap#6577
+Hello everyone!
+
+{Reactions}
+👋 (11) 
+
+[03-Jan-22 03:51 PM] Ameeth ⏳ || Timeswap#0851
+Hello everyone :pepegun: :astroburn:
+
+{Reactions}
+👋 (6) 
+
+[03-Jan-22 03:53 PM] Ameeth ⏳ || Timeswap#0851
+Excited to be sponsoring this contest, all the best to the wardens! :TimeswapLogoDiscord: 🦊
+
+{Reactions}
+TimeswapLogoDiscord (6) 🦊 (4) 
+
+[03-Jan-22 10:26 PM] Harshita ⏳  || Timeswap#2130
+Hello everyone :astroburn: 
+
+Great to be here with Day-1 of our code4ena Timeswap smart contract audit contest going live :pepedance: 
+
+Best wishes to the wardens who would be hunting for the bugs in the contest :pepehappyhands:
+
+
+[04-Jan-22 12:19 AM] ACai#1706
+Excuse me, I wonder if the scope of timeswap audit is only 7 contracts which mentioned in https://code4rena.com/contests/2022-01-timeswap-contest. Does it include other contracts such as libraries or interfaces？
+
+{Embed}
+https://code4rena.com/contests/2022-01-timeswap-contest.
+The future of audits is decentralized.
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/C4-banner-7C19B.png
+
+
+[04-Jan-22 12:40 AM] amateur-dev#8892
+One min - checking
+
+
+[04-Jan-22 12:45 AM] amateur-dev#8892
+7 Contracts does NOT include libraries.
+
+
+[04-Jan-22 12:45 AM] amateur-dev#8892
+Hope this will help.  This will give you an indication of the number of contracts and libs
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-3F83F.png
+
+
+[04-Jan-22 01:19 AM] ACai#1706
+thanks👍
+
+
+[04-Jan-22 01:56 AM] danb#6193
+hi, what is the logic behind this formula?
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-EC65A.png
+
+
+[04-Jan-22 02:24 AM] amateur-dev#8892
+Hi
+
+The collateral to be added has two components minimum collateral and additional collateral.
+
+"Delta ZMax" is essentially the minimum collateral and deltaZ*d/2^25 is the additional collateral that you choose to lock as a borrower. As a borrower, you always have to lock the minimum collateral of delta ZMax (when you choose additional collateral to be locked as zero i.e. deltaZ=0 which makes deltaZ*d/2^25=0 ). On top of this you as a borrower can decide to lock an additional collateral. The more you increase this additional collateral (essentially deltaZ) lesser is the interest or debt (deltaY, owing to constant product XYZ=K) you have to pay as a borrower.
+
+
+[04-Jan-22 03:30 AM] danb#6193
+Thanks!
+
+
+[04-Jan-22 05:39 AM] VinnyChase#8355
+So as a borrower, Delta Z max does not change the constant product formula? Only the second component of collateral changes (additional collat) the constant prod forumla?
+
+
+[04-Jan-22 07:10 AM] Timelord.eth ⌛ || Timeswap#6577
+Yes Delta Z max does not change the constant product formula.
+
+{Reactions}
+👍 
+
+[04-Jan-22 01:37 PM] VinnyChase#8355
+Just to clarify: this (line 5) should definitely be x/z and not z/x?
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/Screenshot_2022-01-04_at_21.35.37-CE51C.png
+
+
+[04-Jan-22 07:36 PM] cryptodog#2063
+I have always confused for the Y Interest Rate Parameter, In my understanding the Interest Rate Parameter should be : Interest Amount = Borrow Principal Amount * Interest Rate * Duration @amateur-dev  But here the Y Multiply by
+Duration is equal Interest Amount
+
+
+[04-Jan-22 07:37 PM] cryptodog#2063
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-E2520.png
+
+
+[04-Jan-22 07:38 PM] cryptodog#2063
+Any formula to calculate the current Delta Z?
+
+
+[04-Jan-22 07:43 PM] cryptodog#2063
+The is correct: X is the principal, the Z is the collateral, Z/X means how much collateral are backed for the per X principal
+
+
+[04-Jan-22 07:50 PM] amateur-dev#8892
+Hi Guys. Replying to the questions shortly.
+
+
+[04-Jan-22 08:17 PM] amateur-dev#8892
+This is because the 0.00000316 is already computed by multiplying the principal amount (1000) multiplied by the interest rate per second (cause we are dividing the 10% to the number of seconds in a year)
+
+
+[04-Jan-22 08:18 PM] amateur-dev#8892
+For this the first step to compute the Max Value of Z --> which is in-turn derived by considering the "K" constant product and then assuming the Delta Y to be 0.
+
+
+[04-Jan-22 08:27 PM] cryptodog#2063
+I know that Y is already computed by multiplying the principal amount, but why this make me confuse is because the initial state of pool, X, Y, Z, are the Y here are also multiplying the princal amount 10,000? So in the pool state change, every Y is computed by the current X...I think this is reallly obscure
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-C9FC9.png
+
+
+[04-Jan-22 08:33 PM] cryptodog#2063
+Sorry to mislead you, I am not finding the way to get the Max Z. I just want to know how to calculate the minimum collateral (Constant Z)
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-90DBB.png
+
+
+[04-Jan-22 08:37 PM] amateur-dev#8892
+Sure, I will help on that.  Just out of curiosity are you looking at a Borrow Tx or Lending Tx.  While the calculations largely remain the same, there are only smaller nitty-gritties that I do not want to ignore when giving you the exact formula
+
+
+[04-Jan-22 08:37 PM] cryptodog#2063
+I was looking the Borrow Tx Part
+
+
+[04-Jan-22 09:14 PM] amateur-dev#8892
+Reverting. Will edit this message with the computation and explanation.  Just heads-up
+
+
+[04-Jan-22 10:19 PM] amateur-dev#8892
+Pool state change Y is not computed by multiplying by current X. It automatically changes after every transaction based on constant product K and user values of interest (based on deltaY ) and Collateral/insurance (based on deltaZ )
+
+In the eg here with Y=0.000475, you can calculate APR by multiplying by X and duration of a year. Rest state Y will "only" change based on K and deltaX,DeltaZ values after each tx.
+
+
+[04-Jan-22 10:30 PM] aga7hokakological#5124
+Can someone tell me why am I getting this error? While yarn install core contract I did not get this error but when I yarn install convenience contract I am getting this error.
+
+```
+error An unexpected error occurred: "https://npm.pkg.github.com/download/@timeswap-labs/timeswap-v1-co
+re/1.0.22/bef1b91d0da6dbe1b5afe72cfa7e1adb4a017d241a619443c49ec9a9f9d704ee: Request failed \"401 Unaut
+horized\"".
+info If you think this is a bug, please open a bug report with the information provided in "/home/saurabh/saurabh/2022-01-timeswap/Timeswap/Timeswap-V1-Convenience/yarn-error.log".
+info Visit https://yarnpkg.com/en/docs/cli/install for documentation about this command.
+```
+
+
+[04-Jan-22 11:12 PM] amateur-dev#8892
+I will draw your reference to the gitbook where we have a computation: https://timeswap.gitbook.io/timeswap/deep-dive/borrowing.  As you will follow the math over here.  The DeltaZmax will be at the maximum value, when the DeltaY = 0.
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/Screen_Shot_2022-01-05_at_12.40.19_PM-483EE.png
+
+
+[04-Jan-22 11:14 PM] amateur-dev#8892
+That is because it is a private repo sir.  You will need to authenticate at npm pacakages
+
+
+[05-Jan-22 12:31 AM] cryptodog#2063
+From the CodeWalkthrough, haven't seen the Pool contract and also not found in your contracts list, but the "Timeswap V1 Core Product Specification" mention about the Pool contract...
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-709F9.png
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-09A16.png
+
+
+[05-Jan-22 12:32 AM] cryptodog#2063
+@amateur-dev Are the pool contract already combine in the TimeswapPair contract?
+
+
+[05-Jan-22 12:33 AM] cryptodog#2063
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-23FCA.png
+
+
+[05-Jan-22 12:43 AM] amateur-dev#8892
+Yes. That's correct. Each pool sits under the Pair.
+
+
+[05-Jan-22 12:44 AM] cryptodog#2063
+OK, got it
+
+
+[05-Jan-22 08:11 AM] Rhynorater#6461
+For this graph, the LP gets  back a Collateralized-Debt Token as well. This is not explained in the below description. Could you provide some clarity as to how this token is different than the one used by the borrower and what function it serves in the overall system?
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/assets2F-MIPZkDBEvwedF77USHq2F-MlBlN43rVTI-32893.png
+
+
+[05-Jan-22 08:21 AM] Timelord.eth ⌛ || Timeswap#6577
+The CDT that borrowers received and LPs received are practically the same. The design is such that since LPs have both lend positions and borrow positions. The CDT is represent the borrow position of the LP.
+
+
+[05-Jan-22 08:29 AM] Rhynorater#6461
+So what happens when the LP burns their CDT? @Timelord.eth ⌛ || Timeswap ?
+
+
+[05-Jan-22 08:30 AM] Rhynorater#6461
+For the borrower, the debt has to be repayed before the CDT is burned. How about for the LP?
+
+
+[05-Jan-22 08:48 AM] Timelord.eth ⌛ || Timeswap#6577
+Same rules, the LP has to pay back the debt to withdraw that collateral.
+
+
+[05-Jan-22 08:49 AM] Timelord.eth ⌛ || Timeswap#6577
+A contract could be created to do flash swap, so that there is no need for capital to pay back the debt to withdraw collateral assuming the value of debt is less than the collateral near maturity.
+
+
+[05-Jan-22 12:02 PM] Rhynorater#6461
+What debt is does the LP have? I thought the LP was simply providing back liquidity? Is the Liquidity Token that the LP gets for contributing considered a debt of LT?
+
+
+[05-Jan-22 12:03 PM] Rhynorater#6461
+In the above graph, the only thing that the LP gets back is a CDT and LTs, right?
+
+
+[05-Jan-22 07:34 PM] amateur-dev#8892
+An LP actually provides both sides of the equation.  He providers the "asset" {like a lender} and also the collateral {like a borrower}.  Hope this helps.
+
+
+[06-Jan-22 12:28 AM] cryptodog#2063
+In this explanation, what is the difference between LT token and IT/BT, cuase the liquidity provider don't get any IT/BT token as the lender? whilte LP provider get the CDT as borrower
+
+
+[06-Jan-22 02:38 AM] amateur-dev#8892
+For a Lender the BT represents the asset portion and the IT represents the collateral token.  Once the Lender liquidates, both or either of IT, BT tokens are exchanged for the underlying asset / collateral position.  
+
+However, in the case of a LiquidityProvider, LT represents all the remaining amount of asset and collateral, after all the necessary tokens for the LPs are accounted for. That's why LT are fungible.
+
+
+[06-Jan-22 04:15 AM] Rhynorater#6461
+Ok so the LP locks collateral (WETH) like a borrower but NOT get DAI back like a borrower. So what debt must be paid before the LP can burn the CDT? There is no debt since the LP did nothing but provide not receive.
+
+
+[06-Jan-22 08:29 AM] Timelord.eth ⌛ || Timeswap#6577
+The debt is is like saying I am creating a debt so that lenders can join and lend. The debt is a promise to lenders that they should expect asset returns, given that the collateral that they deposited is backing that debt.
+
+
+[06-Jan-22 08:33 AM] Rhynorater#6461
+Ok, I think I get it now. That's an interesting use of the term debt, but I see how it there isn't really a better word for the situation 😂
+
+
+[06-Jan-22 08:33 AM] Timelord.eth ⌛ || Timeswap#6577
+Yeah, took me so much time to think of better terms as well, but end up back to the term debt.
+
+
+[06-Jan-22 08:58 AM] Rhynorater#6461
+So, just to confirm, since all these libraries are out of scope, you dont want us to check for math errors? Or should we be looking for anything that will have an impact to the in-scope contracts?
+
+
+[06-Jan-22 09:59 AM] Rhynorater#6461
+```
+/// @notice All error messages are coded and can be found in the documentation.
+```
+Where are these error messages defined?
+
+
+[06-Jan-22 10:20 AM] VinnyChase#8355
+In the repo in ErrorCodes.md @Rhynorater
+
+
+[06-Jan-22 10:35 AM] Rhynorater#6461
+Thanks, missed that.
+
+
+[06-Jan-22 11:16 AM] Timelord.eth ⌛ || Timeswap#6577
+The libraries are included. Sorry if that is unclear.
+
+
+[06-Jan-22 11:24 AM] Rhynorater#6461
+Ok gotcha
+
+
+[06-Jan-22 11:40 AM] VinnyChase#8355
+In the borrow math lib, in particular:
+```
+    function getCollateral(
+        uint256 maturity,
+        IPair.State memory state,
+        uint112 xDecrease,
+        uint112 zIncrease
+    ) internal view returns (uint112 collateralIn) {
+        uint256 _collateralIn = maturity;
+        _collateralIn -= block.timestamp;
+        _collateralIn *= zIncrease;
+        _collateralIn = _collateralIn.shiftRightUp(25);
+        uint256 minimum = state.z;
+        minimum *= xDecrease;
+        uint256 denominator = state.x;
+        denominator -= xDecrease;
+        minimum = minimum.divUp(denominator);
+        _collateralIn += minimum;
+        collateralIn = _collateralIn.toUint112();
+    }
+```
+Is minimum supposed to represent Z max where dy = 0?
+
+
+[06-Jan-22 11:58 AM] Rhynorater#6461
+Was wondering the same thing in LendMath for getInsurance
+
+
+[06-Jan-22 12:01 PM] Rhynorater#6461
+Using the terms from the gitbook: `(d*z/2^25) + (Z*x)/(X+x)` is what is being returned from `getInsurance`, which doesn't appear to be mathematically eqiv to `z_{max}+zd/2^25` unless `zMax` is = `(Z*x)/(X+x)` which it is not as far as I know.  It would be helpful if I could run some tests on some of this stuff, but I'm not sure how you are representing floating points in this (probably my lack of experience with Solidity), but I've got all the math implemented in Python so I'd like to check.
+
+
+[06-Jan-22 04:11 PM] Dravee#7832
+Hello! Here it's said that libraries are not in scope. But just above, it says the opposite. What is true?
+
+
+[06-Jan-22 04:12 PM] Dravee#7832
+I don't know what to believe or how to submit anymore 😆
+
+
+[06-Jan-22 05:55 PM] amateur-dev#8892
+Would request you to check for the Lib for the Math as well 🙂
+
+{Reactions}
+👍 
+
+[06-Jan-22 06:54 PM] cryptodog#2063
+Can I use your gamified testnet to explain the situation? Like the MATIC-AVAX pool, the APR is high, so when the maturity come, how much can the lenders  and liquidity provider get back?
+
+
+[06-Jan-22 06:56 PM] cryptodog#2063
+
+{Attachments}
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-7C71A.png
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/unknown-64B44.png
+
+
+[06-Jan-22 06:56 PM] cryptodog#2063
+You can see the initial asset/collateral and the current stats
+
+
+[06-Jan-22 06:56 PM] cryptodog#2063
+How will happen in the maturity time?
+
+
+[06-Jan-22 07:07 PM] amateur-dev#8892
+Let me put down these numbers in an excel file, 1 min
+
+
+[06-Jan-22 07:23 PM] cryptodog#2063
+OK, also I test to lend I MATIC in the pool with highest apr to get the responding IT/BT, but not sure how much I can get back when maturity
+
+
+[06-Jan-22 07:25 PM] amateur-dev#8892
+At maturity, it depends if the pool is paid-back or not.  That will have an impact.
+
+
+[06-Jan-22 07:26 PM] cryptodog#2063
+what is the paid-back or not mean?
+
+
+[06-Jan-22 07:27 PM] amateur-dev#8892
+Meaning, if all the borrowers paid back their dues
+
+
+[06-Jan-22 07:28 PM] amateur-dev#8892
+If the borrowers honoured their debt, then the bond tokens will get you back the asset and insurance token will not get you back the collateral; and vice-versa
+
+
+[06-Jan-22 07:28 PM] cryptodog#2063
+Most of the borrowers will not paid back
+
+
+[06-Jan-22 07:29 PM] cryptodog#2063
+From the pool stats, the initial MATIC and current has huge difference
+
+
+[06-Jan-22 07:31 PM] cryptodog#2063
+If all borrowerrs are not paid back, how will the default calculate every lenders position and liquidity provider position
+
+
+[07-Jan-22 11:30 PM] Timelord.eth ⌛ || Timeswap#6577
+So the bond tokens will yield any remaining amount of asset in the pool (which will be very small amount because most borrowers defaulted). The insurance on the other hand will yield the collateral left by all those borrowers. Finally any remaining amount of asset and collateral will go to LPS.
+
+
+[10-Jan-22 08:18 AM] Rhynorater#6461
+Can someone from the Timeswap team provide clarification on somthing via DM?
+
+
+[10-Jan-22 08:21 AM] ⛅CloudEllie#4509
+Pinned a message.
+
+
+[10-Jan-22 08:21 AM] ⛅CloudEllie#4509
+I believe @amateur-dev has DMs open for this purpose.
+
+
+[10-Jan-22 08:21 AM] Rhynorater#6461
+Reached out to him, thanks
+
+{Reactions}
+👍 
+
+[10-Jan-22 03:59 PM] Rhynorater#6461
+Whew - barely made that last one in under the wire.
+
+
+[10-Jan-22 03:59 PM] Rhynorater#6461
+Sorry about that crappy report - will comment more later (if Code4rena has that functionality)
+
+{Reactions}
+C4Keycap 
+
+[10-Jan-22 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **Timeswap** contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next:  the Timeswap team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping an organizer if you have questions along the way!
+
+{Reactions}
+hourglass (3) 
+
+[11-Jan-22 07:36 AM] ⛅CloudEllie#4509
+You did the right thing by reaching out to an organizer! We've got you.
+
+
+[02-Mar-22 05:45 PM] itsmetechjay | C4#5294
+👋 Hello and welcome (back) to the contest channel for the $30K USDC Timeswap contest!
+
+📆 Contest opens March 4, 2022, at 0:00 UTC and runs through March 6, 2022 at 23:59 UTC (3 days).
+
+Please give a warm welcome back to the Timeswap team, particularly @amateur-dev and @Timelord.eth ⌛ || Timeswap, who will be available for questions either here in channel or via DM. 
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+{Reactions}
+🥳 (10) 🪛 (2) ☎️ (2) 
+
+[03-Mar-22 09:47 AM] samruna#5774
+Is the timeswap repo not public yet? I get 404 error
+
+
+[03-Mar-22 09:48 AM] itsmetechjay | C4#5294
+It's not launched quite yet.  About 6 more hours. 🙂
+
+{Reactions}
+👍 
+
+[03-Mar-22 10:00 AM] ⛅CloudEllie#4509
+💡 Quick note for wardens planning to participate in this contest -- we are about to publish the report for Timeswap's January contest, and will be making the findings repo public as well, so that you can all review the outcomes of that contest as well as the mitigations that were made as a result. We'll post the links in here as soon as they're available.
+
+{Reactions}
+hi5 (4) astroburn (2) 
+
+[03-Mar-22 10:29 AM] 🦙 liveactionllama | C4#0171
+As promised, here are the links to the report and findings repo for Timeswap's January contest! 🙂
+
+Report link: https://code4rena.com/reports/2022-01-timeswap
+Findings repo: https://github.com/code-423n4/2022-01-timeswap-findings
+
+{Embed}
+https://code4rena.com/reports/2022-01-timeswap
+Timeswap contest
+Hack DeFi. Compete. Get paid.
+
+{Embed}
+https://github.com/code-423n4/2022-01-timeswap-findings
+GitHub - code-423n4/2022-01-timeswap-findings
+Contribute to code-423n4/2022-01-timeswap-findings development by creating an account on GitHub.
+Code4rena - ARCHIVE-Q1-2022 - ☑timeswap-mar4 [927588007526141952].txt_Files/8d0dd9a1-1b15-4e81-b87b-d5dec2fcd13d-D99D2
+
+{Reactions}
+astroburn (5) 🔥 (6) 🥳 (4) 
+
+[05-Mar-22 11:10 AM] Czar102#5072
+@Timelord.eth ⌛ || Timeswap Can you add me to friends because I can't DM?
+
+
+[05-Mar-22 01:56 PM] Czar102#5072
+Is it possible to see the mitigation of a specific issue from the previous audit?
+
+
+[05-Mar-22 05:09 PM] kenta#0163
+Timeswap/Convenience does not work with yarn. I have the following error. Request failed \"401 Unauthorized\" if I excute yarn. Can someone help me?
+
+
+[05-Mar-22 08:14 PM] amateur-dev#8892
+Hi there.  Could you elaborate on this?
+
+
+[05-Mar-22 08:14 PM] amateur-dev#8892
+Yes, cause it relies on the Core Repository; which is a private repository.
+
+
+[05-Mar-22 11:25 PM] Czar102#5072
+Are issue mitigations divided into commits to see how specific issues have been resolved step-by-step?
+
+
+[05-Mar-22 11:34 PM] amateur-dev#8892
+Yes, but the code that has been submitted is the final branch.  We are not able to submit the git history through the Code4Arena code base
+
+{Reactions}
+👍 
+
+[05-Mar-22 11:41 PM] Czar102#5072
+One more thing, can I DM?
+
+{Reactions}
+👍 
+
+[06-Mar-22 04:02 PM] C4#0000
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **Timeswap** contest is now closed! Huge thanks to everyone who participated🔍, whether you submitted a finding or not.
+
+What's next: the Timeswap team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements or regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping a gardener if you have questions along the way!
+
+
+[06-Mar-22 11:20 PM] sorryNotsorry#1586
+Apart from the audit, I'd like to congratulate the project owners and the devs for this brilliant idea.   💯
+
+{Reactions}
+astroburn (4) 
+
+[07-Mar-22 02:36 AM] Ameeth ⏳ || Timeswap#0851
+thank you! 🙂
+
+
+[28-Apr-22 08:03 AM] 0xleastwood#1463
+@Ameeth ⏳ || Timeswap Can you please add me. I'm currently judging the timeswap contest and would love to discuss some things.
+
+
+==============================================================
+Exported 103 message(s)
+==============================================================

