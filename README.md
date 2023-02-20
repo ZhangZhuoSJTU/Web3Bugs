@@ -35,6 +35,29 @@ The dataset is organized into four folders:
 + [contracts/](contracts/): contains all the smart contracts that we examined, using the version at the time of the contest.
 + [reports/](reports/): contains all the reports provided by code4rena.
 
+### Bug Labels
+
+We classify the surveyed bugs into three main categories based on their nature: 
+
++ Out-of-scope bugs (denoted by __O__)
++ Bugs with simple and generic testing oracles (denoted by __L__)
++ Bugs that require high-level semantical oracles (denoted by __S__)
+
+Please note that classifying functional bugs can be ambiguous, and we welcome any suggestions for improving our classification standards. We have also updated our classification since the ICSE23 paper, and we encourage you to refer to our current [classification standards](docs/standard.md) for more information.
+
+#### Out-of-scope Bugs
+
+These are bugs that fall outside the scope of our study and are thus not analyzed further.
+
+#### Bugs with Simple and Generic Testing Oracles
+
+These are bugs that can be detected using simple and generic oracles, such as reentrancy, and do not require more sophisticated oracles.
+
+#### Bugs that Require High-level Semantical Oracles
+
+These are bugs that require high-level semantical oracles to detect, as they arise from inconsistencies between the code implementation and the business model.
+
+
 ## Cite
 
 + Zhuo Zhang, Brian Zhang, Wen Xu, Zhiqiang Lin, "Demystifying Exploitable Bugs in Smart Contracts." In Proceedings of the 45th International Conference on Software Engineering, 2023.
