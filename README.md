@@ -70,7 +70,7 @@ These are bugs that can be detected using simple and generic oracles and do not 
 + __L8__: Revert issues caused by low-level calls or external libraries.
 + __L9__: Bugs that are caused by writing to memory that does not apply to the storage.
 + __LA__: Cryptographic issues.
-+ __LB__: Using _tx.origin_.
++ __LB__: Using `tx.origin`.
 
 ### Bugs that Require High-level Semantical Oracles
 
