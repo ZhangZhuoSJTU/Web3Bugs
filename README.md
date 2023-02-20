@@ -3,7 +3,7 @@
 <p>
 <a href="papers/icse23.pdf"> <img title="" src="resources/paper.jpg" alt="loading-ag-167" align="right" width="200"></a>
 
-The purpose of this project is to provide a valuable resource for Web3 developers and security analysts by facilitating their understanding of exploitable bugs in smart contracts. We conduct a thorough analysis of exploitable bugs extracted from [code4rena](https://code4rena.com/) and classify each bug according to its nature.
+This project aims to provide a valuable resource for Web3 developers and security analysts by facilitating their understanding of exploitable bugs in smart contracts. We conduct a thorough analysis of exploitable bugs extracted from [code4rena](https://code4rena.com/) and classify each bug according to its nature.
 
 Our initial research suggests that current automatic vulnerability detection techniques rely on overly simplistic and generic oracles, such as reentrancy, which may fail to detect functional bugs in smart contracts. We aim to raise awareness about the significance of functional bugs and encourage practitioners to develop more sophisticated and nuanced automatic semantical oracles to detect such bugs.
 </p>
@@ -23,6 +23,17 @@ We plan to compile an extensive list of vulnerability detection techniques that 
 
 + [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which addresses access control issues.
 + [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf), which addresses access control issues.
+
+## Folder Structure and Bug Labels
+
+### Folder Structure
+
+The dataset is organized into four folders:
+
++ `papers/`: contains our ICSE23 paper summarizing our preliminary results, as well as the supplementary material for the paper.
++ `results/`: contains the bug classification (bugs.csv) and the description for each contest (contests.csv).
++ `contracts/`: contains all the smart contracts that we examined, using the version at the time of the contest.
++ `reports/`: contains all the reports provided by code4rena.
 
 ## Cite
 
