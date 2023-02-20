@@ -30,10 +30,10 @@ We plan to compile an extensive list of vulnerability detection techniques that 
 
 The dataset is organized into four folders:
 
-+ `papers/`: contains our ICSE23 paper summarizing our preliminary results, as well as the supplementary material for the paper.
-+ `results/`: contains the bug classification (bugs.csv) and the description for each contest (contests.csv).
-+ `contracts/`: contains all the smart contracts that we examined, using the version at the time of the contest.
-+ `reports/`: contains all the reports provided by code4rena.
++ [papers/](papers/): contains our ICSE23 paper summarizing our preliminary results, as well as the supplementary material for the paper.
++ [results/](results/): contains the bug classification in [bugs.csv](results/bugs.csv) and the description for each contest in [contests.csv](results/contests.csv).
++ [contracts/](contracts/): contains all the smart contracts that we examined, using the version at the time of the contest.
++ [reports/](reports/): contains all the reports provided by code4rena.
 
 ## Cite
 
