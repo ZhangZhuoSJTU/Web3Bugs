@@ -16,7 +16,14 @@ Example:
 
 Contract: [AbraNFT](https://code4rena.com/reports/2022-04-abranft/)
 
+// can be found at https://code4rena.com/contests/2022-04-abranft-contest
 Contract Code: https://github.com/code-423n4/2022-04-abranft
+
+// can be found at https://code4rena.com/reports/2022-04-abranft/#high-risk-findings-5
+Number of High Risk Findings: 5 
+
+// can be found at https://code4rena.com/reports/2022-04-abranft/#wardens
+Number of Wardens: 72 
 
 -->
 
