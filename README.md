@@ -14,9 +14,9 @@ Our initial research suggests that current automatic vulnerability detection tec
 
 <br>
 
-Please be aware that <strong>this repository is currently undergoing active development, and the data may change over time due to ongoing code4rena contests</strong>.
+Please be aware that __this repository is currently undergoing active development, and the data may change over time due to ongoing code4rena contests__.
 
-## Research on Automatic Semantical Oracles
+## Research on Vulnerability Detection with Automatic Semantical Oracles
 
 We plan to compile a comprehensive list of resources that focus on developing semantical oracles for smart contracts. We welcome any additional suggestions or contributions from the community to help expand and improve the list.
 
