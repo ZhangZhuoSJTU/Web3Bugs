@@ -24,9 +24,8 @@ We plan to compile an extensive list of vulnerability detection techniques that 
 + [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which addresses access control issues.
 + [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf), which addresses access control issues.
 
-## Folder Structure and Bug Labels
 
-### Folder Structure
+## Folder Structure
 
 The dataset is organized into four folders:
 
@@ -35,7 +34,7 @@ The dataset is organized into four folders:
 + [contracts/](contracts/): contains all the smart contracts that we examined, using the version at the time of the contest.
 + [reports/](reports/): contains all the reports provided by code4rena.
 
-### Bug Labels
+## Bug Labels
 
 We classify the surveyed bugs into three main categories based on their nature: 
 
@@ -45,15 +44,15 @@ We classify the surveyed bugs into three main categories based on their nature:
 
 Please note that classifying functional bugs can be ambiguous, and we welcome any suggestions for improving our classification standards. We have also updated our classification since the ICSE23 paper, and we encourage you to refer to our current [classification standards](docs/standard.md) for more information.
 
-#### Out-of-scope Bugs
+### Out-of-scope Bugs
 
 These are bugs that fall outside the scope of our study and are thus not analyzed further.
 
-#### Bugs with Simple and Generic Testing Oracles
+### Bugs with Simple and Generic Testing Oracles
 
 These are bugs that can be detected using simple and generic oracles, such as reentrancy, and do not require more sophisticated oracles.
 
-#### Bugs that Require High-level Semantical Oracles
+### Bugs that Require High-level Semantical Oracles
 
 These are bugs that require high-level semantical oracles to detect, as they arise from inconsistencies between the code implementation and the business model.
 
