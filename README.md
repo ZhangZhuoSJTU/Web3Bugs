@@ -18,7 +18,7 @@ Please be aware that __this repository is currently undergoing active developmen
 
 ## Vulnerability Detection with Automatic Semantical Oracles
 
-We plan to compile an extensive list of vulnerability detection techniques that prioritize the development of semantical oracles for smart contracts. We welcome any additional suggestions or contributions from the community to help expand and improve the list.
+We plan to compile an extensive list of vulnerability detection techniques that prioritize the development of semantical oracles for smart contracts. <span style="color:red"><strong>We warmly welcome any additional suggestions or contributions from the community to help expand and improve the list. </strong></span>
 
 
 + [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which addresses access control issues.
@@ -109,7 +109,7 @@ These are bugs that require high-level semantical oracles to detect, as they ari
 
 We welcome all types of contributions to our project, including but not limited to:
 
-+ Suggesting new reference techniques for prioritizing the development of semantical oracles for smart contract vulnerability detection. <font color="#ff0000"><strong>[Priorities]</strong></font>
++ <span style="color:red"><strong>Suggesting new reference techniques for prioritizing the development of semantical oracles for smart contract vulnerability detection.</strong></span>
 + Adding newly disclosed code4rena contest bugs.
 + Suggesting improvements to the classification standard
 + Correcting mislabeled bugs
