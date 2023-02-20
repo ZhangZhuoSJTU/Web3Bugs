@@ -5,12 +5,12 @@
 
 This project aims to provide a valuable resource for Web3 developers and security analysts by facilitating their understanding of exploitable bugs in smart contracts. We conduct a thorough analysis of exploitable bugs extracted from [code4rena](https://code4rena.com/) and classify each bug according to its nature.
 
-Our initial research suggests that current automatic vulnerability detection techniques rely on overly simplistic and generic oracles, such as reentrancy, which may fail to detect functional bugs in smart contracts. We aim to raise awareness about the significance of functional bugs and encourage practitioners to develop more sophisticated and nuanced automatic semantical oracles to detect such bugs.
+Our initial research suggests that a notable proportion of exploitable bugs in smart contracts are functional bugs, which cannot be detected using simple and generic oracles like reentrancy. We aim to raise awareness about the significance of such bugs and encourage practitioners to develop more sophisticated and nuanced automatic semantical oracles to detect them.
 </p>
 
 <br>
 
-> 𝙼𝚘𝚜𝚝 𝚘𝚏 𝚝𝚑𝚎 𝚌𝚞𝚛𝚛𝚎𝚗𝚝 𝚊𝚞𝚝𝚘𝚖𝚊𝚝𝚒𝚌 𝚟𝚞𝚕𝚗𝚎𝚛𝚊𝚋𝚒𝚕𝚒𝚝𝚢 𝚍𝚎𝚝𝚎𝚌𝚝𝚒𝚘𝚗 𝚝𝚎𝚌𝚑𝚗𝚒𝚚𝚞𝚎𝚜 𝚛𝚎𝚕𝚢 𝚘𝚗 𝚘𝚟𝚎𝚛𝚕𝚢 𝚜𝚒𝚖𝚙𝚕𝚒𝚜𝚝𝚒𝚌 𝚊𝚗𝚍 𝚐𝚎𝚗𝚎𝚛𝚊𝚕 𝚘𝚛𝚊𝚌𝚕𝚎𝚜, 𝚜𝚞𝚌𝚑 𝚊𝚜 𝚛𝚎𝚎𝚗𝚝𝚛𝚊𝚗𝚌𝚢, 𝚠𝚑𝚒𝚌𝚑 𝚖𝚊𝚢 𝚗𝚘𝚝 𝚋𝚎 𝚜𝚞𝚏𝚏𝚒𝚌𝚒𝚎𝚗𝚝 𝚏𝚘𝚛 𝚒𝚍𝚎𝚗𝚝𝚒𝚏𝚢𝚒𝚗𝚐 𝚏𝚞𝚗𝚌𝚝𝚒𝚘𝚗𝚊𝚕 𝚋𝚞𝚐𝚜 𝚒𝚗 𝚜𝚖𝚊𝚛𝚝 𝚌𝚘𝚗𝚝𝚛𝚊𝚌𝚝𝚜.
+> 𝙰 𝚜𝚒𝚐𝚗𝚒𝚏𝚒𝚌𝚊𝚗𝚝 𝚗𝚞𝚖𝚋𝚎𝚛 𝚘𝚏 𝚎𝚡𝚙𝚕𝚘𝚒𝚝𝚊𝚋𝚕𝚎 𝚋𝚞𝚐𝚜 𝚒𝚗 𝚜𝚖𝚊𝚛𝚝 𝚌𝚘𝚗𝚝𝚛𝚊𝚌𝚝𝚜 𝚏𝚊𝚕𝚕 𝚞𝚗𝚍𝚎𝚛 𝚝𝚑𝚎 𝚌𝚊𝚝𝚎𝚐𝚘𝚛𝚢 𝚘𝚏 𝚏𝚞𝚗𝚌𝚝𝚒𝚘𝚗𝚊𝚕 𝚋𝚞𝚐𝚜, 𝚠𝚑𝚒𝚌𝚑 𝚌𝚊𝚗𝚗𝚘𝚝 𝚋𝚎 𝚍𝚎𝚝𝚎𝚌𝚝𝚎𝚍 𝚋𝚢 𝚞𝚜𝚒𝚗𝚐 𝚜𝚒𝚖𝚙𝚕𝚎 𝚊𝚗𝚍 𝚐𝚎𝚗𝚎𝚛𝚒𝚌 𝚘𝚛𝚊𝚌𝚕𝚎𝚜.
 
 <br>
 
