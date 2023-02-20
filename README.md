@@ -105,6 +105,17 @@ These are bugs that require high-level semantical oracles to detect, as they ari
     + __SE-4__: Unexpected function arguments.
 + __SC__: Contract implementation-specific bugs. These bugs are difficult to categorize into the above categories.
 
+## Contributing
+
+We welcome all types of contributions to our project, including but not limited to:
+
++ Suggesting new reference techniques for prioritizing the development of semantical oracles for smart contract vulnerability detection. __[Priorities]__
++ Adding newly disclosed code4rena contest bugs.
++ Suggesting improvements to the classification standard
++ Correcting mislabeled bugs
+
+Further details can be found in our [contribution guidelines](docs/contribution.md).
+
 ## Cite
 
 + Zhuo Zhang, Brian Zhang, Wen Xu, Zhiqiang Lin, "Demystifying Exploitable Bugs in Smart Contracts." In Proceedings of the 45th International Conference on Software Engineering, 2023.
