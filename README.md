@@ -1,7 +1,7 @@
 # Demystifying Exploitable Bugs in Smart Contracts
 
 <p>
-<a href="Papers/icse23.pdf"> <img title="" src="resources/paper.jpg" alt="loading-ag-167" align="right" width="200"></a>
+<a href="papers/icse23.pdf"> <img title="" src="resources/paper.jpg" alt="loading-ag-167" align="right" width="200"></a>
 
 The purpose of this project is to provide a valuable resource for Web3 developers and security analysts by facilitating their understanding of exploitable bugs in smart contracts. We conduct a thorough analysis of exploitable bugs extracted from [code4rena](https://code4rena.com/) and classify each bug according to its nature.
 
@@ -18,7 +18,7 @@ Please be aware that <strong>this repository is currently undergoing active deve
 
 ## Research on Automatic Semantical Oracles
 
-We plan to compile a comprehensive list of resources that focus on creating semantical oracles for smart contracts. We welcome any additional suggestions or contributions from the community to help expand and improve the list.
+We plan to compile a comprehensive list of resources that focus on developing semantical oracles for smart contracts. We welcome any additional suggestions or contributions from the community to help expand and improve the list.
 
 
 + [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which addresses access control issues.
