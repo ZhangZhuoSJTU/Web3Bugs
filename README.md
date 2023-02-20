@@ -111,7 +111,7 @@ These are bugs that require high-level semantical oracles to detect, as they ari
 
 We welcome all types of contributions to our project, including but not limited to:
 
-+ <span style="color:red"><strong>Suggesting new reference techniques for prioritizing the development of semantical oracles for smart contract vulnerability detection.</strong></span>
++ <span style="color:red"><strong>Suggesting new reference techniques for prioritizing smart contract vulnerability detection with semantical oracles.</strong></span>
 + Adding newly disclosed code4rena contest bugs.
 + Suggesting improvements to the classification standard
 + Correcting mislabeled bugs
@@ -123,5 +123,13 @@ Further details can be found in our [contribution guidelines](docs/contribution.
 + Zhuo Zhang, Brian Zhang, Wen Xu, Zhiqiang Lin, "Demystifying Exploitable Bugs in Smart Contracts." In Proceedings of the 45th International Conference on Software Engineering, 2023.
 
 
-## WIP
+## Clarification
+
+The ICSE23 paper presented our preliminary investigation, which focused on vulnerability detection tools that were available before August 2022 and capable of analyzing smart contracts before deployment. However, we are now also investigating and recommending tools that work on post-deployment contracts (e.g., [SPCon](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf)). 
+
+Our dataset and classification standards are being actively developed, and we welcome contributions from the community to help improve them. Despite these updates, our conclusions, as presented in the ICSE23 paper, remain unchanged.
+
+## Acknowledgments
+
+We would like to extend our sincere thanks to [code4rena](https://code4rena.com/) for making this valuable information publicly available.
 
