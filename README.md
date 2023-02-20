@@ -76,6 +76,34 @@ These are bugs that can be detected using simple and generic oracles and do not 
 
 These are bugs that require high-level semantical oracles to detect, as they arise from inconsistencies between the code implementation and the business model.
 
++ __S1__: Price oracle manipulation.
+    + __S1-1__: AMM price oracle manipulation.
+    + __S1-2__: Sandwich attack.
+    + __S1-3__: Non-AMM price oracle manipulation.
++ __S2__: ID-related violations.
+    + __S2-1__: ID can be arbitrarily set by users or lack of ID validation. ID can also be a project-specified variable (e.g., hash) or an address.
+    + __S2-2__: Shared resource (e.g., token) without proper locks.
+    + __S2-3__: ID uniqueness violation (i.e., an ID should be unique but it is not).
++ __S3__: Erroneous state updates.
+    + __S3-1__: Missing state update.
+    + __S3-2__: Incorrect state updates, e.g., a state update that should not be there.
++ __S4__: Business-flow atomicity violations.
+    + __S4-1__: Lack of proper locks for a business flow consisting of multiple transactions.
++ __S5__: Privilege escalation and access control issues.
+    + __S5-1__: Users can update privileged state variables arbitrarily (caused by lack of ID-unrelated input sanitization).
+    + __S5-2__: Users can invoke some functions at a time they should not be able to do so.
+    + __S5-3__: Privileged functions can be called by anyone or at any time.
++ __S6__: Erroneous accounting.
+    + __S6-1__: Incorrect calculating order.
+    + __S6-2__: Returning an unexpected value that deviates from the expected semantics specified for the contract.
+    + __S6-3__: Calculations performed with incorrect numbers (e.g., x = a + b ==> x = a + c).
+    + __S6-4__: Other accounting errors (e.g., x = a + b ==> x = a - b).
++ __SE__: Broken business models due to unexpected operations
+    + __SE-1__: Unexpected function invocation sequences (e.g., external calls to dependent contracts).
+    + __SE-2__: Unexpected environment or contract conditions (e.g., ChainLink returning outdated data or significant slippage occurring).
+    + __SE-3__: A given function is invoked multiple times unexpectedly.
+    + __SE-4__: Unexpected function arguments.
++ __SC__: Contract implementation-specific bugs. These bugs are difficult to categorize into the above categories.
 
 ## Cite
 
