@@ -7,16 +7,35 @@ It is important to note that classifying functional bugs can be a subjective pro
 ## Process
 To classify a bug, we follow these steps:
 
-+ First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the __O__ categories, it is considered out of scope.
-+ We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the __L__ categories can detect the exploit, we classify it as an __L__ bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
-+ Any bugs that remain after the previous steps are labeled as __S__ bugs.
-    + We first investigate the root cause of the bug. If the root cause can be classified as __S1__ to __S6__, we label it accordingly.
-    + For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the __SE__ types, we label it accordingly.
-    + Any remaining bugs are labeled as SC.
++ First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
++ We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the `L` categories can detect the exploit, we classify it as an `L` bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
++ Any bugs that remain after the previous steps are labeled as `S` bugs.
+    + We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
+    + For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
+    + Any remaining bugs are labeled as `SC`.
 
 ## Ambiguous Cases
 
-__WIP__
+
+### Case 1: [Referrer can drain `ReferralFeePoolV0`](https://code4rena.com/reports/2021-10-mochi/#h-06-referrer-can-drain-referralfeepoolv0)
+
+#### Bug Description
+
+function `claimRewardAsMochi` in `ReferralFeePoolV0.sol` did not reduce user reward balance, allowing referrer to claim the same reward repeatedly and thus draining the fee pool.
+
+Did not reduce user reward balance at L28-47 in [ReferralFeePoolV0.sol](https://github.com/code-423n4/2021-10-mochi/blob/main/projects/mochi-core/contracts/feePool/ReferralFeePoolV0.sol)
+
+To mitigate the issue, add the following lines
+
+> rewards -= reward\[msg.sender];
+> reward\[msg.sender] = 0;
+
+#### Explanation
+
+We have classified this bug as __S3-1__ since the root cause is related to missing state update regarding `rewards` and `reward[msg.sender]`. While it may appear similar to __SE-3__ since the attacker needs to invoke the `claimRewardAsMochi` function repeatedly to exploit the bug, we followed our classification process and identified the root cause as __S3-1__.
+
+
+
 
 ## Bug Labels
 
