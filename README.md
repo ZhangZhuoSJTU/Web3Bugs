@@ -109,7 +109,7 @@ These are bugs that require high-level semantical oracles to detect, as they ari
 
 We welcome all types of contributions to our project, including but not limited to:
 
-+ Suggesting new reference techniques for prioritizing the development of semantical oracles for smart contract vulnerability detection. __[Priorities]__
++ Suggesting new reference techniques for prioritizing the development of semantical oracles for smart contract vulnerability detection. <font color="red"><strong>[Priorities]</strong></font>
 + Adding newly disclosed code4rena contest bugs.
 + Suggesting improvements to the classification standard
 + Correcting mislabeled bugs
