@@ -96,8 +96,8 @@ These are bugs that require high-level semantical oracles to detect, as they ari
 + __S6__: Erroneous accounting.
     + __S6-1__: Incorrect calculating order.
     + __S6-2__: Returning an unexpected value that deviates from the expected semantics specified for the contract.
-    + __S6-3__: Calculations performed with incorrect numbers (e.g., x = a + b ==> x = a + c).
-    + __S6-4__: Other accounting errors (e.g., x = a + b ==> x = a - b).
+    + __S6-3__: Calculations performed with incorrect numbers (e.g., `x = a + b` ==> `x = a + c`).
+    + __S6-4__: Other accounting errors (e.g., `x = a + b` ==> `x = a - b`).
 + __SE__: Broken business models due to unexpected operations
     + __SE-1__: Unexpected function invocation sequences (e.g., external calls to dependent contracts).
     + __SE-2__: Unexpected environment or contract conditions (e.g., ChainLink returning outdated data or significant slippage occurring).
