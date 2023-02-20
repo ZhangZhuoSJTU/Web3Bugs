@@ -50,7 +50,7 @@ These are bugs that fall outside the scope of our study and are thus not analyze
 
 ### Bugs with Simple and Generic Testing Oracles
 
-These are bugs that can be detected using simple and generic oracles, such as reentrancy, and do not require more sophisticated oracles.
+These are bugs that can be detected using simple and generic oracles and do not require an in-depth understanding of the code semantics.
 
 ### Bugs that Require High-level Semantical Oracles
 
