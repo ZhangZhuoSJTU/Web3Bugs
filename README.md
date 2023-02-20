@@ -60,6 +60,18 @@ These are bugs that fall outside the scope of our study and are thus not analyze
 
 These are bugs that can be detected using simple and generic oracles and do not require an in-depth understanding of the code semantics.
 
++ __L1__: Reentrancy.
++ __L2__: Rounding issues or precision loss.
++ __L3__: Bugs that are caused by using uninitialized variables.
++ __L4__: Bugs that are caused by exceeding the gas limitation.
++ __L5__: Storage collision and confusion between proxy and implementation.
++ __L6__: Arbitrary external function call.
++ __L7__: Integer overflow and underflow.
++ __L8__: Revert issues caused by low-level calls or external libraries.
++ __L9__: Bugs that are caused by writing to memory that does not apply to the storage.
++ __LA__: Cryptographic issues.
++ __LB__: Using _tx.origin_.
+
 ### Bugs that Require High-level Semantical Oracles
 
 These are bugs that require high-level semantical oracles to detect, as they arise from inconsistencies between the code implementation and the business model.
