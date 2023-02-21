@@ -1,10 +1,8 @@
-# Classification Standard
-
 In this document, we present the process we use to classify bugs in our study, along with examples of ambiguous cases. We also provide a description of each bug label as a reference, which can be found at the end of this document.
 
 It is important to note that classifying functional bugs can be a subjective process, and we welcome any suggestions for improving our classification standards.
 
-## Process
+# Process
 To classify a bug, we follow these steps:
 
 + First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
@@ -14,12 +12,12 @@ To classify a bug, we follow these steps:
     + For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
     + Any remaining bugs are labeled as `SC`.
 
-## Ambiguous Cases
+# Ambiguous Cases
 
 
-### Case 1: [Referrer can drain `ReferralFeePoolV0`](https://code4rena.com/reports/2021-10-mochi/#h-06-referrer-can-drain-referralfeepoolv0)
+## Case 1: [Referrer can drain `ReferralFeePoolV0`](https://code4rena.com/reports/2021-10-mochi/#h-06-referrer-can-drain-referralfeepoolv0)
 
-#### Bug Description
+### Bug Description
 
 function `claimRewardAsMochi` in `ReferralFeePoolV0.sol` did not reduce user reward balance, allowing referrer to claim the same reward repeatedly and thus draining the fee pool.
 
@@ -28,18 +26,35 @@ Did not reduce user reward balance at L28-47 in [ReferralFeePoolV0.sol](https://
 To mitigate the issue, add the following lines
 
 > rewards -= reward\[msg.sender];
+>
 > reward\[msg.sender] = 0;
 
-#### Explanation
+### Explanation
 
 We have classified this bug as __S3-1__ since the root cause is related to missing state update regarding `rewards` and `reward[msg.sender]`. While it may appear similar to __SE-3__ since the attacker needs to invoke the `claimRewardAsMochi` function repeatedly to exploit the bug, we followed our classification process and identified the root cause as __S3-1__.
 
 
+## Case 2: [Miners Can Re-Roll the VRF Output to Game the Protocol](https://code4rena.com/reports/2021-10-pooltogether/#h-02-miners-can-re-roll-the-vrf-output-to-game-the-protocol)
+
+### Bug Description
+
+Miners are able to rewrite a chain's history if they dislike the VRF output used by the protocol. Consider the following example:
+
++ A miner or well-funded user is participating in the PoolTogether protocol.
++ A VRF request is made and fulfilled in the same block.
++ The protocol participant does not benefit from the VRF output and therefore wants to increase their chances of winning by including the output in another block, producing an entirely new VRF output. This is done by re-orging the chain, i.e. following a new canonical chain where the VRF output has not been included in a block.
++ This attack can be continued as long as the attacker controls 51% of the network. The miner itself could control a much smaller proportion of the network and still be able to mine a few blocks in succession, although this is of low probability but entirely possible.
++ A well-funded user could also pay miners to re-org the chain on their behalf in the form of MEV to achieve the same benefit.
+The PoolTogether team is aware of this issue but is yet to mitigate this attack vector fully.
+
+### Explanation
+
+We have classified this bug as __O7__, as we believe it is not specific to the subject project, but rather a general question of whether the security model of Chainlink's VRF can be trusted.
 
 
-## Bug Labels
+# Bug Labels
 
-### Out-of-scope Bugs
+## Out-of-scope Bugs
 
 These are bugs that fall outside the scope of our study and are thus not analyzed further.
 
@@ -51,7 +66,7 @@ These are bugs that fall outside the scope of our study and are thus not analyze
 + __O6__: Bugs that are not considered as such by the project. This can be due to disagreements between the auditors and the project (common in early contests), no explicit code affected by the bug, or intentional behavior that aligns with the business model (where the business model may be flawed).
 + __O7__: Doubtful findings, which we believe may be invalid, duplicated, or non-critical (common in early contests).
 
-### Bugs with Simple and General Testing Oracles
+## Bugs with Simple and General Testing Oracles
 
 These are bugs that can be detected using simple and general oracles and do not require an in-depth understanding of the code semantics.
 
@@ -67,7 +82,7 @@ These are bugs that can be detected using simple and general oracles and do not 
 + __LA__: Cryptographic issues.
 + __LB__: Using `tx.origin`.
 
-### Bugs that Require High-level Semantical Oracles
+## Bugs that Require High-level Semantical Oracles
 
 These are bugs that require high-level semantical oracles to detect, as they arise from inconsistencies between the code implementation and the business model.
 
