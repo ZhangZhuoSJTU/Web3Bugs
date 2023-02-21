@@ -15,7 +15,7 @@ To classify a bug, we follow these steps:
 # Ambiguous Cases
 
 
-## Case 1: [Referrer can drain `ReferralFeePoolV0`](https://code4rena.com/reports/2021-10-mochi/#h-06-referrer-can-drain-referralfeepoolv0)
+## Case 1: [Referrer can drain `ReferralFeePoolV0`](https://github.com/code-423n4/2021-10-mochi-findings/issues/55)
 
 ### Bug Description
 
@@ -34,7 +34,7 @@ To mitigate the issue, add the following lines
 We have classified this bug as __S3-1__ since the root cause is related to missing state update regarding `rewards` and `reward[msg.sender]`. While it may appear similar to __SE-3__ since the attacker needs to invoke the `claimRewardAsMochi` function repeatedly to exploit the bug, we followed our classification process and identified the root cause as __S3-1__.
 
 
-## Case 2: [Miners Can Re-Roll the VRF Output to Game the Protocol](https://code4rena.com/reports/2021-10-pooltogether/#h-02-miners-can-re-roll-the-vrf-output-to-game-the-protocol)
+## Case 2: [Miners Can Re-Roll the VRF Output to Game the Protocol](https://github.com/code-423n4/2021-10-pooltogether-findings/issues/56)
 
 ### Bug Description
 
@@ -72,6 +72,31 @@ To mitigate this issue, it is suggested to change line 134 to `delete pendingFla
 ### Explanation
 
 The bug can be classified as either __S3-2__ or __S6-4__, but the root cause is related to the incorrect update of `pendingFlashDecision`, which is not an accounting issue. Therefore, we have classified this bug as __S3-2__.
+
+## Case 4: [Controller does not raise an error when there's insufficient liquidity](https://github.com/code-423n4/2021-09-yaxis-findings/issues/28)
+
+### Bug Description
+
+When a user tries to withdraw the token from the vault, the vault would withdraw the token from the controller if there's insufficient liquidity in the vault. However, the controller does not raise an error when there's insufficient liquidity in the controller/ strategies. The user would lose his shares while getting nothing.
+
+An MEV searcher could apply this attack on any withdrawal. When an attacker found an unconfirmed tx that tries to withdraw 1M dai, he can do such sandwich attack.
+
+1. Deposits USDC into the vault.
+2. Withdraw all dai left in the vault/controller/strategy.
+3. Place the vitims tx here. The victim would get zero dai while burning 1 M share. This would pump the share price.
+4. Withdraw all liquidity.
+
+All users would be vulnerable to MEV attackers. I consider this is a high-risk issue.
+
+To mitigate this issue, the following steps are recommended:
+
++ First, users pay the slippage when they try to withdraw. I do not find this fair. Users have to pay extra gas to withdraw liquidity from strategy, convert the token, and still paying the slippage. I recommend writing a view function for the frontend to display how much slippage the user has to pay. (Controler.sol#L448-L479)
++ Second, the controller does not revert the transaction there's insufficient liquidity. Recommend to revert the transaction when `_amount` is not equal to zero after the loop finish. (Controller.sol#L577-L622)
+
+### Explanation
+
+While this attack is launched through a sandwich attack, the root cause is not related to price changes, and as such, we do not classify it as __S1__. Instead, we classify it as __SC__ since there is no explicit category for this type of bug.
+
 
 # Bug Labels
 
