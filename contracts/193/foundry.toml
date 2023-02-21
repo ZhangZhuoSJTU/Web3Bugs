@@ -1,0 +1,19 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.17"
+optimizer_runs = 3_000
+gas_reports = ["Pair", "Caviar", "LpToken"]
+fs_permissions = [{ access = "read", path = "./script/rankings/"}]
+ffi = true
+
+[fmt]
+line_length = 120
+
+[fuzz]
+runs = 256
+
+[profile.ci]
+ffi = false
+no_match_test = "MerkleProof"
