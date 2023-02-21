@@ -8,9 +8,9 @@ To classify a bug, we follow these steps:
 1. First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
 2. We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the `L` categories can detect the exploit, we classify it as an `L` bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
 3. Any bugs that remain after the previous steps are labeled as `S` bugs.
-    3.1. We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
-    3.2. For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
-    3.3. Any remaining bugs are labeled as `SC`.
+    1. We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
+    2. For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
+    3. Any remaining bugs are labeled as `SC`.
 
 # Ambiguous Cases
 
@@ -63,12 +63,15 @@ A logic error in the `burnFlashGovernanceAsset` function that resets a user's `p
 4. Now, Alice calls `withdrawGovernanceAsset` to withdraw Bob's locked asset, effectively the same as stealing Bob's assets. Since Alice's `pendingFlashDecision` is reset to the default, the `unlockTime < block.timestamp` condition is fulfilled, and the withdrawal succeeds.
 
 Referenced code:
+
 + DAO/FlashGovernanceArbiter.sol#L134
 + DAO/FlashGovernanceArbiter.sol#L146
 
 To mitigate this issue, it is suggested to change line 134 to `delete pendingFlashDecision[targetContract][user]` instead of setting the `pendingFlashDecision` to the default.
 
 ### Explanation
+
+The bug can be classified as either __S3-2__ or __S6-4__, but the root cause is related to the incorrect update of `pendingFlashDecision`, which is not an accounting issue. Therefore, we have classified this bug as __S3-2__.
 
 # Bug Labels
 
