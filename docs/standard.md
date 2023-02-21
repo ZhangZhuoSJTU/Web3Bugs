@@ -5,12 +5,12 @@ It is important to note that classifying functional bugs can be a subjective pro
 # Process
 To classify a bug, we follow these steps:
 
-+ First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
-+ We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the `L` categories can detect the exploit, we classify it as an `L` bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
-+ Any bugs that remain after the previous steps are labeled as `S` bugs.
-    + We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
-    + For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
-    + Any remaining bugs are labeled as `SC`.
+1. First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
+2. We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the `L` categories can detect the exploit, we classify it as an `L` bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
+3. Any bugs that remain after the previous steps are labeled as `S` bugs.
+    3.1. We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
+    3.2. For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
+    3.3. Any remaining bugs are labeled as `SC`.
 
 # Ambiguous Cases
 
@@ -51,6 +51,24 @@ The PoolTogether team is aware of this issue but is yet to mitigate this attack 
 
 We have classified this bug as __O7__, as we believe it is not specific to the subject project, but rather a general question of whether the security model of Chainlink's VRF can be trusted.
 
+## Case 3: [Logic error in burnFlashGovernanceAsset can cause locked assets to be stolen](https://github.com/code-423n4/2022-01-behodler-findings/issues/305)
+
+### Bug Description
+
+A logic error in the `burnFlashGovernanceAsset` function that resets a user's `pendingFlashDecision` allows that user to steal other user's assets locked in future flash governance decisions. As a result, attackers can get their funds back even if they execute a malicious flash decision and the community burns their assets.
+
+1. An attacker Alice executes a malicious flash governance decision, and her assets are locked in the `FlashGovernanceArbiter` contract.
+2. The community disagrees with Alice's flash governance decision and calls `burnFlashGovernanceAsset` to burn her locked assets. However, the `burnFlashGovernanceAsset` function resets Alice's `pendingFlashDecision` to the default config (see line 134).
+3. A benign user, Bob executes another flash governance decision, and his assets are locked in the contract.
+4. Now, Alice calls `withdrawGovernanceAsset` to withdraw Bob's locked asset, effectively the same as stealing Bob's assets. Since Alice's `pendingFlashDecision` is reset to the default, the `unlockTime < block.timestamp` condition is fulfilled, and the withdrawal succeeds.
+
+Referenced code:
++ DAO/FlashGovernanceArbiter.sol#L134
++ DAO/FlashGovernanceArbiter.sol#L146
+
+To mitigate this issue, it is suggested to change line 134 to `delete pendingFlashDecision[targetContract][user]` instead of setting the `pendingFlashDecision` to the default.
+
+### Explanation
 
 # Bug Labels
 
