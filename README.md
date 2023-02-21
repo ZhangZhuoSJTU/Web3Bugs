@@ -44,7 +44,7 @@ We classify the surveyed bugs into three main categories based on their nature:
 + Bugs with simple and general testing oracles (denoted by __L__)
 + Bugs that require high-level semantical oracles (denoted by __S__)
 
-Please note that classifying functional bugs can be ambiguous, and we welcome any suggestions for improving our classification standards. We have also updated our classification since the ICSE23 paper, and we encourage you to refer to our current [classification standards](docs/standard.md) for more information.
+Please note that classifying functional bugs can be ambiguous, and we welcome any suggestions for improving our classification standards. We have also updated our classification since the ICSE23 paper, and we encourage you to refer to our current [classification guidelines](docs/standard.md) for more information.
 
 ### Out-of-scope Bugs
 

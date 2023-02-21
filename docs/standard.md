@@ -1,6 +1,6 @@
 In this document, we present the process we use to classify bugs in our study, along with the description of each bug label. We also include a few examples of ambiguous cases at the end of the document for reference.
 
-It is important to note that classifying functional bugs can be a subjective process, and we welcome any suggestions for improving our classification standards.
+It is important to note that classifying functional bugs can be a subjective process, and we welcome any suggestions for improving our criteria for bug classification
 
 # Process
 
