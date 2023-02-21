@@ -3,6 +3,7 @@ In this document, we present the process we use to classify bugs in our study, a
 It is important to note that classifying functional bugs can be a subjective process, and we welcome any suggestions for improving our classification standards.
 
 # Process
+
 To classify a bug, we follow these steps:
 
 1. First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
@@ -115,7 +116,87 @@ function notionalCallback(
 
 ### Explanation
 
-It is hard to distinguish __S2-1__ and __S5__ bugs. In this case, the issue comes from an incorrect access control. While it can be classified as __S5-3__, the root cause is that the attack can provide arbitrary ID (i.e., address). It more related to __S2-1__. We make such judgement since we believe it is possible to derive an abstract bug model for such ID-related issues. We hence use __S2-1__ as the label of this bug.
+It can be challenging to determine whether a bug should be labeled as __S2-1__ or __S5__, as both categories may involve access control issues (especially when the ID is an address). In this case, the root cause is that the attacker can provide an arbitrary ID (i.e., address) to bypass the access control, which is more related to the __S2-1__ category. Although the bug could also be classified as __S5-3__, we believe that it is possible to develop an abstract bug model for ID-related issues. Therefore, we use __S2-1__ as the label for this bug.
+
+## Case 6: [Anyone can affect deposits of any user and turn the owner of the token](https://github.com/code-423n4/2021-06-realitycards-findings/issues/119)
+
+### Bug Description
+
+On RCTreasury, we have the method `collectRentUser`. This method is public, so anyone can call it using whatever user and whatever timestamp.
+
+So, calling this method using `user = XXXXX` and `_timeToCollectTo = type(uint256).max)`, would make `isForeclosed[user] = true`.
+
+```solidity
+function collectRentUser(address _user, uint256 _timeToCollectTo)
+    public
+    override
+    returns (
+        uint256 newTimeLastCollectedOnForeclosure
+    )
+{
+    require(!globalPause, "Global pause is enabled");
+    assert(_timeToCollectTo != 0);
+    if (user[_user].lastRentCalc < _timeToCollectTo) {
+        uint256 rentOwedByUser = rentOwedUser(_user, _timeToCollectTo);
+
+        if (rentOwedByUser > 0 && rentOwedByUser > user[_user].deposit) {
+            // The User has run out of deposit already.
+            uint256 previousCollectionTime = user[_user].lastRentCalc;
+
+            /*
+        timeTheirDepsitLasted = timeSinceLastUpdate * (usersDeposit/rentOwed)
+                              = (now - previousCollectionTime) * (usersDeposit/rentOwed)
+        */
+            uint256 timeUsersDepositLasts =
+                ((_timeToCollectTo - previousCollectionTime) *
+                    uint256(user[_user].deposit)) / rentOwedByUser;
+            /*
+        Users last collection time = previousCollectionTime + timeTheirDepsitLasted
+        */
+            rentOwedByUser = uint256(user[_user].deposit);
+            newTimeLastCollectedOnForeclosure =
+                previousCollectionTime +
+                timeUsersDepositLasts;
+            _increaseMarketBalance(rentOwedByUser, _user);
+            user[_user].lastRentCalc = SafeCast.toUint64(
+                newTimeLastCollectedOnForeclosure
+            );
+            assert(user[_user].deposit == 0);
+            isForeclosed[_user] = true;
+            emit LogUserForeclosed(_user, true);
+        } else {
+            // User has enough deposit to pay rent.
+            _increaseMarketBalance(rentOwedByUser, _user);
+            user[_user].lastRentCalc = SafeCast.toUint64(_timeToCollectTo);
+        }
+        emit LogAdjustDeposit(_user, rentOwedByUser, false);
+    }
+}
+```
+
+Now, we can do the same for all the users bidding for a specific token.
+
+Finally, I can become the owner of the token by just calling `newRental` and using a small price. `newRental` will iterate over all the previous bid and will remove them because there are foreclosed.
+
+
+### Explanation
+
+It's often difficult to differentiate between __S2-1__ and __S5__ bugs, and this case is no exception. Although the exploit in this case involves leveraging a __feature__ that allows users to provide arbitrary `user` values, the root cause of the issue is that the code does not check if `timeToCollectTo <= block.timestamp`, which enables the attacker to manipulate the privileged `isForeclosed[user]` state variable in an arbitrary manner. Therefore, we have classified this bug as __S5-1__.
+
+## Case 7: [lastUpdatedDay not initialized](https://github.com/code-423n4/2021-04-marginswap-findings/issues/14)
+
+### Bug Description
+
+The variable `lastUpdatedDay` in IncentiveDistribution.sol is not (properly) initialized.
+
+This means the function `updateDayTotals` will end up in a very large loop which will lead to an out of gas error.
+
+Even if the loop would end, the variable `currentDailyDistribution` would be updated very often. Thus `updateDayTotals` cannot be performed
+
+
+### Explanation
+
+Although it is certain that this bug belongs to the __L__ category, there is ambiguity regarding its specific type. The root cause is the improper initialization of the `lastUpdatedDay` variable in IncentiveDistribution.sol. However, the crucial aspect for __L__ bugs is which oracle can detect them, according to our bug classification process. The gas oracle is the most effective in detecting this bug since the updateDayTotals function would lead to an out of gas error. Therefore, we classify this bug as __L4__.
 
 # Bug Labels
 
