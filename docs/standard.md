@@ -54,7 +54,7 @@ We have classified this bug as __O7__, as we believe it is not specific to the s
 
 # Bug Labels
 
-## Out-of-scope Bugs
+### Out-of-scope Bugs
 
 These are bugs that fall outside the scope of our study and are thus not analyzed further.
 
@@ -66,7 +66,7 @@ These are bugs that fall outside the scope of our study and are thus not analyze
 + __O6__: Bugs that are not considered as such by the project. This can be due to disagreements between the auditors and the project (common in early contests), no explicit code affected by the bug, or intentional behavior that aligns with the business model (where the business model may be flawed).
 + __O7__: Doubtful findings, which we believe may be invalid, duplicated, or non-critical (common in early contests).
 
-## Bugs with Simple and General Testing Oracles
+### Bugs with Simple and General Testing Oracles
 
 These are bugs that can be detected using simple and general oracles and do not require an in-depth understanding of the code semantics.
 
@@ -82,7 +82,7 @@ These are bugs that can be detected using simple and general oracles and do not 
 + __LA__: Cryptographic issues.
 + __LB__: Using `tx.origin`.
 
-## Bugs that Require High-level Semantical Oracles
+### Bugs that Require High-level Semantical Oracles
 
 These are bugs that require high-level semantical oracles to detect, as they arise from inconsistencies between the code implementation and the business model.
 
