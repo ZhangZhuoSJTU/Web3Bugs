@@ -2,7 +2,7 @@
 
 We welcome all types of contributions to our project, including but not limited to:
 
-+ <span style="color:red"><strong>Suggesting new reference techniques for prioritizing smart contract vulnerability detection with semantical oracles.</strong></span>
++ <span style="color:red"><strong>Suggesting new reference techniques which prioritize smart contract vulnerability detection with semantical oracles.</strong></span>
 + Adding newly disclosed code4rena contest bugs.
 + Suggesting improvements to the classification standard
 + Correcting mislabeled bugs
