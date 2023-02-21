@@ -98,6 +98,25 @@ To mitigate this issue, the following steps are recommended:
 While this attack is launched through a sandwich attack, the root cause is not related to price changes, and as such, we do not classify it as __S1__. Instead, we classify it as __SC__ since there is no explicit category for this type of bug.
 
 
+## Case 5: [Access restrictions on NotionalV1ToNotionalV2.notionalCallback can be bypassed](https://github.com/code-423n4/2021-08-notional-findings/issues/71)
+
+### Bug Description
+
+The `NotionalV1ToNotionalV2.notionalCallback` is supposed to only be called from the verified contract that calls this callback but the access restrictions can be circumvented by simply providing `sender = this` as `sender` is a parameter of the function that can be chosen by the attacker.
+
+```solidity
+function notionalCallback(
+    address sender,
+    address account,
+    bytes calldata callbackData
+) external returns (uint256) {
+    require(sender == address(this), "Unauthorized callback");
+```
+
+### Explanation
+
+It is hard to distinguish __S2-1__ and __S5__ bugs. In this case, the issue comes from an incorrect access control. While it can be classified as __S5-3__, the root cause is that the attack can provide arbitrary ID (i.e., address). It more related to __S2-1__. We make such judgement since we believe it is possible to derive an abstract bug model for such ID-related issues. We hence use __S2-1__ as the label of this bug.
+
 # Bug Labels
 
 ### Out-of-scope Bugs
