@@ -1,4 +1,4 @@
-In this document, we present the process we use to classify bugs in our study, along with examples of ambiguous cases. We also provide a description of each bug label as a reference, which can be found at the end of this document.
+In this document, we present the process we use to classify bugs in our study, along with the description of each bug label. In addition, we have included a set of examples of ambiguous cases for reference, which can be found at the end of this document.
 
 It is important to note that classifying functional bugs can be a subjective process, and we welcome any suggestions for improving our classification standards.
 
