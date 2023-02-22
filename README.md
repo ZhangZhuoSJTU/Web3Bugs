@@ -25,7 +25,11 @@ We plan to compile an extensive list of vulnerability detection techniques that 
 
 + [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which tries to address access control issues.
 + [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf), which tries to address access control issues.
+
+<!--
+// no a vulnerability detection technique, but a forensic technique
 + [DeFiRanger: Detecting Price Manipulation Attacks on DeFi Applications](https://arxiv.org/abs/2104.15068), which tries to address issues of price oracle manipulation.
+-->
 
 
 ## Folder Structure
