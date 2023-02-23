@@ -1,0 +1,160 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Markets 🏦
+
+## Overview
+
+Trading on prePO occurs within Markets.
+
+Markets consist of Long Tokens and Short Tokens which rise and fall in value with the estimated valuation of a particular pre-public entity, and AMM Pools which facilitate the exchange of Long Tokens and Short Tokens between Traders.
+
+## Market Creation
+
+Creation of new markets is proposed and voted on by [prePO Governance](/governance).
+
+Markets are created with **4 key parameters:**
+
+### Name
+
+The name of the pre-public entity the market will track (e.g. SpaceX).
+
+### Valuation Range
+
+A range between two fully-diluted valuations (also known as fully-diluted market capitalization), typically expressed in millions or billions or dollars (e.g. $10B-$40B).
+
+Learn about the tradeoffs between narrow and wide Valuation Ranges on the [Market Parameter Tradeoffs](/developer/parameter-tradeoffs) page.
+
+### Payout Range
+
+A range between 0% - 100% representing the minimum and maximum portion of a preCT an L or S can be redeemed for in a market (e.g. 20%-80%).
+
+Learn about the impact of the Payout Range on the [Market Parameter Tradeoffs](/developer/parameter-tradeoffs) page.
+
+### Expiry
+
+The expiry date of the market.
+
+If a market has not settled by its expiry date, it will automatically settle at the lower bound of its Valuation Range.
+
+Market expiry dates will typically be set in the far distant future, such that the effect of the remaining time on the current Valuation/Payout is negligible. It is expected that a market migration or settlement will occur much earlier than the market reaching its Expiry.
+
+## Long Tokens and Short Tokens
+
+Long Tokens ($L$) increase in value as the estimated valuation of the market increases, Short Tokens ($S$) increase in value as the estimated valuation of the market decreases.
+
+At any time, $1 preCT$ may be deposited into a Market to mint $1 L + 1 S$.
+
+Conversely, $1L + 1S$ may be always be redeemed from the Market for $1 preCT$.
+
+$$$
+\therefore 1L + 1S = 1 preCT
+$$$
+
+## Calculating Market Valuation and Payouts
+
+The current Market Valuation ($V$) can be derived with 
+
+1. The current Long Token Payout ($P_L$)
+2. The Valuation Range (floor: $V_F$, ceil: $V_C$)
+3. The Payout Range (floor: $P_F$, ceil: $P_C$)
+
+$$
+V = V_F + \frac{P_L - P_F}{P_C - P_F} * (V_C - V_F)
+$$
+
+this equation can be rearranged to find the $P_L$ and $P_S$ values that corresponds to a given $V$.
+
+$$
+P_L = P_F + \frac{V - V_F}{V_C - V_F} * (P_C - P_F)
+$$
+
+$$
+P_S = 1 - P_L
+$$
+
+Visualizing the relationship between Valuation and Long/Short Payout % can make it easier to understand:
+
+<center>
+  <figure style={{maxWidth: '30rem'}}>
+    <img alt="Valuation/Payout" src={useBaseUrl("/img/val_payout.png")} />
+    <figcaption>Relationship between Valuation and Payout</figcaption>
+  </figure>
+</center>
+
+:::tip making sense
+$P_L$ and $P_S$ are inversely correlated.
+
+When $P_L$ goes up, $V$ goes up.
+
+When $P_L$ goes down, $V$ goes down.
+
+When $P_L = P_F$, $V = V_F$.
+
+When $P_L = P_C$, $V = V_C$.
+
+:::
+
+
+### Worked Examples
+
+Consider a market with a Valuation Range of $100M-$900M and a Payout Range of 10%-90%, when the current Long Token Payout is 20%.
+
+- $P_L = 20\%$
+- $P_S = 100\% - 20\% = 80\%$
+- $V = 100 + \frac{20\% - 10\%}{90\% - 10\%} * (900 - 100) = 200M$
+
+
+<center>
+  <figure style={{maxWidth: '30rem'}}>
+    <img alt="200M Valuation Payouts" src={useBaseUrl("/img/200m_payout_val.png")} />
+    <figcaption>Payouts when V is $200M</figcaption>
+  </figure>
+</center>
+
+Traders collectively think the valuation of 200M is too low and that the actual fair value is 800M, so they buy Long Tokens until $V = 800M$. Let's calculate the $P_L$ and $P_S$ values at the new valuation:
+
+- $V = 800M$
+- $P_L = 10\% + \frac{800 - 100}{900 - 100} * (90\% - 10\%) = 80\%$
+- $P_S = 100\% - 80\% = 20\%$
+
+
+<center>
+  <figure style={{maxWidth: '30rem'}}>
+    <img alt="$800M Valuation Payouts" src={useBaseUrl("/img/800m_payout_val.png")} />
+    <figcaption>Payouts when V is $800M</figcaption>
+  </figure>
+</center>
+
+
+
+## Liquidity Pools
+
+Every Market is initialized with two [Uniswap V3 AMMs](https://uniswap.org/blog/uniswap-v3). 
+
+One AMM trades the $L/preCT$ pair, the other trades the $S/preCT$ pair.
+
+Traders can easily buy & sell $L$ and $S$ exposure using these AMMs.
+
+LPs can provide liquidity to a market by minting $L$ and $S$ Tokens with $preCT$, and depositing the tokens into the AMM pools.
+
+[Concentrated liquidity](https://docs.uniswap.org/protocol/concepts/V3-overview/concentrated-liquidity) allows LPs to provide liquidity only across the Payout Range, greatly improving their capital efficiency.
+
+[Arbitrage incentives](/developer/arbitrage) ensure price movements on one AMM will be reflected on the other, such that the $P_L = 1 - P_S$ relationship holds.
+
+## Market Settlement
+
+When a market receives an official public valuation, [prePO Governance](/governance) will create a proposal to **settle** the market at that valuation. For companies, this is the fully-diluted market capitalization at the end of the first day of public trading on the primary market; and for tokens, this is the time-weighted average fully-diluted market capitalization over the first three days of public trading, or the fully-diluted market capitalization at the conclusion of an IDO/IEO/ICO.
+
+Once a market is settled, $L$ and $S$ may be redeemed for $preCT$ **individually** at fixed $P_L$ and $P_S$ values, corresponding to the determined settlement valuation.
+
+The fixed $P_L$ and $P_S$ values can be derived using the rearranged [Market Valuation equation](/concepts/markets#calculating-the-market-valuation) and passing in the final $V$ value.
+
+In the edge case where the underlying company or project is officially bankrupt or discontinued, such that it can no longer reasonably be expected to be publicly tradable in future, a proposal can be made to immediately settle the market at the lower bound of the Payout Range. Similarly, in the edge case where the underlying company or project has been acquired or merged, such that it can no longer reasonably be expected to be publicly tradable in future, a proposal can be made to immediately settle the market at an official publicly-disclosed merger/acquisition valuation, or at the lower bound of the Payout Range in the absence of an official public valuation.
+
+## Market Migration
+
+If a market is trading consistently at an upper or lower bound, a new market may be created by [prePO Governance](/governance) with a new Valuation Range, and positions migrated to the new market.
+
+In the initial release of prePO the migration process will be manual. In future, we will explore automating the market migration process.

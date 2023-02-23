@@ -1,0 +1,1 @@
+/*eslint-disable*/module.exports={messages:{"Connect Wallet":"Conectar Wallet"}};

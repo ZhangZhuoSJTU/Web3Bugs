@@ -1,0 +1,82 @@
+---
+sidebar_position: 4
+---
+
+# LP Risk Minimisation ☔️
+
+The maximum possible loss an LP could incur in a prePO position is **known in advance**, **completely transparent**, and **presented to the LP** on a confirmation screen before they open a position.
+
+Additionally, prePO's unique architecture is designed to **heavily minimise** the max loss LPs could incur in a position.
+
+This is a significant advantage compared to most other AMMs, where **risks are unclear** and LPs are often liable to lose **significant percentages** of their position due to factors like [impermanent loss](https://finematics.com/impermanent-loss-explained/).
+
+<center>
+  <figure height="50%">
+    <img alt="Max Loss displayed in a prePO Transaction Summary" src={"/img/max-loss.png"} />
+    <figcaption>Max Loss displayed in a prePO Transaction Summary</figcaption>
+  </figure>
+</center>
+
+## Risk Minimisation Mechanics
+
+### Payout Ranges
+
+Long and Short tokens in prePO markets trade within the bounds of a [Payout Range](/concepts/markets#payout-range), which sets a price floor for each token.
+
+Setting a lower bound on the possible price of Long and Short tokens allows Pregens to control the maximum [impermanent loss](https://finematics.com/impermanent-loss-explained/) an LP could incur in a position.
+
+If there was no Payout Range, LPs would be liable to lose 100% of their position in the scenario that a token trended towards $0.
+
+Of course, there are tradeoffs to consider when choosing a token price floor. Learn more about the tradeoffs on the [Parameter Tradeoffs](/developer/parameter-tradeoffs) page.
+
+### Natural Hedging
+
+When an LP provides liquidity to a prePO market, two AMM positions are opened under the hood. 50% of the deposit is added to the $L/preCT$ AMM and 50% to the $S/preCT$ AMM, using a [Zap-like](https://learn.zapper.fi/articles/what-is-a-zap) mechanism.
+
+Each AMM position is subject to its own Position Profit or Loss ($PPL$) which is influenced by a combination of factors, including [impermanent loss](https://finematics.com/impermanent-loss-explained/) and market exposure to pool assets.
+
+Let's define
+
+- $PPL_S$: The $S/preCT$ position $PPL$
+- $PPL_L$: The $L/preCT$ position $PPL$
+- $PPL_{net}$: $PPL_S + PPL_L$
+
+Given the $S/preCT$ pool provides Short exposure and the $L/preCT$ pool provides Long exposure, $PPL_S$ and $PPL_L$ are inversely correlated, giving the LP position the properties of a natural hedge.
+
+### Variable Market Exposure
+
+Even though LP deposits are divided equally between the $L/preCT$ and $S/preCT$ pools, the Long and Short exposure provided by each pool is not equal.
+
+This difference gives a Long or Short to every LP position, further minimising the maximum loss the LP could incur.
+
+Let's explore where this exposure comes from, and how it minimises LP maximum loss.
+
+As an asset is purchased from a concentrated liquidity pool, the Real Reserves of the asset decrease until the price ceiling is reached, at which point the Real Reserves will be completely exhausted.
+
+<figure>
+  <center>
+    <img alt="Real Reserves" src={"/img/real-reserves.png"} style={{ maxWidth: "20rem" }} />
+    <figcaption><span>Real Reserves Curve</span><br/><sub>Source: <a href="https://uniswap.org/whitepaper-v3.pdf">Uniswap V3 Core</a></sub></figcaption>
+  </center>
+</figure>
+
+Applying this in the context of prePO:
+
+- When an LP deposits into a market when the price of $L$ is $<0.5$, they get more Long exposure from their $L/preCT$ position than they get Short exposure from their $S/preCT$ position
+- When an LP deposits into a market when the price of $L$ is $>0.5$, they get more Short exposure from their $S/preCT$ position than they get Long exposure from their $L/preCT$ position
+
+The resulting Long or Short exposure offsets losses in the scenario where the most volatile price swings occur.
+
+Let's consider an LP opening a position in a market with a Valuation Range of $20B - $80B and current valuation of $25B. 
+
+- The $L/preCT$ component of the LP position consists almost entirely of $L$ tokens
+- The $S/preCT$ component of the LP position consists almost entirely of $preCT$ tokens
+
+This LP position has Long exposure, which minimises their maximum loss.
+
+- If the $L$ price increases, the gains from their $L/preCT$ position will outweigh losses due to impermanent loss and the $S/preCT$ position
+- If the $L$ price decreases, the losses LP could realise from the $L/preCT$ position are minimal, due to the $L$ price already being close to the floor at the time of deposit
+
+### 3 Layers of Rewards
+
+LP losses are offset by [3 Layers of Rewards](/concepts/rewards).

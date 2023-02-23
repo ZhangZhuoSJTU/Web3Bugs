@@ -1,0 +1,494 @@
+{
+  "address": "0xD3453802c461992b5756c15290A8fAF316065B10",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newGlobalDepositCap",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_newAccountDepositCap",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "AccountDepositCapChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "hook",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "allowed",
+          "type": "bool"
+        }
+      ],
+      "name": "AllowedHooksChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "GlobalDepositCapChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "getAccountDepositCap",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getGlobalDepositAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getGlobalDepositCap",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        }
+      ],
+      "name": "getNetDeposit",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        }
+      ],
+      "name": "isDevAccount",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_hook",
+          "type": "address"
+        }
+      ],
+      "name": "isHookAllowed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_sender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "recordDeposit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_sender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "recordWithdrawal",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newAccountDepositCap",
+          "type": "uint256"
+        }
+      ],
+      "name": "setAccountDepositCap",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_hook",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_allowed",
+          "type": "bool"
+        }
+      ],
+      "name": "setAllowedHook",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "_dev",
+          "type": "bool"
+        }
+      ],
+      "name": "setDevAccount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newGlobalDepositAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "setGlobalDepositAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newGlobalDepositCap",
+          "type": "uint256"
+        }
+      ],
+      "name": "setGlobalDepositCap",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x52d978b2addcaa86cb02c2c346cb463f839fd5cb735deac8685f856d73fa0e06",
+  "receipt": {
+    "to": null,
+    "from": "0xEa83A49aa36d384483c46eCb74E1c59afAc10dc8",
+    "contractAddress": "0xD3453802c461992b5756c15290A8fAF316065B10",
+    "transactionIndex": 18,
+    "gasUsed": "862955",
+    "logsBloom": "0x00000000000000400000000000000000000000000000000000800000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000020",
+    "blockHash": "0xbccdb2ff9e1c9731631c17c1d99353a2f829b64cfa1978ba84c39d50dfc0c767",
+    "transactionHash": "0x52d978b2addcaa86cb02c2c346cb463f839fd5cb735deac8685f856d73fa0e06",
+    "logs": [
+      {
+        "transactionIndex": 18,
+        "blockNumber": 6825497,
+        "transactionHash": "0x52d978b2addcaa86cb02c2c346cb463f839fd5cb735deac8685f856d73fa0e06",
+        "address": "0xD3453802c461992b5756c15290A8fAF316065B10",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000ea83a49aa36d384483c46ecb74e1c59afac10dc8"
+        ],
+        "data": "0x",
+        "logIndex": 83,
+        "blockHash": "0xbccdb2ff9e1c9731631c17c1d99353a2f829b64cfa1978ba84c39d50dfc0c767"
+      }
+    ],
+    "blockNumber": 6825497,
+    "cumulativeGasUsed": "5407896",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": ["2000000000000000000000000", "100000000000000000000"],
+  "numDeployments": 3,
+  "solcInputHash": "2c218f6c78ae0f25065744b448c69d82",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newGlobalDepositCap\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_newAccountDepositCap\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"AccountDepositCapChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"hook\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"allowed\",\"type\":\"bool\"}],\"name\":\"AllowedHooksChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"GlobalDepositCapChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"getAccountDepositCap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGlobalDepositAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getGlobalDepositCap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"}],\"name\":\"getNetDeposit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"}],\"name\":\"isDevAccount\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_hook\",\"type\":\"address\"}],\"name\":\"isHookAllowed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"recordDeposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"recordWithdrawal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newAccountDepositCap\",\"type\":\"uint256\"}],\"name\":\"setAccountDepositCap\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_hook\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_allowed\",\"type\":\"bool\"}],\"name\":\"setAllowedHook\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"_dev\",\"type\":\"bool\"}],\"name\":\"setDevAccount\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newGlobalDepositAmount\",\"type\":\"uint256\"}],\"name\":\"setGlobalDepositAmount\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newGlobalDepositCap\",\"type\":\"uint256\"}],\"name\":\"setGlobalDepositCap\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"getAccountDepositCap()\":{\"details\":\"An account will not be allowed to deposit if their net deposits exceed `accountDepositCap`.\",\"returns\":{\"_0\":\"The cap on net Base Token deposits per user\"}},\"getGlobalDepositAmount()\":{\"returns\":{\"_0\":\"Net total of Base Token deposited.\"}},\"getGlobalDepositCap()\":{\"details\":\"Deposits are not allowed if `globalDepositAmount` exceeds the `globalDepositCap`.\",\"returns\":{\"_0\":\"Base Token amount\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"getGlobalDepositCap()\":{\"notice\":\"Gets the maximum Base Token amount that is allowed to be deposited (net of withdrawals).\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/core/CollateralDepositRecord.sol\":\"CollateralDepositRecord\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":99999},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.0 (access/Ownable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _transferOwnership(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n        _;\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xa1b27b3f44ff825974e5268e8f63ad3b03add5b464880d860fbb8cae043e17f7\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.0 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0x7736c187e6f1358c1ea9350a2a21aa8528dec1c2f43b374a9067465a3a51f5d3\",\"license\":\"MIT\"},\"contracts/core/CollateralDepositRecord.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\nimport \\\"./interfaces/ICollateralDepositRecord.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\npragma solidity =0.8.7;\\n\\ncontract CollateralDepositRecord is ICollateralDepositRecord, Ownable {\\n    uint256 private _globalDepositCap;\\n    uint256 private _globalDepositAmount;\\n    uint256 private _accountDepositCap;\\n    mapping(address => uint256) private _accountToNetDeposit;\\n    mapping(address => bool) private _allowedHooks;\\n    mapping(address => bool) private _devAccounts; // Testnet purposes only\\n\\n    modifier onlyAllowedHooks() {\\n        require(_allowedHooks[msg.sender], \\\"Caller not allowed\\\");\\n        _;\\n    }\\n\\n    constructor(uint256 _newGlobalDepositCap, uint256 _newAccountDepositCap) {\\n        _globalDepositCap = _newGlobalDepositCap;\\n        _accountDepositCap = _newAccountDepositCap;\\n    }\\n\\n    function recordDeposit(address _sender, uint256 _amount)\\n        external\\n        override\\n        onlyAllowedHooks\\n    {\\n        require(\\n            _amount + _globalDepositAmount <= _globalDepositCap,\\n            \\\"Global deposit cap exceeded\\\"\\n        );\\n        // Ignore account deposit cap for devs\\n        if (!_devAccounts[_sender]) {\\n            require(\\n                _amount + _accountToNetDeposit[_sender] <= _accountDepositCap,\\n                \\\"Account deposit cap exceeded\\\"\\n            );\\n            _accountToNetDeposit[_sender] += _amount;\\n        }\\n        _globalDepositAmount += _amount;\\n    }\\n\\n    function recordWithdrawal(address _sender, uint256 _amount)\\n        external\\n        override\\n        onlyAllowedHooks\\n    {\\n        if (_globalDepositAmount > _amount) {\\n            _globalDepositAmount -= _amount;\\n        } else {\\n            _globalDepositAmount = 0;\\n        }\\n        if (_accountToNetDeposit[_sender] > _amount) {\\n            _accountToNetDeposit[_sender] -= _amount;\\n        } else {\\n            _accountToNetDeposit[_sender] = 0;\\n        }\\n    }\\n\\n    // Testnet purposes only\\n    function setGlobalDepositAmount(uint256 _newGlobalDepositAmount)\\n        external\\n        onlyOwner\\n    {\\n        _globalDepositAmount = _newGlobalDepositAmount;\\n    }\\n\\n    function setGlobalDepositCap(uint256 _newGlobalDepositCap)\\n        external\\n        override\\n        onlyOwner\\n    {\\n        _globalDepositCap = _newGlobalDepositCap;\\n        emit GlobalDepositCapChanged(_globalDepositCap);\\n    }\\n\\n    function setAccountDepositCap(uint256 _newAccountDepositCap)\\n        external\\n        override\\n        onlyOwner\\n    {\\n        _accountDepositCap = _newAccountDepositCap;\\n        emit AccountDepositCapChanged(_newAccountDepositCap);\\n    }\\n\\n    function setAllowedHook(address _hook, bool _allowed)\\n        external\\n        override\\n        onlyOwner\\n    {\\n        _allowedHooks[_hook] = _allowed;\\n        emit AllowedHooksChanged(_hook, _allowed);\\n    }\\n\\n    // Testnet purposes only\\n    function setDevAccount(address _account, bool _dev) external onlyOwner {\\n        _devAccounts[_account] = _dev;\\n    }\\n\\n    function getGlobalDepositCap() external view override returns (uint256) {\\n        return _globalDepositCap;\\n    }\\n\\n    function getGlobalDepositAmount()\\n        external\\n        view\\n        override\\n        returns (uint256)\\n    {\\n        return _globalDepositAmount;\\n    }\\n\\n    function getAccountDepositCap() external view override returns (uint256) {\\n        return _accountDepositCap;\\n    }\\n\\n    function getNetDeposit(address _account)\\n        external\\n        view\\n        override\\n        returns (uint256)\\n    {\\n        return _accountToNetDeposit[_account];\\n    }\\n\\n    function isHookAllowed(address _hook)\\n        external\\n        view\\n        override\\n        returns (bool)\\n    {\\n        return _allowedHooks[_hook];\\n    }\\n\\n    // Testnet purposes only\\n    function isDevAccount(address _account) external view returns (bool) {\\n        return _devAccounts[_account];\\n    }\\n}\\n\",\"keccak256\":\"0xc0a8269673de4f649d194d49c5a9b3a862110682cefeff805ee4fee02dac6299\",\"license\":\"UNLICENSED\"},\"contracts/core/interfaces/ICollateralDepositRecord.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\n\\npragma solidity =0.8.7;\\n\\n/// @notice Enforces Collateral deposit caps.\\ninterface ICollateralDepositRecord {\\n    /// @dev Emitted via `setGlobalDepositCap()`.\\n    /// @param amount New global deposit cap\\n    event GlobalDepositCapChanged(uint256 amount);\\n\\n    /// @dev Emitted via `setAccountDepositCap()`.\\n    /// @param amount New account deposit cap\\n    event AccountDepositCapChanged(uint256 amount);\\n\\n    /// @dev Emitted via `setAllowedHook()`.\\n    /// @param hook Hook with changed permissions\\n    /// @param allowed Whether the hook is allowed\\n    event AllowedHooksChanged(address hook, bool allowed);\\n\\n    /**\\n     * @dev This function will be called by a Collateral hook before the fee\\n     * is subtracted from the initial `amount` passed in.\\n     *\\n     * Only callable by allowed hooks.\\n     *\\n     * Reverts if the incoming deposit brings either total over their\\n     * respective caps.\\n     *\\n     * `finalAmount` is added to both the global and account-specific\\n     * deposit totals.\\n     * @param sender The account making the Collateral deposit\\n     * @param finalAmount The amount actually deposited by the user\\n     */\\n    function recordDeposit(address sender, uint256 finalAmount) external;\\n\\n    /**\\n     * @notice Called by a Collateral hook before the fee is subtracted from\\n     * the amount withdrawn from the Strategy.\\n     * @dev `finalAmount` is subtracted from both the global and\\n     * account-specific deposit totals.\\n     *\\n     * Only callable by allowed hooks.\\n     * @param sender The account making the Collateral withdrawal\\n     * @param finalAmount The amount actually withdrawn by the user\\n     */\\n    function recordWithdrawal(address sender, uint256 finalAmount) external;\\n\\n    /**\\n     * @notice Sets the global cap on assets backing Collateral in circulation.\\n     * @dev Only callable by owner().\\n     * @param newGlobalDepositCap The new global deposit cap\\n     */\\n    function setGlobalDepositCap(uint256 newGlobalDepositCap) external;\\n\\n    /**\\n     * @notice Sets the cap on net Base Token deposits per user.\\n     * @dev Only callable by owner().\\n     * @param newAccountDepositCap The new account deposit cap\\n     */\\n    function setAccountDepositCap(uint256 newAccountDepositCap) external;\\n\\n    /**\\n     * @notice Sets if a contract is allowed to record deposits\\n     * and withdrawals.\\n     * @dev Only callable by owner().\\n     * @param hook The contract address\\n     * @param allowed Whether or not the contract will be allowed\\n     */\\n    function setAllowedHook(address hook, bool allowed) external;\\n\\n    /**\\n     * @notice Gets the maximum Base Token amount that is allowed to be\\n     * deposited (net of withdrawals).\\n     * @dev Deposits are not allowed if `globalDepositAmount` exceeds\\n     * the `globalDepositCap`.\\n     * @return Base Token amount\\n     */\\n    function getGlobalDepositCap() external view returns (uint256);\\n\\n    /// @return Net total of Base Token deposited.\\n    function getGlobalDepositAmount() external view returns (uint256);\\n\\n    /**\\n     * @dev An account will not be allowed to deposit if their net deposits\\n     * exceed `accountDepositCap`.\\n     * @return The cap on net Base Token deposits per user\\n     */\\n    function getAccountDepositCap() external view returns (uint256);\\n\\n    /**\\n     * @param account The account to retrieve net deposits for\\n     * @return The net total amount of Base Token deposited by a user\\n     */\\n    function getNetDeposit(address account) external view returns (uint256);\\n\\n    /**\\n     * @notice Returns whether the contract is allowed to record deposits and\\n     * withdrawals.\\n     * @param hook The contract to retrieve allowed status for\\n     * @return Whether the contract is allowed\\n     */\\n    function isHookAllowed(address hook) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x10e7611ffa5de7b598878a67fac8ddecfe9625302d984186263d17aa09e42044\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50604051610e3c380380610e3c83398101604081905261002f91610096565b61003833610046565b6001919091556003556100ba565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b600080604083850312156100a957600080fd5b505080516020909101519092909150565b610d73806100c96000396000f3fe608060405234801561001057600080fd5b50600436106101005760003560e01c806393f52c8511610097578063d4ddb32011610066578063d4ddb32014610266578063ee35744414610279578063f2fde38b1461028c578063fa17bb751461029f57600080fd5b806393f52c85146101ff578063b3858a9814610212578063bb20b9181461021a578063ccb12bde1461022d57600080fd5b806365e7e10c116100d357806365e7e10c1461017e578063715018a6146101c75780637abf1d76146101cf5780638da5cb5b146101d757600080fd5b80630c99bbd1146101055780631b905aea1461011a5780631e578bae1461016357806332fc07b414610176575b600080fd5b610118610113366004610cc6565b6102b2565b005b610150610128366004610c3e565b73ffffffffffffffffffffffffffffffffffffffff1660009081526004602052604090205490565b6040519081526020015b60405180910390f35b610118610171366004610c9c565b610374565b600354610150565b6101b761018c366004610c3e565b73ffffffffffffffffffffffffffffffffffffffff1660009081526006602052604090205460ff1690565b604051901515815260200161015a565b610118610583565b600254610150565b60005460405173ffffffffffffffffffffffffffffffffffffffff909116815260200161015a565b61011861020d366004610cc6565b610610565b600154610150565b610118610228366004610cc6565b6106c6565b6101b761023b366004610c3e565b73ffffffffffffffffffffffffffffffffffffffff1660009081526005602052604090205460ff1690565b610118610274366004610c60565b61074c565b610118610287366004610c60565b610823565b61011861029a366004610c3e565b610932565b6101186102ad366004610c9c565b610a62565b60005473ffffffffffffffffffffffffffffffffffffffff163314610338576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657260448201526064015b60405180910390fd5b60038190556040518181527fd7ae35ba7d196ed3a0d7303e6300e0d9457d63a8d8b93728a1ca1cde14bbd175906020015b60405180910390a150565b3360009081526005602052604090205460ff166103ed576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601260248201527f43616c6c6572206e6f7420616c6c6f7765640000000000000000000000000000604482015260640161032f565b6001546002546103fd9083610cdf565b1115610465576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601b60248201527f476c6f62616c206465706f736974206361702065786365656465640000000000604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff821660009081526006602052604090205460ff166105685760035473ffffffffffffffffffffffffffffffffffffffff83166000908152600460205260409020546104c59083610cdf565b111561052d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601c60248201527f4163636f756e74206465706f7369742063617020657863656564656400000000604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff821660009081526004602052604081208054839290610562908490610cdf565b90915550505b806002600082825461057a9190610cdf565b90915550505050565b60005473ffffffffffffffffffffffffffffffffffffffff163314610604576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b61060e6000610ba0565b565b60005473ffffffffffffffffffffffffffffffffffffffff163314610691576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b60018190556040518181527f959b4684feaa0e36db1208206eb91af0b278e7beb2056b22f1b39e3fb50f22b990602001610369565b60005473ffffffffffffffffffffffffffffffffffffffff163314610747576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b600255565b60005473ffffffffffffffffffffffffffffffffffffffff1633146107cd576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff91909116600090815260066020526040902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0016911515919091179055565b60005473ffffffffffffffffffffffffffffffffffffffff1633146108a4576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff821660008181526005602090815260409182902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00168515159081179091558251938452908301527f6b86468637b2f87cd5fc78216769ddeb8375e2c857e1f0a68a91a2d1ef85be1a910160405180910390a15050565b60005473ffffffffffffffffffffffffffffffffffffffff1633146109b3576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff8116610a56576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015260840161032f565b610a5f81610ba0565b50565b3360009081526005602052604090205460ff16610adb576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601260248201527f43616c6c6572206e6f7420616c6c6f7765640000000000000000000000000000604482015260640161032f565b806002541115610b02578060026000828254610af79190610cf7565b90915550610b089050565b60006002555b73ffffffffffffffffffffffffffffffffffffffff8216600090815260046020526040902054811015610b755773ffffffffffffffffffffffffffffffffffffffff821660009081526004602052604081208054839290610b6a908490610cf7565b90915550610b9c9050565b73ffffffffffffffffffffffffffffffffffffffff82166000908152600460205260408120555b5050565b6000805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b803573ffffffffffffffffffffffffffffffffffffffff81168114610c3957600080fd5b919050565b600060208284031215610c5057600080fd5b610c5982610c15565b9392505050565b60008060408385031215610c7357600080fd5b610c7c83610c15565b915060208301358015158114610c9157600080fd5b809150509250929050565b60008060408385031215610caf57600080fd5b610cb883610c15565b946020939093013593505050565b600060208284031215610cd857600080fd5b5035919050565b60008219821115610cf257610cf2610d0e565b500190565b600082821015610d0957610d09610d0e565b500390565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fdfea2646970667358221220105e741f5d4a19e988ac2be7f1ae9b2411e7ecf6720ac37de3aaf9a6547e542064736f6c63430008070033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101005760003560e01c806393f52c8511610097578063d4ddb32011610066578063d4ddb32014610266578063ee35744414610279578063f2fde38b1461028c578063fa17bb751461029f57600080fd5b806393f52c85146101ff578063b3858a9814610212578063bb20b9181461021a578063ccb12bde1461022d57600080fd5b806365e7e10c116100d357806365e7e10c1461017e578063715018a6146101c75780637abf1d76146101cf5780638da5cb5b146101d757600080fd5b80630c99bbd1146101055780631b905aea1461011a5780631e578bae1461016357806332fc07b414610176575b600080fd5b610118610113366004610cc6565b6102b2565b005b610150610128366004610c3e565b73ffffffffffffffffffffffffffffffffffffffff1660009081526004602052604090205490565b6040519081526020015b60405180910390f35b610118610171366004610c9c565b610374565b600354610150565b6101b761018c366004610c3e565b73ffffffffffffffffffffffffffffffffffffffff1660009081526006602052604090205460ff1690565b604051901515815260200161015a565b610118610583565b600254610150565b60005460405173ffffffffffffffffffffffffffffffffffffffff909116815260200161015a565b61011861020d366004610cc6565b610610565b600154610150565b610118610228366004610cc6565b6106c6565b6101b761023b366004610c3e565b73ffffffffffffffffffffffffffffffffffffffff1660009081526005602052604090205460ff1690565b610118610274366004610c60565b61074c565b610118610287366004610c60565b610823565b61011861029a366004610c3e565b610932565b6101186102ad366004610c9c565b610a62565b60005473ffffffffffffffffffffffffffffffffffffffff163314610338576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e657260448201526064015b60405180910390fd5b60038190556040518181527fd7ae35ba7d196ed3a0d7303e6300e0d9457d63a8d8b93728a1ca1cde14bbd175906020015b60405180910390a150565b3360009081526005602052604090205460ff166103ed576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601260248201527f43616c6c6572206e6f7420616c6c6f7765640000000000000000000000000000604482015260640161032f565b6001546002546103fd9083610cdf565b1115610465576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601b60248201527f476c6f62616c206465706f736974206361702065786365656465640000000000604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff821660009081526006602052604090205460ff166105685760035473ffffffffffffffffffffffffffffffffffffffff83166000908152600460205260409020546104c59083610cdf565b111561052d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601c60248201527f4163636f756e74206465706f7369742063617020657863656564656400000000604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff821660009081526004602052604081208054839290610562908490610cdf565b90915550505b806002600082825461057a9190610cdf565b90915550505050565b60005473ffffffffffffffffffffffffffffffffffffffff163314610604576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b61060e6000610ba0565b565b60005473ffffffffffffffffffffffffffffffffffffffff163314610691576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b60018190556040518181527f959b4684feaa0e36db1208206eb91af0b278e7beb2056b22f1b39e3fb50f22b990602001610369565b60005473ffffffffffffffffffffffffffffffffffffffff163314610747576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b600255565b60005473ffffffffffffffffffffffffffffffffffffffff1633146107cd576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff91909116600090815260066020526040902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0016911515919091179055565b60005473ffffffffffffffffffffffffffffffffffffffff1633146108a4576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff821660008181526005602090815260409182902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00168515159081179091558251938452908301527f6b86468637b2f87cd5fc78216769ddeb8375e2c857e1f0a68a91a2d1ef85be1a910160405180910390a15050565b60005473ffffffffffffffffffffffffffffffffffffffff1633146109b3576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161032f565b73ffffffffffffffffffffffffffffffffffffffff8116610a56576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201527f6464726573730000000000000000000000000000000000000000000000000000606482015260840161032f565b610a5f81610ba0565b50565b3360009081526005602052604090205460ff16610adb576040517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601260248201527f43616c6c6572206e6f7420616c6c6f7765640000000000000000000000000000604482015260640161032f565b806002541115610b02578060026000828254610af79190610cf7565b90915550610b089050565b60006002555b73ffffffffffffffffffffffffffffffffffffffff8216600090815260046020526040902054811015610b755773ffffffffffffffffffffffffffffffffffffffff821660009081526004602052604081208054839290610b6a908490610cf7565b90915550610b9c9050565b73ffffffffffffffffffffffffffffffffffffffff82166000908152600460205260408120555b5050565b6000805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b803573ffffffffffffffffffffffffffffffffffffffff81168114610c3957600080fd5b919050565b600060208284031215610c5057600080fd5b610c5982610c15565b9392505050565b60008060408385031215610c7357600080fd5b610c7c83610c15565b915060208301358015158114610c9157600080fd5b809150509250929050565b60008060408385031215610caf57600080fd5b610cb883610c15565b946020939093013593505050565b600060208284031215610cd857600080fd5b5035919050565b60008219821115610cf257610cf2610d0e565b500190565b600082821015610d0957610d09610d0e565b500390565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fdfea2646970667358221220105e741f5d4a19e988ac2be7f1ae9b2411e7ecf6720ac37de3aaf9a6547e542064736f6c63430008070033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "getAccountDepositCap()": {
+        "details": "An account will not be allowed to deposit if their net deposits exceed `accountDepositCap`.",
+        "returns": {
+          "_0": "The cap on net Base Token deposits per user"
+        }
+      },
+      "getGlobalDepositAmount()": {
+        "returns": {
+          "_0": "Net total of Base Token deposited."
+        }
+      },
+      "getGlobalDepositCap()": {
+        "details": "Deposits are not allowed if `globalDepositAmount` exceeds the `globalDepositCap`.",
+        "returns": {
+          "_0": "Base Token amount"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "getGlobalDepositCap()": {
+        "notice": "Gets the maximum Base Token amount that is allowed to be deposited (net of withdrawals)."
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 964,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 4207,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_globalDepositCap",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 4209,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_globalDepositAmount",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 4211,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_accountDepositCap",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 4215,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_accountToNetDeposit",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_address,t_uint256)"
+      },
+      {
+        "astId": 4219,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_allowedHooks",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_mapping(t_address,t_bool)"
+      },
+      {
+        "astId": 4223,
+        "contract": "contracts/core/CollateralDepositRecord.sol:CollateralDepositRecord",
+        "label": "_devAccounts",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_mapping(t_address,t_bool)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

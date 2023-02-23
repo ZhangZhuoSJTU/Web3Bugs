@@ -1,0 +1,13 @@
+{
+  "github": {
+    "silent": true
+  },
+  "buildCommand": "cd ../../../ && npx turbo run build --filter=docs",
+  "ignoreCommand": "[ \"$VERCEL_ENV\" != production ] || npx turbo-ignore",
+  "rewrites": [
+    {
+      "source": "/bear.js",
+      "destination": "https://cdn.panelbear.com/analytics.js"
+    }
+  ]
+}

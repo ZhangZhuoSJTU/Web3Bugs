@@ -1,0 +1,182 @@
+type BaseToken @entity {
+  "token address"
+  id: ID!
+  "paired collateral token"
+  collateral: CollateralToken!
+  "ERC20 properties"
+  token: Token!
+}
+
+type CollateralToken @entity {
+  "token address"
+  id: ID!
+  "whether collateral token is allowed"
+  allowed: Boolean!
+  "address of base token"
+  baseToken: BaseToken!
+  "all pools this token is in"
+  pools: [Pool!]! @derivedFrom(field: "collateralToken")
+  "ERC20 properties"
+  token: Token!
+  "treasury address where fees are sent to"
+  treasuryAddress: String!
+}
+
+type HistoricalEvent @entity {
+  "{HASH}-{OWNER_ADDRESS}"
+  id: ID!
+  "amount of tokens"
+  amount: BigDecimal!
+  "USD value to display"
+  amountUSD: BigDecimal!
+  "block number"
+  createdAtBlockNumber: BigInt!
+  "when transaction was made"
+  createdAtTimestamp: BigInt!
+  "potential event"
+  event: String!
+  "hash of the transaction"
+  hash: String!
+  "owner address"
+  ownerAddress: String!
+  "collateral token if this is deposit or withdraw"
+  collateralToken: CollateralToken
+  "long/short token if this is open or close"
+  longShortToken: LongShortToken
+  "number of transactions related to this hash for the same owner"
+  txCount: BigInt!
+  "all transactions with same hash that belongs to the same owner"
+  transactions: [Transaction!]!
+}
+
+type LongShortToken @entity {
+  "token address"
+  id: ID!
+  "default pool preCT/currentToken as trading pair"
+  defaultPool: Pool @derivedFrom(field: "longShortToken")
+  "the market this token is traded for"
+  market: Market!
+  "all positions in this token"
+  positions: [Position!]! @derivedFrom(field: "longShortToken")
+  "all pools this token is in"
+  pools: [Pool!]! @derivedFrom(field: "longShortToken")
+  "price in USD"
+  priceUSD: BigDecimal!
+  "ERC20 properties"
+  token: Token!
+}
+
+type Market @entity {
+  "market contract address"
+  id: ID!
+  "long token"
+  longToken: LongShortToken!
+  "short token"
+  shortToken: LongShortToken!
+  "floor long price"
+  floorLongPrice: BigInt!
+  "ceiling long price"
+  ceilingLongPrice: BigInt!
+  "floor valuation"
+  floorValuation: BigInt!
+  "ceiling valuation"
+  ceilingValuation: BigInt!
+  "minting fee"
+  mintingFee: BigInt!
+  "redemption fee"
+  redemptionFee: BigInt!
+  "market expiry time"
+  expiryTime: BigInt!
+  "when market was created"
+  createdAtTimestamp: BigInt!
+  "at which block was market created"
+  createdAtBlockNumber: BigInt!
+}
+
+type Pool @entity {
+  "pool contract address"
+  id: ID!
+  "address of token0"
+  token0: Token!
+  "address of token1"
+  token1: Token!
+  "long/short token of this pool"
+  longShortToken: LongShortToken!
+  "collateral token of this pool"
+  collateralToken: CollateralToken!
+  "0 or 1"
+  collateralTokenPosition: BigInt!
+  "token0 per token1"
+  token0Price: BigDecimal!
+  "token1 per token0"
+  token1Price: BigDecimal!
+  "The sqrt(price) of the pool after the swap, as a Q64.96"
+  sqrtPriceX96: BigInt!
+  "pool creation time"
+  createdAtTimestamp: BigInt!
+  "at which block was pool created"
+  createdAtBlockNumber: BigInt!
+  "transactions related to this pool"
+  transactions: [Transaction!]! @derivedFrom(field: "pool")
+}
+
+type Position @entity {
+  "concat of user address and token address"
+  id: ID!
+  "average cost per token - for PNL calculation"
+  costBasis: BigDecimal!
+  "address who owned this position"
+  ownerAddress: String!
+  "token of which this position is tracking"
+  longShortToken: LongShortToken!
+}
+
+type Token @entity {
+  "address of token contract"
+  id: ID!
+  "decimals of token"
+  decimals: BigInt!
+  "name of token"
+  name: String!
+  "symbol of token"
+  symbol: String!
+  "e.g. Long, Short, Collateral, CollateralBase"
+  type: String!
+}
+
+type Transaction @entity {
+  "template: {ACTION}-{OWNER_ADDRESS}-{TRANSACTION_HASH}-{LOG_INDEX}"
+  id: ID!
+  "actions we recognized (e.g. send, open, close, receive)"
+  action: String!
+  "token amount (for Pool related events, this is the token amount user receives)"
+  amount: BigDecimal!
+  "token amount in USD value (for Pool related events, this is the amount user paid (input amount) in USD value)"
+  amountUSD: BigDecimal!
+  "the contract that emitted this event"
+  contractAddress: String!
+  "block number"
+  createdAtBlockNumber: BigInt!
+  "when transaction was made"
+  createdAtTimestamp: BigInt!
+  "type of event (e.g. Swap, Transfer)"
+  event: String!
+  "transaction hash"
+  hash: String!
+  "{HASH}-{OWNER_ADDRESS}"
+  historicalEvent: HistoricalEvent
+  "owner"
+  ownerAddress: String!
+  "recipent address"
+  recipientAddress: String!
+  "sender address"
+  senderAddress: String!
+  "[Base token's transfer] base token entity if transaction is transfer of base tokens"
+  baseToken: BaseToken
+  "[Collateral token's transfer] collateral token entity if transaction is transfer of collateral tokens"
+  collateralToken: CollateralToken
+  "[Long/short token's transfer] long/short token entity if transaction is transfer of long short token"
+  longShortToken: LongShortToken
+  "[prePO related Pool interaction] pool if transaction is swap"
+  pool: Pool
+}

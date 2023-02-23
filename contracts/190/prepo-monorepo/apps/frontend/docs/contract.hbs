@@ -1,0 +1,58 @@
+## Overview
+
+{{{natspec.userdoc}}}
+
+{{{natspec.devdoc}}}
+
+{{#if ownFunctions}}
+## Functions
+{{/if}}
+{{#ownFunctions}}
+### {{name}}
+```solidity
+  function {{name}}(
+    {{#natspec.params}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{/natspec.params}}
+  ) {{visibility}}{{#if outputs}} returns ({{outputs}}){{/if}}
+```
+{{#if natspec.userdoc}}{{natspec.userdoc}}{{/if}}
+{{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
+{{#if natspec.params}}
+#### Parameters:
+| Name | Type | Description                                                          |
+| :--- | :--- | :------------------------------------------------------------------- |
+{{#natspec.params}}
+|{{param}} | `{{#lookup ../args.types @index}}{{/lookup}}` | {{ description }}{{/natspec.params}}{{/if}}
+{{#if natspec.returns }}
+{{#if (gt this.astNode.returnParameters.length 1) }}
+#### Return Values:
+| Name                           |  Description                                                                  |
+| :----------------------------- |  :--------------------------------------------------------------------------- |
+{{#natspec.returns}}
+|{{param}}| {{{description}}}
+{{/natspec.returns}}
+{{/if}}
+{{/if}}
+{{/ownFunctions}}
+{{#if ownEvents}}
+## Events
+{{/if}}
+{{#ownEvents}}
+### {{name}}
+```solidity
+  event {{name}}(
+    {{#natspec.params}}
+    {{#lookup ../args.types @index}}{{/lookup}} {{param}}{{#if @last}}{{else}},{{/if}}
+    {{/natspec.params}}
+  )
+```
+{{#if natspec.userdoc}}{{natspec.userdoc}}{{/if}}
+{{#if natspec.devdoc}}{{natspec.devdoc}}{{/if}}
+{{#if natspec.params}}
+#### Parameters:
+| Name                           | Type          | Description                                    |
+| :----------------------------- | :------------ | :--------------------------------------------- |
+{{#natspec.params}}
+|{{param}}| `{{#lookup ../args.types @index}}{{/lookup}}` | {{{description}}}{{/natspec.params}}{{/if}}
+{{/ownEvents}}

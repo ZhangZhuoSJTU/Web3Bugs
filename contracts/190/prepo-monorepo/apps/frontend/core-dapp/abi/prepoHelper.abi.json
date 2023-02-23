@@ -1,0 +1,183 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newBaseToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newCollateral",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newMarketFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newRouter",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newPoolFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newPoolManager",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPrePOMarket",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "_baseToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_bento",
+    "outputs": [
+      {
+        "internalType": "contract IBentoBoxMinimal",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_collateral",
+    "outputs": [
+      {
+        "internalType": "contract ICollateral",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_marketFactory",
+    "outputs": [
+      {
+        "internalType": "contract IPrePOMarketFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_poolFactory",
+    "outputs": [
+      {
+        "internalType": "contract IPoolDeployer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_poolManager",
+    "outputs": [
+      {
+        "internalType": "contract IExtendedCLPManager",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_router",
+    "outputs": [
+      {
+        "internalType": "contract ITridentRouterExtended",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_keepLong",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_baseTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collateralAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minPositionFromSwap",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_longPoolIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_shortPoolIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_marketHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "depositMintAndSwap",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

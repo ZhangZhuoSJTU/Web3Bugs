@@ -1,0 +1,87 @@
+
+# Overview
+
+<center>
+  <div style={{'maxWidth': '40rem'}}>
+    <figure>
+      <img alt="prePO Architecture" src="/img/architecture_diagram.png" />
+      <figcaption>prePO Architecture</figcaption>
+    </figure>
+  </div>
+</center>
+
+## Collateral
+
+Used for minting and redeeming prePO Collateral tokens. A 
+Collateral token is a share of a yield-bearing vault, its Base Token value 
+varying based on the current value of the vault's assets.
+
+> [**Collateral Reference**](/developer/core-contracts/collateral)
+
+## Hook
+
+Used for adding additional checks and/or data recording when 
+interacting with the Collateral vault.
+
+> [**StrategyController Reference**](/developer/core-contracts/hook)
+
+## CollateralDepositRecord
+
+Enforces Collateral deposit caps.
+
+> [**CollateralDepositRecord Reference**](/developer/core-contracts/CollateralDepositRecord)
+
+## Strategy
+
+Strategy that deploys Base Token to earn yield denominated in Base 
+Token.
+
+> [**Strategy Reference**](/developer/core-contracts/strategy)
+
+## StrategyController
+
+Strategy Controller acts as an intermediary between the Strategy and
+the PrePO Collateral contract. 
+
+The Collateral contract should never interact
+with the Strategy directly and only perform operations via the 
+Strategy Controller.
+
+> [**StrategyController Reference**](/developer/core-contracts/strategycontroller)
+
+## PrePOMarket
+
+Users can mint/redeem long/short positions on a specific asset in 
+exchange for Collateral tokens.
+
+
+Position settlement prices are bound by a floor and ceiling set 
+during market initialization. 
+
+The value of a Long and Short token should always equal 1 Collateral.
+
+> [**PrePOMarket Reference**](/developer/core-contracts/prepomarket)
+
+## PrePOMarketFactory
+
+Deploys a PrePOMarket and two LongShortToken contracts to serve as 
+the token pair.
+
+> [**PrePOMarketFactory Reference**](/developer/core-contracts/prepomarketfactory)
+
+
+## LongShortToken
+
+LongShortToken contract representing PrePOMarket positions. 
+
+The token can represent either a Long or Short position for the 
+PrePOMarket it belongs to.
+
+> [**LongShortToken Reference**](/developer/core-contracts/longshorttoken)
+
+## AccountAccessController
+
+The Access Controller is used for allowing/blocking access to
+contract functions.
+
+> [**AccountAccessController Reference**](/developer/core-contracts/AccountAccessController)

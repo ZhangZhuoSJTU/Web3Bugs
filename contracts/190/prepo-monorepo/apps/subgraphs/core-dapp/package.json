@@ -1,0 +1,29 @@
+{
+  "name": "core-dapp-subgraph",
+  "version": "1.0.0",
+  "description": "prePO analytical and historical data with subgraph",
+  "scripts": {
+    "build": "graph build",
+    "deploy:testnet": "graph deploy --product hosted-service chrisling-dev/prepo-goerli",
+    "deploy:testnet-staging": "graph deploy --product hosted-service chrisling-dev/prepo-goerli-staging",
+    "codegen": "graph codegen --output-dir src/generated/types",
+    "gql:compile": "get-graphql-schema https://api.thegraph.com/subgraphs/name/chrisling-dev/prepo-goerli > src/generated/schema.gql",
+    "gql:compile-staging": "get-graphql-schema https://api.thegraph.com/subgraphs/name/chrisling-dev/prepo-goerli-staging > src/generated/schema-staging.gql",
+    "postinstall": "yarn codegen"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "0.30.4",
+    "config": "*",
+    "get-graphql-schema": "2.1.2",
+    "tsconfig": "*",
+    "typescript": "4.7.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "yarn": "1.x"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-ts": "0.27.0",
+    "prepo-constants": "*"
+  }
+}

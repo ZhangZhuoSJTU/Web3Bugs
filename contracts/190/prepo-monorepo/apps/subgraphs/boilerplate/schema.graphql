@@ -1,0 +1,33 @@
+type Token @entity {
+  # token address
+  id: ID!
+  # the market this token is traded for
+  market: Market!
+}
+
+type Market @entity {
+  # market contract address
+  id: ID!
+  # long token
+  longToken: Token!
+  # short token
+  shortToken: Token!
+  # floor long price
+  floorLongPrice: BigInt!
+  # ceiling long price
+  ceilingLongPrice: BigInt!
+  # floor valuation
+  floorValuation: BigInt!
+  # ceiling valuation
+  ceilingValuation: BigInt!
+  # minting fee
+  mintingFee: BigInt!
+  # redemption fee
+  redemptionFee: BigInt!
+  # market expiry time
+  expiryTime: BigInt!
+  # when market was created
+  createdAtTimestamp: BigInt!
+  # at which block was market created
+  createdAtBlockNumber: BigInt!
+}

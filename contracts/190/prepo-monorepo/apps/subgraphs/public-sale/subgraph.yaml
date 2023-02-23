@@ -1,0 +1,28 @@
+specVersion: 0.0.5
+description: PPO Token Public Sale Subgraph
+repository: https://github.com/prepo-io/prepo-monorepo
+schema:
+  file: ./schema.graphql
+features:
+  - nonFatalErrors
+dataSources:
+  - kind: ethereum/contract
+    name: MiniSales
+    network: 'arbitrum-one'
+    source:
+      address: '0x7dD121eA83aFfc19457A12fcCbd3B49dcCF9f128'
+      abi: MiniSales
+      startBlock: 28785919
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mappings/purchase.ts
+      entities:
+        - Market
+      abis:
+        - name: MiniSales
+          file: ./abis/MiniSales.json
+      eventHandlers:
+        - event: Purchase(indexed address,indexed address,uint256,uint256)
+          handler: handlePurchase

@@ -1,0 +1,27 @@
+specVersion: 0.0.5
+description: USDC balances on Arbitrum
+repository: https://github.com/prepo-io/prepo-monorepo
+schema:
+  file: ./schema.graphql
+features:
+  - nonFatalErrors
+dataSources:
+  - kind: ethereum/contract
+    name: USDC
+    network: 'arbitrum-one'
+    source:
+      address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8'
+      abi: ERC20
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mappings/usdc.ts
+      entities:
+        - USDC
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleUSDCTransfer

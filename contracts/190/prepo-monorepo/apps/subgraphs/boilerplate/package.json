@@ -1,0 +1,26 @@
+{
+  "name": "subgraph-boilerplate",
+  "version": "1.0.0",
+  "description": "prePO subgraph boilerplate",
+  "scripts": {
+    "build": "graph build",
+    "deploy:testnet": "graph deploy --product hosted-service chrisling-dev/prepo-goerli",
+    "codegen": "graph codegen --output-dir src/generated/types",
+    "gql:compile": "get-graphql-schema https://api.thegraph.com/subgraphs/name/chrisling-dev/prepo-goerli > src/generated/schema.gql",
+    "postinstall": "yarn codegen"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "0.30.4",
+    "config": "*",
+    "get-graphql-schema": "2.1.2",
+    "tsconfig": "*",
+    "typescript": "4.7.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "yarn": "1.x"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-ts": "0.27.0"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "extends": "tsconfig/frontend.json",
+  "include": ["vite-env.d.ts", "styled.d.ts", "src/**/*", "vite.config.ts"],
+  "exclude": ["node_modules", ".next", ".turbo"],
+  "compilerOptions": {
+    "plugins": [
+      {
+        "transform": "typescript-plugin-styled-components",
+        "type": "config",
+        "minify": true
+      }
+    ]
+  }
+}

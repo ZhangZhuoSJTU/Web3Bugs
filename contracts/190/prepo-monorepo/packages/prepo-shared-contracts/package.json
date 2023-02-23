@@ -1,0 +1,45 @@
+{
+  "name": "prepo-shared-contracts",
+  "version": "0.0.0",
+  "description": "prePO Shared smart contracts",
+  "files": ["contracts/*.sol"],
+  "scripts": {
+    "clean": "rm -rf './frontend/src/hardhat' && npx hardhat clean",
+    "sl": "yarn prettier --write 'contracts/**/*.sol'",
+    "sh": "npx solhint -f table contracts/**/*.sol",
+    "size": "npx hardhat size-contracts",
+    "prec": "yarn typechain && yarn clean && yarn sl",
+    "c": "yarn compile",
+    "compile": "yarn typechain && npx hardhat compile",
+    "l": "yarn prettier --write './test/**/*.ts' './hardhat.config.ts'",
+    "pret": "yarn c && yarn l",
+    "t": "npx hardhat test",
+    "test:ci": "yarn c && npx hardhat test",
+    "typechain": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat typechain", 
+    "pret:coverage": "yarn c && yarn l",
+    "t:coverage": "npx hardhat coverage",
+    "lint": "eslint . --max-warnings 0 --ext ts,tsx",
+    "server": "npx hardhat node --watch",
+    "deploy": "npx hardhat --network hardhat deploy",
+    "deploy:local": "npx hardhat --network localhost deploy",
+    "deploy:ropsten": "npx hardhat --network ropsten deploy"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "4.7.3",
+    "@openzeppelin/contracts-upgradeable": "4.7.3",
+    "@openzeppelin/hardhat-upgrades": "1.17.0",
+    "@typechain/ethers-v5": "10.0.0",
+    "@typechain/hardhat": "6.0.0",
+    "chai": "4.3.4",
+    "dotenv": "10.0.0",
+    "keccak256": "1.0.3",
+    "merkletreejs": "0.2.24",
+    "prepo-constants": "*",
+    "prepo-hardhat": "*"
+  },
+  "devDependencies": {
+    "config": "*",
+    "tsconfig": "*",
+    "solhint-config-prepo": "*"
+  }
+}

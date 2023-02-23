@@ -1,0 +1,333 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Sequence Diagrams
+
+## Deposit
+
+<center>
+  <figure>
+    <img alt="Deposit" src={useBaseUrl("/img/sequence-diagrams/deposit.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Deposit
+
+actor User
+participant Collateral\n(preCT) as Collateral
+participant DepositHook
+participant CollateralDepositRecord
+participant AccountAccessController
+participant StrategyController
+participant Strategy
+participant "Yield Farm\n(external)" as YieldFarm
+
+User->Collateral: deposit()
+activate Collateral
+Collateral->DepositHook: hook()
+activate DepositHook
+DepositHook->CollateralDepositRecord: recordDeposit()
+DepositHook->AccountAccessController: isAccountAllowed()
+activate AccountAccessController
+AccountAccessController-->DepositHook: accountAllowed
+deactivate AccountAccessController
+DepositHook->AccountAccessController: isAccountBlocked()
+activate AccountAccessController
+AccountAccessController-->DepositHook: accountBlocked
+deactivate AccountAccessController
+alt !accountAllowed || accountBlocked
+    DepositHook-->User: Revert
+end
+deactivate DepositHook
+Collateral->StrategyController: deposit()
+activate StrategyController
+StrategyController->Strategy: deposit()
+activate Strategy
+Strategy->YieldFarm: Deposit Base Token
+activate YieldFarm
+YieldFarm-->Strategy: Yield Token
+deactivate YieldFarm
+deactivate Strategy
+deactivate StrategyController
+Collateral->StrategyController: totalValue()
+activate StrategyController
+StrategyController->Strategy: totalValue()
+activate Strategy
+Strategy-->StrategyController: totalValue
+deactivate Strategy
+StrategyController-->Collateral: totalValue
+deactivate StrategyController
+Collateral->Collateral: Mint preCT
+Collateral-->User: preCT
+deactivate Collateral
+'''
+</div>
+
+## Withdraw
+
+<center>
+  <figure>
+    <img alt="Withdraw" src={useBaseUrl("/img/sequence-diagrams/withdraw.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Withdraw
+
+actor User
+participant Collateral\n(preCT) as Collateral
+participant WithdrawHook
+participant CollateralDepositRecord
+participant StrategyController
+participant Strategy
+participant "Yield Farm\n(external)" as YieldFarm
+
+User->Collateral: initiateWithdrawal()
+note over User: Wait at least one block\nbut before `_delayedWithdrawalExpiry`
+User->Collateral: withdraw()
+activate Collateral
+Collateral->WithdrawHook: hook()
+WithdrawHook->CollateralDepositRecord: recordWithdrawal()
+Collateral->StrategyController: withdraw()
+activate StrategyController
+StrategyController->Strategy: withdraw()
+activate Strategy
+Strategy->YieldFarm: Redeem Yield Token
+activate YieldFarm
+YieldFarm-->Strategy: Base Token\n(e.g. USDC)
+deactivate YieldFarm
+Strategy-->StrategyController: Base Token
+deactivate Strategy
+StrategyController-->Collateral: Base Token
+deactivate StrategyController
+Collateral->Collateral: Burn preCT
+Collateral-->User: Base Token
+deactivate Collateral
+'''
+</div>
+
+## Create Market
+
+<center>
+  <figure >
+    <img alt="Create Market" src={useBaseUrl("/img/sequence-diagrams/create_market.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Create Market
+
+actor Governance
+participant PrePOMarketFactory
+participant PrePOMarket
+participant LongShortToken\n(Long) as Long
+participant LongShortToken\n(Short) as Short
+participant Long/preCT\nAMM Pool\n(external) as LongPool
+participant Short/preCT\nAMM Pool\n(external) as ShortPool
+
+Governance->PrePOMarketFactory: createMarket()
+activate PrePOMarketFactory
+PrePOMarketFactory->*PrePOMarket: Deploy
+PrePOMarketFactory->*Long: Deploy
+PrePOMarketFactory->*Short: Deploy
+deactivate PrePOMarketFactory
+Governance->*LongPool: Deploy
+Governance->*ShortPool: Deploy
+'''
+</div>
+
+## Add Liquidity
+
+<center>
+  <figure>
+    <img alt="Add Liquidity" src={useBaseUrl("/img/sequence-diagrams/add_liquidity.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Add Liquidity
+
+actor LP
+participant Collateral\n(preCT) as Collateral
+participant PrePOMarket
+participant Long/preCT Pool\n(external) as LongPool
+participant Short/preCT Pool\n(external) as ShortPool
+
+LP->Collateral: deposit()
+activate Collateral
+Collateral-->LP: preCT
+deactivate Collateral
+LP->PrePOMarket: mintLongShortTokens()
+activate PrePOMarket
+PrePOMarket-->LP: Long + Short
+deactivate PrePOMarket
+LP->LongPool: Add Long/preCT Liquidity
+LP->ShortPool: Add Short/preCT Liquidity
+'''
+</div>
+
+## Remove Liquidity
+
+<center>
+  <figure>
+    <img alt="Remove Liquidity Liquidity" src={useBaseUrl("/img/sequence-diagrams/remove_liquidity.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Remove Liquidity
+
+actor LP
+participant Long/preCT Pool\n(external) as LongPool
+participant Short/preCT Pool\n(external) as ShortPool
+participant PrePOMarket
+participant Collateral\n(preCT) as Collateral
+
+LP->LongPool: Remove Long/preCT Liquidity
+activate LongPool
+LongPool-->LP: Long + preCT
+deactivate LongPool
+LP->ShortPool: Remove Short/preCT Liquidity
+activate ShortPool
+ShortPool-->LP: Short + preCT
+deactivate ShortPool
+alt Market is unresolved
+note over LongPool: Until Market is resolved, Long + Short must be redeemed in equal amounts,\nso make a swap to end up with equal amounts
+alt Long Bal > Short Bal
+LP->LongPool: Swap Long for preCT
+else
+LP->ShortPool: Swap Short for preCT
+end
+end
+LP->PrePOMarket: redeem()
+activate PrePOMarket
+PrePOMarket->PrePOMarket: Burn Long + Short
+PrePOMarket-->LP: preCT
+deactivate PrePOMarket
+LP->Collateral: Withdraw (optional)
+'''
+</div>
+
+## Open Trading Position
+
+<center>
+  <figure>
+    <img alt="Open Position" src={useBaseUrl("/img/sequence-diagrams/open_trading_position.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Open Trading Position
+
+actor Trader
+participant Collateral\n(preCT) as Collateral
+participant Long/preCT or Short/preCT\nAMM Pool (external) as Pool
+Trader->Collateral: deposit()
+activate Collateral
+Collateral-->Trader: preCT
+deactivate Collateral
+Trader->Pool: Swap preCT for Long or Short
+'''
+</div>
+
+## Close Trading Position
+
+<center>
+  <figure>
+    <img alt="Close Position" src={useBaseUrl("/img/sequence-diagrams/close_trading_position.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Close Trading Position
+
+actor Trader
+participant Collateral\n(preCT) as Collateral
+participant Long/preCT or Short/preCT\nAMM Pool (external) as Pool
+
+Trader->Pool: Swap Long or Short for preCT
+Trader->Collateral: initiateWithdrawal()
+note over Trader: Wait at least one block\nbut before `_delayedWithdrawalExpiry`
+Trader->Collateral: withdraw()
+activate Collateral
+Collateral-->Trader: `_baseToken`\n(e.g. USDC)
+deactivate Collateral
+'''
+</div>
+
+## Rebalance Pools (Redeem Strategy)
+
+<center>
+  <figure>
+    <img alt="Rebalance Pools (Redeem Strategy)" src={useBaseUrl("/img/sequence-diagrams/rebalance_redeem.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Rebalance Pools (Redeem Strategy)
+
+actor Arbitrage Bot
+participant Long/preCT Pool\n(external) as Long/preCT Pool
+participant Short/preCT Pool\n(external) as Short/preCT Pool
+participant PrePOMarket
+
+note over Arbitrage Bot:
+Calculate n (off-chain), where\nswapping for n Long + n Short\ncan be redeemed for profit 
+end note
+Arbitrage Bot->Long/preCT Pool: Swap preCT for n Long
+activate Arbitrage Bot
+Arbitrage Bot->Short/preCT Pool: Swap preCT for n Short
+alt spent preCT >  n preCT
+Arbitrage Bot->Arbitrage Bot: Revert
+end
+Arbitrage Bot->PrePOMarket: Redeem n Long + n Short for n preCT
+'''
+</div>
+
+## Rebalance Pools (Mint Strategy)
+
+<center>
+  <figure>
+    <img alt="Rebalance Pools (Mint Strategy)" src={useBaseUrl("/img/sequence-diagrams/rebalance_mint.png")} />
+  </figure>
+</center>
+
+<div style={{'display': 'none'}}>
+Edit on https://websequencediagrams.com/
+'''
+title Rebalance Pools (Mint Strategy)
+
+actor Arbitrage Bot
+participant PrePOMarket
+participant Long/preCT Pool\n(external) as Long/preCT Pool
+participant Short/preCT Pool\n(external) as Short/preCT Pool
+
+note over Arbitrage Bot:
+Calculate n (off-chain), where\nn Long + n Short can be\nminted and swapped for profit 
+end note
+Arbitrage Bot->PrePOMarket: Mint n Long + n Short for n preCT
+activate Arbitrage Bot
+Arbitrage Bot->Long/preCT Pool: Swap n Long for preCT
+Arbitrage Bot->Short/preCT Pool: Swap n Short for preCT
+alt received preCT < n preCT
+Arbitrage Bot->Arbitrage Bot: Revert
+end
+deactivate Arbitrage Bot
+'''
+</div>

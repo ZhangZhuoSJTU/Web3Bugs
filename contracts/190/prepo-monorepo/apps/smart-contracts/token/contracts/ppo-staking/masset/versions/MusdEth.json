@@ -1,0 +1,688 @@
+[
+  {
+    "inputs": [{ "internalType": "address", "name": "_nexus", "type": "address" }],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "spender", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
+    "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "cacheSize", "type": "uint256" }
+    ],
+    "name": "CacheSizeChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "swapFee", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "redemptionFee", "type": "uint256" }
+    ],
+    "name": "FeesChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "forgeValidator", "type": "address" }
+    ],
+    "name": "ForgeValidatorChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "minter", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "mAssetQuantity", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "input", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "inputQuantity", "type": "uint256" }
+    ],
+    "name": "Minted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "minter", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "mAssetQuantity", "type": "uint256" },
+      { "indexed": false, "internalType": "address[]", "name": "inputs", "type": "address[]" },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "inputQuantities",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "MintedMulti",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "redeemer", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "mAssetQuantity", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "output", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "outputQuantity", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "scaledFee", "type": "uint256" }
+    ],
+    "name": "Redeemed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "redeemer", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "mAssetQuantity", "type": "uint256" },
+      { "indexed": false, "internalType": "address[]", "name": "outputs", "type": "address[]" },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "outputQuantity",
+        "type": "uint256[]"
+      },
+      { "indexed": false, "internalType": "uint256", "name": "scaledFee", "type": "uint256" }
+    ],
+    "name": "RedeemedMulti",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "swapper", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "input", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "output", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "outputAmount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "scaledFee", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "recipient", "type": "address" }
+    ],
+    "name": "Swapped",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
+    "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint128", "name": "min", "type": "uint128" },
+      { "indexed": false, "internalType": "uint128", "name": "max", "type": "uint128" }
+    ],
+    "name": "WeightLimitsChanged",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "address", "name": "spender", "type": "address" }
+    ],
+    "name": "allowance",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ampData",
+    "outputs": [
+      { "internalType": "uint64", "name": "initialA", "type": "uint64" },
+      { "internalType": "uint64", "name": "targetA", "type": "uint64" },
+      { "internalType": "uint64", "name": "rampStartTime", "type": "uint64" },
+      { "internalType": "uint64", "name": "rampEndTime", "type": "uint64" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "approve",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "bAssetData",
+    "outputs": [
+      { "internalType": "uint128", "name": "ratio", "type": "uint128" },
+      { "internalType": "uint128", "name": "vaultBalance", "type": "uint128" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "bAssetIndexes",
+    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "bAssetPersonal",
+    "outputs": [
+      { "internalType": "address", "name": "addr", "type": "address" },
+      { "internalType": "address", "name": "integrator", "type": "address" },
+      { "internalType": "bool", "name": "hasTxFee", "type": "bool" },
+      { "internalType": "enum MassetStructs.BassetStatus", "name": "status", "type": "uint8" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
+    "name": "balanceOf",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "basket",
+    "outputs": [
+      { "internalType": "bool", "name": "undergoingRecol", "type": "bool" },
+      { "internalType": "bool", "name": "failed", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cacheSize",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectInterest",
+    "outputs": [
+      { "internalType": "uint256", "name": "mintAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "newSupply", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectPlatformInterest",
+    "outputs": [
+      { "internalType": "uint256", "name": "mintAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "newSupply", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "subtractedValue", "type": "uint256" }
+    ],
+    "name": "decreaseAllowance",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "forgeValidator",
+    "outputs": [{ "internalType": "contract IInvariantValidator", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBasket",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" },
+      { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_bAsset", "type": "address" }],
+    "name": "getBasset",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "addr", "type": "address" },
+          { "internalType": "address", "name": "integrator", "type": "address" },
+          { "internalType": "bool", "name": "hasTxFee", "type": "bool" },
+          { "internalType": "enum MassetStructs.BassetStatus", "name": "status", "type": "uint8" }
+        ],
+        "internalType": "struct MassetStructs.BassetPersonal",
+        "name": "personal",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "uint128", "name": "ratio", "type": "uint128" },
+          { "internalType": "uint128", "name": "vaultBalance", "type": "uint128" }
+        ],
+        "internalType": "struct MassetStructs.BassetData",
+        "name": "data",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBassets",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "addr", "type": "address" },
+          { "internalType": "address", "name": "integrator", "type": "address" },
+          { "internalType": "bool", "name": "hasTxFee", "type": "bool" },
+          { "internalType": "enum MassetStructs.BassetStatus", "name": "status", "type": "uint8" }
+        ],
+        "internalType": "struct MassetStructs.BassetPersonal[]",
+        "name": "personal",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          { "internalType": "uint128", "name": "ratio", "type": "uint128" },
+          { "internalType": "uint128", "name": "vaultBalance", "type": "uint128" }
+        ],
+        "internalType": "struct MassetStructs.BassetData[]",
+        "name": "data",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getConfig",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "a", "type": "uint256" },
+          {
+            "components": [
+              { "internalType": "uint128", "name": "min", "type": "uint128" },
+              { "internalType": "uint128", "name": "max", "type": "uint128" }
+            ],
+            "internalType": "struct MassetStructs.WeightLimits",
+            "name": "limits",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct MassetStructs.InvariantConfig",
+        "name": "config",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "_inputs", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "_inputQuantities", "type": "uint256[]" }
+    ],
+    "name": "getMintMultiOutput",
+    "outputs": [{ "internalType": "uint256", "name": "mintOutput", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_input", "type": "address" },
+      { "internalType": "uint256", "name": "_inputQuantity", "type": "uint256" }
+    ],
+    "name": "getMintOutput",
+    "outputs": [{ "internalType": "uint256", "name": "mintOutput", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "_outputs", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "_outputQuantities", "type": "uint256[]" }
+    ],
+    "name": "getRedeemExactBassetsOutput",
+    "outputs": [{ "internalType": "uint256", "name": "mAssetQuantity", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_output", "type": "address" },
+      { "internalType": "uint256", "name": "_mAssetQuantity", "type": "uint256" }
+    ],
+    "name": "getRedeemOutput",
+    "outputs": [{ "internalType": "uint256", "name": "bAssetOutput", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_input", "type": "address" },
+      { "internalType": "address", "name": "_output", "type": "address" },
+      { "internalType": "uint256", "name": "_inputQuantity", "type": "uint256" }
+    ],
+    "name": "getSwapOutput",
+    "outputs": [{ "internalType": "uint256", "name": "swapOutput", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_bAsset", "type": "address" },
+      { "internalType": "bool", "name": "_belowPeg", "type": "bool" }
+    ],
+    "name": "handlePegLoss",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "spender", "type": "address" },
+      { "internalType": "uint256", "name": "addedValue", "type": "uint256" }
+    ],
+    "name": "increaseAllowance",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "maxBassets",
+    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "_bAssets", "type": "address[]" },
+      { "internalType": "address", "name": "_newIntegration", "type": "address" }
+    ],
+    "name": "migrateBassets",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_input", "type": "address" },
+      { "internalType": "uint256", "name": "_inputQuantity", "type": "uint256" },
+      { "internalType": "uint256", "name": "_minOutputQuantity", "type": "uint256" },
+      { "internalType": "address", "name": "_recipient", "type": "address" }
+    ],
+    "name": "mint",
+    "outputs": [{ "internalType": "uint256", "name": "mintOutput", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "_inputs", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "_inputQuantities", "type": "uint256[]" },
+      { "internalType": "uint256", "name": "_minOutputQuantity", "type": "uint256" },
+      { "internalType": "address", "name": "_recipient", "type": "address" }
+    ],
+    "name": "mintMulti",
+    "outputs": [{ "internalType": "uint256", "name": "mintOutput", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "name",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_bAsset", "type": "address" }],
+    "name": "negateIsolation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nexus",
+    "outputs": [{ "internalType": "contract INexus", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_output", "type": "address" },
+      { "internalType": "uint256", "name": "_mAssetQuantity", "type": "uint256" },
+      { "internalType": "uint256", "name": "_minOutputQuantity", "type": "uint256" },
+      { "internalType": "address", "name": "_recipient", "type": "address" }
+    ],
+    "name": "redeem",
+    "outputs": [{ "internalType": "uint256", "name": "outputQuantity", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "_outputs", "type": "address[]" },
+      { "internalType": "uint256[]", "name": "_outputQuantities", "type": "uint256[]" },
+      { "internalType": "uint256", "name": "_maxMassetQuantity", "type": "uint256" },
+      { "internalType": "address", "name": "_recipient", "type": "address" }
+    ],
+    "name": "redeemExactBassets",
+    "outputs": [{ "internalType": "uint256", "name": "mAssetQuantity", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_mAssetQuantity", "type": "uint256" },
+      { "internalType": "uint256[]", "name": "_minOutputQuantities", "type": "uint256[]" },
+      { "internalType": "address", "name": "_recipient", "type": "address" }
+    ],
+    "name": "redeemMasset",
+    "outputs": [{ "internalType": "uint256[]", "name": "outputQuantities", "type": "uint256[]" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "redemptionFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_cacheSize", "type": "uint256" }],
+    "name": "setCacheSize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_swapFee", "type": "uint256" },
+      { "internalType": "uint256", "name": "_redemptionFee", "type": "uint256" }
+    ],
+    "name": "setFees",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_bAsset", "type": "address" },
+      { "internalType": "bool", "name": "_flag", "type": "bool" }
+    ],
+    "name": "setTransferFeesFlag",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint128", "name": "_min", "type": "uint128" },
+      { "internalType": "uint128", "name": "_max", "type": "uint128" }
+    ],
+    "name": "setWeightLimits",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_targetA", "type": "uint256" },
+      { "internalType": "uint256", "name": "_rampEndTime", "type": "uint256" }
+    ],
+    "name": "startRampA",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stopRampA",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "surplus",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_input", "type": "address" },
+      { "internalType": "address", "name": "_output", "type": "address" },
+      { "internalType": "uint256", "name": "_inputQuantity", "type": "uint256" },
+      { "internalType": "uint256", "name": "_minOutputQuantity", "type": "uint256" },
+      { "internalType": "address", "name": "_recipient", "type": "address" }
+    ],
+    "name": "swap",
+    "outputs": [{ "internalType": "uint256", "name": "swapOutput", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "swapFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "recipient", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "transfer",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "sender", "type": "address" },
+      { "internalType": "address", "name": "recipient", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "transferFrom",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_forgeValidator", "type": "address" },
+      {
+        "components": [
+          { "internalType": "uint256", "name": "a", "type": "uint256" },
+          {
+            "components": [
+              { "internalType": "uint128", "name": "min", "type": "uint128" },
+              { "internalType": "uint128", "name": "max", "type": "uint128" }
+            ],
+            "internalType": "struct MassetStructs.WeightLimits",
+            "name": "limits",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct MassetStructs.InvariantConfig",
+        "name": "_config",
+        "type": "tuple"
+      }
+    ],
+    "name": "upgrade",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_newForgeValidator", "type": "address" }],
+    "name": "upgradeForgeValidator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "weightLimits",
+    "outputs": [
+      { "internalType": "uint128", "name": "min", "type": "uint128" },
+      { "internalType": "uint128", "name": "max", "type": "uint128" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

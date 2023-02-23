@@ -1,0 +1,54 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx next",
+    "build": "next build && next-sitemap",
+    "test": "jest -w 1",
+    "test:ci": "yarn test",
+    "start": "next start",
+    "pre-commit": "lint-staged",
+    "lint": "eslint . --max-warnings 0 --ext ts,tsx",
+    "lint:fix": "yarn lint --fix",
+    "clean": "rm -rf .next && rm -rf node_modules && rm -rf out"
+  },
+  "dependencies": {
+    "@headlessui/react": "1.5.0",
+    "@panelbear/panelbear-nextjs": "1.0.3",
+    "@tailwindcss/forms": "0.5.0",
+    "@types/react-google-recaptcha": "2.1.5",
+    "canvas-confetti": "1.5.1",
+    "clsx": "1.1.1",
+    "configcat-js-ssr": "3.10.0",
+    "d3-ease": "3.0.1",
+    "mobx": "6.6.1",
+    "mobx-react": "7.5.2",
+    "mobx-react-lite": "3.4.0",
+    "mobx-state-tree": "5.1.6",
+    "next": "12.1.6",
+    "next-sitemap": "2.5.20",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-google-recaptcha": "2.1.0",
+    "react-lottie": "1.2.3",
+    "react-spring": "9.4.4",
+    "react-swipeable": "6.2.1",
+    "react-toastify": "8.2.0",
+    "react-use": "17.3.2",
+    "tailwind-scrollbar-hide": "1.1.7",
+    "tailwindcss": "3.0.24"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "1.4.2",
+    "@types/d3-ease": "3.0.0",
+    "@types/react": "17.0.45",
+    "@types/react-lottie": "1.2.6",
+    "autoprefixer": "10.4.4",
+    "config": "*",
+    "postcss": "8.4.12",
+    "tsconfig": "*"
+  },
+  "resolutions": {
+    "@types/react": "17.0.45"
+  }
+}

@@ -1,0 +1,47 @@
+# Parameter Tradeoffs
+
+There are various tradeoffs to consider when choosing parameters for a prePO market.
+
+## Choosing a Valuation Range
+
+The Valuation Range impacts leverage for traders, and the frequency of market migrations.
+
+Narrow valuation ranges
+
+- Increase the leverage of Long and Short tokens
+- Increase the frequency of market migrations
+
+Wide valuation ranges
+
+- Decrease the leverage of Long and Short tokens
+- Decrease the frequency of market migrations
+
+An optimal Valuation Range creates sufficient leverage to reward traders, without being so narrow that markets need to be migrated too frequently.
+
+### Leverage Examples
+
+Assume a market is being created with a payout range of 0.2-0.8:
+
+- Valuation Range 100B-400B provides $1$x leverage
+- Valuation Range 100B-250B provides $2$x leverage
+- Valuation Range 100B-700B provides $\frac{1}{2}$x leverage
+
+## Choosing a Payout Range
+
+The Payout Range impacts the maximum position loss (PL) LPs can incur, and the frequency of market migrations.
+
+Narrow payout ranges
+
+- Decrease the maximum PL LPs can incur
+- Increase the frequency of market migrations
+
+Wide valuation ranges
+
+- Increase the maximum PL LPs can incur
+- Decrease the frequency of market migrations
+
+An optimal Payout Range reduces maximum IL enough to satisfy LP safety requirements, without being so narrow that markets need to be migrated too frequently.
+
+### Simulating Payout Range Impact
+
+[prePO Simulator advanced mode](/simulator#advanced-mode) can be used to simulate the impact of Payout Range on maximum PL.

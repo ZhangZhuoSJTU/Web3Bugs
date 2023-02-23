@@ -1,0 +1,39 @@
+---
+sidebar_position: 8
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import ReactPlayer from 'react-player/lazy'
+
+# Simulator 🧮
+
+
+The first thing built for prePO was a [comprehensive SDK](/developer/sdk) with built-in market simulation capabilities.
+
+This unlocked the door for us to build [**prePO Simulator**](https://simulator.prepo.io) - a tool for playing out different scenarios as a Trader or Liquidity Provider on prePO.
+
+
+Through the Simulator, we aim to facilitate a deeper understanding of how prePO works, including the impact of different inputs and parameters.
+
+<figure>
+  <img alt="The Simulator experience" src={useBaseUrl("/img/simulator.gif")} />
+  <figcaption>The Simulator experience.</figcaption>
+</figure>
+
+## Scenarios
+
+As a curious trader, you could play out a scenario where you enter a long position in a SpaceX market at a valuation of $100B and exit at a valuation of $400B, and understand what your overall profit would be if that scenario played out.
+
+Or as an LP, you could explore the ‘max loss’ scenario if you provided liquidity for an OpenSea market, to visualize prePO’s unique downside minimization for LPs and the [3 Layers of Rewards](/concepts/rewards) that can offset any potential losses.
+
+## Advanced Mode
+
+For the Precogs out there, we developed **Advanced Mode**.
+
+The Simulator assumes a number of default values to simplify the UX, including for reward APRs, fees, holding periods, and valuation / payout ranges.
+
+In Advanced Mode, you can tinker with each of these parameters to your heart's content, and **see visually** how various parameters adjustments impacting the market.
+
+<center>
+  <ReactPlayer url="/video/simulator-adv-mode.mov" playing={true} loop={true} controls={false} width="95%" height="100%" volume={0} />
+</center>

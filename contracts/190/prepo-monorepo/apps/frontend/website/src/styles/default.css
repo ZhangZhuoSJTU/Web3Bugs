@@ -1,0 +1,64 @@
+/* Load Fonts */
+
+/* Here's a blog for adding custom fonts: https://kirazhang.com/posts/nextjs-custom-fonts */
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: local('Euclid Circular A'), url('/fonts/EuclidCircularA/Regular.woff2') format('woff2'),
+    url('/fonts/EuclidCircularA/Regular.woff') format('woff'),
+    url('/fonts/EuclidCircularA/Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: local('Euclid Circular A'), url('/fonts/EuclidCircularA/Medium.woff2') format('woff2'),
+    url('/fonts/EuclidCircularA/Medium.woff') format('woff'),
+    url('/fonts/EuclidCircularA/Medium.ttf');
+  font-weight: 500;
+  font-style: normal;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: local('Euclid Circular A'), url('/fonts/EuclidCircularA/SemiBold.woff2') format('woff2'),
+    url('/fonts/EuclidCircularA/SemiBold.woff') format('woff'),
+    url('/fonts/EuclidCircularA/SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+  font-display: fallback;
+}
+@font-face {
+  font-family: 'Euclid Circular A';
+  src: local('Euclid Circular A'), url('/fonts/EuclidCircularA/Bold.woff2') format('woff2'),
+    url('/fonts/EuclidCircularA/Bold.woff') format('woff'), url('/fonts/EuclidCircularA/Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
+}
+
+/* ReCAPTCHA Style Overrides */
+
+/* Hide badge */
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+/* Make ReCAPTCHA responsive on mobile */
+.gc-reset{
+  transform:scale(0.95) !important;
+  -webkit-transform:scale(0.95) !important;
+  transform-origin:0 0 !important;
+  -webkit-transform-origin:0 0 !important;
+}
+
+/* Progress bar https://stackoverflow.com/a/32186894 */
+
+/* background */
+progress::-webkit-progress-bar {background-color: theme(colors.prepo.light); width: 100%;}
+progress {background-color: theme(colors.prepo.light);}
+
+/* progress */
+progress::-webkit-progress-value {background-color: theme(colors.prepo.DEFAULT) !important;}
+progress::-moz-progress-bar {background-color: theme(colors.prepo.DEFAULT) !important;}
+progress {color: theme(colors.prepo.DEFAULT);}

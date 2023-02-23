@@ -1,0 +1,65 @@
+{
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"]
+    },
+    "core-dapp#build": {
+      "dependsOn": [
+        "^build",
+        "$NEXT_PUBLIC_HOST",
+        "$SENTRY_ORG",
+        "$SENTRY_PROJECT",
+        "$NEXT_PUBLIC_SENTRY_DSN",
+        "$SENTRY_AUTH_TOKEN",
+        "$SENTRY_LOG_LEVEL",
+        "$NPM_RC"
+      ],
+      "outputs": [".next/**", "out/**"]
+    },
+    "react-boilerplate#build": {
+      "dependsOn": [
+        "^build",
+        "$SENTRY_ORG",
+        "$SENTRY_PROJECT",
+        "$NEXT_PUBLIC_SENTRY_DSN",
+        "$SENTRY_AUTH_TOKEN",
+        "$NPM_RC"
+      ],
+      "outputs": [".next/**", "out/**"]
+    },
+    "docs#build": {
+      "dependsOn": ["^build", "$NPM_RC"],
+      "outputs": ["build/**"]
+    },
+    "website#build": {
+      "dependsOn": ["^build", "$NEXT_PUBLIC_RECAPTCHA_SITE_ID", "$NPM_RC"],
+      "outputs": [".next/**", "out/**"]
+    },
+    "simulator#build": {
+      "dependsOn": ["^build", "$NPM_RC"],
+      "outputs": ["dist/**"]
+    },
+    "test:ci": {
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts"]
+    },
+    "core:test:ci": {
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "core/test/**/*.ts"]
+    },
+    "token:test:ci": {
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "token/test/**/*.ts"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    },
+    "compile": {
+      "cache": false
+    }
+  }
+}
