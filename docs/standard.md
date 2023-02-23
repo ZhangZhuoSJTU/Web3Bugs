@@ -4,6 +4,12 @@ It is important to note that classifying functional bugs can be a subjective pro
 
 # Bug Labels
 
+We classify the surveyed bugs into three main categories based on their nature:
+
++ Out-of-scope bugs (denoted by __O__)
++ Bugs with simple and general testing oracles (denoted by __L__)
++ Bugs that require high-level semantical oracles (denoted by __S__)
+
 ### Out-of-scope Bugs
 
 These are bugs that fall outside the scope of our study and are thus not analyzed further.
