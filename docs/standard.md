@@ -1,17 +1,6 @@
-In this document, we present the process we use to classify bugs in our study, along with the description of each bug label. We also include a few examples of ambiguous cases at the end of the document for reference.
+This document aims to clarify the meaning of each bug label and the process we use to classify bugs in our study. We have also included some examples of ambiguous cases at the end of the document for reference.
 
 It is important to note that classifying functional bugs can be a subjective process, and we welcome any suggestions for improving our criteria for bug classification
-
-# Process
-
-To classify a bug, we follow these steps:
-
-1. First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
-2. We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the `L` categories can detect the exploit, we classify it as an `L` bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
-3. Any bugs that remain after the previous steps are labeled as `S` bugs.
-    1. We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
-    2. For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
-    3. Any remaining bugs are labeled as `SC`.
 
 # Bug Labels
 
@@ -75,6 +64,19 @@ These are bugs that require high-level semantical oracles to detect, as they ari
     + __SE-3__: A given function is invoked multiple times unexpectedly.
     + __SE-4__: Unexpected function arguments.
 + __SC__: Contract implementation-specific bugs. These bugs are difficult to categorize into the above categories.
+
+# Process
+
+To classify a bug, we follow these steps:
+
+1. First, we validate whether the bug is within the scope of our study. Our focus is on exploitable bugs in smart contracts, so many bugs may be excluded. If the bug falls into any of the `O` categories, it is considered out of scope.
+2. We then validate whether the bug can be found by tools with simple and generic testing oracles. To do so, we investigate how the bug is exploited. If any oracle mentioned by the `L` categories can detect the exploit, we classify it as an `L` bug. It is important to note that this is an over-approximation of current vulnerability detection techniques. As long as there is an oracle that can detect the exploit, we assume the detection tool can detect it (regardless of the tool's effectiveness). For example, we assume there is no path exploration issue for symbolic execution and any constraint can be solved in time.
+3. Any bugs that remain after the previous steps are labeled as `S` bugs.
+    1. We first investigate the root cause of the bug. If the root cause can be classified as `S1` to `S6`, we label it accordingly.
+    2. For the remaining bugs, we investigate how they can be exploited. If the way of exploit matches any of the `SE` types, we label it accordingly.
+    3. Any remaining bugs are labeled as `SC`.
+
+
 # Ambiguous Cases
 
 
