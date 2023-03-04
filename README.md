@@ -18,6 +18,27 @@ Our initial research suggests that a notable proportion of exploitable bugs in s
 
 Please be aware that __this repository is currently undergoing active development, and the data may change over time due to ongoing code4rena contests__.
 
+## Dataset Description
+
+### Folder Structure
+
+The dataset is organized into four folders:
+
++ [papers/](papers/): contains our ICSE23 paper summarizing our preliminary results, as well as the supplementary material for the paper.
++ [results/](results/): contains the bug classification in [bugs.csv](results/bugs.csv) and the description for each contest in [contests.csv](results/contests.csv).
++ [contracts/](contracts/): contains all the smart contracts that we examined, using the version at the time of the contest.
++ [reports/](reports/): contains all the reports provided by code4rena.
+
+### Bug Labels
+
+We classify the surveyed bugs into three main categories based on their nature: 
+
++ Out-of-scope bugs (denoted by __O__)
++ Bugs with simple and general testing oracles (denoted by __L__)
++ Bugs that require high-level semantical oracles (denoted by __S__)
+
+As classifying functional bugs can be ambiguous, we welcome suggestions to improve our classification standards. You can find more detailed label information in our [documentation](docs/standard.md), and we encourage you to refer to our current classification [guidelines](docs/standard.md#process) for more information.
+
 ## Vulnerability Detection with Automatic Semantical Oracles
 
 We plan to compile an extensive list of vulnerability detection techniques that prioritize the development of semantical oracles for smart contracts. 
@@ -32,26 +53,6 @@ We plan to compile an extensive list of vulnerability detection techniques that 
 // no a vulnerability detection technique, but a forensic technique
 + [DeFiRanger: Detecting Price Manipulation Attacks on DeFi Applications](https://arxiv.org/abs/2104.15068), which tries to address issues of price oracle manipulation.
 -->
-
-
-## Folder Structure
-
-The dataset is organized into four folders:
-
-+ [papers/](papers/): contains our ICSE23 paper summarizing our preliminary results, as well as the supplementary material for the paper.
-+ [results/](results/): contains the bug classification in [bugs.csv](results/bugs.csv) and the description for each contest in [contests.csv](results/contests.csv).
-+ [contracts/](contracts/): contains all the smart contracts that we examined, using the version at the time of the contest.
-+ [reports/](reports/): contains all the reports provided by code4rena.
-
-## Bug Labels
-
-We classify the surveyed bugs into three main categories based on their nature: 
-
-+ Out-of-scope bugs (denoted by __O__)
-+ Bugs with simple and general testing oracles (denoted by __L__)
-+ Bugs that require high-level semantical oracles (denoted by __S__)
-
-As classifying functional bugs can be ambiguous, we welcome suggestions to improve our classification standards. You can find more detailed label information in our [documentation](docs/standard.md), and we encourage you to refer to our current classification [guidelines](docs/standard.md#process) for more information.
 
 ## Contributing
 
