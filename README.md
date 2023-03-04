@@ -39,20 +39,29 @@ We classify the surveyed bugs into three main categories based on their nature:
 
 As classifying functional bugs can be ambiguous, we welcome suggestions to improve our classification standards. You can find more detailed label information in our [documentation](docs/standard.md), and we encourage you to refer to our current classification [guidelines](docs/standard.md#process) for more information.
 
-## Vulnerability Detection with Automatic Semantical Oracles
+## Recommended Security Analysis Tools
 
-We plan to compile an extensive list of vulnerability detection techniques that prioritize the development of semantical oracles for smart contracts. 
+Our goal is to create a comprehensive list of vulnerability detection techniques that will be a valuable resource for Web3 developers and security analysts. We will focus on two main categories:
 
-<span style="color:red"><strong>We warmly welcome any additional suggestions or contributions from the community to help expand and improve the list. </strong></span> These techniques can be sourced from a variety of materials, such as peer-reviewed research papers, pre-prints, industry tools, online resources, and more.
++ Publicly available security analysis tools that can be used for auditing
++ Vunerability detection techniques that prioritize the development of semantical oracles for smart contracts.
+
+<span style="color:red"><strong>We warmly welcome any additional suggestions or contributions from the community to help expand and improve the list. </strong></span> 
+
+### Publicly Available Security Analysis Techniques
+
+We will include techniques that are publicly available and open-source, which can be used directly by Web3 developers and security analysts, or used as building blocks for other tools. Source-code level techniques are preferred given the scenarios of Web3 development and auditing.
+
++ [Slither, the Solidity source analyzer](https://github.com/crytic/slither)
+
+### Vulnerability Detection with Automatic Semantical Oracles
+
+
+We will include techniques that provide guidance for developing automatic semantic oracles, which can be sourced from various materials such as peer-reviewed research papers, pre-prints, industry tools, and online resources.
 
 
 + [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which tries to address access control issues.
 + [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf), which tries to address access control issues.
-
-<!--
-// no a vulnerability detection technique, but a forensic technique
-+ [DeFiRanger: Detecting Price Manipulation Attacks on DeFi Applications](https://arxiv.org/abs/2104.15068), which tries to address issues of price oracle manipulation.
--->
 
 ## Contributing
 
