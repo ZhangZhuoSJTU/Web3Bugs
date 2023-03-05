@@ -43,15 +43,23 @@ As classifying functional bugs can be ambiguous, we welcome suggestions to impro
 
 Our goal is to create a comprehensive list of vulnerability detection techniques that will be a valuable resource for Web3 developers and security analysts. We will focus on two main categories:
 
-+ Publicly available security analysis tools that can be used for auditing
 + Vunerability detection techniques that prioritize the development of semantical oracles for smart contracts.
++ Publicly available security analysis tools that can be used for auditing
 
 <span style="color:red"><strong>We warmly welcome any additional suggestions or contributions from the community to help expand and improve the list. </strong></span> 
 
+### Vulnerability Detection with Automatic Semantical Oracles
+
+We believe that future web3 security efforts will prioritize identifying functional bugs and developing corresponding oracles. To this end, we intend to compile a list of techniques that provide guidance in the creation of automatic semantic oracles. These techniques will be sourced from various materials, such as peer-reviewed research papers, pre-prints, industry tools, and online resources.
+
+| Technique | Bug Category |
+| :--- | :--- | 
+| [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf) | Access Control |
+| [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
+
 ### Publicly Available Security Analysis Techniques
 
-We will include open-source techniques that are publicly available and currently in active development. These techniques can be used either directly by Web3 developers and security analysts, or as building blocks for other tools. We prioritize source-code level techniques, which are better suited for the Web3 development and auditing contexts.
-
+This section will include open-source techniques that are publicly available and currently in active development. These techniques can be used either directly by Web3 developers and security analysts or as building blocks for other tools. We give priority to source-code level techniques, which are better suited for Web3 development and auditing contexts.
 
 | Technique      | Developer(s) | Description | Security-related Keywords   |
 | :---        |    :--- | :--- | :--- |
@@ -61,16 +69,6 @@ We will include open-source techniques that are publicly available and currently
 | [Woke](https://github.com/Ackee-Blockchain/woke) | [Ackee Blockchain](https://ackeeblockchain.com/)  | Development Toolchain | [Cross-chain Testing](https://ackeeblockchain.com/woke/docs/2.1.0/testing-framework/cross-chain-testing/#relaying-events), [Invariant Testing](https://ackeeblockchain.com/woke/docs/2.1.0/testing-framework/fuzzing/), [Vulnerability Detectors](https://ackeeblockchain.com/woke/docs/devel/detectors/), [IR](https://ackeeblockchain.com/woke/docs/devel/api-reference/ir/abc/) |
 | [4naly3er](https://github.com/Picodes/4naly3er) | [Picodes](https://twitter.com/thePicodes)  | Static Scanner | [Code4rena Pre-content Testing](https://docs.code4rena.com/roles/wardens/submission-policy#automated-findings-ineligible) | 
 | [Manticore](https://github.com/trailofbits/manticore) | [Trail of Bits](https://www.trailofbits.com/) |  Symbolic Execution Tool | Symbolic Execution, [Property Testing](https://manticore.readthedocs.io/en/latest/verifier.html)
-
-### Vulnerability Detection with Automatic Semantical Oracles
-
-
-We will include techniques that provide guidance for developing automatic semantic oracles, which can be sourced from various materials such as peer-reviewed research papers, pre-prints, industry tools, and online resources.
-
-| Technique | Bug Category |
-| :--- | :--- | 
-| [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf) | Access Control |
-| [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
 
 ## Contributing
 
