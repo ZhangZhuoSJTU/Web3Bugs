@@ -50,24 +50,33 @@ Our goal is to create a comprehensive list of vulnerability detection techniques
 
 ### Publicly Available Security Analysis Techniques
 
-We will include techniques that are publicly available and open-source, which can be used directly by Web3 developers and security analysts, or used as building blocks for other tools. Source-code level techniques are preferred given the scenarios of Web3 development and auditing.
+We will include open-source techniques that are publicly available and currently in active development. These techniques can be used either directly by Web3 developers and security analysts, or as building blocks for other tools. We prioritize source-code level techniques, which are better suited for the Web3 development and auditing contexts.
 
-+ [Slither, the Solidity source analyzer](https://github.com/crytic/slither)
+
+| Technique      | Developer(s) | Description | Security-related Keywords   |
+| :---        |    :--- | :--- | :--- |
+| [Slither](https://github.com/crytic/slither)      | [Trail of Bits](https://www.trailofbits.com/) | Static Analysis Framework | [Vulnerability Detectors](https://github.com/crytic/slither/blob/master/trophies.md), [SlithIR](https://github.com/crytic/slither/wiki/SlithIR)  |
+| [Foundry](https://github.com/foundry-rs/foundry) | [Paradigm](https://www.paradigm.xyz/)  | Development Toolchain | [Fuzzing](https://book.getfoundry.sh/forge/fuzz-testing), [Invariant Testing](https://book.getfoundry.sh/forge/invariant-testing#invariant-testing), [Differential Testing](https://book.getfoundry.sh/forge/differential-ffi-testing#differential-testing) |
+| [Echidna](https://github.com/crytic/echidna) | [Trail of Bits](https://www.trailofbits.com/)  | Fuzzer | [Invariant Testing](https://github.com/crytic/echidna#writing-invariants), [CI/CD](https://github.com/crytic/echidna#using-echidna-in-a-github-actions-workflow) | 
+| [Woke](https://github.com/Ackee-Blockchain/woke) | [Ackee Blockchain](https://ackeeblockchain.com/)  | Development Toolchain | [Cross-chain Testing](https://ackeeblockchain.com/woke/docs/2.1.0/testing-framework/cross-chain-testing/#relaying-events), [Invariant Testing](https://ackeeblockchain.com/woke/docs/2.1.0/testing-framework/fuzzing/), [Vulnerability Detectors](https://ackeeblockchain.com/woke/docs/devel/detectors/), [IR](https://ackeeblockchain.com/woke/docs/devel/api-reference/ir/abc/) |
+| [4naly3er](https://github.com/Picodes/4naly3er) | [Picodes](https://twitter.com/thePicodes)  | Static Scanner | [Code4rena Pre-content Testing](https://docs.code4rena.com/roles/wardens/submission-policy#automated-findings-ineligible) | 
+| [Manticore](https://github.com/trailofbits/manticore) | [Trail of Bits](https://www.trailofbits.com/) |  Symbolic Execution Tool | Symbolic Execution, [Property Testing](https://manticore.readthedocs.io/en/latest/verifier.html)
 
 ### Vulnerability Detection with Automatic Semantical Oracles
 
 
 We will include techniques that provide guidance for developing automatic semantic oracles, which can be sourced from various materials such as peer-reviewed research papers, pre-prints, industry tools, and online resources.
 
-
-+ [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf), which tries to address access control issues.
-+ [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf), which tries to address access control issues.
+| Technique | Bug Category |
+| :--- | :--- | 
+| [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf) | Access Control |
+| [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
 
 ## Contributing
 
 We welcome all types of contributions to our project, including but not limited to:
 
-+ <span style="color:red"><strong>Suggesting new reference techniques for prioritizing smart contract vulnerability detection with semantical oracles.</strong></span>
++ <span style="color:red"><strong>Suggesting new reference techniques for smart contract security analysis.</strong></span>
 + Adding newly disclosed code4rena contest bugs.
 + Suggesting improvements to the classification standard
 + Correcting mislabeled bugs
