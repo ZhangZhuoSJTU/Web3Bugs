@@ -1083,7 +1083,7 @@ contract Pool is Initializable, ReentrancyGuardUpgradeable, ERC20PausableUpgrade
 
     //-------------------------------- Token transfer utils end --------------------------------/
 
-    //-------------------------------- Token comparision utils start --------------------------------/
+    //-------------------------------- Token comparison utils start --------------------------------/
 
     /**
      * @notice used to get corresponding borrow tokens for given collateral tokens
@@ -1113,7 +1113,7 @@ contract Pool is Initializable, ReentrancyGuardUpgradeable, ERC20PausableUpgrade
         return _amount.mul(_price).div(10**_decimals);
     }
 
-    //-------------------------------- Token comparision utils end --------------------------------/
+    //-------------------------------- Token comparison utils end --------------------------------/
 
     /**
      * @notice used to get the current repayment period for the borrow pool
