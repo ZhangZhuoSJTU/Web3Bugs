@@ -78,6 +78,7 @@ We welcome all types of contributions to our project, including but not limited 
 + Adding newly disclosed code4rena contest bugs.
 + Suggesting improvements to the classification standard
 + Correcting mislabeled bugs
++ Filling in any missing defillama entities in the `results/contests.csv`
 
 Further details can be found in our [contribution guidelines](docs/contribution.md).
 
