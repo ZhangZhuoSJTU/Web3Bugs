@@ -16,7 +16,7 @@ if __name__ == "__main__":
     all_pass = True
 
     with open(contest_csv) as f:
-        for (lid, line) in enumerate(f):
+        for lid, line in enumerate(f):
             if lid == 0:
                 continue
 

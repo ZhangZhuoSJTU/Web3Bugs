@@ -36,7 +36,7 @@ if __name__ == "__main__":
         contest_dir = os.path.join(contract_dir, contest_id)
 
         find_sol = False
-        for (root, dirs, files) in os.walk(contest_dir):
+        for root, dirs, files in os.walk(contest_dir):
             for file_name in files:
                 if file_name.endswith(".sol"):
                     find_sol = True
