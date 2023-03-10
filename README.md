@@ -56,6 +56,7 @@ We believe that future web3 security efforts will prioritize identifying functio
 | :------------------------------------------------------------------------------------------------------------------------------------------------- | :------------- |
 | [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf)                              | Access Control |
 | [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
+| [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
 
 ### Publicly Available Security Analysis Techniques
 
@@ -72,6 +73,7 @@ This section will include open-source techniques that are publicly available and
 | [Manticore](https://github.com/trailofbits/manticore)                            | [Trail of Bits](https://www.trailofbits.com/)              | Symbolic Execution Tool                      | Symbolic Execution, [Property Testing](https://manticore.readthedocs.io/en/latest/verifier.html)                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | [Halmos](https://github.com/a16z/halmos)                                         | [a16z](https://github.com/a16z)                            | Symbolic Bounded Model Checker               | Symbolic Execution, Bound Checker                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | [Solidity SMT Checker](https://docs.soliditylang.org/en/v0.8.17/smtchecker.html) | [Ethereum Foundation](https://ethereum.org/en/foundation/) | Formal Verification by Symbolic Exection     | Solidity, Formal Verification, Symbolic Execution                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| [Move Prover](https://github.com/move-language/move/tree/main/language/move-prover) | [The Move Programming Language](https://github.com/move-language) | Formal Specification and Verification     | [Move](https://github.com/MystenLabs/awesome-move), Formal Verification |
 
 ## Contributing
 
@@ -103,4 +105,5 @@ We would like to extend our sincere thanks to [code4rena](https://code4rena.com/
   <li><a href="https://github.com/niothefirst"><b>ItsNio</b></a>
   <li><a href="https://github.com/tarafans"><b>Wen Xu</b></a>
   <li><a href="https://github.com/PatrickAlphaC"><b>Patrick Collins</b></a>
+  <li><a href="https://twitter.com/meng_xu_cs"><b>Meng Xu</b></a>
 </details>
