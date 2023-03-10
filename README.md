@@ -54,7 +54,6 @@ We believe that future web3 security efforts will prioritize identifying functio
 
 | Technique                                                                                                                                          | Bug Category   |
 | :------------------------------------------------------------------------------------------------------------------------------------------------- | :------------- |
-| [Ethainter: A Smart Contract Security Analyzer for Composite Vulnerabilities](https://www.nevillegrech.com/assets/pdf/ethainter-pldi.pdf)          | Access Control |
 | [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf)                              | Access Control |
 | [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
 | [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
