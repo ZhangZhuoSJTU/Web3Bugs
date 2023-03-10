@@ -97,3 +97,10 @@ Please refer to our classification [documentation](docs/classification.md).
 
 We would like to extend our sincere thanks to [code4rena](https://code4rena.com/) for making this valuable information publicly available.
 
+<details>
+<summary>Our appreciation also goes out to the following contributors for their valuable input.</summary>
+<br>
+  <li><a href="https://github.com/niothefirst"><b>ItsNio</b></a>
+  <li><a href="https://github.com/niothefirst"><b>Wen Xu</b></a>
+  <li><a href="https://github.com/PatrickAlphaC"><b>Patrick Collins</b></a>
+</details>
