@@ -54,10 +54,10 @@ We believe that future web3 security efforts will prioritize identifying functio
 
 | Technique                                                                                                                                          | Bug Category   |
 | :------------------------------------------------------------------------------------------------------------------------------------------------- | :------------- |
+| [Ethainter: A Smart Contract Security Analyzer for Composite Vulnerabilities](https://www.nevillegrech.com/assets/pdf/ethainter-pldi.pdf)          | Access Control |
 | [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf)                              | Access Control |
 | [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
 | [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
-| [Ethainter: A Smart Contract Security Analyzer for Composite Vulnerabilities](https://www.nevillegrech.com/assets/pdf/ethainter-pldi.pdf) | Access Control |
 
 ### Publicly Available Security Analysis Techniques
 
@@ -103,9 +103,10 @@ We would like to extend our sincere thanks to [code4rena](https://code4rena.com/
 <details>
 <summary>Our appreciation also goes out to the following contributors for their valuable input.</summary></br>
 
-+ [__ItsNio__](https://github.com/niothefirst)
++ [__NioTheFirst__](https://github.com/niothefirst)
 + [__Wen Xu__](https://github.com/tarafans)
 + [__Patrick Collins__](https://github.com/PatrickAlphaC)
 + [__Meng Xu__](https://twitter.com/meng_xu_cs)
++ [__CharesFang__](https://github.com/CharesFang)
 
 </details>
