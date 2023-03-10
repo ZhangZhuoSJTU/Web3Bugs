@@ -14,7 +14,7 @@ assignees: ZhangZhuoSJTU
 <!--
 Example:
 
-Contract: [AbraNFT](https://code4rena.com/reports/2022-04-abranft/)
+Contest: [AbraNFT](https://code4rena.com/reports/2022-04-abranft/)
 
 [//]: # (can be found at https://code4rena.com/reports/2022-04-abranft/#scope)
 Contract Code: https://github.com/code-423n4/2022-04-abranft
