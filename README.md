@@ -75,6 +75,15 @@ This section will include open-source techniques that are publicly available and
 | [Solidity SMTChecker](https://docs.soliditylang.org/en/latest/smtchecker.html)   | [Ethereum Foundation](https://ethereum.org/en/foundation/) | Formal Verification by Symbolic Exection     | Solidity, Formal Verification, Symbolic Execution                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | [Move Prover](https://github.com/move-language/move/tree/main/language/move-prover) | [The Move Programming Language](https://github.com/move-language) | Formal Specification and Verification     | [Move](https://github.com/MystenLabs/awesome-move), Formal Verification |
 
+### Valuable Resources for Web3 Security
+
+<details>
+<summary>This section comprises a compilation of resources that pertain to web3 security.</summary>
+
++ [Academic Smart Contract Papers](https://github.com/hzysvilla/Academic_Smart_Contract_Papers)
++ [DeFi Hacks Reproduce - Foundry](https://github.com/SunWeb3Sec/DeFiHackLabs)
+</details>
+
 ## Contributing
 
 We welcome all types of contributions to our project, including but not limited to:
