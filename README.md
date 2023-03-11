@@ -78,7 +78,7 @@ This section will include open-source techniques that are publicly available and
 ### Valuable Resources for Web3 Security
 
 <details>
-<summary>This section comprises a compilation of resources that pertain to web3 security.</summary>
+<summary>This section comprises a compilation of resources that pertain to web3 security.</summary></br>
 
 + [Academic Smart Contract Papers](https://github.com/hzysvilla/Academic_Smart_Contract_Papers)
 + [DeFi Hacks Reproduce - Foundry](https://github.com/SunWeb3Sec/DeFiHackLabs)
