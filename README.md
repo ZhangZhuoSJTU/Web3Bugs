@@ -82,6 +82,7 @@ This section will include open-source techniques that are publicly available and
 
 + [Academic Smart Contract Papers](https://github.com/hzysvilla/Academic_Smart_Contract_Papers)
 + [DeFi Hacks Reproduce - Foundry](https://github.com/SunWeb3Sec/DeFiHackLabs)
++ [Smart Contract Security Verification Standard 🚀](https://github.com/ComposableSecurity/SCSVS)
 </details>
 
 ## Contributing
