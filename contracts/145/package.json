@@ -1,0 +1,69 @@
+{
+  "name": "@ensdomains/ens-contracts",
+  "version": "0.0.9",
+  "description": "ENS contracts",
+  "scripts": {
+    "test": "hardhat test",
+    "test:local": "hardhat --network localhost test",
+    "lint": "hardhat check",
+    "build": "rm -rf ./build/deploy ./build/hardhat.config.js && hardhat compile && tsc",
+    "prepublishOnly": "yarn build",
+    "pub": "yarn publish --access public"
+  },
+  "files": [
+    "build",
+    "contracts/**/*.sol",
+    "artifacts",
+    "deployments/mainnet/*.json",
+    "deployments/archive/**/*.json"
+  ],
+  "main": "index.js",
+  "devDependencies": {
+    "@ensdomains/dnsprovejs": "^0.3.7",
+    "@ensdomains/test-utils": "^1.3.0",
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
+    "@nomiclabs/hardhat-solhint": "^2.0.0",
+    "@nomiclabs/hardhat-truffle5": "^2.0.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "@openzeppelin/test-helpers": "^0.5.11",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.0.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "elliptic-solidity": "^1.0.0",
+    "ethereum-waffle": "^3.3.0",
+    "ethers": "^5.6.1",
+    "hardhat": "^2.9.9",
+    "hardhat-abi-exporter": "^2.9.0",
+    "hardhat-deploy": "^0.11.10",
+    "hardhat-gas-reporter": "^1.0.4",
+    "prettier": "^2.6.2",
+    "rfc4648": "^1.5.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  },
+  "resolutions": {
+    "ethereum-ens": "0.8.0",
+    "js-sha3": "0.8.0"
+  },
+  "dependencies": {
+    "@ensdomains/buffer": "^0.0.13",
+    "@ensdomains/solsha1": "0.0.3",
+    "@openzeppelin/contracts": "^4.1.0",
+    "dns-packet": "^5.3.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ensdomains/ens-contracts.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ensdomains/ens-contracts/issues"
+  },
+  "homepage": "https://github.com/ensdomains/ens-contracts#readme"
+}

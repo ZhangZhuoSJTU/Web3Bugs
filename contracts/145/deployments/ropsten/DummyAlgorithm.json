@@ -1,0 +1,70 @@
+{
+  "address": "0x79456fE8B62C936cCF45D117CDe6bDd184A6182d",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "name": "verify",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xe8444805fcf350673b3123448ce8cd8dc1552d81e0e42276e2713f70f9d13f72",
+  "receipt": {
+    "to": null,
+    "from": "0xa303ddC620aa7d1390BACcc8A495508B183fab59",
+    "contractAddress": "0x79456fE8B62C936cCF45D117CDe6bDd184A6182d",
+    "transactionIndex": 6,
+    "gasUsed": "152065",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x1ed6b8da244de61409dafe892b7a69ecf5d857601ea6efdf7b634da01bbbf855",
+    "transactionHash": "0xe8444805fcf350673b3123448ce8cd8dc1552d81e0e42276e2713f70f9d13f72",
+    "logs": [],
+    "blockNumber": 10645996,
+    "cumulativeGasUsed": "1462718",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "a50cca78b1bed5d39e9ebe70f5371ee9",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"verify\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Implements a dummy DNSSEC (signing) algorithm that approves all      signatures, for testing.\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/dnssec-oracle/algorithms/DummyAlgorithm.sol\":\"DummyAlgorithm\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/dnssec-oracle/algorithms/Algorithm.sol\":{\"content\":\"pragma solidity ^0.8.4;\\n\\n/**\\n* @dev An interface for contracts implementing a DNSSEC (signing) algorithm.\\n*/\\ninterface Algorithm {\\n    /**\\n    * @dev Verifies a signature.\\n    * @param key The public key to verify with.\\n    * @param data The signed data to verify.\\n    * @param signature The signature to verify.\\n    * @return True iff the signature is valid.\\n    */\\n    function verify(bytes calldata key, bytes calldata data, bytes calldata signature) external virtual view returns (bool);\\n}\\n\",\"keccak256\":\"0x51d6251568844e435f58952354abe8c8c8e978ab40ecb0bbb2f5bd767838b3a7\"},\"contracts/dnssec-oracle/algorithms/DummyAlgorithm.sol\":{\"content\":\"pragma solidity ^0.8.4;\\n\\nimport \\\"./Algorithm.sol\\\";\\n\\n/**\\n* @dev Implements a dummy DNSSEC (signing) algorithm that approves all\\n*      signatures, for testing.\\n*/\\ncontract DummyAlgorithm is Algorithm {\\n    function verify(bytes calldata, bytes calldata, bytes calldata) external override view returns (bool) { return true; }\\n}\\n\",\"keccak256\":\"0x59bb926cf8544aa5624717a2fd5850508ac7dd2a09620b05799b4ee00b708b2d\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506101ca806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c8063de8f50a114610030575b600080fd5b61004a600480360381019061004591906100ba565b610060565b604051610057919061016d565b60405180910390f35b6000600190509695505050505050565b60008083601f84011261008257600080fd5b8235905067ffffffffffffffff81111561009b57600080fd5b6020830191508360018202830111156100b357600080fd5b9250929050565b600080600080600080606087890312156100d357600080fd5b600087013567ffffffffffffffff8111156100ed57600080fd5b6100f989828a01610070565b9650965050602087013567ffffffffffffffff81111561011857600080fd5b61012489828a01610070565b9450945050604087013567ffffffffffffffff81111561014357600080fd5b61014f89828a01610070565b92509250509295509295509295565b61016781610188565b82525050565b6000602082019050610182600083018461015e565b92915050565b6000811515905091905056fea26469706673582212202bd735fbfbac3f59fb2f61586d9b6aaaa5eb85678261893d3270e9f1a0151c9464736f6c63430008040033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c8063de8f50a114610030575b600080fd5b61004a600480360381019061004591906100ba565b610060565b604051610057919061016d565b60405180910390f35b6000600190509695505050505050565b60008083601f84011261008257600080fd5b8235905067ffffffffffffffff81111561009b57600080fd5b6020830191508360018202830111156100b357600080fd5b9250929050565b600080600080600080606087890312156100d357600080fd5b600087013567ffffffffffffffff8111156100ed57600080fd5b6100f989828a01610070565b9650965050602087013567ffffffffffffffff81111561011857600080fd5b61012489828a01610070565b9450945050604087013567ffffffffffffffff81111561014357600080fd5b61014f89828a01610070565b92509250509295509295509295565b61016781610188565b82525050565b6000602082019050610182600083018461015e565b92915050565b6000811515905091905056fea26469706673582212202bd735fbfbac3f59fb2f61586d9b6aaaa5eb85678261893d3270e9f1a0151c9464736f6c63430008040033",
+  "devdoc": {
+    "details": "Implements a dummy DNSSEC (signing) algorithm that approves all      signatures, for testing.",
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

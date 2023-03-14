@@ -1,0 +1,2 @@
+# rerun if logic changes significantly for the ExponentialPremiumPriceOracle
+for i in $(seq 0 11); do for j in $(seq 0 4); do OFFSET=$((i+j*12)) yarn test test/ethregistrar/TestExponentialPremiumPriceOracle.js; done & done

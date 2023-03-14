@@ -1,0 +1,65 @@
+{
+  "address": "0x2Ea5d7A80987ec70d504d64234e6f03689a1C9Bf",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "name": "verify",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xe7cfa540daaa44c63b5516b22e8dd11a70769e5211c2c78226fde602f632bd80",
+  "receipt": {
+    "to": null,
+    "from": "0xa303ddC620aa7d1390BACcc8A495508B183fab59",
+    "contractAddress": "0x2Ea5d7A80987ec70d504d64234e6f03689a1C9Bf",
+    "transactionIndex": 5,
+    "gasUsed": "119551",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xe94deff42b8af8768b15c8919b1a57b936be3e2d8ee3dba8b3e474c23e74b25b",
+    "transactionHash": "0xe7cfa540daaa44c63b5516b22e8dd11a70769e5211c2c78226fde602f632bd80",
+    "logs": [],
+    "blockNumber": 6470037,
+    "cumulativeGasUsed": "869778",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "7948b60c3b601df824761a337a51d661",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"verify\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Implements a dummy DNSSEC digest that approves all hashes, for testing.\",\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/dnssec-oracle/digests/DummyDigest.sol\":\"DummyDigest\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":10000},\"remappings\":[]},\"sources\":{\"contracts/dnssec-oracle/digests/Digest.sol\":{\"content\":\"pragma solidity ^0.8.4;\\n\\n/**\\n* @dev An interface for contracts implementing a DNSSEC digest.\\n*/\\ninterface Digest {\\n    /**\\n    * @dev Verifies a cryptographic hash.\\n    * @param data The data to hash.\\n    * @param hash The hash to compare to.\\n    * @return True iff the hashed data matches the provided hash value.\\n    */\\n    function verify(bytes calldata data, bytes calldata hash) external virtual pure returns (bool);\\n}\\n\",\"keccak256\":\"0x259720cef78c019d38b908bc7dd524f087c58d8c40792cebcdd4e982c628bc9a\"},\"contracts/dnssec-oracle/digests/DummyDigest.sol\":{\"content\":\"pragma solidity ^0.8.4;\\n\\nimport \\\"./Digest.sol\\\";\\n\\n/**\\n* @dev Implements a dummy DNSSEC digest that approves all hashes, for testing.\\n*/\\ncontract DummyDigest is Digest {\\n    function verify(bytes calldata, bytes calldata) external override pure returns (bool) { return true; }\\n}\\n\",\"keccak256\":\"0x15e3a63572d9325d0e59346e5758181aed1865b934b3422f53cac930c7902c14\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610132806100206000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063f7e83aee14602d575b600080fd5b60426038366004609a565b6001949350505050565b604051901515815260200160405180910390f35b60008083601f8401126066578182fd5b50813567ffffffffffffffff811115607c578182fd5b602083019150836020828501011115609357600080fd5b9250929050565b6000806000806040858703121560ae578384fd5b843567ffffffffffffffff8082111560c4578586fd5b60ce888389016056565b9096509450602087013591508082111560e5578384fd5b5060f0878288016056565b9598949750955050505056fea264697066735822122041ceb00124643679e016d6d16621a8b6506a42fb1e1d12c87aa9fc7f504bfb4e64736f6c63430008040033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c8063f7e83aee14602d575b600080fd5b60426038366004609a565b6001949350505050565b604051901515815260200160405180910390f35b60008083601f8401126066578182fd5b50813567ffffffffffffffff811115607c578182fd5b602083019150836020828501011115609357600080fd5b9250929050565b6000806000806040858703121560ae578384fd5b843567ffffffffffffffff8082111560c4578586fd5b60ce888389016056565b9096509450602087013591508082111560e5578384fd5b5060f0878288016056565b9598949750955050505056fea264697066735822122041ceb00124643679e016d6d16621a8b6506a42fb1e1d12c87aa9fc7f504bfb4e64736f6c63430008040033",
+  "devdoc": {
+    "details": "Implements a dummy DNSSEC digest that approves all hashes, for testing.",
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}
