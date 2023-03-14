@@ -80,7 +80,7 @@ This section will include open-source techniques that are publicly available and
 <details>
 <summary>This section comprises a compilation of resources that pertain to web3 security.</summary></br>
 
-| Technique | Keywords |
+| Resource | Keywords |
 | :-------- | :------- |
 | [Academic Smart Contract Papers](https://github.com/hzysvilla/Academic_Smart_Contract_Papers) | Academic Paper |
 | [DeFi Hacks Reproduce - Foundry](https://github.com/SunWeb3Sec/DeFiHackLabs) | Attack Replication |
