@@ -94,6 +94,7 @@ This section will include open-source techniques that are publicly available and
 | [Academic Smart Contract Papers](https://github.com/hzysvilla/Academic_Smart_Contract_Papers) | Academic Paper |
 | [DeFi Hacks Reproduce - Foundry](https://github.com/SunWeb3Sec/DeFiHackLabs) | Attack Replication |
 | [Smart Contract Security Verification Standard](https://github.com/ComposableSecurity/SCSVS) | Security Checklist  |
+| [MythX Tools](https://github.com/muellerberndt/awesome-mythx-smart-contract-security-tools) | Security Analysis Service |
 </details>
 
 ## Contributing
