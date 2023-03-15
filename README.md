@@ -56,8 +56,8 @@ We believe that future web3 security efforts will prioritize identifying functio
 | :------------------------------------------------------------------------------------------------------------------------------------------------- | :------------- |
 | [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf)                              | Access Control |
 | [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
-| [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
 | [Towards Automated Verification of Smart Contract Fairness](https://personal.ntu.edu.sg/yi_li/files/Liu2020TAV.pdf) | Fairness Property |
+| [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
 
 ### Publicly Available Security Analysis Techniques
 
@@ -74,7 +74,7 @@ This section will include open-source techniques that are publicly available and
 | [Manticore](https://github.com/trailofbits/manticore)                            | [Trail of Bits](https://www.trailofbits.com/)              | Symbolic Execution Tool                      | Symbolic Execution, [Property Testing](https://manticore.readthedocs.io/en/latest/verifier.html)                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | [Halmos](https://github.com/a16z/halmos)                                         | [a16z](https://github.com/a16z)                            | Symbolic Bounded Model Checker               | Symbolic Execution, Bound Checker                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | [Solidity SMTChecker](https://docs.soliditylang.org/en/latest/smtchecker.html)   | [Ethereum Foundation](https://ethereum.org/en/foundation/) | Formal Verification by Symbolic Exection     | Solidity, Formal Verification, Symbolic Execution                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| [Mythril](https://github.com/ConsenSys/mythril)   | [Consensys](https://consensys.net/) | Symbolic Exection Tool  | Symbolic Execution, SMT Solving, Taint Analysis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| [Mythril](https://github.com/ConsenSys/mythril)   | [Consensys](https://consensys.net/) | Symbolic Exection Tool  | Symbolic Execution, [On-Chain Analysis](https://mythril-classic.readthedocs.io/en/develop/security-analysis.html#analyzing-on-chain-contracts), [Vulnerability Detectors](https://mythril-classic.readthedocs.io/en/develop/analysis-modules.html), Taint Analysis |
 
 <details>
 <summary>In addition, we curate a catalogue of security utilities applicable to smart contract programming languages beyond Solidity.</summary></br>
@@ -95,6 +95,7 @@ This section will include open-source techniques that are publicly available and
 | [DeFi Hacks Reproduce - Foundry](https://github.com/SunWeb3Sec/DeFiHackLabs) | Attack Replication |
 | [Smart Contract Security Verification Standard](https://github.com/ComposableSecurity/SCSVS) | Security Checklist  |
 | [MythX Tools](https://github.com/muellerberndt/awesome-mythx-smart-contract-security-tools) | Security Analysis Service |
+| [Common Security Properties of Smart Contracts](https://github.com/crytic/properties) | Security Compliance Suite |
 </details>
 
 ## Contributing
@@ -124,10 +125,11 @@ We would like to extend our sincere thanks to [code4rena](https://code4rena.com/
 <details>
 <summary>Our appreciation also goes out to the following contributors for their valuable input.</summary></br>
 
-+ [__NioTheFirst__](https://github.com/niothefirst)
++ [__ItsNio__](https://github.com/niothefirst)
 + [__Wen Xu__](https://github.com/tarafans)
 + [__Patrick Collins__](https://github.com/PatrickAlphaC)
 + [__Meng Xu__](https://twitter.com/meng_xu_cs)
-+ [__CharesFang__](https://github.com/CharesFang)
++ [__y3s0n__](https://github.com/CharesFang)
++ [__William Aaron Cheung__](https://github.com/Troublor)
 
 </details>
