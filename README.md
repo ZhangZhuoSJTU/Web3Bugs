@@ -1,4 +1,4 @@
-# Demystifying Exploitable Bugs in Smart Contracts
+# Demystifying Exploitable Bugs in Smart Contracts <img src="resources/logo.png" alt="Logo" align="right" width="82"/>
 
 [![integrity validation](https://github.com/ZhangZhuoSJTU/Web3Bugs/actions/workflows/validate.yml/badge.svg)](https://github.com/ZhangZhuoSJTU/Web3Bugs/actions/workflows/validate.yml)
 
