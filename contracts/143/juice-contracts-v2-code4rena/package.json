@@ -1,0 +1,44 @@
+{
+  "name": "@jbx-protocol/contracts-v2",
+  "bugs": {
+    "url": "https://github.com/jbx-protocol/juice-contracts-v2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbx-protocol/juice-contracts-v2"
+  },
+  "version": "8.0.1",
+  "license": "MIT",
+  "devDependencies": {
+    "@chainlink/contracts": "^0.1.6",
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-etherscan": "^2.1.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@openzeppelin/contracts": "^4.5.0-rc.0",
+    "@paulrberg/contracts": "^3.4.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.6",
+    "glob": "^7.2.0",
+    "hardhat": "^2.9.3",
+    "hardhat-deploy": "^0.9.1",
+    "hardhat-deploy-ethers": "^0.3.0-beta.10",
+    "hardhat-gas-reporter": "^1.0.4",
+    "prettier": "^2.4.0",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "solhint": "^3.3.6",
+    "solhint-plugin-prettier": "^0.0.5",
+    "solidity-coverage": "^0.8.0-beta.1"
+  },
+  "scripts": {
+    "chain": "hardhat node",
+    "account": "hardhat account",
+    "test": "mocha './test/**/*.test.js' -r esm --bail",
+    "coverage": "node --require esm ./node_modules/.bin/hardhat coverage --network hardhat",
+    "clean": "rimraf ./cache && rimraf ./artifacts",
+    "compile": "yarn clean && hardhat compile",
+    "pretty": "prettier --write \"./**/*.{js,jsx,json,sol}\""
+  }
+}
