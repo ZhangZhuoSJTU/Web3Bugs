@@ -1,4 +1,4 @@
-# Demystifying Exploitable Bugs in Smart Contracts <img src="resources/logo.png" alt="Logo" align="right" width="82"/>
+# Demystifying Exploitable Bugs in Smart Contracts <a href="https://openai.com/product/dall-e-2"><img src="resources/logo.png" alt="Logo" align="right" width="82"/></a>
 
 [![integrity validation](https://github.com/ZhangZhuoSJTU/Web3Bugs/actions/workflows/validate.yml/badge.svg)](https://github.com/ZhangZhuoSJTU/Web3Bugs/actions/workflows/validate.yml)
 
