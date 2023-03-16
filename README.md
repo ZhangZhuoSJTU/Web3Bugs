@@ -96,6 +96,7 @@ This section will include open-source techniques that are publicly available and
 | [Smart Contract Security Verification Standard](https://github.com/ComposableSecurity/SCSVS) | Security Checklist  |
 | [Awesome MythX Smart Contract Security Tools](https://github.com/muellerberndt/awesome-mythx-smart-contract-security-tools) | Security Analysis Service |
 | [Common Security Properties of Smart Contracts](https://github.com/crytic/properties) | Security Compliance Suite |
+| [Immunefi PoC Templates](https://github.com/immunefi-team/forge-poc-templates) | PoC Templates |
 </details>
 
 ## Contributing
