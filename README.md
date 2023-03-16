@@ -57,6 +57,7 @@ We believe that future web3 security efforts will prioritize identifying functio
 | [Finding Permission Bugs in Smart Contracts with Role Mining](https://personal.ntu.edu.sg/yi_li/files/Liu2022FPB.pdf)                              | Access Control |
 | [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
 | [Towards Automated Verification of Smart Contract Fairness](https://personal.ntu.edu.sg/yi_li/files/Liu2020TAV.pdf) | Fairness Property |
+| [Front-Running Attack Benchmark Construction and Vulnerability Detection Technique Evaluation](https://arxiv.org/abs/2212.12110) | Front-running |
 | [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
 
 ### Publicly Available Security Analysis Techniques
@@ -98,6 +99,7 @@ This section will include open-source techniques that are publicly available and
 | [Awesome MythX Smart Contract Security Tools](https://github.com/muellerberndt/awesome-mythx-smart-contract-security-tools) | Security Analysis Service |
 | [Common Security Properties of Smart Contracts](https://github.com/crytic/properties) | Security Compliance Suite |
 | [Immunefi PoC Templates](https://github.com/immunefi-team/forge-poc-templates) | PoC Templates |
+| [Awesome MEV Resources](https://github.com/0xalpharush/awesome-MEV-resources) | MEV, Front-running |
 </details>
 
 ## Contributing
