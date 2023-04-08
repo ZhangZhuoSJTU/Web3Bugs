@@ -150,11 +150,11 @@ The bug can be classified as either __S3-2__ or __S6-4__, but the root cause is 
 
 When a user tries to withdraw the token from the vault, the vault would withdraw the token from the controller if there's insufficient liquidity in the vault. However, the controller does not raise an error when there's insufficient liquidity in the controller/ strategies. The user would lose his shares while getting nothing.
 
-An MEV searcher could apply this attack on any withdrawal. When an attacker found an unconfirmed tx that tries to withdraw 1M dai, he can do such sandwich attack.
+An MEV searcher could apply this attack on any withdrawal. When an attacker found an unconfirmed tx that tries to withdraw 1M DAI, he can do such sandwich attack.
 
 1. Deposits USDC into the vault.
-2. Withdraw all dai left in the vault/controller/strategy.
-3. Place the victims tx here. The victim would get zero dai while burning 1 M share. This would pump the share price.
+2. Withdraw all DAI left in the vault/controller/strategy.
+3. Place the victim tx here. The victim would get zero DAI while burning 1 M share. This would pump the share price.
 4. Withdraw all liquidity.
 
 All users would be vulnerable to MEV attackers. I consider this is a high-risk issue.
