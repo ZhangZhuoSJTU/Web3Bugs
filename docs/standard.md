@@ -154,7 +154,7 @@ An MEV searcher could apply this attack on any withdrawal. When an attacker foun
 
 1. Deposits USDC into the vault.
 2. Withdraw all dai left in the vault/controller/strategy.
-3. Place the vitims tx here. The victim would get zero dai while burning 1 M share. This would pump the share price.
+3. Place the victims tx here. The victim would get zero dai while burning 1 M share. This would pump the share price.
 4. Withdraw all liquidity.
 
 All users would be vulnerable to MEV attackers. I consider this is a high-risk issue.
