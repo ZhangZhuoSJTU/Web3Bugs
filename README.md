@@ -100,6 +100,7 @@ This section will include open-source techniques that are publicly available and
 | [Immunefi PoC Templates](https://github.com/immunefi-team/forge-poc-templates) | PoC Templates |
 | [Awesome MEV Resources](https://github.com/0xalpharush/awesome-MEV-resources) | MEV Resources |
 | [Front-Running Attack Benchmark Construction and Vulnerability Detection Technique Evaluation](https://arxiv.org/abs/2212.12110) | Front-Running Dataset |
+| [Ultimate DeFi & Blockchain Research Base](https://github.com/OffcierCia/ultimate-defi-research-base) | Blockchain Security All-in-One |
 </details>
 
 ## Contributing
