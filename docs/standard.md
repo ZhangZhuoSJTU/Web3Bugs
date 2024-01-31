@@ -150,7 +150,7 @@ The bug can be classified as either __S3-2__ or __S6-4__, but the root cause is 
 
 When a user tries to withdraw the token from the vault, the vault would withdraw the token from the controller if there's insufficient liquidity in the vault. However, the controller does not raise an error when there's insufficient liquidity in the controller/ strategies. The user would lose his shares while getting nothing.
 
-An MEV searcher could apply this attack on any withdrawal. When an attacker found an unconfirmed tx that tries to withdraw 1M DAI, he can do such sandwich attack.
+An MEV searcher could apply this attack on any withdrawal. When an attacker finds an unconfirmed tx that tries to withdraw 1M DAI, he can do such sandwich attack.
 
 1. Deposits USDC into the vault.
 2. Withdraw all DAI left in the vault/controller/strategy.
@@ -246,7 +246,7 @@ function collectRentUser(address _user, uint256 _timeToCollectTo)
 
 Now, we can do the same for all the users bidding for a specific token.
 
-Finally, I can become the owner of the token by just calling `newRental` and using a small price. `newRental` will iterate over all the previous bid and will remove them because there are foreclosed.
+Finally, I can become the owner of the token by just calling `newRental` and using a small price. `newRental` will iterate over all the previous bids and will remove them because they are foreclosed.
 
 
 ### Explanation
