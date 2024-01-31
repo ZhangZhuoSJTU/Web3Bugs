@@ -143,5 +143,6 @@ We would like to extend our sincere thanks to [code4rena](https://code4rena.com/
 + [__y3s0n__](https://github.com/CharesFang)
 + [__William Aaron Cheung__](https://github.com/Troublor)
 + [__soaphorn__](https://github.com/soaphorn)
++ [__Fabio Gritti__](https://github.com/degrigis)
 
 </details>
