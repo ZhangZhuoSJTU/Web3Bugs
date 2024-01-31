@@ -58,6 +58,9 @@ We believe that future web3 security efforts will prioritize identifying functio
 | [AChecker: Statically Detecting Smart Contract Access Control Vulnerabilities](https://people.ece.ubc.ca/mjulia/publications/ACheckerICSE2023.pdf) | Access Control |
 | [Towards Automated Verification of Smart Contract Fairness](https://personal.ntu.edu.sg/yi_li/files/Liu2020TAV.pdf) | Fairness Property |
 | [Clockwork Finance: Automated Analysis of Economic Security in Smart Contracts](https://www.computer.org/csdl/proceedings-article/sp/2023/933600a622/1He7Yru4ls4) | TBD |
+| [Confusum Contractum: Confused Deputy Vulnerabilities in Ethereum Smart Contracts](https://seclab.cs.ucsb.edu/files/publications/gritti23confusum.pdf) | Confused Deputy |
+| [Not your Type! Detecting Storage Collision Vulnerabilities in Ethereum Smart Contracts](https://seclab.cs.ucsb.edu/files/publications/ruaro24crush.pdf)    | Storage Collision |
+
 
 ### Publicly Available Security Analysis Techniques
 
@@ -76,6 +79,8 @@ This section will include open-source techniques that are publicly available and
 | [Solidity SMTChecker](https://docs.soliditylang.org/en/latest/smtchecker.html)   | [Ethereum Foundation](https://ethereum.org/en/foundation/) | Formal Verification by Symbolic Execution     | Solidity, Formal Verification, Symbolic Execution                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | [Mythril](https://github.com/ConsenSys/mythril)                                  | [Consensys](https://consensys.net/)                        | Symbolic Execution Tool                       | Symbolic Execution, [On-Chain Analysis](https://mythril-classic.readthedocs.io/en/develop/security-analysis.html#analyzing-on-chain-contracts), [Vulnerability Detectors](https://mythril-classic.readthedocs.io/en/develop/analysis-modules.html), Taint Analysis |
 | [Pyrometer](https://github.com/nascentxyz/pyrometer) __[WIP]__                       | [Nascent](https://www.nascent.xyz/)                        | Symbolic Execution Tool  | Symbolic Execution, Abstract Interpretation |
+| [greed](https://github.com/ucsb-seclab/greed)                                        | [UCSB Seclab](https://seclab.cs.ucsb.edu/)                 | Static/Symbolic Analysis Framework |  Symbolic Execution, Bound Checker, Static Analyses, Property Testing
+| [ethpwn](https://github.com/ethpwn/ethpwn)                                           | [ethpwn](https://github.com/ethpwn/)                       | Dynamic analysis/Debugging                | EVM simulations, EVM debugging
 
 <details>
 <summary>In addition, we curate a catalogue of security utilities applicable to smart contract programming languages beyond Solidity.</summary></br>
