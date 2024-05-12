@@ -124,7 +124,21 @@ Further details can be found in our [contribution guidelines](docs/contribution.
 
 ## Cite
 
-+ Zhuo Zhang, Brian Zhang, Wen Xu, Zhiqiang Lin, "Demystifying Exploitable Bugs in Smart Contracts." In Proceedings of the 45th International Conference on Software Engineering, 2023.
+If you are using our dataset for an academic publication, we would really appreciate a citation to the following work:
+
+```
+@inproceedings{DBLP:conf/icse/ZhangZXL23,
+  author       = {Zhuo Zhang and
+                  Brian Zhang and
+                  Wen Xu and
+                  Zhiqiang Lin},
+  title        = {Demystifying Exploitable Bugs in Smart Contracts},
+  booktitle    = {{ICSE}},
+  pages        = {615--627},
+  publisher    = {{IEEE}},
+  year         = {2023}
+}
+```
 
 ## Clarification
 
